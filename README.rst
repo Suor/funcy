@@ -29,4 +29,8 @@ How you can help
 TODO
 ----
 
+- implement most usefull things from clojure cheatsheet
+- write overview
+- create cheatsheet html
+- write docs
 - refactor or get rid of decorators
