@@ -43,3 +43,7 @@ def test_any():
 def test_none():
     assert none([0, False])
     assert none(_ < 0, [0, -1]) == False
+
+def test_first():
+    assert first([0, '', 2, 3]) == 2
+    assert first(_ > 3, range(10)) == 4
