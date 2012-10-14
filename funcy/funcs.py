@@ -14,12 +14,7 @@ def caller(*a, **kw):
 
 # not using functools.partial to get real function
 def partial(func, *args, **kwargs):
-    def new_func(*fargs, **fkwargs):
-        return func(*(args + fargs), **dict(kwargs, **fkwargs))
-    new_func.func = func
-    new_func.args = args
-    new_func.kwargs = kwargs
-    return new_func
+    return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
 def compose(*fs):
     pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
