@@ -83,5 +83,8 @@ def test_partial():
 def test_juxt():
     assert juxt(__add__, __sub__)(10, 2) == [12, 8]
 
+def test_all_fn():
+    assert filter(all_fn(_ > 3, _ % 2), range(10)) == [5, 7, 9]
+
 def test_first_fn():
     assert first_fn(_-1, _*0, _+1, _*2)(1) == 2
