@@ -1,4 +1,5 @@
 from operator import __not__
+from itertools import ifilter
 
 
 def identity(x):
@@ -30,6 +31,28 @@ def complement(f):
 def juxt(*fs):
     return lambda *a, **kw: [f(*a, **kw) for f in fs]
 
+def ijuxt(*fs):
+    return lambda *a, **kw: (f(*a, **kw) for f in fs)
+
+# fnil ?
+
+# NOTE: Should these ones be moved somewhere? func_colls? fcolls?
+#       Should I call them every_pred, all_pred, any_pred ... ?
+# every-pred in clojure
+def all_fn(*fs):
+    return compose(all, ijuxt(*fs))
+
+def first(pred, coll=None):
+    if coll is None:
+        return first(None, pred)
+    return next(ifilter(pred, coll), None)
+
+# some-fn in clojure
+def first_fn(*fs):
+    return compose(first, ijuxt(*fs))
+
+def any_fn(*fs):
+    return compose(any, ijuxt(*fs))
 
 
 from operator import __add__, __sub__
@@ -59,3 +82,6 @@ def test_partial():
 
 def test_juxt():
     assert juxt(__add__, __sub__)(10, 2) == [12, 8]
+
+def test_first_fn():
+    assert first_fn(_-1, _*0, _+1, _*2)(1) == 2
