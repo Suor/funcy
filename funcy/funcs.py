@@ -1,21 +1,15 @@
 from operator import __not__
-# NOTE: there are some alternate implementations commented out here
-#       just keep them for alpha until I realize some things:
-#           - when I should just stop decomposing?
-#           - how much point-free notation should be used?
-#           - how much optimization should I impose?
-#           - should I use defs over lambdas and point-free notation for better introspection?
 
 
+def identity(x):
+    return x
 
-identity = lambda x: x
-constantly = lambda x: lambda *a, **kw: x
-# This one is implemented with * syntax in python
-# Do we need this entity as explicit function?
-# pack = lambda *fs: fs
+def constantly(x):
+    return lambda *a, **kw: x
 
 # an operator.methodcaller() brother
-caller = lambda *a, **kw: lambda f: f(*a, **kw)
+def caller(*a, **kw):
+    return lambda f: f(*a, **kw)
 
 # not using functools.partial to get real function
 def partial(func, *args, **kwargs):
@@ -26,22 +20,15 @@ def partial(func, *args, **kwargs):
     new_func.kwargs = kwargs
     return new_func
 
-_compose_pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
-compose = lambda *fs: reduce(_compose_pair, fs, identity)
-# comp = partial(reduce, _compose_pair) # packed args variant, probably, bad idea
-                                        # also does not support comp([])
-# compose = _compose_pair(comp, pack)
+def compose(*fs):
+    pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
+    return reduce(pair, fs, identity)
 
-complement = lambda f: compose(__not__, f)
-# complement = partial(compose, __not__)
-
-# NOTE: move these to .funcdata or .funcolls or .fdata?
-def _map_over(coll):
-    return lambda f: map(f, coll)
+def complement(f):
+    return compose(__not__, f)
 
 def juxt(*fs):
-    # return lambda *a, **kw: map(caller(*a, **kw), fs)
-    return compose(_map_over(fs), caller)
+    return lambda *a, **kw: [f(*a, **kw) for f in fs]
 
 
 
