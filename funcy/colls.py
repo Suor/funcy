@@ -5,7 +5,7 @@ from .funcs import complement
 
 
 def is_distinct(coll):
-    pass
+    raise NotImplementedError
 
 
 def all(pred, coll=None):
@@ -20,10 +20,16 @@ def any(pred, coll=None):
 
 none = complement(any)
 
+# NOTE: name it some() ?
 def first(pred, coll=None):
     if coll is None:
         return first(None, pred)
     return next(ifilter(pred, coll), None)
+
+
+# TODO: capabilities + type tests
+
+
 
 
 from whatever import _

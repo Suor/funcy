@@ -37,12 +37,15 @@ def ijuxt(*fs):
 def all_fn(*fs):
     return compose(all, ijuxt(*fs))
 
+# NOTE: this one is duplicated here, should really go to colls
+#       circular reference problem
 def first(pred, coll=None):
     if coll is None:
         return first(None, pred)
     return next(ifilter(pred, coll), None)
 
-# some-fn in clojure
+# NOTE: some-fn in clojure, should I name it the same?
+#       It kind of makes sense and more stylish )
 def first_fn(*fs):
     return compose(first, ijuxt(*fs))
 
