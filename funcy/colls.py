@@ -5,7 +5,7 @@ from .funcs import complement
 
 
 def is_distinct(coll):
-    raise NotImplementedError
+    return len(coll) == len(set(coll))
 
 
 def all(pred, coll=None):
@@ -28,8 +28,6 @@ def first(pred, coll=None):
 
 
 # TODO: capabilities + type tests
-
-
 
 
 from whatever import _
