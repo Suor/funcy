@@ -34,3 +34,4 @@ TODO
 - create cheatsheet html
 - write docs
 - refactor or get rid of decorators
+- vector boolean test (like perl 6 [<])
