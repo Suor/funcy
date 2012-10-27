@@ -35,24 +35,35 @@ def iremove(pred, coll):
 
 def concat(*colls):
     return list(chain(*colls))
-iconcat = chain                # clojure's concat
-iiconcat = chain.from_iterable # clojure's lazy-cat
+iconcat = chain            # clojure's concat
+
+def cat(colls):
+    return list(icat(colls))
+icat = chain.from_iterable # clojure's lazy-cat
 
 def mapcat(f, *colls):
     return concat(*map(f, *colls))
 
 def imapcat(f, *colls):
-    return chain.from_iterable(map(f, *colls))
+    return icat(imap(f, *colls))
 
-# interleave = izip
+def interleave(*seqs):
+    return cat(izip(*seqs))
 
-def interpose(sep, coll):
-    pass
+def interpose(sep, seq):
+    return drop(1, izip(repeat(sep), seq))
 
+# Should return dict?
+# def zipmap(keys, vals):
+#     return dict(zip(keys, vals))
 
+# there is slice syntax seq[n:] for no lazy seq
 def drop(n, seq):
     return islice(seq, n, None)
 
+# drop_while = itertools.dropwhile
+
+# drop-last, butlast, take-last?
 
 def keep(f, seq):
     return remove(_ is None, map(f, seq))
