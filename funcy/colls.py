@@ -13,6 +13,7 @@ def empty(coll):
 def not_empty(coll):
     return coll or None
 
+# NOTE: rename to merge?
 def into(dest, src):
     if hasattr(dest, 'update'):
         result = dest.copy()
@@ -80,6 +81,7 @@ def some(pred, coll=None):
         return some(None, pred)
     return next(ifilter(pred, coll), None)
 
+# TODO: vector comparison tests - ascending, descending and such
 
 # TODO: capabilities + type tests or skip?
 
