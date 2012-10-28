@@ -1,0 +1,18 @@
+# Things to steal from Clojure
+
+## Numbers
+Arithmetic: inc dec
+Test: even odd
+
+## Strings
+Use: join ujoin
+Regex: re_find re_ifindall re_finddict re_finddicts re_ifinddicts
+       match_groups
+# Should I insect them into re?
+#     re.find re.ifindall ...
+#
+# Should I implement findict in re_find if there is groups?
+# Or provide alternative versions?
+#     re_first re_all re_iter
+
+## Collections
