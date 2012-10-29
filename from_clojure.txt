@@ -16,3 +16,12 @@ Regex: re_find re_ifindall re_finddict re_finddicts re_ifinddicts
 #     re_first re_all re_iter
 
 ## Collections
+Generic ops: empty not_empty into conj (add?) merge(unite?) walk walk_keys walk_values
+             select select_keys select_values
+Content tests: is_distinct all any some none not-all?
+# Capabilities and type tests - postpone
+
+Set: sorted-set sorted-set-by
+Lists: first second rest (or in seqs?)
+Dict: flip walk_keys walk_values project(subdict) (dict_slice?) items? iteritems? groupby(to seqs?)
+      sorted_dict sorted_dict_by merge merge_with
