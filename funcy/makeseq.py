@@ -53,7 +53,7 @@ def get_arity(succ, items):
         else:
             succ(*items) # reraise
 
-class Seq(object):
+class SeqMaker(object):
     def __getitem__(self, key):
         if isinstance(key, int):
             return range(1, key + 1)
@@ -71,7 +71,7 @@ class Seq(object):
 
             return items
 
-seq = Seq()
+seq = SeqMaker()
 
 
 from operator import __add__
