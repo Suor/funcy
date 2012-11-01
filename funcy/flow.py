@@ -7,7 +7,7 @@ def silent(func):
     def wrappper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except Exception, e:
+        except Exception as e:
             return None
     return wrapper
 

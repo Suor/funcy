@@ -14,7 +14,7 @@ def memoize(func):
         if args not in cache:
             try:
                 cache[args] = func(*args)
-            except SkipMemoization, e:
+            except SkipMemoization as e:
                 return e.args[0] if e.args else None
 
         return cache[args]

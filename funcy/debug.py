@@ -24,7 +24,7 @@ def log_errors(print_func=print):
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
-            except Exception, e:
+            except Exception as e:
                 print_func('%s: %s in %s' % (e.__class__.__name__, e, func.__name__))
                 raise
         return wrapper

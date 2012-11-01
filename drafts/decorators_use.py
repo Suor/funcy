@@ -7,7 +7,7 @@ from funcy.decorators import decorator, call_decorator
 def silent(call):
     try:
         return call()
-    except Exception, e:
+    except Exception as e:
         return None
 
 
