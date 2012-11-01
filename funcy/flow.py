@@ -14,7 +14,7 @@ def silent(func):
 
 def retry(tries, cont=Exception):
     def decorator(func):
-        @wraps
+        @wraps(func)
         def wrapper(*args, **kwargs):
             for attempt in range(tries):
                 try:
