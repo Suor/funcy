@@ -2,92 +2,28 @@ from functools import wraps
 
 from funcy.decorators import decorator, call_decorator
 
+@decorator
+def repeat(n):
+    print "> Start %d iterations" % n
+    for i in range(n):
+        yield
+    print '> Done'
 
-@call_decorator
-def silent(call):
-    try:
-        return call()
-    except Exception as e:
-        return None
+@repeat(2)
+def test():
+    print 'test'
 
+test()
 
-def retry(tries, cont=Exception):
-    def decorator(func):
-        @wraps
-        def wrapper(*args, **kwargs):
-            for attempt in range(tries):
-                try:
-                    return func(*args, **kwargs)
-                except cont:
-                    # Reraise error on last attempt
-                    if attempt + 1 == tries:
-                        raise
-        return wrapper
-    return decorator
-
-
-def retry(tries, cont=Exception):
-    @decorator
-    def wrapper(func, *args, **kwargs):
-        for attempt in range(tries):
-            try:
-                return func(*args, **kwargs)
-            except cont:
-                # Reraise error on last attempt
-                if attempt + 1 == tries:
-                    raise
-    return wrapper
-
-
-@call_decorator(tries=None, cont=Exception)
-def retry(call):
-    for attempt in range(tries):
-        try:
-            return call()
-        except cont:
-            # Reraise error on last attempt
-            if attempt + 1 == tries:
-                raise
-
-@call_decorator
-def retry(call, tries, cont=Exception):
-    for attempt in range(tries):
-        try:
-            return call()
-        except cont:
-            # Reraise error on last attempt
-            if attempt + 1 == tries:
-                raise
-
-
-# introspect "call" parameter to make call_decorator
-# introspect __call__ ?
 
 @decorator
-def retry(tries, cont=Exception):
-    for attempt in range(tries):
-        try:
-            return __call__()
-        except cont:
-            # Reraise error on last attempt
-            if attempt + 1 == tries:
-                raise
+def iterate(func):
+    for i in range(5): func(i)
 
-# ===>
+print iterate.__name__
 
-def retry(tries, cont=Exception):
-    def decorator(__func__):
-        @wraps(__func__)
-        def wrapper(*args, **kwargs):
-            __call__ = lambda: __func__(*args, **kwargs)
-            def essense(tries, cont=Exception):
-                for attempt in range(tries):
-                    try:
-                        return __call__()
-                    except cont:
-                        # Reraise error on last attempt
-                        if attempt + 1 == tries:
-                            raise
-            return essense(tries, cont)
-        return wrapper
-    return decorator
+@iterate()
+def test(i):
+    print 'test', i
+
+test()

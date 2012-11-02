@@ -1,48 +1,39 @@
 import inspect
 from functools import wraps
 
-# TODO: refactor, rethink or get rid of
-# NOTE: will, probably need some kind of eval or byteplay to make this really work
-#       the other way is simulate argspec,
-#       now we are ignoring it, which is error prone and don't works with default values
 
-def _make_decorator(deco, deco_args=()):
-    @wraps(deco)
-    def forged_deco(func):
-        @wraps(func)
+def _func_decorator(deco, dargs=(), dkwargs={}):
+    assert not dkwargs # not sure how and whether this should work
+    def _decorator(func):
         def wrapper(*args, **kwargs):
-            return deco(func, *(deco_args + args), **kwargs)
-        return wrapper
-    return forged_deco
+            return deco(func, *(dargs + args), **kwargs)
+        return wraps(func)(wrapper)
+    return _decorator
+
+def _gen_decorator(gen, dargs=(), dkwargs={}):
+    def _decorator(func):
+        def wrapper(*args, **kwargs):
+            for _ in gen(*dargs, **dkwargs):
+                func(*args, **kwargs)
+        return wraps(func)(wrapper)
+    return _decorator
+
+
+def argcounts(func):
+    spec = inspect.getargspec(func)
+    return (len(spec.args), bool(spec.varargs), bool(spec.keywords))
 
 def decorator(deco):
-    deco_arg_names = inspect.getargspec(deco).args[1:]
-    if deco_arg_names:
-        @wraps(deco)
-        def forged_deco_fab(*deco_args):
-            # check args and fill defaults
-            return _make_decorator(deco, deco_args)
-        return forged_deco_fab
+    if inspect.isgeneratorfunction(deco):
+        fab = _gen_decorator
+        args = argcounts(deco) != (0, False, False)
     else:
-        return _make_decorator(deco)
+        fab = _func_decorator
+        args = argcounts(deco) != (1, False, False)
 
-def _make_call_decorator(deco, deco_args=()):
-    @wraps(deco)
-    def forged_deco(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            call = lambda: func(*args, **kwargs)
-            return deco(call, *deco_args)
-        return wrapper
-    return forged_deco
-
-def call_decorator(deco):
-    deco_arg_names = inspect.getargspec(deco).args[1:]
-    if deco_arg_names:
-        @wraps(deco)
-        def forged_deco_fab(*deco_args):
-            return _make_call_decorator(deco, deco_args)
-        return forged_deco_fab
+    if args:
+        def decorator_fab(*dargs, **dkwargs):
+            return fab(deco, dargs, dkwargs)
+        return wraps(deco)(decorator_fab)
     else:
-        return _make_call_decorator(deco)
-
+        return wraps(deco)(fab(deco))

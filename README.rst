@@ -34,6 +34,5 @@ TODO
 - write overview
 - create cheatsheet html
 - write docs
-- refactor or get rid of decorators
 - vector boolean test (like perl 6 [<])
 - lazy, lazy_seq, lazy_dict
