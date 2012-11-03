@@ -17,13 +17,31 @@ test()
 
 
 @decorator
-def iterate(func):
-    for i in range(5): func(i)
+def iterate(call):
+    for i in range(5): call.func(i)
 
 print iterate.__name__
 
-@iterate()
+@iterate
 def test(i):
     print 'test', i
 
 test()
+
+
+@decorator
+def retry(call, tries, cont=Exception):
+    for attempt in range(tries):
+        try:
+            return call()
+        except cont:
+            # Reraise error on last attempt
+            if attempt + 1 == tries:
+                raise
+
+@decorator
+def silent():
+    try:
+        yield
+    except Exception as e:
+        return None

@@ -1,18 +1,29 @@
 import inspect
 from functools import wraps
 
+__ALL__ = ['decorator']
 
-def _func_decorator(deco, dargs=(), dkwargs={}):
-    assert not dkwargs # not sure how and whether this should work
+
+def make_call(func, args, kwargs):
+    call = lambda: func(*args, **kwargs)
+    # Support args and func introspection
+    call.func = func
+    call.args = args
+    call.kwargs = kwargs
+    return call
+
+def make_call_decorator(deco, dargs=(), dkwargs={}):
     def _decorator(func):
         def wrapper(*args, **kwargs):
-            return deco(func, *(dargs + args), **kwargs)
+            call = make_call(func, args, kwargs)
+            return deco(call, *dargs, **dkwargs)
         return wraps(func)(wrapper)
     return _decorator
 
-def _gen_decorator(gen, dargs=(), dkwargs={}):
+def make_gen_decorator(gen, dargs=(), dkwargs={}):
     def _decorator(func):
         def wrapper(*args, **kwargs):
+            # TODO: collect function results?
             for _ in gen(*dargs, **dkwargs):
                 func(*args, **kwargs)
         return wraps(func)(wrapper)
@@ -25,10 +36,10 @@ def argcounts(func):
 
 def decorator(deco):
     if inspect.isgeneratorfunction(deco):
-        fab = _gen_decorator
+        fab = make_gen_decorator
         args = argcounts(deco) != (0, False, False)
     else:
-        fab = _func_decorator
+        fab = make_call_decorator
         args = argcounts(deco) != (1, False, False)
 
     if args:
