@@ -35,6 +35,8 @@ def argcounts(func):
     return (len(spec.args), bool(spec.varargs), bool(spec.keywords))
 
 def decorator(deco):
+    # TODO: make uncalled deco usable as deco called with all defaults
+    #       when it has defaults for all arguments
     if inspect.isgeneratorfunction(deco):
         fab = make_gen_decorator
         args = argcounts(deco) != (0, False, False)
