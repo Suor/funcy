@@ -109,6 +109,15 @@ def some(pred, coll=None):
 # TODO: capabilities + type tests or skip?
 
 
+def distinct(seq):
+    "Order preserving distinct"
+    seen = set()
+    return [x for x in seq if x not in seen and not seen.add(x)]
+
+def zipdict(keys, vals):
+    return dict(zip(keys, vals))
+
+
 from whatever import _
 
 def test_all():

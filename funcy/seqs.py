@@ -22,11 +22,6 @@ def take(n, coll):
 
 # TODO: tree-seq equivalent
 
-def distinct(seq):
-    "Order preserving distinct"
-    seen = set()
-    return [x for x in seq if x not in seen and not seen.add(x)]
-
 def remove(pred, coll):
     return filter(complement(pred), coll)
 
@@ -52,10 +47,6 @@ def interleave(*seqs):
 
 def interpose(sep, seq):
     return drop(1, izip(repeat(sep), seq))
-
-# Should return dict?
-# def zipmap(keys, vals):
-#     return dict(zip(keys, vals))
 
 # there is slice syntax seq[n:] for no lazy seq
 def drop(n, seq):
