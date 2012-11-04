@@ -1,6 +1,5 @@
 from __builtin__ import all as _all, any as _any
-from collections import Mapping, Set, Iterator, Iterable
-from operator import __add__
+from collections import Mapping, Set, Iterable, Iterator
 from itertools import ifilter, imap, chain
 
 from .funcs import complement
@@ -26,7 +25,6 @@ def iteritems(coll):
 _miss = object()
 
 def join(colls):
-    # assert len(colls) >= 1
     it = iter(colls)
     dest = next(colls, _miss)
     if dest is _miss:
@@ -43,6 +41,7 @@ def join(colls):
         return chain.from_iterable(colls)
     elif isinstance(dest, Iterable):
         return cls(chain.from_iterable(colls)) # could be reduce(concat, ...)
+                                               # more effective for low count
     else:
         raise TypeError("Don't know how to join %s" % cls.__name__)
 
@@ -96,7 +95,6 @@ def some(pred, coll=None):
 # TODO: vector comparison tests - ascending, descending and such
 
 # TODO: capabilities + type tests or skip?
-
 
 def distinct(seq):
     "Order preserving distinct"
