@@ -29,7 +29,7 @@ def join(colls):
     dest = next(colls, _miss)
     if dest is _miss:
         raise TypeError('join needs at least one collection or string')
-    cls = type(dest)
+    cls = dest.__class__
 
     if isinstance(dest, basestring):
         return ''.join(colls)
@@ -68,6 +68,15 @@ def walk_values(f, coll):
 
 # TODO: prewalk, postwalk and friends
 
+def select(f, coll):
+    """Same as filter but preserves coll type."""
+    return coll.__class__(ifilter(f, iteritems(coll)))
+
+def select_keys(f, coll):
+    return select(lambda (k, v): f(k), coll)
+
+def select_values(f, coll):
+    return select(lambda (k, v): f(v), coll)
 
 ### Content tests
 
@@ -106,6 +115,13 @@ def zipdict(keys, vals):
 
 
 from whatever import _
+
+
+def test_walk_values():
+    assert walk_values(_ * 2, {'a': 1, 'b': 2}) == {'a': 2, 'b': 4}
+
+def test_select_values():
+    assert select_values(_ % 2, {'a': 1, 'b': 2}) == {'a': 1}
 
 def test_all():
     assert all([1,2,3])
