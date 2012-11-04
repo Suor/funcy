@@ -4,7 +4,7 @@
 Arithmetic: inc dec
 Test: even odd
 
-## Strings
+## Strings # postpone all
 Use: join ujoin
 Regex: re_find re_ifindall re_finddict re_finddicts re_ifinddicts
        match_groups
@@ -16,12 +16,24 @@ Regex: re_find re_ifindall re_finddict re_finddicts re_ifinddicts
 #     re_first re_all re_iter
 
 ## Collections
-Generic ops: empty not_empty into conj (add?) merge(unite?) walk walk_keys walk_values
-             select select_keys select_values
+Generic ops: empty not_empty into conj? (add?) merge(unite?) walk walk_keys walk_values
+             # walk + filter
+             select select_keys select_values # subdict ? postpone?
 Content tests: is_distinct all any some none not-all?
 # Capabilities and type tests - postpone
 
 Set: sorted-set sorted-set-by
 Lists: first second rest (or in seqs?)
-Dict: flip walk_keys walk_values project(subdict) (dict_slice?) items? iteritems? groupby(to seqs?)
-      sorted_dict sorted_dict_by merge merge_with
+Dict: flip walk_keys walk_values project(subdict) (dict_slice?) items,p iteritems groupby(to seqs?)
+      sorted_dict sorted_dict_by join merge join_with,p merge_with,p
+
+## Functions
+Create: identity constantly compose complement partial juxt
+        all_fn any_fn some_fn none_fn
+Calc: memoize cached
+
+## Data
+diff # postpone
+
+## Seqs
+items iteritems
