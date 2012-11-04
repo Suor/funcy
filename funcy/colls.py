@@ -59,8 +59,7 @@ def walk(f, coll):
     Walk coll transforming it's elements with f.
     Same as map, but preserves coll type.
     """
-    items = coll.iteritems() if hasattr(coll, 'iteritems') else coll
-    return coll.__class__(imap(f, items))
+    return coll.__class__(imap(f, iteritems(coll)))
 
 def walk_keys(f, coll):
     return walk(lambda (k, v): (f(k), v), coll)
@@ -76,16 +75,6 @@ def walk_values(f, coll):
 def is_distinct(coll):
     return len(coll) == len(set(coll))
 
-# NOTE: maybe not a greatest implementation but works for iterators.
-#       Though, it consumes an item from them which probably makes it useless.
-#
-#       Get rid of it and use boolean test instead?
-def is_empty(coll):
-    try:
-        next(iter(coll))
-        return False
-    except StopIteration:
-        return True
 
 def all(pred, coll=None):
     if coll is None:

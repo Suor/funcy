@@ -43,7 +43,7 @@ def imapcat(f, *colls):
     return icat(imap(f, *colls))
 
 def interleave(*seqs):
-    return cat(izip(*seqs))
+    return icat(izip(*seqs))
 
 def interpose(sep, seq):
     return drop(1, izip(repeat(sep), seq))
