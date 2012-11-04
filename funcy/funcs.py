@@ -29,29 +29,6 @@ def juxt(*fs):
 def ijuxt(*fs):
     return lambda *a, **kw: (f(*a, **kw) for f in fs)
 
-# fnil ?
-
-# NOTE: Should these ones be moved somewhere? func_colls? fcolls?
-#       Should I call them every_pred, all_pred, any_pred ... ?
-# every-pred in clojure
-def all_fn(*fs):
-    return compose(all, ijuxt(*fs))
-
-# NOTE: this one is duplicated here, should really go to colls
-#       circular reference problem
-def first(pred, coll=None):
-    if coll is None:
-        return first(None, pred)
-    return next(ifilter(pred, coll), None)
-
-# NOTE: some-fn in clojure, should I name it the same?
-#       It kind of makes sense and more stylish )
-def first_fn(*fs):
-    return compose(first, ijuxt(*fs))
-
-def any_fn(*fs):
-    return compose(any, ijuxt(*fs))
-
 
 from operator import __add__, __sub__
 from whatever import _
@@ -80,9 +57,3 @@ def test_partial():
 
 def test_juxt():
     assert juxt(__add__, __sub__)(10, 2) == [12, 8]
-
-def test_all_fn():
-    assert filter(all_fn(_ > 3, _ % 2), range(10)) == [5, 7, 9]
-
-def test_first_fn():
-    assert first_fn(_-1, _*0, _+1, _*2)(1) == 2
