@@ -1,35 +1,58 @@
 from __builtin__ import all as _all, any as _any
+from collections import Mapping, Set, Iterator, Iterable
+from operator import __add__
 from itertools import ifilter, imap, chain
 
 from .funcs import complement
 
 
 ### Generic ops
-# count = len
-
 def empty(coll):
     return coll.__class__()
 
-def not_empty(coll):
-    return coll or None
+# postponed - not sure if it's usefull
+# def not_empty(coll):
+#     return coll or None
 
-# NOTE: rename to merge?
-def into(dest, src):
-    if hasattr(dest, 'update'):
-        result = dest.copy()
-        result.update(src)
-        return result
-    elif hasattr(dest, 'union'):
-        return dest.union(src)
-    elif hasattr(dest, '__add__'):
-        return dest + dest.__class__(src)
-    elif hasattr(dest, '__iter__'):
-        return chain(dest, src)
+# polluting? this is a common variable name
+# posponed - since you should walk away with iteritems in most cases
+# def items(coll):
+#     return coll.items() if hasattr(coll, 'items') else coll
+
+def iteritems(coll):
+    return coll.iteritems() if hasattr(coll, 'iteritems') else coll
+
+
+_miss = object()
+
+def join(colls):
+    # assert len(colls) >= 1
+    it = iter(colls)
+    dest = next(colls, _miss)
+    if dest is _miss:
+        raise TypeError('join needs at least one collection or string')
+    cls = type(dest)
+
+    if isinstance(dest, basestring):
+        return ''.join(colls)
+    elif isinstance(dest, Mapping):
+        return reduce(lambda a, b: cls(a, **b), colls)
+    elif isinstance(dest, Set):
+        return dest.union(*it)
+    elif isinstance(dest, (Iterator, xrange)):
+        return chain.from_iterable(colls)
+    elif isinstance(dest, Iterable):
+        return cls(chain.from_iterable(colls)) # could be reduce(concat, ...)
     else:
-        raise TypeError("Don't know how to add items to %s" % dest.__class__.__name__)
+        raise TypeError("Don't know how to join %s" % cls.__name__)
 
-def conj(coll, *xs):
-    return into(coll, xs)
+def merge(*colls):
+    return join(colls)
+
+# postponed
+# def conj(coll, *xs):
+#     return merge(coll, xs)
+
 
 def walk(f, coll):
     """
