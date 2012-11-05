@@ -96,6 +96,7 @@ def any(pred, coll=None):
 
 none = complement(any)
 
+# Not same as in clojure! returns value found not pred(value)
 def some(pred, coll=None):
     if coll is None:
         return some(None, pred)

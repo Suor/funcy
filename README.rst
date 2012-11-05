@@ -29,7 +29,6 @@ How you can help
 TODO
 ----
 
-- limit scope for first release to prevent feature creep
 - implement most usefull things from clojure cheatsheet
 - write overview
 - create cheatsheet html
