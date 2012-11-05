@@ -1,0 +1,14 @@
+# Collections
+find?=some(2arg) where? countby pluck?
+
+# Array
+compact=keep without
+
+# Functions
+throttle once
+
+# Objects -> to dicts
+pick omit defaults?
+
+# Utility
+times?
