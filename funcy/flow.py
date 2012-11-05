@@ -28,6 +28,10 @@ class ErrorRateExceeded(Exception):
     pass
 
 def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
+    """
+    If function fails to complete `fails` times in a row,
+    calls to it will be intercepted for `timeout` with `exception` raised instead.
+    """
     if isinstance(timeout, int):
         timeout = timedelta(seconds=timeout)
 
@@ -37,8 +41,11 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if func.blocked and datetime.now() - func.blocked < timeout:
-                raise exception
+            if func.blocked:
+                if datetime.now() - func.blocked < timeout:
+                    raise exception
+                else:
+                    func.blocked = None
 
             try:
                 result = func(*args, **kwargs)
@@ -49,7 +56,6 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
                 raise
             else:
                 func.fails = 0
-                func.blocked = None
                 return result
         return wrapper
     return decorator
