@@ -1,33 +1,33 @@
 from datetime import datetime, timedelta
 from functools import wraps
 
+from .decorators import decorator
 
-def silent(func):
-    @wraps(func)
-    def wrappper(*args, **kwargs):
+
+@decorator
+def ignore(call, errors):
+    try:
+        return call()
+    except errors:
+        return None
+
+silent = ignore(Exception) # Ignore all real exceptions
+
+@decorator
+def retry(call, tries, errors=Exception):
+    for attempt in range(tries):
         try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            return None
-    return wrapper
+            return call()
+        except errors:
+            # Reraise error on last attempt
+            if attempt + 1 == tries:
+                raise
 
 
-def retry(tries, cont=Exception):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            for attempt in range(tries):
-                try:
-                    return func(*args, **kwargs)
-                except cont:
-                    # Reraise error on last attempt
-                    if attempt + 1 == tries:
-                        raise
-        return wrapper
-    return decorator
+class ErrorRateExceeded(Exception):
+    pass
 
-
-def limit_error_rate(fails=None, timeout=None, exception=None):
+def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
     if isinstance(timeout, int):
         timeout = timedelta(seconds=timeout)
 
