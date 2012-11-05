@@ -5,7 +5,7 @@ Arithmetic: inc dec
 Test: even odd
 
 ## Strings # postpone all
-Use: join ujoin
+Use: join ujoin?
 Regex: re_find re_ifindall re_finddict re_finddicts re_ifinddicts
        match_groups
 # Should I insect them into re?
@@ -16,7 +16,7 @@ Regex: re_find re_ifindall re_finddict re_finddicts re_ifinddicts
 #     re_first re_all re_iter
 
 ## Collections
-Generic ops: empty not_empty into conj? (add?) merge(unite?) walk walk_keys walk_values
+Generic ops: empty not_empty join merge walk walk_keys walk_values
              # walk + filter
              select select_keys select_values # subdict ? postpone?
 Content tests: is_distinct all any some none not-all?
@@ -24,8 +24,8 @@ Content tests: is_distinct all any some none not-all?
 
 Set: sorted-set sorted-set-by
 Lists: first second rest (or in seqs?)
-Dict: flip walk_keys walk_values project(subdict) (dict_slice?) items,p iteritems groupby(to seqs?)
-      sorted_dict sorted_dict_by join merge join_with,p merge_with,p
+Dict: flip project items,p iteritems groupby(to seqs?)
+      sorted_dict,p sorted_dict_by,p join_with,p merge_with,p
 
 ## Functions
 Create: identity constantly compose complement partial juxt
@@ -36,4 +36,14 @@ Calc: memoize cached
 diff # postpone
 
 ## Seqs
-items iteritems
+From consts: repeat range
+From func: repeatedly iterate
+From seq: keep ikeep keep_indexed,p
+Get shorter: filter ifilter remove iremove distinct,p idistinct,p
+Get longer: concat iconcat cat icat mapcat imapcat cycle interleave interpose
+Slicing: first,p last,p take drop rest butlast,p take_last,p drop_last,p dropwhile takewhile
+Change: flatten groupby partition(no pad) partition_all partition_by split_at? split_with? replace?
+Process: pmap,p map_indexed?
+Extract item: max_key? min_key?
+Constrct coll: reduce reductions,p
+
