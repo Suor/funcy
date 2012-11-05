@@ -6,8 +6,7 @@ Test: even odd
 
 ## Strings # postpone all
 Use: join ujoin?
-Regex: re_find re_ifindall re_finddict re_finddicts re_ifinddicts
-       match_groups
+Regex: re_find re_all re_iter
 # Should I insect them into re?
 #     re.find re.ifindall ...
 #
