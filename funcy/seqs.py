@@ -20,6 +20,11 @@ def iterate(f, x):
 def take(n, coll):
     return list(islice(coll, n))
 
+# there is slice syntax seq[n:] for no lazy seq
+def drop(n, seq):
+    return islice(seq, n, None)
+
+
 # TODO: tree-seq equivalent
 
 def remove(pred, coll):
@@ -37,7 +42,7 @@ def cat(colls):
 icat = chain.from_iterable # clojure's lazy-cat
 
 def mapcat(f, *colls):
-    return concat(*map(f, *colls))
+    return cat(imap(f, *colls))
 
 def imapcat(f, *colls):
     return icat(imap(f, *colls))
@@ -48,9 +53,6 @@ def interleave(*seqs):
 def interpose(sep, seq):
     return drop(1, izip(repeat(sep), seq))
 
-# there is slice syntax seq[n:] for no lazy seq
-def drop(n, seq):
-    return islice(seq, n, None)
 
 # drop_while = itertools.dropwhile
 
