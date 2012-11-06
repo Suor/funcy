@@ -22,12 +22,10 @@ def iteritems(coll):
     return coll.iteritems() if hasattr(coll, 'iteritems') else coll
 
 
-_miss = object()
-
 def join(colls):
     it = iter(colls)
-    dest = next(colls, _miss)
-    if dest is _miss:
+    dest = next(colls, None)
+    if dest is None:
         raise TypeError('join needs at least one collection or string')
     cls = dest.__class__
 
@@ -107,13 +105,14 @@ def some(pred, coll=None):
 
 # TODO: capabilities + type tests or skip?
 
-def distinct(seq):
-    "Order preserving distinct"
-    seen = set()
-    return [x for x in seq if x not in seen and not seen.add(x)]
-
 def zipdict(keys, vals):
     return dict(zip(keys, vals))
+
+def flip(mapping):
+    return walk(lambda (k, v): (v, k), mapping)
+
+def project(mapping, keys):
+    return mapping.__class__((k, mapping[k]) for k in keys if k in mapping)
 
 
 from whatever import _

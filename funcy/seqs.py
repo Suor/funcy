@@ -1,12 +1,7 @@
-from itertools import repeat, islice, ifilter, imap, chain
-from whatever import _, that
+from itertools import islice, ifilter, imap, chain, tee, ifilterfalse
 
-# NOTE: Should I import here anything from itertools or elsewhere,
-#       if it exactly implements some function I want?
-# PROS: Convenient
-# CONS: Possibly confusing
 
-# pythons itertools.repeat() is basically the same as in clojure
+from itertools import count, repeat
 
 def repeatedly(f, n=None):
     _repeat = repeat(None, n) if n else repeat(None)
@@ -17,12 +12,18 @@ def iterate(f, x):
         yield x
         x = f(x)
 
+
 def take(n, coll):
     return list(islice(coll, n))
 
-# there is slice syntax seq[n:] for no lazy seq
 def drop(n, seq):
     return islice(seq, n, None)
+
+def first(seq):
+    return take(1, seq)
+
+def rest(seq):
+    return drop(1, seq)
 
 
 # TODO: tree-seq equivalent
@@ -33,13 +34,19 @@ def remove(pred, coll):
 def iremove(pred, coll):
     return ifilter(complement(pred), coll)
 
+def keep(f, seq):
+    return filter(None, imap(f, seq))
+
+def ikeep(f, seq):
+    return ifilter(None, imap(f, seq))
+
 def concat(*colls):
     return list(chain(*colls))
-iconcat = chain            # clojure's concat
+iconcat = chain
 
 def cat(colls):
     return list(icat(colls))
-icat = chain.from_iterable # clojure's lazy-cat
+icat = chain.from_iterable
 
 def mapcat(f, *colls):
     return cat(imap(f, *colls))
@@ -54,24 +61,35 @@ def interpose(sep, seq):
     return drop(1, izip(repeat(sep), seq))
 
 
-# drop_while = itertools.dropwhile
+# Re-export
+from itertools import dropwhile, takewhile
 
-# drop-last, butlast, take-last?
+def distinct(seq):
+    "Order preserving distinct"
+    seen = set()
+    return [x for x in seq if x not in seen and not seen.add(x)]
 
-def keep(f, seq):
-    return remove(_ is None, map(f, seq))
+def isplit(at, seq):
+    a, b = tee(seq)
+    if callable(at):
+        return ifilter(at, a), ifilterfalse(at, b)
+    else:
+        return islice(a, at), islice(b, at, None)
 
-def ikeep(f, seq):
-    return iremove(_ is None, imap(f, seq))
+def split(at, seq):
+    return map(list, isplit(at, seq))
 
-def keep_indexed(f, seq):
-    raise NotImplementedError
+# NOTE: should I name it cluster? to distinguish from itertools.groupby
+def groupby(f, seq):
+    result = defaultdict(list)
+    for item in seq:
+        result[f(item)].append(item)
+    return result
 
-def ikeep_indexed(f, seq):
-    raise NotImplementedError
-
-
-from itertools import count
+def chunks(n, step, seq=None):
+    if seq is None:
+        return chunks(n, n, step)
+    return [seq[i:i+n] for i in range(0, len(seq), step)]
 
 
 def test_repeatedly():

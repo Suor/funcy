@@ -15,14 +15,14 @@ Regex: re_find re_all re_iter
 #     re_first re_all re_iter
 
 ## Collections
-Generic ops: empty not_empty join merge walk walk_keys walk_values
+Generic ops: empty not_empty,p join merge walk walk_keys walk_values
              # walk + filter
              select select_keys select_values # subdict ? postpone?
-Content tests: is_distinct all any some none not-all?
+Content tests: is_distinct all any some none not-all,p
 # Capabilities and type tests - postpone
 
-Set: sorted-set sorted-set-by
-Lists: first second rest (or in seqs?)
+Set: sorted-set,p sorted-set-by,p
+# Lists: first second rest (or in seqs?)
 Dict: flip project items,p iteritems groupby(to seqs?)
       sorted_dict,p sorted_dict_by,p join_with,p merge_with,p
 
@@ -32,16 +32,16 @@ Create: identity constantly compose complement partial juxt
 Calc: memoize cached
 
 ## Data
-diff # postpone
+diff,p # postpone
 
 ## Seqs
-From consts: repeat range
+From consts: repeat range count
 From func: repeatedly iterate
 From seq: keep ikeep keep_indexed,p
-Get shorter: filter ifilter remove iremove distinct,p idistinct,p
+Get shorter: filter ifilter remove iremove distinct idistinct,p
 Get longer: concat iconcat cat icat mapcat imapcat cycle interleave interpose
-Slicing: first,p last,p take drop rest butlast,p take_last,p drop_last,p dropwhile takewhile
-Change: flatten groupby partition(no pad) partition_all partition_by split_at? split_with? replace?
+Slicing: first second,p last,p take drop rest butlast,p take_last,p drop_last,p dropwhile takewhile
+Change: flatten,p groupby chunks partition(no pad),p partition_all,p partition_by,p split isplit replace?
 Process: pmap,p map_indexed?
 Extract item: max_key? min_key?
 Constrct coll: reduce reductions,p
