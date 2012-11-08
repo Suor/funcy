@@ -1,4 +1,12 @@
-from itertools import islice, ifilter, imap, chain, tee, ifilterfalse
+from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse
+
+
+__all__ = ['count', 'repeat', 'repeatedly', 'iterate',
+           'take', 'drop', 'first', 'rest',
+           'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
+           'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
+           'izip', 'interleave', 'interpose', 'distinct',
+           'dropwhile', 'takewhile', 'isplit', 'split', 'groupby', 'chunks']
 
 
 from itertools import count, repeat

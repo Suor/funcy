@@ -4,6 +4,9 @@ from functools import wraps
 from .decorators import decorator
 
 
+__all__ = ['ignore', 'silent', 'limit_error_rate', 'ErrorRateExceeded']
+
+
 @decorator
 def ignore(call, errors):
     try:

@@ -5,6 +5,12 @@ from itertools import ifilter, imap, chain
 from .funcs import complement
 
 
+__all__ = ['empty', 'iteritems', 'join', 'merge',
+           'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values',
+           'is_distinct', 'all', 'any', 'none', 'some',
+           'zipdict', 'flip', 'project']
+
+
 ### Generic ops
 def empty(coll):
     return coll.__class__()

@@ -1,7 +1,8 @@
 import inspect
 from functools import wraps
 
-__ALL__ = ['decorator']
+
+__all__ = ['decorator']
 
 
 def make_call(func, args, kwargs):

@@ -2,6 +2,9 @@ from .funcs import compose, ijuxt
 from .colls import some, none
 
 
+__all__ = ['all_fn', 'any_fn', 'none_fn', 'some_fn']
+
+
 def all_fn(*fs):
     return compose(all, ijuxt(*fs))
 

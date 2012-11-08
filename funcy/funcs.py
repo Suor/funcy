@@ -2,6 +2,11 @@ from operator import __not__
 from itertools import ifilter
 
 
+__all__ = ['identity', 'constantly', 'caller',
+           'partial', 'compose', 'complement',
+           'juxt', 'ijuxt']
+
+
 def identity(x):
     return x
 

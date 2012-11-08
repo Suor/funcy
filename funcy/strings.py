@@ -5,6 +5,9 @@ from itertools import imap
 from .funcs import identity
 
 
+__all__ = ['re_iter', 're_all', 're_find']
+
+
 def _make_getter(regex):
     if regex.groups == 0:
         return methodcaller('group')
