@@ -66,7 +66,7 @@ def interleave(*seqs):
     return icat(izip(*seqs))
 
 def interpose(sep, seq):
-    return drop(1, izip(repeat(sep), seq))
+    return drop(1, interleave(repeat(sep), seq))
 
 
 # Re-export
