@@ -30,7 +30,7 @@ def iteritems(coll):
 
 def join(colls):
     it = iter(colls)
-    dest = next(colls, None)
+    dest = next(it, None)
     if dest is None:
         raise TypeError('join needs at least one collection or string')
     cls = dest.__class__
