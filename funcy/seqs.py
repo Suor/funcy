@@ -1,4 +1,7 @@
 from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse
+from collections import defaultdict
+
+from .funcs import complement
 
 
 __all__ = ['count', 'repeat', 'repeatedly', 'iterate',
@@ -6,7 +9,7 @@ __all__ = ['count', 'repeat', 'repeatedly', 'iterate',
            'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
            'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
            'izip', 'interleave', 'interpose', 'distinct',
-           'dropwhile', 'takewhile', 'isplit', 'split', 'groupby', 'chunks']
+           'dropwhile', 'takewhile', 'isplit', 'split', 'groupby', 'partition', 'chunks']
 
 
 from itertools import count, repeat
@@ -28,7 +31,7 @@ def drop(n, seq):
     return islice(seq, n, None)
 
 def first(seq):
-    return take(1, seq)
+    return next(iter(seq), None)
 
 def rest(seq):
     return drop(1, seq)
@@ -94,12 +97,13 @@ def groupby(f, seq):
         result[f(item)].append(item)
     return result
 
+def partition(n, step, seq=None):
+    if seq is None:
+        return partition(n, n, step)
+    return [seq[i:i+n] for i in xrange(0, len(seq)-n+1, step)]
+
 def chunks(n, step, seq=None):
     if seq is None:
         return chunks(n, n, step)
-    return [seq[i:i+n] for i in range(0, len(seq), step)]
+    return [seq[i:i+n] for i in xrange(0, len(seq), step)]
 
-
-def test_repeatedly():
-    c = count().next
-    assert take(2, repeatedly(c)) == [0, 1]
