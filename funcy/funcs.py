@@ -4,7 +4,8 @@ from itertools import ifilter
 
 __all__ = ['identity', 'constantly', 'caller',
            'partial', 'compose', 'complement',
-           'juxt', 'ijuxt']
+           'juxt', 'ijuxt',
+           'iffy']
 
 
 def identity(x):
@@ -25,11 +26,14 @@ def compose(*fs):
     pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
     return reduce(pair, fs, identity)
 
-def complement(f):
-    return compose(__not__, f)
+def complement(pred):
+    return compose(__not__, pred)
 
 def juxt(*fs):
     return lambda *a, **kw: [f(*a, **kw) for f in fs]
 
 def ijuxt(*fs):
     return lambda *a, **kw: (f(*a, **kw) for f in fs)
+
+def iffy(pred, action, default=identity):
+    return lambda v: action(v) if pred(v) else default(v)
