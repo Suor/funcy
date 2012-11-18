@@ -87,11 +87,17 @@ Work with sequences::
     remove(even, [1, 2, 3])     # [1, 3]
     concat([1, 2], [5, 6])      # [1, 2, 5, 6]
     cat(map(range, range(4)))   # [0, 0, 1, 0, 1, 2]
+    mapcat(range, range(4)))    # same
     distinct('abacbdd')         # list('abcd')
 
     split(2, range(5))          # [[0, 1], [2, 3, 4]]
     split(odd, range(5))        # [[1, 3], [0, 2, 4]]
     groupby(mod2, range(5))     # {0: [0, 2, 4], 1: [1, 3]}
+
+    partition(2, range(5))      # [[0, 1], [2, 3]]
+    chunks(2, range(5))         # [[0, 1], [2, 3], [4]]
+    partition(2, 1, range(4))   # [[0, 1], [1, 2], [2, 3]]
+    chunks(2, 1, range(4))      # [[0, 1], [1, 2], [2, 3], [3]]
 
 
 And many more, see tests and source.
@@ -106,7 +112,6 @@ Bring your ideas and/or code that can make functional python more fun.
 TODO
 ----
 
-- write overview
 - create cheatsheet html
 - write docs
 - vector chained boolean test (like perl 6 [<])
