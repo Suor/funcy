@@ -3,11 +3,12 @@ from collections import Mapping, Set, Iterable, Iterator
 from itertools import ifilter, imap, chain
 
 from .funcs import complement
+from .seqs import take
 
 
 __all__ = ['empty', 'iteritems', 'join', 'merge',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values',
-           'is_distinct', 'all', 'any', 'none', 'some',
+           'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project']
 
 
@@ -99,6 +100,11 @@ def any(pred, coll=None):
     return _any(imap(pred, coll))
 
 none = complement(any)
+
+def one(pred, coll=None):
+    if coll is None:
+        return one(bool, pred)
+    return len(take(2, ifilter(pred, coll))) == 1
 
 # Not same as in clojure! returns value found not pred(value)
 # NOTE: should I name it "find" when pred is here

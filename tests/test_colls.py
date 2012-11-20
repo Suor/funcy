@@ -79,6 +79,14 @@ def test_any():
     assert any(_ > 0, [1,2,0])
     assert any(_ < 0, [1,2,0]) == False
 
+def test_one():
+    assert one([0, False, 3, ''])
+    assert not one([0, False, ''])
+    assert not one([1, False, 'a'])
+    assert one(_ > 0, [0,1])
+    assert not one(_ < 0, [0,1,2])
+    assert not one(_ > 0, [0,1,2])
+
 def test_none():
     assert none([0, False])
     assert none(_ < 0, [0, -1]) == False
