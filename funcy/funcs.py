@@ -22,6 +22,15 @@ def caller(*a, **kw):
 def partial(func, *args, **kwargs):
     return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
+def curry(func, arg_count=None):
+    if arg_count is None:
+        arg_count = func.__code__.co_argcount
+
+    if arg_count <= 1:
+        return func
+    else:
+        return lambda x: curry(partial(func, x), arg_count - 1)
+
 def compose(*fs):
     pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
     return reduce(pair, fs, identity)
