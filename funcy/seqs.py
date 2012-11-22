@@ -33,6 +33,9 @@ def drop(n, seq):
 def first(seq):
     return next(iter(seq), None)
 
+def second(seq):
+    return first(rest(seq))
+
 def rest(seq):
     return drop(1, seq)
 
