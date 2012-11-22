@@ -15,6 +15,10 @@ def test_partial():
     assert partial(merge, a='abra')(b='cadabra') == 'abracadabra'
     assert partial(merge, b='abra')(a='cadabra') == 'cadabraabra'
 
+def test_curry():
+    assert curry(__add__, 2)(10)(1) == 11
+    assert curry(lambda x,y,z: x+y+z)('a')('b')('c') == 'abc'
+
 def test_compose():
     double = _ * 2
     inc    = _ + 1

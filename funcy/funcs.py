@@ -3,7 +3,7 @@ from itertools import ifilter
 
 
 __all__ = ['identity', 'constantly', 'caller',
-           'partial', 'compose', 'complement',
+           'partial', 'curry', 'compose', 'complement',
            'juxt', 'ijuxt',
            'iffy']
 
@@ -22,14 +22,14 @@ def caller(*a, **kw):
 def partial(func, *args, **kwargs):
     return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
-def curry(func, arg_count=None):
-    if arg_count is None:
-        arg_count = func.__code__.co_argcount
+def curry(func, n=None):
+    if n is None:
+        n = func.__code__.co_argcount
 
-    if arg_count <= 1:
+    if n <= 1:
         return func
     else:
-        return lambda x: curry(partial(func, x), arg_count - 1)
+        return lambda x: curry(lambda *y: func(x, *y), n - 1)
 
 def compose(*fs):
     pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
