@@ -44,5 +44,8 @@ def juxt(*fs):
 def ijuxt(*fs):
     return lambda *a, **kw: (f(*a, **kw) for f in fs)
 
-def iffy(pred, action, default=identity):
-    return lambda v: action(v) if pred(v) else default(v)
+def iffy(pred, action=None, default=identity):
+    if action is None:
+        return iffy(bool, pred)
+    else:
+        return lambda v: action(v) if pred(v) else default(v)
