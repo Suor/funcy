@@ -2,10 +2,10 @@ import re
 from operator import methodcaller
 from itertools import imap
 
-from .funcs import identity
+from .funcs import identity, iffy
 
 
-__all__ = ['re_iter', 're_all', 're_find']
+__all__ = ['re_iter', 're_all', 're_find', 're_finder', 're_test', 're_tester']
 
 
 def _make_getter(regex):
@@ -20,20 +20,31 @@ def _make_getter(regex):
 
 _re_type = type(re.compile(r''))
 
-def _prepare(regex):
+def _prepare(regex, flags):
     if not isinstance(regex, _re_type):
-        regex = re.compile(regex)
+        regex = re.compile(regex, flags)
     return regex, _make_getter(regex)
 
 
 def re_iter(regex, s, flags=0):
-    regex, getter = _prepare(regex)
-    return imap(getter, re.finditer(regex, s, flags))
+    regex, getter = _prepare(regex, flags)
+    return imap(getter, regex.finditer(s))
 
 def re_all(regex, s, flags=0):
     return list(re_iter(regex, s, flags))
 
 def re_find(regex, s, flags=0):
-    regex, getter = _prepare(regex)
-    result = re.search(regex, s, flags)
-    return getter(result) if result else None
+    return re_finder(regex, flags)(s)
+
+def re_test(regex, s, flags=0):
+    return re_tester(regex, flags)(s)
+
+
+# TODO: shorter names?
+def re_finder(regex, flags=0):
+    regex, getter = _prepare(regex, flags)
+    return lambda s: iffy(getter)(regex.search(s))
+
+def re_tester(regex, flags=0):
+    regex, getter = _prepare(regex, flags)
+    return lambda s: bool(regex.search(s))
