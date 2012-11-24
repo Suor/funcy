@@ -31,3 +31,9 @@ def test_complement():
 
 def test_juxt():
     assert juxt(__add__, __sub__)(10, 2) == [12, 8]
+
+def test_iffy():
+    assert map(iffy(_ % 2, _ * 2, _ / 2), [1,2,3,4]) == [2,1,6,2]
+    assert map(iffy(_ % 2, _ * 2), [1,2,3,4]) == [2,2,6,4]
+    assert map(iffy(_ * 2), [1, '', None, '2']) == [2, '', None, '22']
+    assert map(iffy(_ % 2, _ * 2, None), [1,2,3,4]) == [2, None, 6, None]

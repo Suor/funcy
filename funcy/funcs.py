@@ -48,4 +48,6 @@ def iffy(pred, action=None, default=identity):
     if action is None:
         return iffy(bool, pred)
     else:
-        return lambda v: action(v) if pred(v) else default(v)
+        return lambda v: action(v)  if pred(v) else           \
+                         default(v) if callable(default) else \
+                         default
