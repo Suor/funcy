@@ -40,11 +40,9 @@ def re_test(regex, s, flags=0):
     return re_tester(regex, flags)(s)
 
 
-# TODO: shorter names?
 def re_finder(regex, flags=0):
     regex, getter = _prepare(regex, flags)
     return lambda s: iffy(getter)(regex.search(s))
 
 def re_tester(regex, flags=0):
-    regex, getter = _prepare(regex, flags)
-    return lambda s: bool(regex.search(s))
+    return lambda s: bool(re.search(regex, s, flags))
