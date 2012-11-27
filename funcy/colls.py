@@ -16,15 +16,6 @@ __all__ = ['empty', 'iteritems', 'join', 'merge',
 def empty(coll):
     return coll.__class__()
 
-# postponed - not sure if it's usefull
-# def not_empty(coll):
-#     return coll or None
-
-# polluting? this is a common variable name
-# posponed - since you should walk away with iteritems in most cases
-# def items(coll):
-#     return coll.items() if hasattr(coll, 'items') else coll
-
 def iteritems(coll):
     return coll.iteritems() if hasattr(coll, 'iteritems') else coll
 
