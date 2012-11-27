@@ -64,15 +64,15 @@ def walk_values(f, coll):
 
 # TODO: prewalk, postwalk and friends
 
-def select(f, coll):
+def select(pred, coll):
     """Same as filter but preserves coll type."""
-    return coll.__class__(ifilter(f, iteritems(coll)))
+    return coll.__class__(ifilter(pred, iteritems(coll)))
 
-def select_keys(f, coll):
-    return select(lambda (k, v): f(k), coll)
+def select_keys(pred, coll):
+    return select(lambda (k, v): pred(k), coll)
 
-def select_values(f, coll):
-    return select(lambda (k, v): f(v), coll)
+def select_values(pred, coll):
+    return select(lambda (k, v): pred(v), coll)
 
 ### Content tests
 
