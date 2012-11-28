@@ -1,8 +1,8 @@
 from __builtin__ import all as _all, any as _any
-from collections import Mapping, Set, Iterable, Iterator
+from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import ifilter, imap, chain
 
-from .funcs import complement
+from .funcs import partial, complement
 from .seqs import take
 
 
@@ -13,8 +13,15 @@ __all__ = ['empty', 'iteritems', 'join', 'merge',
 
 
 ### Generic ops
+def _factory(coll):
+    # Hack for defaultdicts overriden constructor
+    if isinstance(coll, defaultdict):
+        return partial(defaultdict, coll.default_factory)
+    else:
+        return coll.__class__
+
 def empty(coll):
-    return coll.__class__()
+    return _factory(coll)()
 
 def iteritems(coll):
     return coll.iteritems() if hasattr(coll, 'iteritems') else coll
@@ -30,7 +37,7 @@ def join(colls):
     if isinstance(dest, basestring):
         return ''.join(colls)
     elif isinstance(dest, Mapping):
-        return reduce(lambda a, b: cls(a, **b), colls)
+        return reduce(lambda a, b: _factory(dest)(a, **b), colls)
     elif isinstance(dest, Set):
         return dest.union(*it)
     elif isinstance(dest, (Iterator, xrange)):
@@ -54,7 +61,7 @@ def walk(f, coll):
     Walk coll transforming it's elements with f.
     Same as map, but preserves coll type.
     """
-    return coll.__class__(imap(f, iteritems(coll)))
+    return _factory(coll)(imap(f, iteritems(coll)))
 
 def walk_keys(f, coll):
     return walk(lambda (k, v): (f(k), v), coll)
@@ -66,7 +73,7 @@ def walk_values(f, coll):
 
 def select(pred, coll):
     """Same as filter but preserves coll type."""
-    return coll.__class__(ifilter(pred, iteritems(coll)))
+    return _factory(coll)(ifilter(pred, iteritems(coll)))
 
 def select_keys(pred, coll):
     return select(lambda (k, v): pred(k), coll)
@@ -115,4 +122,4 @@ def flip(mapping):
     return walk(lambda (k, v): (v, k), mapping)
 
 def project(mapping, keys):
-    return mapping.__class__((k, mapping[k]) for k in keys if k in mapping)
+    return _factory(mapping)((k, mapping[k]) for k in keys if k in mapping)
