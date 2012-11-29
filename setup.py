@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='funcy',
-    version='0.1.0',
+    version='0.2.0',
     author='Alexander Schepanovski',
     author_email='suor.web@gmail.com',
 
@@ -14,7 +14,7 @@ setup(
     packages=['funcy'],
 
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
