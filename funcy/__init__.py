@@ -1,4 +1,4 @@
-from .calc import memoize # partially experimental
+from .calc import *
 from .colls import *
 from .decorators import *
 from .funcolls import *
