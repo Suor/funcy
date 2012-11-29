@@ -1,0 +1,7 @@
+0.2
+- added curry() to funcs
+- added re_test(), re_tester() and re_finder() to strings
+- added second() to seqs
+- added one() and one_fn() to colls and funcolls
+- support defaultdicts in walk*(), select*(), project(), empty()
+- one argument and uncallable default in iffy()
