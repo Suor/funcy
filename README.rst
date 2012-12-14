@@ -120,3 +120,4 @@ TODO
 - vector chained boolean test (like perl 6 [<])
 - lazy, lazy_seq, lazy_dict
 - make better or get rid of generator version of @decorator
+- reject*(), split collections
