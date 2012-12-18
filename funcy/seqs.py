@@ -24,8 +24,8 @@ def iterate(f, x):
         x = f(x)
 
 
-def take(n, coll):
-    return list(islice(coll, n))
+def take(n, seq):
+    return list(islice(seq, n))
 
 def drop(n, seq):
     return islice(seq, n, None)
@@ -42,11 +42,11 @@ def rest(seq):
 
 # TODO: tree-seq equivalent
 
-def remove(pred, coll):
-    return filter(complement(pred), coll)
+def remove(pred, seq):
+    return filter(complement(pred), seq)
 
-def iremove(pred, coll):
-    return ifilter(complement(pred), coll)
+def iremove(pred, seq):
+    return ifilter(complement(pred), seq)
 
 def keep(f, seq=None):
     if seq is None:
@@ -60,19 +60,19 @@ def ikeep(f, seq=None):
     else:
         return ifilter(bool, imap(f, seq))
 
-def concat(*colls):
-    return list(chain(*colls))
+def concat(*seqs):
+    return list(chain(*seqs))
 iconcat = chain
 
-def cat(colls):
-    return list(icat(colls))
+def cat(seqs):
+    return list(icat(seqs))
 icat = chain.from_iterable
 
-def mapcat(f, *colls):
-    return cat(imap(f, *colls))
+def mapcat(f, *seqs):
+    return cat(imap(f, *seqs))
 
-def imapcat(f, *colls):
-    return icat(imap(f, *colls))
+def imapcat(f, *seqs):
+    return icat(imap(f, *seqs))
 
 def interleave(*seqs):
     return icat(izip(*seqs))
