@@ -1,0 +1,59 @@
+Collections
+===========
+
+Unite
+-----
+
+.. .. function:: empty(coll)
+
+
+.. function:: merge(*colls)
+
+    Merges several collections of same type into one: dicts, sets, lists, tuples, iterators or strings. For dicts values of later dicts override values of former ones with same keys.
+
+    Can be used in variety of ways, but merging dicts is probably most common::
+
+        def utility(**options):
+            defaults = {...}
+            options = merge(defaults, options)
+            ...
+
+    If you don't need exact result type when merging sequences use :func:`concat` or :func:`iconcat` instead.
+
+
+.. function:: join(colls)
+
+    Joins collections of same type into one. Same as :func:`merge`, but accepts iterable of collections.
+
+
+
+
+
+Transform and select
+--------------------
+
+.. function:: walk(f, coll)
+.. function:: walk_keys(f, coll)
+.. function:: walk_values(f, coll)
+.. function:: select(pred, coll)
+.. function:: select_keys(pred, coll)
+.. function:: select_values(pred, coll)
+
+
+Content tests
+-------------
+
+.. function:: is_distinct(colls)
+.. function:: all(colls)
+.. function:: any(colls)
+.. function:: none(colls)
+.. function:: one(colls)
+.. function:: some(colls)
+
+
+Dict utils
+----------
+
+.. function:: zipdict(colls)
+.. function:: flip(colls)
+.. function:: project(colls)
