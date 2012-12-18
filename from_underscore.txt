@@ -1,5 +1,5 @@
 # Collections
-find?=some(2arg) where? countby pluck?
+find?=some(2arg) where? countby pluck
 
 # Array
 compact=keep without
@@ -8,7 +8,7 @@ compact=keep without
 throttle once
 
 # Objects -> to dicts
-pick omit defaults?
+pick=project omit defaults?
 
 # Utility
 times?
