@@ -48,11 +48,17 @@ def remove(pred, coll):
 def iremove(pred, coll):
     return ifilter(complement(pred), coll)
 
-def keep(f, seq):
-    return filter(None, imap(f, seq))
+def keep(f, seq=None):
+    if seq is None:
+        return filter(bool, f)
+    else:
+        return filter(bool, imap(f, seq))
 
-def ikeep(f, seq):
-    return ifilter(None, imap(f, seq))
+def ikeep(f, seq=None):
+    if seq is None:
+        return ifilter(bool, f)
+    else:
+        return ifilter(bool, imap(f, seq))
 
 def concat(*colls):
     return list(chain(*colls))

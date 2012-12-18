@@ -34,6 +34,8 @@ def test_remove():
 
 def test_keep():
     assert keep(_ % 3, range(5)) == [1, 2, 1]
+    assert keep(range(5)) == [1, 2, 3, 4]
+    assert keep(mapcat(range, range(4))) == [1, 1, 2]
 
 def test_concat():
     assert concat('ab', 'cd') == list('abcd')
