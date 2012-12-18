@@ -4,7 +4,7 @@ from functools import wraps
 from .decorators import decorator
 
 
-__all__ = ['ignore', 'silent', 'limit_error_rate', 'ErrorRateExceeded']
+__all__ = ['ignore', 'silent', 'fallback', 'limit_error_rate', 'ErrorRateExceeded']
 
 
 @decorator
@@ -25,6 +25,15 @@ def retry(call, tries, errors=Exception):
             # Reraise error on last attempt
             if attempt + 1 == tries:
                 raise
+
+
+def fallback(approaches):
+    for approach in approaches:
+        func, catch = (approach, Exception) if callable(approach) else approach
+        try:
+            return func()
+        except catch:
+            pass
 
 
 class ErrorRateExceeded(Exception):

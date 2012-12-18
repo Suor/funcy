@@ -5,7 +5,7 @@ from .funcolls import *
 from .funcs import *
 from .seqs import *
 from .strings import *
-from .flow import ignore, silent, retry # partially experimental
+from .flow import ignore, silent, retry, fallback # partially experimental
 # from debug import * # fully experimental
 
 
