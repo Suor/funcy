@@ -121,3 +121,4 @@ TODO
 - lazy, lazy_seq, lazy_dict
 - make better or get rid of generator version of @decorator
 - reject*(), split collections
+- merge_with(), join_with()

@@ -13,6 +13,7 @@ __all__ = ['count', 'repeat', 'repeatedly', 'iterate',
 
 
 from itertools import count, repeat
+# cycle?
 
 def repeatedly(f, n=None):
     _repeat = repeat(None, n) if n else repeat(None)
