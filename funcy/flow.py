@@ -27,7 +27,7 @@ def retry(call, tries, errors=Exception):
                 raise
 
 
-def fallback(approaches):
+def fallback(*approaches):
     for approach in approaches:
         func, catch = (approach, Exception) if callable(approach) else approach
         try:
