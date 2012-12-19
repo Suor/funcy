@@ -1,8 +1,10 @@
 # Collections
-find?=some(2arg) where? countby pluck
+where? countby pluck?=map(attrgetter(...), ...) invoke?=map(methodcaller(...), ...)
+foldl?=reduce foldr?
 
 # Array
-compact=keep without
+compact=keep/1 without(relates to conj)
+flatten?
 
 # Functions
 throttle once
