@@ -16,7 +16,6 @@ Contents:
    funcs
    decorators
    flow
-   funcolls
    strings
    calc
    other

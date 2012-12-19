@@ -26,9 +26,6 @@ Unite
     Joins collections of same type into one. Same as :func:`merge`, but accepts iterable of collections.
 
 
-
-
-
 Transform and select
 --------------------
 
@@ -38,6 +35,14 @@ Transform and select
 .. function:: select(pred, coll)
 .. function:: select_keys(pred, coll)
 .. function:: select_values(pred, coll)
+
+
+Dict utils
+----------
+
+.. function:: zipdict(colls)
+.. function:: flip(colls)
+.. function:: project(colls)
 
 
 Content tests
@@ -51,9 +56,11 @@ Content tests
 .. function:: some(colls)
 
 
-Dict utils
-----------
+Collections of functions
+------------------------
 
-.. function:: zipdict(colls)
-.. function:: flip(colls)
-.. function:: project(colls)
+.. function:: all_fn(*fs)
+.. function:: any_fn(*fs)
+.. function:: none_fn(*fs)
+.. function:: one_fn(*fs)
+.. function:: some_fn(*fs)
