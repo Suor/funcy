@@ -5,7 +5,7 @@ from .funcs import complement
 
 
 __all__ = ['count', 'repeat', 'repeatedly', 'iterate',
-           'take', 'drop', 'first', 'rest',
+           'take', 'drop', 'first', 'second', 'rest',
            'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
            'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
            'izip', 'interleave', 'interpose', 'distinct',
