@@ -6,7 +6,7 @@ setup(
     author='Alexander Schepanovski',
     author_email='suor.web@gmail.com',
 
-    description='A fancy functional tools.',
+    description='A fancy functional tools. Manipulate your functions and data with ease.',
     long_description=open('README.rst').read(),
     url='http://github.com/Suor/funcy',
     license='BSD',
