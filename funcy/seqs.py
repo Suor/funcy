@@ -44,10 +44,8 @@ def rest(seq):
 # TODO: tree-seq equivalent
 
 def remove(pred, seq):
-    return filter(complement(pred), seq)
-
-def iremove(pred, seq):
-    return ifilter(complement(pred), seq)
+    return list(iremove(pred, seq))
+iremove = ifilterfalse
 
 def keep(f, seq=None):
     if seq is None:
