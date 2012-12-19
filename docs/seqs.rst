@@ -1,6 +1,8 @@
 Sequences
 =========
 
+.. module:: seqs
+
 Generate
 --------
 
@@ -28,11 +30,13 @@ Unite
 
     Concats several sequences into one.
 
-    :func:`iconcat` is the same as ``itertools.chain()``
+    :func:`iconcat` is an alias for :func:`itertools.chain`.
 
 
 .. function:: cat(seqs)
-              icats(seqs)
+              icat(seqs)
+
+    :func:`icat` is an alias for :meth:`itertools.chain.from_iterable`.
 
 
 Transform and filter
@@ -40,6 +44,8 @@ Transform and filter
 
 .. function:: remove(pred, coll)
               iremove(pred, coll)
+
+    :func:`iremove` is an alias for :func:`itertools.ifilterfalse`.
 
 .. function:: keep([f], seq)
               ikeep([f], seq)
