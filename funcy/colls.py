@@ -1,4 +1,5 @@
 from __builtin__ import all as _all, any as _any
+from operator import itemgetter, methodcaller
 from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import ifilter, imap, chain
 
@@ -9,7 +10,8 @@ from .seqs import take
 __all__ = ['empty', 'iteritems', 'join', 'merge',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
-           'zipdict', 'flip', 'project']
+           'zipdict', 'flip', 'project',
+           'where', 'pluck', 'invoke']
 
 
 ### Generic ops
@@ -123,3 +125,17 @@ def flip(mapping):
 
 def project(mapping, keys):
     return _factory(mapping)((k, mapping[k]) for k in keys if k in mapping)
+
+
+def where(mappings, **cond):
+    match = lambda m: all(m[k] == v for k, v in cond.items())
+    return filter(match, mappings)
+
+# NOTE: should I change params order to be more consistent with map/filter
+#       or leave as is to be consistent with where/invoke?
+def pluck(mappings, key):
+    return map(itemgetter(key), mappings)
+
+
+def invoke(objects, name, *args, **kwargs):
+    return map(methodcaller(name, *args, **kwargs), objects)

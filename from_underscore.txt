@@ -1,5 +1,5 @@
 # Collections
-where countby pluck=map(attrgetter(...), ...) invoke=map(methodcaller(...), ...)
+countby
 foldl?=reduce foldr?
 
 # Array

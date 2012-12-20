@@ -120,3 +120,18 @@ def test_project():
     assert project({'a':1, 'b':2, 'c': 3}, 'ac') == {'a':1, 'c': 3}
     dd = defaultdict(int, {'a':1, 'b':2, 'c': 3})
     assert eq(project(dd, 'ac'), defaultdict(int, {'a':1, 'c': 3}))
+
+
+def test_where():
+    data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
+    assert where(data, a=1) == [{'a': 1, 'b': 2}]
+    assert where(data, a=1, b=2) == [{'a': 1, 'b': 2}]
+    assert where(data, b=2) == data
+
+def test_pluck():
+    data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
+    assert pluck(data, 'a') == [1, 10]
+
+
+def test_invoke():
+    assert invoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]

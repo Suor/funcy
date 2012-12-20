@@ -45,6 +45,14 @@ Dict utils
 .. function:: project(colls)
 
 
+Data mangling
+-------------
+
+.. function:: where(mappings, **cond)
+.. function:: pluck(mappings, key)
+.. function:: invoke(objects, name, *args, **kwargs)
+
+
 Content tests
 -------------
 
