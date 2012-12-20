@@ -29,7 +29,8 @@ def test_iteritems():
     assert list(iteritems({'a': 1})) == [('a', 1)]
 
 def test_join():
-    assert pytest.raises(TypeError, join, [])
+    assert join([]) is None
+    assert pytest.raises(TypeError, join, [1])
     assert eq(join(['', 'ab', 'cd']), 'abcd')
     assert eq(join([['a', 'b'], 'c']), list('abc'))
     assert eq(join([('a', 'b'), ('c',)]), tuple('abc'))

@@ -31,7 +31,7 @@ def join(colls):
     it = iter(colls)
     dest = next(it, None)
     if dest is None:
-        raise TypeError('join needs at least one collection or string')
+        return None
     cls = dest.__class__
 
     if isinstance(dest, basestring):
