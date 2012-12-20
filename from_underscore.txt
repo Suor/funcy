@@ -3,14 +3,14 @@ where countby pluck=map(attrgetter(...), ...) invoke=map(methodcaller(...), ...)
 foldl?=reduce foldr?
 
 # Array
-compact=keep/1 without(relates to conj)
+compact=keep/1? without(relates to conj)
 flatten?
 
 # Functions
-throttle once
+throttle? once?
 
 # Objects -> to dicts
-pick=project omit defaults?
+pick=project omit? defaults?
 
 # Utility
 times?
