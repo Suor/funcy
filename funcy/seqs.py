@@ -4,7 +4,7 @@ from collections import defaultdict
 from .funcs import complement
 
 
-__all__ = ['count', 'repeat', 'repeatedly', 'iterate',
+__all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'take', 'drop', 'first', 'second', 'rest',
            'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
            'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
@@ -12,8 +12,7 @@ __all__ = ['count', 'repeat', 'repeatedly', 'iterate',
            'dropwhile', 'takewhile', 'isplit', 'split', 'groupby', 'partition', 'chunks']
 
 
-from itertools import count, repeat
-# cycle?
+from itertools import count, cycle, repeat
 
 def repeatedly(f, n=None):
     _repeat = repeat(None, n) if n else repeat(None)
