@@ -31,6 +31,9 @@ def curry(func, n=None):
     else:
         return lambda x: curry(lambda *y: func(x, *y), n - 1)
 
+# NOTE: could be optimized in two ways:
+#       1. Don't use an `identity` in reduce if fs is not empty.
+#       2. Use special `pair` version depending on fs[-1] signature.
 def compose(*fs):
     pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
     return reduce(pair, fs, identity)
