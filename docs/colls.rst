@@ -18,12 +18,14 @@ Unite
             options = merge(defaults, options)
             ...
 
-    If you don't need exact result type when merging sequences use :func:`concat` or :func:`iconcat` instead.
+    If you merge sequences and don't need to preserve collection type then use :func:`concat` or :func:`iconcat` instead.
 
 
 .. function:: join(colls)
 
     Joins collections of same type into one. Same as :func:`merge`, but accepts iterable of collections.
+
+    Use :func:`cat` and :func:`icat` for non-type preserving sequence join.
 
 
 Transform and select
