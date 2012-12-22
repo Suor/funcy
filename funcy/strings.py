@@ -11,6 +11,8 @@ __all__ = ['re_iter', 're_all', 're_find', 're_finder', 're_test', 're_tester']
 def _make_getter(regex):
     if regex.groups == 0:
         return methodcaller('group')
+    elif regex.groups == 1 and regex.groupindex == {}:
+        return methodcaller('group', 1)
     elif regex.groupindex == {}:
         return methodcaller('groups')
     elif regex.groups == len(regex.groupindex):
