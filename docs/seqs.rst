@@ -1,12 +1,22 @@
 Sequences
 =========
 
+This functions are aimed at manipulating finite and infinite sequences of values. Some functions have two flavours: one returning list and other returning possibly infinite iterator, the latter ones follow convention of prepending ``i`` before list-returning function name.
+
+When working with sequences, see also :mod:`itertools` standard module. Funcy reexports and aliases some functions from it.
+
 Generate
 --------
 
 .. function:: repeat(elem, [n])
 
-    Makes an iterator returning ``elem`` for ``n`` times or indefinitly if ``n`` is omitted.
+    Makes an iterator returning ``elem`` for ``n`` times or indefinitly if ``n`` is omitted. :func:`repeat` simply repeat given value, when you need to reevaluate something repeatedly use :func:`repeatedly` instead.
+
+    When you just need a length ``n`` list or tuple of ``elem`` you can use::
+
+        [elem] * n
+        # or
+        (elem,) * n
 
     .. Is a reexport of :func:`itertools.repeat`.
 
@@ -15,12 +25,31 @@ Generate
 
     Makes infinite iterator of values: ``start, start + step, start + 2*step, ...``.
 
-    .. Is a reexport of :func:`itertools.count`.
+    Could be used to gererate sequence::
+
+        imap(lambda x: x ** 2, count(1))
+        # -> 1, 4, 9, 16, ...
+
+    Or annotate sequence using :func:`zip` or :func:`itertools.izip`::
+
+        zip(count(), 'abcd')
+        # -> [(0, 'a'), (1, 'b'), (2, 'c'), (3, 'd')]
+
+        # print code with BASIC-style numbered lines::
+        for line in izip(count(10, 10), code.splitlines()):
+            print '%d %s' % line
+
+    See also :func:`enumerate` and original :func:`itertools.count` documentation.
 
 
 .. function:: cycle(seq)
 
     Cycles passed ``seq`` indefinitly returning its elements one by one.
+
+    Useful when you need to cyclically decorate some sequence::
+
+        for n, parity in izip(count(), cycle(['even', 'odd'])):
+            print '%d is %s' % (n, parity)
 
     .. Is a reexport of :func:`itertools.cycle`.
 
@@ -51,20 +80,34 @@ Generate
         iterate(lambda x: x * 2, 1)
         # -> 1, 2, 4, 8, 16, ...
 
-        # this one generates Fibonacci sequence
         step = lambda ((a, b)): (b, a + b)
         imap(first, iterate(step, (0, 1)))
-        # -> 0, 1, 1, 2, 3, 5, 8, ...
+        # -> 0, 1, 1, 2, 3, 5, 8, ... (Fibonacci sequence)
 
 Manipulate
 ----------
 
+This section provides some robust tools for sequence slicing. Consider :ref:`slicings` or :func:`itertools.islice` for more generic cases.
+
 .. function:: take(n, seq)
+
+    Returns a list of the first ``n`` items in sequence, or all items if there are fewer than ``n``.
+
 .. function:: drop(n, seq)
+
+    Skips first ``n`` items in sequence, returning iterator yielding rest of its items.
+
 .. function:: first(seq)
+
+    Returns first item in sequence. Raises :exc:`ValueError` if sequence is empty.
+
 .. function:: second(seq)
+
+    Returns second item in sequence. Raises :exc:`ValueError` if there are less than two items in it.
+
 .. function:: rest(seq)
 
+    Skips first item in sequence, returning iterator starting just after it.
 
 Unite
 -----
