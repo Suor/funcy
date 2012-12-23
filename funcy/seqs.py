@@ -31,7 +31,10 @@ def drop(n, seq):
     return islice(seq, n, None)
 
 def first(seq):
-    return next(iter(seq), None)
+    try:
+        return next(iter(seq))
+    except StopIteration:
+        raise ValueError('not enough values in sequence')
 
 def second(seq):
     return first(rest(seq))
