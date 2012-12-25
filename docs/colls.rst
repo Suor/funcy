@@ -34,9 +34,19 @@ Transform and select
 .. function:: walk(f, coll)
 .. function:: walk_keys(f, coll)
 .. function:: walk_values(f, coll)
+
+    ::
+
+        groups = walk_values(sorted, groups) # partial(sorted, key=...)
+
+
 .. function:: select(pred, coll)
 .. function:: select_keys(pred, coll)
 .. function:: select_values(pred, coll)
+
+    Strip falsy values from dict::
+
+        select_values(bool, some_dict)
 
 
 Dict utils

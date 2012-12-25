@@ -1,6 +1,8 @@
 Sequences
 =========
 
+.. .. module:: seqs
+
 This functions are aimed at manipulating finite and infinite sequences of values. Some functions have two flavours: one returning list and other returning possibly infinite iterator, the latter ones follow convention of prepending ``i`` before list-returning function name.
 
 When working with sequences, see also :mod:`itertools` standard module. Funcy reexports and aliases some functions from it.
@@ -30,7 +32,7 @@ Generate
         imap(lambda x: x ** 2, count(1))
         # -> 1, 4, 9, 16, ...
 
-    Or annotate sequence using :func:`zip` or :func:`itertools.izip`::
+    Or annotate sequence using :func:`zip` or :func:`~itertools.izip`::
 
         zip(count(), 'abcd')
         # -> [(0, 'a'), (1, 'b'), (2, 'c'), (3, 'd')]
@@ -93,17 +95,50 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
     Returns a list of the first ``n`` items in sequence, or all items if there are fewer than ``n``.
 
+    ::
+
+        take(3, [2, 3, 4, 5]) # [2, 3, 4]
+        take(3, count(5))     # [5, 6, 7]
+        take(3, 'ab')         # ['a', 'b']
+
 .. function:: drop(n, seq)
 
     Skips first ``n`` items in sequence, returning iterator yielding rest of its items.
 
+    ::
+
+        drop(3, [2, 3, 4, 5]) # iter([5])
+        drop(3, count(5))     # count(8)
+        drop(3, 'ab')         # empty iterator
+
 .. function:: first(seq)
 
-    Returns first item in sequence. Returns ``None`` if sequence is empty.
+    Returns first item in sequence. Returns ``None`` if sequence is empty. Typical usage is choosing first of some inplace generated variants::
+
+        # Get a text message of first failed validation rule
+        fail = first(rule.text for rule in rules if not rule.test(instance))
+
+        # Use simple pattern matching to construct form field widget
+        TYPE_TO_WIDGET = (
+            [lambda f: f.choices,           lambda f: Select(choices=f.choices)],
+            [lambda f: f.type == 'int',     lambda f: TextInput(coerce=int)],
+            [lambda f: f.type == 'string',  lambda f: TextInput()],
+            [lambda f: f.type == 'text',    lambda f: Textarea()],
+            [lambda f: f.type == 'boolean', lambda f: Checkbox(f.label)],
+        )
+        return first(do(field) for cond, do in TYPE_TO_WIDGET if cond(field))
+
+    Other common use case is passing to :func:`map` or :func:`~itertools.imap`. See last example in :func:`iterate` for such example.
+
 
 .. function:: second(seq)
 
     Returns second item in sequence. Returns ``None`` if there are less than two items in it.
+
+    Could come in handy with sequences of pairs, e.g. :meth:`dict.items`. Following code extract values of a dict sorted by keys::
+
+        map(second, sorted(selected.items()))
+
 
 .. function:: rest(seq)
 
@@ -155,7 +190,7 @@ Data mangling
 
 .. function:: distinct(seq)
 .. function:: split(at, seq)
-.. function:: isplit(at, seq)
+.. .. function:: isplit(at, seq)
 .. function:: groupby(f, seq)
 .. function:: partition(n, [step], seq)
 .. function:: chunks(n, [step], seq)
