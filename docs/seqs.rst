@@ -99,11 +99,11 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
 .. function:: first(seq)
 
-    Returns first item in sequence. Raises :exc:`ValueError` if sequence is empty.
+    Returns first item in sequence. Returns ``None`` if sequence is empty.
 
 .. function:: second(seq)
 
-    Returns second item in sequence. Raises :exc:`ValueError` if there are less than two items in it.
+    Returns second item in sequence. Returns ``None`` if there are less than two items in it.
 
 .. function:: rest(seq)
 
