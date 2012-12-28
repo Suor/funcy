@@ -37,7 +37,7 @@ Generate
         zip(count(), 'abcd')
         # -> [(0, 'a'), (1, 'b'), (2, 'c'), (3, 'd')]
 
-        # print code with BASIC-style numbered lines::
+        # print code with BASIC-style numbered lines
         for line in izip(count(10, 10), code.splitlines()):
             print '%d %s' % line
 
@@ -142,7 +142,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
 .. function:: rest(seq)
 
-    Skips first item in sequence, returning iterator starting just after it.
+    Skips first item in sequence, returning iterator starting just after it. A shortcut for :func:`drop(1, seq) <drop>`.
 
 Unite
 -----
