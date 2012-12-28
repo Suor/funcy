@@ -150,13 +150,31 @@ Unite
 .. function:: concat(*seqs)
               iconcat(*seqs)
 
-    Concats several sequences into one.
+    Concats several sequences into one. :func:`iconcat` returns an iterator yielding concatenation.
 
     :func:`iconcat` is an alias for :func:`itertools.chain`.
 
 
 .. function:: cat(seqs)
               icat(seqs)
+
+    Returns concatenation of passed seqs. Useful when dealing with sequence of sequences, see :func:`concat` or :func:`iconcat` to join just a few sequences.
+
+    Flattening of various nested sequences is most common use::
+
+        # flatten two level deep list
+        cat(list_of_lists)
+
+        # get a flat html of errors of a form
+        errors = icat(inline.errors() for inline in form)
+        error_text = '<br>'.join(errors)
+
+        # brace expansion on product of sums
+        # (a + b)(t + pq)x == atx + apqx + btx + bpqx
+        terms = [['a', 'b'], ['t', 'pq'], ['x']]
+        map(cat, product(*terms))
+        # [list('atx'), list('apqx'), list('btx'), list('bpqx')]
+
 
     :func:`icat` is an alias for :meth:`itertools.chain.from_iterable`.
 
