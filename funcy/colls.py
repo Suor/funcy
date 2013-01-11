@@ -19,6 +19,8 @@ def _factory(coll):
     # Hack for defaultdicts overriden constructor
     if isinstance(coll, defaultdict):
         return partial(defaultdict, coll.default_factory)
+    elif isinstance(coll, basestring):
+        return ''.join
     else:
         return coll.__class__
 
