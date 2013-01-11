@@ -18,7 +18,7 @@ Unite
             options = merge(defaults, options)
             ...
 
-    If you merge sequences and don't need to preserve collection type then use :func:`concat` or :func:`iconcat` instead.
+    If you merge sequences and don't need to preserve collection type, then use :func:`concat` or :func:`iconcat` instead.
 
 
 .. function:: join(colls)
@@ -32,12 +32,43 @@ Transform and select
 --------------------
 
 .. function:: walk(f, coll)
+
+    Returns collection of same type as ``coll`` consisting of its elements mapped with given function::
+
+        walk(inc, {1, 2, 3}) # -> {2, 3, 4}
+        walk(inc, (1, 2, 3)) # -> (2, 3, 4)
+
+    When walking dict, ``(key, value)`` pairs are mapped, i.e. this lines :func:`flip` dict::
+
+        swap = lambda (k, v): (v, k)
+        walk(swap, {1: 10, 2: 20})
+
+    :func:`walk` works with strings too::
+
+        walk(lambda x: x * 2, 'ABC')   # -> 'AABBCC'
+        walk(compose(str, ord), 'ABC') # -> '656667'
+
+    One should probably use :func:`map` or :func:`~itertools.imap` when doesn't need to preserve collection type.
+
 .. function:: walk_keys(f, coll)
+
+    Walks keys of ``coll`` mapping them with given function. Works with mappings and collections of pairs::
+
+        walk_keys(str.upper, {'a': 1, 'b': 2}) # {'A': 1, 'B': 2}
+
+
+    .. :class:`dicts <dict>`, :class:`defaultdicts <collections.defaultdict>`
+
 .. function:: walk_values(f, coll)
 
-    ::
+    Walks values of ``coll`` mapping them with given function. Works with mappings and collections of pairs.
 
-        groups = walk_values(sorted, groups) # partial(sorted, key=...)
+    Common use is to process values somehow::
+
+        clean_values = walk_values(int, form_values)
+        sorted_groups = walk_values(sorted, groups)
+
+    Hint: you can use :func:`partial(sorted, key=...) <partial>` instead of :func:`sorted` to sort in non-default way.
 
 
 .. function:: select(pred, coll)
