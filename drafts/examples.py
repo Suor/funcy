@@ -52,3 +52,15 @@ class namespace_meta(type):
 
 class namespace(object):
     __metaclass__ = namespace_meta
+
+
+names = chain.from_iterable(get_all_names(color))
+try:
+    return ifilter(None, imap(COLOR_BY_NAME.get, names)).next()
+except StopIteration:
+    return unknown()
+
+etags = map(etag_from_response, responses)
+etags = filter(None, etags)
+
+phones = filter(None, map(stub_to_phone, _extract_stubs(text)))
