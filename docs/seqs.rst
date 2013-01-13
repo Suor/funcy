@@ -7,6 +7,7 @@ This functions are aimed at manipulating finite and infinite sequences of values
 
 When working with sequences, see also :mod:`itertools` standard module. Funcy reexports and aliases some functions from it.
 
+
 Generate
 --------
 
@@ -86,6 +87,7 @@ Generate
         imap(first, iterate(step, (0, 1)))
         # -> 0, 1, 1, 2, 3, 5, 8, ... (Fibonacci sequence)
 
+
 Manipulate
 ----------
 
@@ -148,6 +150,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
     Skips first item in sequence, returning iterator starting just after it. A shortcut for :func:`drop(1, seq) <drop>`.
 
+
 Unite
 -----
 
@@ -186,13 +189,54 @@ Unite
 Transform and filter
 --------------------
 
-.. function:: remove(pred, coll)
-              iremove(pred, coll)
+.. function:: remove(pred, seq)
+              iremove(pred, seq)
+
+    Return a list or an iterator of items of ``seq`` that result in false when passed to ``pred``. The results of this functions complement results of standard :func:`filter` and :func:`~itertools.ifilter`. The notable diffrence is that predicate can't be ``None``, use ``bool`` instead::
+
+        remove(bool, [0, 1, 2, ''])
+        # -> [0, '']
+
+    Other handy use is passing :func:`re_tester` result as ``pred``. For example, this code removes any whitespace only lines from list::
+
+        remove(re_tester('^\s+$'), lines)
 
     :func:`iremove` is an alias for :func:`itertools.ifilterfalse`.
 
 .. function:: keep([f], seq)
               ikeep([f], seq)
+
+    Maps ``seq`` with given function and then filters out falsy elements. Simply filters ``seq`` when ``f`` is absent. In fact these functions are just handy shortcuts::
+
+        keep(f, seq)  == filter(bool, map(f, seq))
+        keep(seq)     == filter(bool, seq)
+
+        ikeep(f, seq) == ifilter(bool, imap(f, seq))
+        ikeep(seq)    == ifilter(bool, seq)
+
+    Natural use case for :func:`keep` is data extraction or recognition that could eventually fail::
+
+        # Extract numbers from words:
+        keep(re_finder(r'\d+'), words)
+
+        # Recognize as many colors by name as possible:
+        keep(COLOR_BY_NAME.get, color_names)
+
+    An iterator version can be useful when you don't need or not sure you need the whole sequence. For example, you can use :func:`first` - :func:`ikeep` combo to find out first match::
+
+        first(ikeep(COLOR_BY_NAME.get, color_name_candidates))
+
+    Alternatively, you can do the same with :func:`some` and :func:`~itertools.imap`.
+
+    One argument variant is a simple tool to keep your data free of falsy junk. This one returns non-empty description lines::
+
+        keep(description.splitlines())
+
+    Other common case is using generator expression instead of mapping function. Consider these two lines::
+
+        keep(f.name for f in fields)     # sugar generator expression
+        keep(attrgetter('name'), fields) # pure functions
+
 
 .. function:: mapcat(f, *colls)
               imapcat(f, *colls)
