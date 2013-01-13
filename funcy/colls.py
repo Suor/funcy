@@ -1,7 +1,7 @@
 from __builtin__ import all as _all, any as _any
 from operator import itemgetter, methodcaller
 from collections import Mapping, Set, Iterable, Iterator, defaultdict
-from itertools import ifilter, imap, chain
+from itertools import ifilter, imap, chain, tee
 
 from .funcs import partial, complement
 from .seqs import take
@@ -36,7 +36,8 @@ def iteritems(coll):
 
 
 def join(colls):
-    it = iter(colls)
+    colls, colls_copy = tee(colls)
+    it = iter(colls_copy)
     dest = next(it, None)
     if dest is None:
         return None

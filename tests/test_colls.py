@@ -31,7 +31,7 @@ def test_iteritems():
 def test_join():
     assert join([]) is None
     assert pytest.raises(TypeError, join, [1])
-    assert eq(join(['', 'ab', 'cd']), 'abcd')
+    assert eq(join(['ab', '', 'cd']), 'abcd')
     assert eq(join([['a', 'b'], 'c']), list('abc'))
     assert eq(join([('a', 'b'), ('c',)]), tuple('abc'))
     assert eq(join([{'a': 1}, {'b': 2}]), {'a': 1, 'b': 2})
@@ -47,6 +47,16 @@ def test_join():
     dd2 = defaultdict(int, b=2)
     assert eq(join([dd1, dd2]), defaultdict(int, a=1, b=2))
 
+def test_join_iter():
+    assert join(iter('abc')) == 'abc'
+    assert join(iter([[1], [2]])) == [1, 2]
+    assert eq(join(iter([{'a': 1}, {'b': 2}])), {'a': 1, 'b': 2})
+    assert eq(join(iter([{1,2}, {3}])), {1,2,3})
+
+    it1 = (x for x in range(2))
+    it2 = (x for x in range(5, 7))
+    chained = join([it1, it2])
+    assert isinstance(chained, Iterator) and list(chained) == [0,1,5,6]
 
 def test_walk():
     assert eq(walk(inc, [1,2,3]), [2,3,4])
