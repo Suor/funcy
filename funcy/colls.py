@@ -119,6 +119,10 @@ def some(pred, coll=None):
         return some(None, pred)
     return next(ifilter(pred, coll), None)
 
+# TODO: a variant of some that returns mapped value,
+#       one can use some(imap(f, seq)) or first(ikeep(f, seq)) for now.
+#       Call it `find`?
+
 # TODO: vector comparison tests - ascending, descending and such
 
 # TODO: capabilities + type tests or skip?
