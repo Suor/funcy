@@ -137,7 +137,11 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
     Could come in handy with sequences of pairs, e.g. :meth:`dict.items`. Following code extract values of a dict sorted by keys::
 
-        map(second, sorted(selected.items()))
+        map(second, sorted(some_dict.items()))
+
+    And this line constructs an ordered by value dict from a plain one::
+
+        OrderedDict(sorted(plain_dict, key=second))
 
 
 .. function:: rest(seq)
