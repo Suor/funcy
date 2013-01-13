@@ -64,3 +64,5 @@ etags = map(etag_from_response, responses)
 etags = filter(None, etags)
 
 phones = filter(None, map(stub_to_phone, _extract_stubs(text)))
+
+return reduce(concat, map(extract_updates, rows))

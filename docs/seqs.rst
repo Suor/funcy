@@ -238,14 +238,25 @@ Transform and filter
         keep(attrgetter('name'), fields) # pure functions
 
 
-.. function:: mapcat(f, *colls)
-              imapcat(f, *colls)
+.. function:: mapcat(f, *seqs)
+              imapcat(f, *seqs)
+
+    Maps given sequence(s) and then concatenates them, essentially a shortcut for ``cat(map(f, *seqs))``. Come in handy when extracting multiple values from every sequence item or transforming nested sequences::
+
+        # Get all the lines of all the texts in single flat list:
+        mapcat(str.splitlines, bunch_of_texts)
+
+        # Extract all numbers from strings:
+        mapcat(partial(re_all, r'\d+'), bunch_of_strings)
 
 
 Sequence mangling
 -----------------
 
 .. function:: interleave(*seqs)
+
+    Returns an iterator yielding first item in each sequence, then second and so on until some sequence ends. Numbers of items taken from all sequences are always equal.
+
 .. function:: interpose(sep, seq)
 .. function:: dropwhile(pred, seq)
 .. function:: takewhile(pred, seq)
