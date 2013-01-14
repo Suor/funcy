@@ -169,14 +169,14 @@ Unite
 
     Flattening of various nested sequences is most common use::
 
-        # flatten two level deep list
+        # Flatten two level deep list
         cat(list_of_lists)
 
-        # get a flat html of errors of a form
+        # Get a flat html of errors of a form
         errors = icat(inline.errors() for inline in form)
         error_text = '<br>'.join(errors)
 
-        # brace expansion on product of sums
+        # Brace expansion on product of sums
         # (a + b)(t + pq)x == atx + apqx + btx + bpqx
         terms = [['a', 'b'], ['t', 'pq'], ['x']]
         map(cat, product(*terms))
@@ -216,10 +216,10 @@ Transform and filter
 
     Natural use case for :func:`keep` is data extraction or recognition that could eventually fail::
 
-        # Extract numbers from words:
+        # Extract numbers from words
         keep(re_finder(r'\d+'), words)
 
-        # Recognize as many colors by name as possible:
+        # Recognize as many colors by name as possible
         keep(COLOR_BY_NAME.get, color_names)
 
     An iterator version can be useful when you don't need or not sure you need the whole sequence. For example, you can use :func:`first` - :func:`ikeep` combo to find out first match::
@@ -243,10 +243,10 @@ Transform and filter
 
     Maps given sequence(s) and then concatenates them, essentially a shortcut for ``cat(map(f, *seqs))``. Come in handy when extracting multiple values from every sequence item or transforming nested sequences::
 
-        # Get all the lines of all the texts in single flat list:
+        # Get all the lines of all the texts in single flat list
         mapcat(str.splitlines, bunch_of_texts)
 
-        # Extract all numbers from strings:
+        # Extract all numbers from strings
         mapcat(partial(re_all, r'\d+'), bunch_of_strings)
 
 
