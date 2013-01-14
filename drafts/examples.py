@@ -66,3 +66,30 @@ etags = filter(None, etags)
 phones = filter(None, map(stub_to_phone, _extract_stubs(text)))
 
 return reduce(concat, map(extract_updates, rows))
+
+op_js = ' %s ' % node.op.js
+node.js = op_js.join(v.js for v in node.values)
+
+' '.join(n.js for n in interpose(node.op, node.values))
+
+mapcat(translate, interpose(node.op, node.values))
+translate_items(interpose(node.op, node.values))
+
+35:         while self.exists(name):
+36              name = name_fmt % i
+37              i += 1
+
+@property
+def path(self):
+    parents = []
+    p = self
+    while p.parent:
+        p = p.parent
+        parents.append(p)
+    parents.reverse()
+    return parents
+
+    # path = takewhile(bool, iterate(_.parent, self))
+    path = takewhile(bool, iterate(attrgetter('parent'), self))
+    path = takewhile(bool, iterate(lambda node: node.parent, self))
+    return reversed(rest(path))
