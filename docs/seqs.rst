@@ -301,9 +301,9 @@ Data mangling
 
         private, public = split(re_tester('^_'), dir(instance))
 
-.. function:: split_at(pos, seq)
+.. function:: split_at(n, seq)
 
-    Splits sequence at given position, returning a tuple ``take(pos, seq), list(drop(pos, seq))``.
+    Splits sequence at given position, returning a tuple ``take(n, seq), list(drop(n, seq))``.
 
 .. function:: split_by(pred, seq)
 

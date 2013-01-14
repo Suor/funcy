@@ -95,12 +95,12 @@ def isplit(pred, seq):
 def split(pred, seq):
     return map(list, isplit(pred, seq))
 
-def isplit_at(pos, seq):
+def isplit_at(n, seq):
     a, b = tee(seq)
-    return islice(a, pos), islice(b, pos, None)
+    return islice(a, n), islice(b, n, None)
 
-def split_at(pos, seq):
-    return map(list, isplit_at(pos, seq))
+def split_at(n, seq):
+    return map(list, isplit_at(n, seq))
 
 def isplit_by(pred, seq):
     a, b = tee(seq)
