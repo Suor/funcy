@@ -9,7 +9,8 @@ __all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
            'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
            'izip', 'interleave', 'interpose', 'distinct',
-           'dropwhile', 'takewhile', 'isplit', 'split', 'groupby', 'partition', 'chunks']
+           'dropwhile', 'takewhile', 'isplit', 'split', 'isplit_at', 'split_at',
+           'groupby', 'partition', 'chunks']
 
 
 from itertools import count, cycle, repeat
@@ -87,15 +88,23 @@ def distinct(seq):
     seen = set()
     return [x for x in seq if x not in seen and not seen.add(x)]
 
-def isplit(at, seq):
+def isplit(pred, seq):
     a, b = tee(seq)
-    if callable(at):
-        return ifilter(at, a), ifilterfalse(at, b)
-    else:
-        return islice(a, at), islice(b, at, None)
+    return ifilter(pred, a), ifilterfalse(pred, b)
 
-def split(at, seq):
-    return map(list, isplit(at, seq))
+def split(pred, seq):
+    return map(list, isplit(pred, seq))
+
+def isplit_at(pred_or_pos, seq):
+    a, b = tee(seq)
+    if callable(pred_or_pos):
+        return takewhile(pred_or_pos, a), dropwhile(pred_or_pos, b)
+    else:
+        return islice(a, pred_or_pos), islice(b, pred_or_pos, None)
+
+def split_at(pred_or_pos, seq):
+    return map(list, isplit_at(pred_or_pos, seq))
+
 
 # NOTE: should I name it cluster? to distinguish from itertools.groupby
 def groupby(f, seq):
