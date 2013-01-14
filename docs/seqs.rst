@@ -297,5 +297,7 @@ Data mangling
 
     ::
 
+        dict(partition(2, flat_list_of_pairs))
+
 .. function:: chunks(n, [step], seq)
 
