@@ -93,3 +93,5 @@ def path(self):
     path = takewhile(bool, iterate(attrgetter('parent'), self))
     path = takewhile(bool, iterate(lambda node: node.parent, self))
     return reversed(rest(path))
+
+mro = unique(sum((b.__mro__ for b in bases), ()))
