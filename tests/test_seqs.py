@@ -67,7 +67,11 @@ def test_split():
 
 def test_split_at():
     assert split_at(2, range(5)) == [[0, 1], [2, 3, 4]]
-    assert split_at(_ % 2, range(1, 5)) == [[1], [2, 3, 4]]
+    # This behaviour moved to split_by()
+    with pytest.raises(ValueError): split_at(_ % 2, range(5))
+
+def test_split_by():
+    assert split_by(_ % 2, [1, 2, 3]) == [[1], [2, 3]]
 
 def test_groupby():
     assert groupby(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}

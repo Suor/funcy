@@ -9,7 +9,7 @@ __all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
            'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
            'izip', 'interleave', 'interpose', 'distinct',
-           'dropwhile', 'takewhile', 'isplit', 'split', 'isplit_at', 'split_at',
+           'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
            'groupby', 'partition', 'chunks']
 
 
@@ -95,15 +95,19 @@ def isplit(pred, seq):
 def split(pred, seq):
     return map(list, isplit(pred, seq))
 
-def isplit_at(pred_or_pos, seq):
+def isplit_at(pos, seq):
     a, b = tee(seq)
-    if callable(pred_or_pos):
-        return takewhile(pred_or_pos, a), dropwhile(pred_or_pos, b)
-    else:
-        return islice(a, pred_or_pos), islice(b, pred_or_pos, None)
+    return islice(a, pos), islice(b, pos, None)
 
-def split_at(pred_or_pos, seq):
-    return map(list, isplit_at(pred_or_pos, seq))
+def split_at(pos, seq):
+    return map(list, isplit_at(pos, seq))
+
+def isplit_by(pred, seq):
+    a, b = tee(seq)
+    return takewhile(pred, a), dropwhile(pred, b)
+
+def split_by(pred, seq):
+    return map(list, isplit_by(pred, seq))
 
 
 # NOTE: should I name it cluster? to distinguish from itertools.groupby
