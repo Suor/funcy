@@ -73,8 +73,8 @@ def test_split_at():
 def test_split_by():
     assert split_by(_ % 2, [1, 2, 3]) == [[1], [2, 3]]
 
-def test_groupby():
-    assert groupby(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}
+def test_group_by():
+    assert group_by(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}
 
 def test_partition():
     assert partition(2, range(5)) == [[0, 1], [2, 3]]

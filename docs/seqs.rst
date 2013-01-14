@@ -292,7 +292,7 @@ Data mangling
 .. function:: distinct(seq)
 .. function:: split(at, seq)
 .. .. function:: isplit(at, seq)
-.. function:: groupby(f, seq)
+.. function:: group_by(f, seq)
 .. function:: partition(n, [step], seq)
 
     ::

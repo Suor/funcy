@@ -10,7 +10,7 @@ __all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
            'izip', 'interleave', 'interpose', 'distinct',
            'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
-           'groupby', 'partition', 'chunks']
+           'group_by', 'partition', 'chunks']
 
 
 from itertools import count, cycle, repeat
@@ -111,7 +111,8 @@ def split_by(pred, seq):
 
 
 # NOTE: should I name it cluster? to distinguish from itertools.groupby
-def groupby(f, seq):
+#       or just group?
+def group_by(f, seq):
     result = defaultdict(list)
     for item in seq:
         result[f(item)].append(item)
