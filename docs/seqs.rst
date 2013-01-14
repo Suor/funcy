@@ -290,14 +290,67 @@ Data mangling
 -------------
 
 .. function:: distinct(seq)
-.. function:: split(at, seq)
-.. .. function:: isplit(at, seq)
-.. function:: group_by(f, seq)
-.. function:: partition(n, [step], seq)
 
+    Returns given sequence with duplicates removed. Preserves order.
+
+.. function:: split(pred, seq)
+
+    Splits sequence items which pass predicate from ones that don't, essentially returning a tuple ``filter(pred, seq), remove(pred, seq)``.
+
+    For example, this way one can separate private attributes of an instance from public ones::
+
+        private, public = split(re_tester('^_'), dir(instance))
+
+.. function:: split_at(pos, seq)
+
+    Splits sequence at given position, returning a tuple ``take(pos, seq), list(drop(pos, seq))``.
+
+.. function:: split_by(pred, seq)
+
+    Splits start of sequence, consisting of items passing predicate, from the rest of it. Works similar to ``takewhile(pred, seq), dropwhile(pred, seq)``, but returns lists and works with iterator ``seq`` correctly::
+
+        split_by(bool, iter([-2, -1, 0, 1, 2]))
+        # [-2, -1], [0, 1, 2]
+
+.. function:: group_by(f, seq)
+
+    Returns a dict of the elements of ``seq`` keyed by the result of ``f`` on each element. The value at each key will be a list of the corresponding elements, in the order they appeared in ``seq``.
     ::
 
+        group_by(len, ['a', 'ab', 'b'])
+        # -> {1: ['a', 'b'], 2: ['ab']}
+
+    .. group_by(lambda f: f.section, fields)
+
+    One can use :func:`split_by` when grouping by boolean predicate. See also :func:`itertools.groupby`.
+
+.. function:: partition(n, [step], seq)
+
+    Returns a list of lists of ``n`` items each, at offsets ``step`` apart. If ``step`` is not supplied, defaults to ``n``, i.e. the partitions do not overlap. Returns only full length-``n`` partitions, in case there are not enough elements for last partition they are ignored.
+
+    Most common use is deflattening data::
+
+        # Make a dict from flat list of pairs
         dict(partition(2, flat_list_of_pairs))
+
+        # Structure user credentials
+        {id: (name, password) for id, name, password in partition(3, users)}
+
+    A three argument variant of :func:`partition` can be used to process sequence items in context of their neighbours::
+
+        # Check if seq is non-descending
+        all(left <= right for left, right in partition(2, 1, seq))
+
+    Other use of :func:`partition` is processing sequence of data elements or jobs in chunks. Take a look at :func:`chunks` for that.
 
 .. function:: chunks(n, [step], seq)
 
+    Returns a list of lists like :func:`partition`, but may include partitions with fewer than ``n`` items at the end::
+
+        chunks(2, 'abcde')
+        # -> ['ab', 'cd', 'e'])
+
+        chunks(2, 4, 'abcde')
+        # -> ['ab', 'e'])
+
+    Handy for batch processing.
