@@ -52,7 +52,7 @@ Transform and select
 
 .. function:: walk_keys(f, coll)
 
-    Walks keys of ``coll`` mapping them with given function. Works with mappings and collections of pairs::
+    Walks keys of ``coll``, mapping them with given function. Works with mappings and collections of pairs::
 
         walk_keys(str.upper, {'a': 1, 'b': 2}) # {'A': 1, 'B': 2}
 
@@ -61,7 +61,7 @@ Transform and select
 
 .. function:: walk_values(f, coll)
 
-    Walks values of ``coll`` mapping them with given function. Works with mappings and collections of pairs.
+    Walks values of ``coll``, mapping them with given function. Works with mappings and collections of pairs.
 
     Common use is to process values somehow::
 
