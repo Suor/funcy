@@ -72,8 +72,27 @@ Transform and select
 
 
 .. function:: select(pred, coll)
+
+    Filters elements of ``coll`` by ``pred`` constructing collection of same type. When filtering a dict ``pred`` receives ``(key, value)`` pairs. See :func:`select_keys` and :func:`select_values` to filter it by keys or values respectively::
+
+        select(even, {1, 2, 3, 10, 20})
+        # -> {2, 10, 20}
+
+        select(lambda (k, v): k == v, {1: 1, 2: 3})
+        # -> {1: 1}
+
 .. function:: select_keys(pred, coll)
+
+    Select part of a dict or a collection of pairs with keys passing given predicate.
+
+    This way a public part of instance attributes dictionary could be selected::
+
+        is_public = complement(re_tester('^_'))
+        public = select_keys(is_public, instance.__dict__)
+
 .. function:: select_values(pred, coll)
+
+    Select part of a dict or a collection of pairs with values passing given predicate.
 
     Strip falsy values from dict::
 
