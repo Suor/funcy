@@ -112,6 +112,7 @@ def split_by(pred, seq):
 
 # NOTE: should I name it cluster? to distinguish from itertools.groupby
 #       or just group?
+# NOTE: should it return OrderedDict to preserve order of keys not just values?
 def group_by(f, seq):
     result = defaultdict(list)
     for item in seq:
