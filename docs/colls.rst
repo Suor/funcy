@@ -104,10 +104,30 @@ Transform and select
 Dict utils
 ----------
 
-.. function:: zipdict(colls)
-.. function:: flip(colls)
-.. function:: project(colls)
+.. function:: zipdict(keys, vals)
 
+    Returns a dict with the ``keys`` mapped to the corresponding ``vals``. Stops pairing on shorter sequence end::
+
+        zipdict('abcd', range(4))
+        # -> {'a': 0, 'b': 1, 'c': 2, 'd': 3}
+
+        zipdict('abc', range(4))
+        # -> {'a': 0, 'b': 1, 'c': 2}
+
+.. function:: flip(mapping)
+
+    Flip passed dict swapping its keys and values. Preserves mapping type::
+
+        flip(OrderedDict(['aA', 'bB']))
+        # -> OrderedDict([('A', 'a'), ('B', 'b')])
+
+.. function:: project(mapping, keys)
+
+    Returns a dict containing only those entries in ``mapping`` whose key is in ``keys``.
+
+    Most useful to shrink some common data or options to predefined subset. One particular case is grasping a dict of used variables::
+
+        merge(project(__builtins__, names), project(globals(), names))
 
 Data mangling
 -------------
