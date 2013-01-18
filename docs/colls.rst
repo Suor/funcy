@@ -50,6 +50,8 @@ Transform and select
 
     One should probably use :func:`map` or :func:`~itertools.imap` when doesn't need to preserve collection type.
 
+    .. note about constructor interface?
+
 .. function:: walk_keys(f, coll)
 
     Walks keys of ``coll``, mapping them with given function. Works with mappings and collections of pairs::
@@ -57,7 +59,7 @@ Transform and select
         walk_keys(str.upper, {'a': 1, 'b': 2}) # {'A': 1, 'B': 2}
 
 
-    .. :class:`dicts <dict>`, :class:`defaultdicts <collections.defaultdict>`
+    Important to note that it preserves collection type whether it is simple :class:`dict`, :class:`~collections.defaultdict`, :class:`~collections.OrderedDict` or any other mapping class or a collection of pairs.
 
 .. function:: walk_values(f, coll)
 
