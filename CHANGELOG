@@ -1,3 +1,19 @@
+0.3.0
+- partial docs
+- added where(), pluck() and invoke() inspired by underscore
+- added split_by()
+- second() made public
+- reexport itertools.cycle()
+- walk() and select() work with strings now
+Backward incompatible changes:
+- renamed groupby() to group_by()
+- separated split_at() from split()
+- automatically unpack one-element tuples returned from re_*()
+- join() now returns None on empty input instead of TypeError
+- made fallback() accept multiple arguments
+Bugfixes:
+- fixed join() swallowing first coll from iterator of colls
+
 0.2.1
 - one argument keep()
 - fallback() flow
