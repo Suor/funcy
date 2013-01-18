@@ -3,7 +3,8 @@ Funcy
 
 A collection of fancy functional tools. Manipulate your functions and data with ease.
 
-Inspired by my own abstractions and clojure standard library.
+Inspired by clojure, underscore and my own abstractions. Keep reading to get an overview
+or `read the docs <http://funcy.readthedocs.org/>`_ (not complete yet).
 
 
 Installation
