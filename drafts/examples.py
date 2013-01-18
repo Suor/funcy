@@ -34,9 +34,13 @@ def translate_dict(d):
     lines = ('%s: %s' % (k, v) for k, v in walk_values(translate, d).items())
     return '{%s}' % ','.join(lines)
 
-names = func.__code__.co_freevars
-values = [cell.cell_contents for cell in func.__closure__]
-return zipdict(names, values)
+def _locals(func):
+    if func.__closure__:
+        names = func.__code__.co_freevars
+        values = [cell.cell_contents for cell in func.__closure__]
+        return zipdict(names, values)
+    else:
+        return {}
 
 names = _code_names(code)
 return merge(project(__builtins__, names), project(func.__globals__, names))
