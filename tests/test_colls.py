@@ -55,7 +55,7 @@ def test_join_iter():
 
     it1 = (x for x in range(2))
     it2 = (x for x in range(5, 7))
-    chained = join([it1, it2])
+    chained = join(iter([it1, it2]))
     assert isinstance(chained, Iterator) and list(chained) == [0,1,5,6]
 
 def test_walk():
