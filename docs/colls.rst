@@ -125,7 +125,7 @@ Dict utils
 
     Returns a dict containing only those entries in ``mapping`` whose key is in ``keys``.
 
-    Most useful to shrink some common data or options to predefined subset. One particular case is grasping a dict of used variables::
+    Most useful to shrink some common data or options to predefined subset. One particular case is constructing a dict of used variables::
 
         merge(project(__builtins__, names), project(globals(), names))
 
