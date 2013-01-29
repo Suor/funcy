@@ -133,8 +133,22 @@ Data mangling
 -------------
 
 .. function:: where(mappings, **cond)
+
+    Looks through each value in given sequence of dicts, returning a list of all the dicts that contain all of the key-value pairs in ``cond``::
+
+        where(plays, author="Shakespeare", year=1611)
+        # => [{"title": "Cymbeline", "author": "Shakespeare", "year": 1611},
+        #     {"title": "The Tempest", "author": "Shakespeare", "year": 1611}]
+
 .. function:: pluck(mappings, key)
+
+    Returns list of values for ``key`` in each mapping in given sequence. Essentialy a shortcut for::
+
+        map(operator.itemgetter(key), mappings)
+
 .. function:: invoke(objects, name, *args, **kwargs)
+
+    Calls named method with given arguments for each object in ``objects`` and returns a list of results.
 
 
 Content tests
