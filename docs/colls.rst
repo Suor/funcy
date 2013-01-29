@@ -129,6 +129,7 @@ Dict utils
 
         merge(project(__builtins__, names), project(globals(), names))
 
+
 Data mangling
 -------------
 
@@ -154,12 +155,12 @@ Data mangling
 Content tests
 -------------
 
-.. function:: is_distinct(colls)
-.. function:: all(colls)
-.. function:: any(colls)
-.. function:: none(colls)
-.. function:: one(colls)
-.. function:: some(colls)
+.. function:: is_distinct(coll)
+.. function:: all([pred], seq)
+.. function:: any([pred], seq)
+.. function:: none([pred], seq)
+.. function:: one([pred], seq)
+.. function:: some([pred], seq)
 
 
 Collections of functions
