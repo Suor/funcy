@@ -96,29 +96,29 @@ def is_distinct(coll):
     return len(coll) == len(set(coll))
 
 
-def all(pred, coll=None):
-    if coll is None:
+def all(pred, seq=None):
+    if seq is None:
         return _all(pred)
-    return _all(imap(pred, coll))
+    return _all(imap(pred, seq))
 
-def any(pred, coll=None):
-    if coll is None:
+def any(pred, seq=None):
+    if seq is None:
         return _any(pred)
-    return _any(imap(pred, coll))
+    return _any(imap(pred, seq))
 
 none = complement(any)
 
-def one(pred, coll=None):
-    if coll is None:
+def one(pred, seq=None):
+    if seq is None:
         return one(bool, pred)
-    return len(take(2, ifilter(pred, coll))) == 1
+    return len(take(2, ifilter(pred, seq))) == 1
 
 # Not same as in clojure! returns value found not pred(value)
 # NOTE: should I name it "find" when pred is here
-def some(pred, coll=None):
-    if coll is None:
+def some(pred, seq=None):
+    if seq is None:
         return some(None, pred)
-    return next(ifilter(pred, coll), None)
+    return next(ifilter(pred, seq), None)
 
 # TODO: a variant of some that returns mapped value,
 #       one can use some(imap(f, seq)) or first(ikeep(f, seq)) for now.
