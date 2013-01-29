@@ -15,10 +15,7 @@ diff,p # postpone
 ## Seqs
 From seq: keep_indexed,p
 Get shorter: idistinct,p
-Get longer: cycle?
 Slicing: last,p butlast,p take_last,p drop_last,p
 Change: flatten,p partition_by,p replace?
 Process: pmap,p map_indexed?
-Extract item: max_key? min_key?
-Constrct coll: reductions,p
-
+Construct coll: reductions,p
