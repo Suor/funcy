@@ -301,6 +301,10 @@ Data mangling
 
         private, public = split(re_tester('^_'), dir(instance))
 
+    Split absolute and relative urls::
+
+        absolute, relative = split(re_tester(r'^http://'), photo_urls)
+
 .. function:: split_at(n, seq)
 
     Splits sequence at given position, returning a tuple ``take(n, seq), list(drop(n, seq))``.
