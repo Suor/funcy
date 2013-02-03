@@ -7,7 +7,7 @@ Content tests: not-all,p
 
 Set: sorted-set,p sorted-set-by,p
 Dict: items,p
-      sorted_dict,p sorted_dict_by,p join_with,p merge_with,p
+      sorted_dict,p sorted_dict_by,p merge_with,p
 
 ## Data
 diff,p # postpone
