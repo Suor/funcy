@@ -156,7 +156,16 @@ Content tests
 -------------
 
 .. function:: is_distinct(coll)
+
+    Checks if all elements in collection are diffrent.
+
 .. function:: all([pred], seq)
+
+    Checks if ``pred`` holds every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` is true (which is the same as in builtin :func:`~builtin.all`)::
+
+        they_are_ints = all(is_instance(n, int) for n in seq)
+        they_are_even = all(even, seq)
+
 .. function:: any([pred], seq)
 .. function:: none([pred], seq)
 .. function:: one([pred], seq)
