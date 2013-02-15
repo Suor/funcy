@@ -25,6 +25,18 @@ def memoize(func):
 memoize.skip = SkipMemoization
 
 
+def lookup(func):
+    memory = {}
+
+    @wraps(func)
+    def wrapper(arg):
+        if not memory:
+            memory[object()] = None # prevert continuos memory refilling
+            memory.update(func())
+        return memory.get(arg)
+    return wrapper
+memoize.lookup = lookup
+
 def cache(timeout):
     if isinstance(timeout, int):
         timeout = timedelta(seconds=timeout)
