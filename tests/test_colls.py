@@ -140,7 +140,7 @@ def test_where():
 
 def test_pluck():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
-    assert pluck(data, 'a') == [1, 10]
+    assert pluck('a', data) == [1, 10]
 
 
 def test_invoke():

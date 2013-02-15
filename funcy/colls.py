@@ -143,11 +143,8 @@ def where(mappings, **cond):
     match = lambda m: all(m[k] == v for k, v in cond.items())
     return filter(match, mappings)
 
-# NOTE: should I change params order to be more consistent with map/filter
-#       or leave as is to be consistent with where/invoke?
-def pluck(mappings, key):
+def pluck(key, mappings):
     return map(itemgetter(key), mappings)
-
 
 def invoke(objects, name, *args, **kwargs):
     return map(methodcaller(name, *args, **kwargs), objects)

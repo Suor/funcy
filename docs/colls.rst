@@ -141,7 +141,7 @@ Data mangling
         # => [{"title": "Cymbeline", "author": "Shakespeare", "year": 1611},
         #     {"title": "The Tempest", "author": "Shakespeare", "year": 1611}]
 
-.. function:: pluck(mappings, key)
+.. function:: pluck(key, mappings)
 
     Returns list of values for ``key`` in each mapping in given sequence. Essentialy a shortcut for::
 
