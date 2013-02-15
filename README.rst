@@ -95,9 +95,9 @@ Work with sequences::
     mapcat(range, range(4)))    # same
     distinct('abacbdd')         # list('abcd')
 
-    split(2, range(5))          # [[0, 1], [2, 3, 4]]
     split(odd, range(5))        # [[1, 3], [0, 2, 4]]
-    groupby(mod2, range(5))     # {0: [0, 2, 4], 1: [1, 3]}
+    split_at(2, range(5))       # [[0, 1], [2, 3, 4]]
+    group_by(mod3, range(5))    # {0: [0, 3], 1: [1, 4], 2: [2]}
 
     partition(2, range(5))      # [[0, 1], [2, 3]]
     chunks(2, range(5))         # [[0, 1], [2, 3], [4]]
