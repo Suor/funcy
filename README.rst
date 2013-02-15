@@ -63,7 +63,8 @@ More tools for mappings::
 
     flip({'a': 1, 'b': 2})                        # {1: 'a', 2: 'b'}
     project({'a': 1, 'b': 2, 'c': 3}, ['a', 'c']) # {'a': 1, 'c': 3}
-
+    pluck('a', [{'a': 1, 'b': 2}, {'a': 10}])     # [1, 10]
+    where([{'a': 1, 'b': 2}, {'a': 10}], a=1)     # [{'a': 1, 'b': 2}]
 
 Manipulate functions::
 
