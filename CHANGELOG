@@ -1,3 +1,9 @@
+0.3.1
+- more and better docs
+Backward incompatible changes:
+- removed generator based @decorator version
+- pluck() now accepts key as first parameter
+
 0.3.0
 - partial docs
 - added where(), pluck() and invoke() inspired by underscore
