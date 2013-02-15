@@ -37,6 +37,7 @@ def lookup(func):
     return wrapper
 memoize.lookup = lookup
 
+
 def cache(timeout):
     if isinstance(timeout, int):
         timeout = timedelta(seconds=timeout)
