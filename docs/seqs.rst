@@ -143,7 +143,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
     And this line constructs an ordered by value dict from a plain one::
 
-        OrderedDict(sorted(plain_dict, key=second))
+        OrderedDict(sorted(plain_dict.items(), key=second))
 
 
 .. function:: rest(seq)
