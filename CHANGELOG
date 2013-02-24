@@ -1,3 +1,6 @@
+0.3.2
+- added ilen()
+
 0.3.1
 - added @memoize.lookup()
 - more and better docs

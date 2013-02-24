@@ -40,6 +40,9 @@ def second(seq):
 def rest(seq):
     return drop(1, seq)
 
+def ilen(seq):
+    return sum(1 for _ in seq)
+
 
 # TODO: tree-seq equivalent
 

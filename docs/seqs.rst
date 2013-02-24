@@ -151,6 +151,15 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
     Skips first item in sequence, returning iterator starting just after it. A shortcut for :func:`drop(1, seq) <drop>`.
 
 
+.. function:: ilen(seq)
+
+    Calculates length of iterator. Will consume it or hang up if it's infinite.
+
+    Especially useful in conjuction with filtering or slicing functions, for example, this way one can find common start length of two strings::
+
+        ilen(takewhile(lambda (x,y): x == y, zip(s1, s2)))
+
+
 Unite
 -----
 
