@@ -31,7 +31,7 @@ def lookup(func):
     @wraps(func)
     def wrapper(arg):
         if not memory:
-            memory[object()] = None # prevert continuos memory refilling
+            memory[object()] = None # prevent continuos memory refilling
             memory.update(func())
         return memory.get(arg)
     return wrapper
