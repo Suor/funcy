@@ -1,4 +1,5 @@
 0.3.1
+- added @memoize.lookup()
 - more and better docs
 Backward incompatible changes:
 - removed generator based @decorator version
