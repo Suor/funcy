@@ -18,6 +18,7 @@ Contents:
    flow
    strings
    calc
+   objects
    other
 
 
