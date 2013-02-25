@@ -123,4 +123,4 @@ TODO
 - lazy, lazy_seq, lazy_dict (a separate library?)
 - reject*(), split collections
 - merge_with()
-- object utils cached_property(), monkey()?
+- object util monkey()?
