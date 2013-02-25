@@ -1,5 +1,6 @@
 0.3.2
 - added ilen()
+- added some object helpers: namespace base class and @cached_property
 - more docs
 
 0.3.1
