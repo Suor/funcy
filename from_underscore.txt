@@ -3,7 +3,7 @@ countby
 foldl?=reduce foldr?
 
 # Array
-compact=keep/1? without(relates to conj)
+without(relates to conj)
 flatten?
 
 # Functions

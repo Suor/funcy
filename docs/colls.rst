@@ -101,6 +101,15 @@ Transform and select
         select_values(bool, some_dict)
 
 
+.. function:: compact(pred, coll)
+
+    Removes ``None`` values from given collection. When compacting a dict all keys with ``None`` values are trashed.
+
+    Extract integer data from request::
+
+        compact(walk_values(silent(int), request_dict))
+
+
 Dict utils
 ----------
 

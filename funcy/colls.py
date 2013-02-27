@@ -8,7 +8,7 @@ from .seqs import take
 
 
 __all__ = ['empty', 'iteritems', 'join', 'merge',
-           'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values',
+           'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project',
            'where', 'pluck', 'invoke']
@@ -89,6 +89,15 @@ def select_keys(pred, coll):
 
 def select_values(pred, coll):
     return select(lambda (k, v): pred(v), coll)
+
+
+def compact(coll):
+    pred = lambda x: x is not None
+    if isinstance(coll, Mapping):
+        return select_values(pred, coll)
+    else:
+        return select(pred, coll)
+
 
 ### Content tests
 

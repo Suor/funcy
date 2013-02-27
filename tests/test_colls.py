@@ -88,6 +88,10 @@ def test_select_keys():
 def test_select_values():
     assert select_values(_ % 2, {'a': 1, 'b': 2}) == {'a': 1}
 
+def test_compact():
+    assert eq(compact([0, 1, None, 3]), [0, 1, 3])
+    assert eq(compact((0, 1, None, 3)), (0, 1, 3))
+    assert eq(compact({'a': None, 'b': 0, 'c': 1}), {'b': 0, 'c': 1})
 
 def test_is_distinct():
     assert is_distinct('abc')
