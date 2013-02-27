@@ -120,12 +120,12 @@ Dict utils
         zipdict('abcd', range(4))
         # -> {'a': 0, 'b': 1, 'c': 2, 'd': 3}
 
-        zipdict('abc', range(4))
+        zipdict('abc', count())
         # -> {'a': 0, 'b': 1, 'c': 2}
 
 .. function:: flip(mapping)
 
-    Flip passed dict swapping its keys and values. Preserves mapping type::
+    Flip passed dict swapping its keys and values. Also works for sequences of pairs. Preserves collection type::
 
         flip(OrderedDict(['aA', 'bB']))
         # -> OrderedDict([('A', 'a'), ('B', 'b')])
