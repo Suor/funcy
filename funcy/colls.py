@@ -38,8 +38,9 @@ def iteritems(coll):
 def join(colls):
     colls, colls_copy = tee(colls)
     it = iter(colls_copy)
-    dest = next(it, None)
-    if dest is None:
+    try:
+        dest = next(it)
+    except StopIteration:
         return None
     cls = dest.__class__
 
