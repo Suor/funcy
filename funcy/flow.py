@@ -8,11 +8,11 @@ __all__ = ['ignore', 'silent', 'fallback', 'limit_error_rate', 'ErrorRateExceede
 
 
 @decorator
-def ignore(call, errors):
+def ignore(call, errors, default=None):
     try:
         return call()
     except errors:
-        return None
+        return default
 
 silent = ignore(Exception) # Ignore all real exceptions
 

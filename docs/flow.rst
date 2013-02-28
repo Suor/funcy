@@ -1,7 +1,7 @@
 Flow
 ====
 
-.. decorator:: ignore(errors)
+.. decorator:: ignore(errors, [default])
 
 .. decorator:: silent
 
