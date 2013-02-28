@@ -1,4 +1,5 @@
 from collections import Iterator
+from operator import add
 import pytest
 from whatever import _
 
@@ -28,6 +29,13 @@ def test_first():
     assert first('xyz') == 'x'
     assert first(count(7)) == 7
     assert first([]) is None
+
+
+def test_reductions():
+    assert reductions(add, []) == []
+    assert reductions(add, [None]) == [None]
+    assert reductions(add, [1, 2, 3, 4]) == [1, 3, 6, 10]
+    assert reductions(lambda x, y: x + [y], [1,2,3], []) == [[1], [1, 2], [1, 2, 3]]
 
 
 def test_remove():

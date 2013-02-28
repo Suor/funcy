@@ -160,6 +160,10 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
         ilen(takewhile(lambda (x,y): x == y, zip(s1, s2)))
 
 
+.. function:: reductions(f, seq, [acc])
+              ireductions(f, seq, [acc])
+
+
 Unite
 -----
 

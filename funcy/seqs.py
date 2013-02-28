@@ -6,6 +6,7 @@ from .funcs import complement
 
 __all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'take', 'drop', 'first', 'second', 'rest', 'ilen',
+           'ireductions', 'reductions',
            'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
            'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
            'izip', 'interleave', 'interpose', 'distinct',
@@ -42,6 +43,23 @@ def rest(seq):
 
 def ilen(seq):
     return sum(1 for _ in seq)
+
+
+EMPTY = object()
+
+def ireductions(f, seq, acc=EMPTY):
+    it = iter(seq)
+    if acc is EMPTY:
+        last = next(it)
+        yield last
+    else:
+        last = acc
+    for x in it:
+        last = f(last, x)
+        yield last
+
+def reductions(f, seq, acc=EMPTY):
+    return list(ireductions(f, seq, acc))
 
 
 # TODO: tree-seq equivalent
