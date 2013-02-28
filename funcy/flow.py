@@ -16,6 +16,22 @@ def ignore(call, errors, default=None):
 
 silent = ignore(Exception) # Ignore all real exceptions
 
+
+# NOTE: is it usefull enough?
+# EMPTY = object()
+#
+# @decorator
+# def handle(call, exceptions=EMPTY, default=EMPTY):
+#     try:
+#         return call()
+#     except BaseException as e:
+#         result = exceptions.get(e.__class__, default)
+#         if result is DONT_HANDLE:
+#             raise
+#         else:
+#             return result
+
+
 @decorator
 def retry(call, tries, errors=Exception):
     for attempt in range(tries):
