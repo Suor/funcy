@@ -1,5 +1,7 @@
 0.3.3
-- added compact()
+- added compact(), i?reductions()
+- added default argument to @ignore()
+- fix: join() and merge() now correctly fail when receive [None, ...]
 - better docs
 
 0.3.2
