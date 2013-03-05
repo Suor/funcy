@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from functools import wraps
+import inspect
 
 
 __all__ = ['memoize', 'make_lookuper', 'cache']
@@ -26,15 +27,25 @@ memoize.skip = SkipMemoization
 
 
 def make_lookuper(func):
-    memory = {}
+    spec = inspect.getargspec(func)
+    assert not spec.keywords,  \
+           'Lookup table building function should not have keyword arguments'
 
-    @wraps(func)
-    def wrapper(arg):
-        if not memory:
-            memory[object()] = None # prevent continuos memory refilling
-            memory.update(func())
-        return memory.get(arg)
-    return wrapper
+    if spec.args or spec.varargs:
+        @memoize
+        def wrapper(*args):
+            return make_lookuper(lambda: func(*args))
+    else:
+        memory = {}
+
+        @wraps(func)
+        def wrapper(arg):
+            if not memory:
+                memory[object()] = None # prevent continuos memory refilling
+                memory.update(func())
+            return memory.get(arg)
+
+    return wraps(func)(wrapper)
 
 
 def cache(timeout):
