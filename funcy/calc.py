@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 
-__all__ = ['memoize', 'cache']
+__all__ = ['memoize', 'make_lookuper', 'cache']
 
 
 class SkipMemoization(Exception):
@@ -25,7 +25,7 @@ def memoize(func):
 memoize.skip = SkipMemoization
 
 
-def lookup(func):
+def make_lookuper(func):
     memory = {}
 
     @wraps(func)
@@ -35,7 +35,6 @@ def lookup(func):
             memory.update(func())
         return memory.get(arg)
     return wrapper
-memoize.lookup = lookup
 
 
 def cache(timeout):

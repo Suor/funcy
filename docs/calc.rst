@@ -18,11 +18,11 @@ Calculation
     Use ``raise memoize.skip(some_value)`` to make function return ``some_value`` on fail instead of ``None``.
 
 
-.. decorator:: memoize.lookup
+.. decorator:: make_lookuper
 
     As :func:`memoize`, but with prefilled memory. Decorated function should return fully filled memory, resulting function will return ``None`` for any argument missing in it::
 
-        @memoize.lookup
+        @make_lookuper
         def city_location():
             return {row['city']: row['location'] for row in fetch_city_locations()}
 

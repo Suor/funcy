@@ -4,6 +4,8 @@
 - added tap() debug utility
 - fix: join() and merge() now correctly fail when receive [None, ...]
 - better docs
+Backward incompatible changes:
+- renamed @memoize.lookup() to @make_lookuper()
 
 0.3.2
 - added ilen()
