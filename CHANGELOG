@@ -1,6 +1,7 @@
 0.3.3
 - added compact(), i?reductions()
 - added default argument to @ignore()
+- added tap() debug utility
 - fix: join() and merge() now correctly fail when receive [None, ...]
 - better docs
 

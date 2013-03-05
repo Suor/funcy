@@ -4,7 +4,12 @@ from __future__ import print_function
 from .decorators import decorator
 
 
-__all__ = ['log', 'log_errors']
+__all__ = ['tap', 'log', 'log_errors']
+
+
+def tap(x):
+    print(x)
+    return x
 
 
 @decorator
