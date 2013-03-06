@@ -1,8 +1,10 @@
 0.3.3
 - added compact(), i?reductions()
 - added default argument to @ignore()
-- added tap() debug utility
+- added tap() experimental debug utility
 - @make_lookuper() now works on functions with arguments
+- exposed ilen() publicly
+- added default argument to @ignore()
 - fix: join() and merge() now correctly fail when receive [None, ...]
 - better docs
 Backward incompatible changes:
