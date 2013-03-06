@@ -101,7 +101,7 @@ Transform and select
         select_values(bool, some_dict)
 
 
-.. function:: compact(pred, coll)
+.. function:: compact(coll)
 
     Removes ``None`` values from given collection. When compacting a dict all keys with ``None`` values are trashed.
 
