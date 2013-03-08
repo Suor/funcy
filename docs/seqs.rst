@@ -387,7 +387,7 @@ Data mangling
 
     Returns an iterator of a pair of each item with one preceding it.
 
-    Great for getting rid of clunky `prev` housekeeping in for loops. This way one can indent first line of each paragraph while printing text::
+    Great for getting rid of clunky ``prev`` housekeeping in for loops. This way one can indent first line of each paragraph while printing text::
 
         for line, prev in text.splitlines():
             if not prev:
