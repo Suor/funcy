@@ -1,5 +1,6 @@
-0.3.4
+to be 0.3.4
 - added with_prev()
+- more docs
 
 0.3.3
 - added compact(), i?reductions()
