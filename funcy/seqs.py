@@ -45,23 +45,6 @@ def ilen(seq):
     return sum(1 for _ in seq)
 
 
-EMPTY = object()
-
-def ireductions(f, seq, acc=EMPTY):
-    it = iter(seq)
-    if acc is EMPTY:
-        last = next(it)
-        yield last
-    else:
-        last = acc
-    for x in it:
-        last = f(last, x)
-        yield last
-
-def reductions(f, seq, acc=EMPTY):
-    return list(ireductions(f, seq, acc))
-
-
 # TODO: tree-seq equivalent
 
 def remove(pred, seq):
@@ -153,3 +136,20 @@ def chunks(n, step, seq=None):
 def with_prev(seq):
     a, b = tee(seq)
     return izip(a, chain([None], b))
+
+
+EMPTY = object()
+
+def ireductions(f, seq, acc=EMPTY):
+    it = iter(seq)
+    if acc is EMPTY:
+        last = next(it)
+        yield last
+    else:
+        last = acc
+    for x in it:
+        last = f(last, x)
+        yield last
+
+def reductions(f, seq, acc=EMPTY):
+    return list(ireductions(f, seq, acc))
