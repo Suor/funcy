@@ -8,7 +8,7 @@ __all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'take', 'drop', 'first', 'second', 'rest', 'ilen',
            'ireductions', 'reductions',
            'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
-           'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
+           'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
            'izip', 'interleave', 'interpose', 'distinct',
            'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
            'group_by', 'partition', 'chunks', 'with_prev']
