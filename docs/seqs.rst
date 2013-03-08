@@ -398,4 +398,4 @@ Data mangling
 
     And you can make this even easier with a shortcut::
 
-        isums = partial(add, ireductions)
+        isums = partial(ireductions, add)
