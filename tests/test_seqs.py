@@ -91,3 +91,6 @@ def test_partition():
 def test_chunks():
     assert chunks(2, range(5)) == [[0, 1], [2, 3], [4]]
     assert chunks(2, 1, range(4)) == [[0, 1], [1, 2], [2, 3], [3]]
+
+def test_with_prev():
+    assert list(with_prev(range(3))) == [(0, None), (1, 0), (2, 1)]

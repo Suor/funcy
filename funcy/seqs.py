@@ -11,7 +11,7 @@ __all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'concat', 'iconcat', 'cat', 'icat', 'mapcat', 'imapcat',
            'izip', 'interleave', 'interpose', 'distinct',
            'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
-           'group_by', 'partition', 'chunks']
+           'group_by', 'partition', 'chunks', 'with_prev']
 
 
 from itertools import count, cycle, repeat
@@ -150,3 +150,6 @@ def chunks(n, step, seq=None):
         return chunks(n, n, step)
     return [seq[i:i+n] for i in xrange(0, len(seq), step)]
 
+def with_prev(seq):
+    a, b = tee(seq)
+    return izip(a, chain([None], b))

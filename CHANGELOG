@@ -1,3 +1,6 @@
+0.3.4
+- added with_prev()
+
 0.3.3
 - added compact(), i?reductions()
 - added default argument to @ignore()
