@@ -163,6 +163,17 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 .. function:: reductions(f, seq, [acc])
               ireductions(f, seq, [acc])
 
+    Returns a sequence of the intermediate values of the reduction of ``seq`` by ``f``. In other words it yields a sequence like::
+
+        reduce(f, seq[1:], [acc]), reduce(f, seq[2:], [acc]), ...
+
+    Find out which straw will break camels back::
+
+        from operator import add
+
+        first(i for i, total in enumerate(ireductions(add, straw_weights))
+                if total > camel_toughness)
+
 
 Unite
 -----
