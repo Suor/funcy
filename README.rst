@@ -107,7 +107,7 @@ Work with sequences::
     chunks(2, 1, range(4))      # [[0, 1], [1, 2], [2, 3], [3]]
 
 
-And many more, see tests and source.
+And `many more <http://funcy.readthedocs.org/>`_.
 
 
 How you can help
