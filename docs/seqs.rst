@@ -395,3 +395,7 @@ Data mangling
 
         first(i for i, total in enumerate(ireductions(add, straw_weights))
                 if total > camel_toughness)
+
+    And you can make this even easier with a shortcut::
+
+        isums = partial(add, ireductions)
