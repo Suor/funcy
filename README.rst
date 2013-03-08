@@ -52,6 +52,7 @@ Test collection contents::
     all(even, [1, 2, 5])            # False
     any(even, [1, 2, 5])            # True
     none(even, [1, 2, 5])           # False
+    is_distinct('adbec')            # True
 
 
 Or search for something::
