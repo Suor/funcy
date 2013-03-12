@@ -1,6 +1,7 @@
 to be 0.3.4
 - added with_prev()
 - added iterable()
+- faster curry
 - more docs
 
 0.3.3
