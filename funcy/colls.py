@@ -3,7 +3,7 @@ from operator import itemgetter, methodcaller
 from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import ifilter, imap, chain, tee
 
-from .funcs import partial, complement
+from .funcs import identity, partial, complement
 from .seqs import take
 
 
@@ -23,6 +23,8 @@ def _factory(coll):
     # Hack for defaultdicts overriden constructor
     if isinstance(coll, defaultdict):
         return partial(defaultdict, coll.default_factory)
+    elif isinstance(coll, Iterator):
+        return identity
     elif isinstance(coll, basestring):
         return ''.join
     else:
