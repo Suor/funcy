@@ -7,12 +7,16 @@ from .funcs import partial, complement
 from .seqs import take
 
 
-__all__ = ['empty', 'iteritems', 'join', 'merge',
+__all__ = ['iterable', 'empty', 'iteritems',
+           'join', 'merge',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project',
            'where', 'pluck', 'invoke']
 
+
+def iterable(value):
+    return isinstance(value, Iterable)
 
 ### Generic ops
 def _factory(coll):
