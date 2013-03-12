@@ -1,6 +1,7 @@
 to be 0.3.4
 - added with_prev()
 - added iterable()
+- reexport itertools.chain()
 - faster curry
 - more docs
 
