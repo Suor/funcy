@@ -28,6 +28,8 @@ def curry(func, n=None):
 
     if n <= 1:
         return func
+    elif n == 2:
+        return lambda x: lambda y: func(x, y)
     else:
         return lambda x: curry(lambda *y: func(x, *y), n - 1)
 

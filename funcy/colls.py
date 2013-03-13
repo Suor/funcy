@@ -3,22 +3,28 @@ from operator import itemgetter, methodcaller
 from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import ifilter, imap, chain, tee
 
-from .funcs import partial, complement
+from .funcs import identity, partial, complement
 from .seqs import take
 
 
-__all__ = ['empty', 'iteritems', 'join', 'merge',
+__all__ = ['iterable', 'empty', 'iteritems',
+           'join', 'merge',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project',
            'where', 'pluck', 'invoke']
 
 
+def iterable(value):
+    return isinstance(value, Iterable)
+
 ### Generic ops
 def _factory(coll):
     # Hack for defaultdicts overriden constructor
     if isinstance(coll, defaultdict):
         return partial(defaultdict, coll.default_factory)
+    elif isinstance(coll, Iterator):
+        return identity
     elif isinstance(coll, basestring):
         return ''.join
     else:

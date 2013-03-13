@@ -16,6 +16,9 @@ def test_partial():
     assert partial(merge, b='abra')(a='cadabra') == 'cadabraabra'
 
 def test_curry():
+    assert curry(lambda: 42)() == 42
+    assert curry(_ * 2)(21) == 42
+    assert curry(_ * _)(6)(7) == 42
     assert curry(__add__, 2)(10)(1) == 11
     assert curry(lambda x,y,z: x+y+z)('a')('b')('c') == 'abc'
 

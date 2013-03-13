@@ -1,5 +1,5 @@
 import pytest
-from itertools import count
+from itertools import chain
 from collections import Iterator, defaultdict
 from whatever import _
 
@@ -16,6 +16,16 @@ def inc(x):
 
 def hinc(xs):
     return map(inc, xs)
+
+
+def test_iterable():
+    assert iterable([])
+    assert iterable({})
+    assert iterable('abc')
+    assert iterable(iter([]))
+    assert iterable(x for x in range(10))
+
+    assert not iterable(1)
 
 
 def test_empty():
@@ -58,11 +68,19 @@ def test_join_iter():
     chained = join(iter([it1, it2]))
     assert isinstance(chained, Iterator) and list(chained) == [0,1,5,6]
 
+
 def test_walk():
     assert eq(walk(inc, [1,2,3]), [2,3,4])
     assert eq(walk(inc, (1,2,3)), (2,3,4))
     assert eq(walk(inc, {1,2,3}), {2,3,4})
     assert eq(walk(hinc, {1:1,2:2,3:3}), {2:2,3:3,4:4})
+
+def test_walk_iter():
+    it = walk(inc, chain([0], [1, 2]))
+    assert isinstance(it, Iterator) and list(it) == [1,2,3]
+
+    it = walk(inc, (i for i in [0,1,2]))
+    assert isinstance(it, Iterator) and list(it) == [1,2,3]
 
 def test_walk_keys():
     assert walk_keys(str.upper, {'a': 1, 'b':2}) == {'A': 1, 'B': 2}
@@ -74,6 +92,7 @@ def test_walk_values():
     walked_dd = walk_values(_ * 2, dd)
     assert walked_dd == {'a': 2, 'b': 4}
     assert walked_dd.default_factory is dd.default_factory
+
 
 def test_select():
     assert eq(select(_>1, [1,2,3]), [2,3])
@@ -88,10 +107,12 @@ def test_select_keys():
 def test_select_values():
     assert select_values(_ % 2, {'a': 1, 'b': 2}) == {'a': 1}
 
+
 def test_compact():
     assert eq(compact([0, 1, None, 3]), [0, 1, 3])
     assert eq(compact((0, 1, None, 3)), (0, 1, 3))
     assert eq(compact({'a': None, 'b': 0, 'c': 1}), {'b': 0, 'c': 1})
+
 
 def test_is_distinct():
     assert is_distinct('abc')
@@ -145,7 +166,6 @@ def test_where():
 def test_pluck():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
     assert pluck('a', data) == [1, 10]
-
 
 def test_invoke():
     assert invoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
