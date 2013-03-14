@@ -1,3 +1,5 @@
+- exended predicates/mapping functions for seq utils
+
 0.3.4
 - added with_prev()
 - added iterable()
