@@ -31,12 +31,17 @@ def test_first():
     assert first([]) is None
 
 
-def test_reductions():
-    assert reductions(add, []) == []
-    assert reductions(add, [None]) == [None]
-    assert reductions(add, [1, 2, 3, 4]) == [1, 3, 6, 10]
-    assert reductions(lambda x, y: x + [y], [1,2,3], []) == [[1], [1, 2], [1, 2, 3]]
+def test_map():
+    assert map(_ * 2, [2, 3]) == [4, 6]
+    assert map(None, [2, 3]) == [2, 3]
+    assert map(r'\d+', ['a2', '13b']) == ['2', '13']
+    assert map({'a': 1, 'b': 2}, 'ab') == [1, 2]
+    assert map({1,2,3}, [0, 1, 2]) == [False, True, True]
 
+def test_filter():
+    assert filter(None, [2, 3, 0]) == [2, 3]
+    assert filter(r'\d+', ['a2', '13b', 'c']) == ['a2', '13b']
+    assert filter({1,2,3}, [0, 1, 2, 4, 1]) == [1, 2, 1]
 
 def test_remove():
     assert remove(_ > 3, range(10)) == [0, 1, 2, 3]
@@ -94,3 +99,9 @@ def test_chunks():
 
 def test_with_prev():
     assert list(with_prev(range(3))) == [(0, None), (1, 0), (2, 1)]
+
+def test_reductions():
+    assert reductions(add, []) == []
+    assert reductions(add, [None]) == [None]
+    assert reductions(add, [1, 2, 3, 4]) == [1, 3, 6, 10]
+    assert reductions(lambda x, y: x + [y], [1,2,3], []) == [[1], [1, 2], [1, 2, 3]]

@@ -1,13 +1,12 @@
-from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse
+from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile
 from collections import defaultdict
 
-from .funcs import complement
-
+from .funcmakers import *
 
 __all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'take', 'drop', 'first', 'second', 'rest', 'ilen',
            'ireductions', 'reductions',
-           'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
+           'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
            'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
            'izip', 'interleave', 'interpose', 'distinct',
            'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
@@ -47,9 +46,14 @@ def ilen(seq):
 
 # TODO: tree-seq equivalent
 
+map = wrap_mapper(map)
+imap = wrap_mapper(imap)
+filter = wrap_selector(filter)
+ifilter = wrap_selector(ifilter)
+
 def remove(pred, seq):
     return list(iremove(pred, seq))
-iremove = ifilterfalse
+iremove = wrap_selector(ifilterfalse)
 
 def keep(f, seq=None):
     if seq is None:
@@ -84,8 +88,9 @@ def interpose(sep, seq):
     return drop(1, interleave(repeat(sep), seq))
 
 
-# Re-export
-from itertools import dropwhile, takewhile
+dropwhile = wrap_selector(dropwhile)
+takewhile = wrap_selector(takewhile)
+
 
 def distinct(seq):
     "Order preserving distinct"
@@ -94,7 +99,7 @@ def distinct(seq):
 
 def isplit(pred, seq):
     a, b = tee(seq)
-    return ifilter(pred, a), ifilterfalse(pred, b)
+    return ifilter(pred, a), iremove(pred, b)
 
 def split(pred, seq):
     return map(list, isplit(pred, seq))
