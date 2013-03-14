@@ -1,4 +1,4 @@
-to be 0.3.4
+0.3.4
 - added with_prev()
 - added iterable()
 - support iterators in walk*(), select*(), empty() and project()
