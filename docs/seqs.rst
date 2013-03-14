@@ -198,6 +198,18 @@ Unite
 Transform and filter
 --------------------
 
+.. function:: map(pred, seq)
+              imap(pred, seq)
+
+    Extended versions of `map() <http://docs.python.org/2/library/functions.html#map>`_ and :func:`~itertools.imap`.
+
+
+.. function:: filter(pred, seq)
+              ifilter(pred, seq)
+
+    Extended versions of `filter() <http://docs.python.org/2/library/functions.html#filter>`_ and :func:`~itertools.ifilter`.
+
+
 .. function:: remove(pred, seq)
               iremove(pred, seq)
 
