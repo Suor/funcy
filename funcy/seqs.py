@@ -1,7 +1,8 @@
 from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile
 from collections import defaultdict
 
-from .funcmakers import *
+from .funcmakers import wrap_mapper, wrap_selector
+
 
 __all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'take', 'drop', 'first', 'second', 'rest', 'ilen',
@@ -13,6 +14,7 @@ __all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
            'group_by', 'partition', 'chunks', 'with_prev']
 
 
+# Re-export
 from itertools import count, cycle, repeat
 
 def repeatedly(f, n=None):
@@ -86,7 +88,6 @@ def interleave(*seqs):
 
 def interpose(sep, seq):
     return drop(1, interleave(repeat(sep), seq))
-
 
 dropwhile = wrap_selector(dropwhile)
 takewhile = wrap_selector(takewhile)
