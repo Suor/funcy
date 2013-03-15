@@ -1,4 +1,5 @@
 - extended predicates/mapping functions for seq and coll utils
+- added str_join()
 
 0.3.4
 - added with_prev()

@@ -5,7 +5,8 @@ from itertools import imap
 from .funcs import identity, iffy
 
 
-__all__ = ['re_iter', 're_all', 're_find', 're_finder', 're_test', 're_tester']
+__all__ = ['re_iter', 're_all', 're_find', 're_finder', 're_test', 're_tester',
+           'str_join']
 
 
 def _make_getter(regex):
@@ -53,3 +54,9 @@ def re_tester(regex, flags=0):
     return lambda s: bool(re.search(regex, s, flags))
 
 # TODO: re_allfinder? better name?
+
+def str_join(sep, seq=None):
+    if not seq:
+        return str_join('', sep)
+    else:
+        return sep.join(map(str, seq))

@@ -8,3 +8,8 @@ String utils
 
 .. function:: re_finder(regex, flags=0)
 .. function:: re_tester(regex, flags=0)
+
+.. function:: str_join([sep=""], seq)
+
+    Joins sequence by ``sep``. Same as ``sep.join(seq)``, but forcefully stringifies elements.
+

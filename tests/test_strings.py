@@ -11,3 +11,7 @@ def test_re_all():
     assert re_all(r'([a-z]+)(\d+)', 'x34y12') == [('x', '34'), ('y', '12')]
     assert re_all(r'(?P<l>[a-z]+)(?P<d>\d+)', 'x34y12') \
                     == [{'l': 'x', 'd': '34'}, {'l': 'y', 'd': '12'}]
+
+def test_str_join():
+    assert str_join([1, 2, 3]) == '123'
+    assert str_join('_', [1, 2, 3]) == '1_2_3'
