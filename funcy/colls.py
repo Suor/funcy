@@ -1,10 +1,11 @@
 from __builtin__ import all as _all, any as _any
 from operator import itemgetter, methodcaller
 from collections import Mapping, Set, Iterable, Iterator, defaultdict
-from itertools import ifilter, imap, chain, tee
+from itertools import chain, tee
 
 from .funcs import identity, partial, complement
-from .seqs import take
+from .funcmakers import wrap_mapper, wrap_selector
+from .seqs import take, imap, ifilter
 
 
 __all__ = ['iterable', 'empty', 'iteritems',
@@ -79,9 +80,11 @@ def walk(f, coll):
     """
     return _factory(coll)(imap(f, iteritems(coll)))
 
+@wrap_mapper
 def walk_keys(f, coll):
     return walk(lambda (k, v): (f(k), v), coll)
 
+@wrap_mapper
 def walk_values(f, coll):
     return walk(lambda (k, v): (k, f(v)), coll)
 
@@ -91,9 +94,11 @@ def select(pred, coll):
     """Same as filter but preserves coll type."""
     return _factory(coll)(ifilter(pred, iteritems(coll)))
 
+@wrap_selector
 def select_keys(pred, coll):
     return select(lambda (k, v): pred(k), coll)
 
+@wrap_selector
 def select_values(pred, coll):
     return select(lambda (k, v): pred(v), coll)
 

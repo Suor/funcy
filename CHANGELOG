@@ -1,4 +1,4 @@
-- exended predicates/mapping functions for seq utils
+- extended predicates/mapping functions for seq and coll utils
 
 0.3.4
 - added with_prev()

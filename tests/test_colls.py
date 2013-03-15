@@ -82,6 +82,12 @@ def test_walk_iter():
     it = walk(inc, (i for i in [0,1,2]))
     assert isinstance(it, Iterator) and list(it) == [1,2,3]
 
+def test_walk_extended():
+    assert walk(None, {2, 3}) == {2, 3}
+    assert walk(r'\d+', {'a2', '13b'}) == {'2', '13'}
+    assert walk({'a': '1', 'b': '2'}, 'ab') == '12'
+    assert walk({1,2,3}, (0, 1, 2)) == (False, True, True)
+
 def test_walk_keys():
     assert walk_keys(str.upper, {'a': 1, 'b':2}) == {'A': 1, 'B': 2}
 
@@ -101,8 +107,14 @@ def test_select():
     assert eq(select(_[1]>1, {'a':1,'b':2,'c':3}), {'b':2,'c':3})
     assert select(_[1]>1, defaultdict(int)) == {}
 
+def test_select_extended():
+    assert select(None, [2, 3, 0]) == [2, 3]
+    assert select(r'\d', 'a23bn45') == '2345'
+    assert select({1,2,3}, (0, 1, 2, 4, 1)) == (1, 2, 1)
+
 def test_select_keys():
     assert select_keys(_[0] == 'a', {'a':1, 'b':2, 'ab':3}) == {'a': 1, 'ab':3}
+    assert select_keys(r'^a', {'a':1, 'b':2, 'ab':3, 'ba': 4}) == {'a': 1, 'ab':3}
 
 def test_select_values():
     assert select_values(_ % 2, {'a': 1, 'b': 2}) == {'a': 1}
@@ -124,6 +136,12 @@ def test_all():
     assert not all([1,2,''])
     assert all(callable, [abs, open, int])
     assert not all(_ < 3, [1,2,5])
+
+def test_all_extended():
+    assert all(None, [1,2,3])
+    assert not all(None, [1,2,''])
+    assert all(r'\d', '125')
+    assert not all(r'\d', '12.5')
 
 def test_any():
     assert any([0, False, 3, ''])
