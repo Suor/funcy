@@ -38,6 +38,9 @@ def test_map():
     assert map({'a': 1, 'b': 2}, 'ab') == [1, 2]
     assert map({1,2,3}, [0, 1, 2]) == [False, True, True]
 
+def test_map_multi():
+    assert map(None, [1, 2, 3], 'abc') == [(1, 'a'), (2, 'b'), (3, 'c')]
+
 def test_filter():
     assert filter(None, [2, 3, 0]) == [2, 3]
     assert filter(r'\d+', ['a2', '13b', 'c']) == ['a2', '13b']

@@ -34,10 +34,10 @@ def _wrap_higher_order(func, test):
     # NOTE: builtin housekeeping is optimization:
     #       map(None, ...) is much faster than map(identity, ...)
     builtin = isbuiltin(func) or func in {ifilter, ifilterfalse}
-    return wraps(func)(lambda f, seq: func(make_func(f, builtin=builtin, test=test), seq))
+    return wraps(func)(lambda f, *seqs: func(make_func(f, builtin=builtin, test=test), *seqs))
 
 def wrap_mapper(func):
-    return _wrap_higher_order(func, False)
+    return _wrap_higher_order(func, test=False)
 
 def wrap_selector(func):
-    return _wrap_higher_order(func, True)
+    return _wrap_higher_order(func, test=True)
