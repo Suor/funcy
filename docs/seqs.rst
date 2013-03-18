@@ -262,7 +262,7 @@ Transform and filter
 .. function:: mapcat(f, *seqs)
               imapcat(f, *seqs)
 
-    Maps given sequence(s) and then concatenates them, essentially a shortcut for ``cat(map(f, *seqs))``. Come in handy when extracting multiple values from every sequence item or transforming nested sequences::
+    Maps given sequence(s) and then concatenates results, essentially a shortcut for ``cat(map(f, *seqs))``. Come in handy when extracting multiple values from every sequence item or transforming nested sequences::
 
         # Get all the lines of all the texts in single flat list
         mapcat(str.splitlines, bunch_of_texts)
