@@ -324,7 +324,7 @@ Data mangling
 
     Split absolute and relative urls::
 
-        absolute, relative = split(re_tester(r'^http://'), photo_urls)
+        absolute, relative = split(re_tester(r'^http://'), urls)
 
 .. function:: split_at(n, seq)
 
@@ -386,7 +386,7 @@ Data mangling
 
     Great for getting rid of clunky ``prev`` housekeeping in for loops. This way one can indent first line of each paragraph while printing text::
 
-        for line, prev in text.splitlines():
+        for line, prev in with_prev(text.splitlines()):
             if not prev:
                 print '    ',
             print line
