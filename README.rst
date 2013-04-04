@@ -126,3 +126,5 @@ TODO
 - reject*(), split collections
 - merge_with()
 - object util monkey()?
+- reversed() to work with iterators
+- cached_property() to wrap iterator into list
