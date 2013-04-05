@@ -59,4 +59,4 @@ def str_join(sep, seq=None):
     if not seq:
         return str_join('', sep)
     else:
-        return sep.join(map(str, seq))
+        return sep.join(imap(sep.__class__, seq))
