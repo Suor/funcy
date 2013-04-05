@@ -1,5 +1,6 @@
 - extended predicates/mapping functions for seq and coll utils
 - added str_join()
+- added @collecting and @joining()
 - better docs
 
 0.3.4

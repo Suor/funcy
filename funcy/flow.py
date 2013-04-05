@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from functools import wraps
+from itertools import imap
 
 from .decorators import decorator
 
@@ -87,3 +88,12 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
                 return result
         return wrapper
     return decorator
+
+
+@decorator
+def collecting(call):
+    return list(call())
+
+@decorator
+def joining(call, sep):
+    return sep.join(imap(sep.__class__, call()))
