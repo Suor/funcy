@@ -1,17 +1,21 @@
+from operator import add
 from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile
 from collections import defaultdict
 
+from .funcs import partial
 from .funcmakers import wrap_mapper, wrap_selector
 
 
-__all__ = ['count', 'cycle', 'repeat', 'repeatedly', 'iterate',
-           'take', 'drop', 'first', 'second', 'rest', 'ilen',
-           'ireductions', 'reductions',
-           'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
-           'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
-           'izip', 'interleave', 'interpose', 'distinct',
-           'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
-           'group_by', 'partition', 'chunks', 'with_prev']
+__all__ = [
+    'count', 'cycle', 'repeat', 'repeatedly', 'iterate',
+    'take', 'drop', 'first', 'second', 'rest', 'ilen',
+    'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
+    'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
+    'izip', 'interleave', 'interpose', 'distinct',
+    'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
+    'group_by', 'partition', 'chunks', 'with_prev',
+    'ireductions', 'reductions', 'isums', 'sums',
+]
 
 
 # Re-export
@@ -159,3 +163,6 @@ def ireductions(f, seq, acc=EMPTY):
 
 def reductions(f, seq, acc=EMPTY):
     return list(ireductions(f, seq, acc))
+
+isums = partial(ireductions, add)
+sums = partial(reductions, add)

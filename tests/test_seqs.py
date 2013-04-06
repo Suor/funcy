@@ -108,3 +108,8 @@ def test_reductions():
     assert reductions(add, [None]) == [None]
     assert reductions(add, [1, 2, 3, 4]) == [1, 3, 6, 10]
     assert reductions(lambda x, y: x + [y], [1,2,3], []) == [[1], [1, 2], [1, 2, 3]]
+
+def test_sums():
+    assert sums([]) == []
+    assert sums([1, 2, 3, 4]) == [1, 3, 6, 10]
+    assert sums([[1],[2],[3]]) == [[1], [1, 2], [1, 2, 3]]

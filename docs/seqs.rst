@@ -404,15 +404,17 @@ Data mangling
 
     Returns a sequence of the intermediate values of the reduction of ``seq`` by ``f``. In other words it yields a sequence like::
 
-        reduce(f, seq[1:], [acc]), reduce(f, seq[2:], [acc]), ...
+        reduce(f, seq[:1], [acc]), reduce(f, seq[:2], [acc]), ...
+
+    You can use :func:`sums` or :func:`isums` for a common use of getting list of sums.
+
+
+.. function:: sums(seq, [acc])
+              isums(seq, [acc])
+
+    Same as :func:`reductions` or :func:`ireductions` with reduce function fixed to addition.
 
     Find out which straw will break camels back::
 
-        from operator import add
-
-        first(i for i, total in enumerate(ireductions(add, straw_weights))
+        first(i for i, total in enumerate(isums(straw_weights))
                 if total > camel_toughness)
-
-    And you can make this even easier with a shortcut::
-
-        isums = partial(ireductions, add)
