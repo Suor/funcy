@@ -215,12 +215,9 @@ Most of functions in this section support :ref:`extended_fns`. Among other thing
 .. function:: remove(pred, seq)
               iremove(pred, seq)
 
-    Return a list or an iterator of items of ``seq`` that result in false when passed to ``pred``. The results of this functions complement results of standard :func:`filter` and :func:`~itertools.ifilter`. The notable diffrence is that predicate can't be ``None``, use ``bool`` instead::
+    Return a list or an iterator of items of ``seq`` that result in false when passed to ``pred``. The results of this functions complement results of standard :func:`filter` and :func:`~itertools.ifilter`.
 
-        remove(bool, [0, 1, 2, ''])
-        # -> [0, '']
-
-    Other handy use is passing :func:`re_tester` result as ``pred``. For example, this code removes any whitespace only lines from list::
+    A handy use is passing :func:`re_tester` result as ``pred``. For example, this code removes any whitespace-only lines from list::
 
         remove(re_tester('^\s+$'), lines)
 
