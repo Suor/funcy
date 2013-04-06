@@ -20,6 +20,7 @@ Contents:
    calc
    objects
    other
+   extended_fns
 
 
 Indices and tables

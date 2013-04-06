@@ -41,7 +41,7 @@ Walk through collection, creating it's transform (like map but preserves type)::
 Select a part of collection::
 
     select(even, {1,2,3,10,20})                  # {2,10,20}
-    select(re_tester('^a'), ('a','b','ab','ba')) # ('a','ab')
+    select(r'^a', ('a','b','ab','ba'))           # ('a','ab')
     select_keys(callable, {str: '', None: None}) # {str: ''}
     compact({2, None, '', 0})                    # {2,'',0}
 

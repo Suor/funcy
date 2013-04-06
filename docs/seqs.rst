@@ -198,6 +198,8 @@ Unite
 Transform and filter
 --------------------
 
+Most of functions in this section support :ref:`extended_fns`. Among other things it allows to rewrite examples using :func:`re_tester` and :func:`re_finder` tighter.
+
 .. function:: map(pred, seq)
               imap(pred, seq)
 
@@ -222,7 +224,10 @@ Transform and filter
 
         remove(re_tester('^\s+$'), lines)
 
-    :func:`iremove` is an alias for :func:`itertools.ifilterfalse`.
+    Note, you can rewrite it shorter using :ref:`extended predicate semantics <extended_fns>`::
+
+        remove('^\s+$', lines)
+
 
 .. function:: keep([f], seq)
               ikeep([f], seq)

@@ -31,6 +31,8 @@ Unite
 Transform and select
 --------------------
 
+Most of functions in this section support :ref:`extended_fns`.r
+
 .. function:: walk(f, coll)
 
     Returns collection of same type as ``coll`` consisting of its elements mapped with given function::
@@ -180,6 +182,13 @@ Content tests
         they_are_even = all(even, seq)
 
 .. function:: any([pred], seq)
+
+    Returns ``True`` if ``pred`` holds for any item in given sequence. If ``pred`` is omitted checks if any element of ``seq`` is true.
+
+    Check if there is a needle in haystack, using :ref:`extended predicate semantics <extended_fns>`::
+
+        any(r'needle', haystack_strings)
+
 .. function:: none([pred], seq)
 .. function:: one([pred], seq)
 .. function:: some([pred], seq)

@@ -1,0 +1,15 @@
+@import "default.css";
+
+table.docutils td, table.docutils th {
+    border-right: 1px solid black;
+    padding: 5px;
+}
+
+table.docutils td:first-child, table.docutils th:first-child {
+    white-space: nowrap;
+}
+
+table.docutils td {
+    padding-top: 7px; padding-bottom: 7px;
+    background-color: #EEEEFF;
+}
