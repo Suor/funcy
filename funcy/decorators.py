@@ -6,7 +6,7 @@ __all__ = ['decorator']
 
 
 def make_call(func, args, kwargs):
-    call = lambda: func(*args, **kwargs)
+    call = lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
     # Support args and func introspection
     call.func = func
     call.args = args

@@ -1,3 +1,5 @@
+- decorators created with @decorator are now able to pass additional args and kwargs
+
 0.4.0
 - extended predicate/mapping semantics for seq and coll utils
 - added str_join()
