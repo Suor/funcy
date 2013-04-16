@@ -3,6 +3,7 @@
 - @tap(), @log_calls and @log_errors() now exported directly from funcy
 - added @print_calls and @print_errors
 - better handling passing None to optional parameter
+- docs for debugging utilities
 Backward incompatible changes:
 - @log renamed to @log_calls
 

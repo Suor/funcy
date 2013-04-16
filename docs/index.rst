@@ -19,6 +19,7 @@ Contents:
    strings
    calc
    objects
+   debug
    other
    extended_fns
 
