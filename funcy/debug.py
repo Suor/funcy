@@ -4,7 +4,7 @@ from __future__ import print_function
 from .decorators import decorator
 
 
-__all__ = ['tap', 'log_calls', 'log_errors']
+__all__ = ['tap', 'log_calls', 'print_calls', 'log_errors', 'print_errors']
 
 
 def tap(x):
@@ -20,6 +20,8 @@ def log_calls(call, print_func=print):
     print_func('-> %s' % repr(result))
     return result
 
+print_calls = log_calls()
+
 
 @decorator
 def log_errors(call, print_func=print):
@@ -28,3 +30,5 @@ def log_errors(call, print_func=print):
     except Exception as e:
         print_func('%s: %s in %s' % (e.__class__.__name__, e, call.func.__name__))
         raise
+
+print_errors = log_errors()
