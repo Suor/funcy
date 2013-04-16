@@ -8,6 +8,9 @@ __all__ = ['identity', 'constantly', 'caller',
            'iffy']
 
 
+EMPTY = object()
+
+
 def identity(x):
     return x
 
@@ -22,8 +25,8 @@ def caller(*a, **kw):
 def partial(func, *args, **kwargs):
     return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
-def curry(func, n=None):
-    if n is None:
+def curry(func, n=EMPTY):
+    if n is EMPTY:
         n = func.__code__.co_argcount
 
     if n <= 1:
@@ -49,8 +52,8 @@ def juxt(*fs):
 def ijuxt(*fs):
     return lambda *a, **kw: (f(*a, **kw) for f in fs)
 
-def iffy(pred, action=None, default=identity):
-    if action is None:
+def iffy(pred, action=EMPTY, default=identity):
+    if action is EMPTY:
         return iffy(bool, pred)
     else:
         return lambda v: action(v)  if pred(v) else           \

@@ -55,8 +55,11 @@ def re_tester(regex, flags=0):
 
 # TODO: re_allfinder? better name?
 
-def str_join(sep, seq=None):
-    if not seq:
+
+EMPTY = object()
+
+def str_join(sep, seq=EMPTY):
+    if seq is EMPTY:
         return str_join('', sep)
     else:
         return sep.join(imap(sep.__class__, seq))

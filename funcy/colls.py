@@ -16,6 +16,9 @@ __all__ = ['iterable', 'empty', 'iteritems',
            'where', 'pluck', 'invoke']
 
 
+EMPTY = object()
+
+
 def iterable(value):
     return isinstance(value, Iterable)
 
@@ -117,28 +120,27 @@ def is_distinct(coll):
     return len(coll) == len(set(coll))
 
 
-def all(pred, seq=None):
-    if seq is None:
+def all(pred, seq=EMPTY):
+    if seq is EMPTY:
         return _all(pred)
     return _all(imap(pred, seq))
 
-def any(pred, seq=None):
-    if seq is None:
+def any(pred, seq=EMPTY):
+    if seq is EMPTY:
         return _any(pred)
     return _any(imap(pred, seq))
 
 none = complement(any)
 
-def one(pred, seq=None):
-    if seq is None:
+def one(pred, seq=EMPTY):
+    if seq is EMPTY:
         return one(bool, pred)
     return len(take(2, ifilter(pred, seq))) == 1
 
 # Not same as in clojure! returns value found not pred(value)
-# NOTE: should I name it "find" when pred is here
-def some(pred, seq=None):
-    if seq is None:
-        return some(None, pred)
+def some(pred, seq=EMPTY):
+    if seq is EMPTY:
+        return some(bool, pred)
     return next(ifilter(pred, seq), None)
 
 # TODO: a variant of some that returns mapped value,

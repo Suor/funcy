@@ -18,11 +18,14 @@ __all__ = [
 ]
 
 
+EMPTY = object() # Used as default for optional arguments
+
+
 # Re-export
 from itertools import count, cycle, repeat
 
-def repeatedly(f, n=None):
-    _repeat = repeat(None, n) if n else repeat(None)
+def repeatedly(f, n=EMPTY):
+    _repeat = repeat(None) if n is EMPTY else repeat(None, n)
     return (f() for _ in _repeat)
 
 def iterate(f, x):
@@ -61,14 +64,14 @@ def remove(pred, seq):
     return list(iremove(pred, seq))
 iremove = wrap_selector(ifilterfalse)
 
-def keep(f, seq=None):
-    if seq is None:
+def keep(f, seq=EMPTY):
+    if seq is EMPTY:
         return filter(bool, f)
     else:
         return filter(bool, imap(f, seq))
 
-def ikeep(f, seq=None):
-    if seq is None:
+def ikeep(f, seq=EMPTY):
+    if seq is EMPTY:
         return ifilter(bool, f)
     else:
         return ifilter(bool, imap(f, seq))
@@ -133,13 +136,13 @@ def group_by(f, seq):
         result[f(item)].append(item)
     return result
 
-def partition(n, step, seq=None):
-    if seq is None:
+def partition(n, step, seq=EMPTY):
+    if seq is EMPTY:
         return partition(n, n, step)
     return [seq[i:i+n] for i in xrange(0, len(seq)-n+1, step)]
 
-def chunks(n, step, seq=None):
-    if seq is None:
+def chunks(n, step, seq=EMPTY):
+    if seq is EMPTY:
         return chunks(n, n, step)
     return [seq[i:i+n] for i in xrange(0, len(seq), step)]
 
@@ -147,8 +150,6 @@ def with_prev(seq):
     a, b = tee(seq)
     return izip(a, chain([None], b))
 
-
-EMPTY = object()
 
 def ireductions(f, seq, acc=EMPTY):
     it = iter(seq)
