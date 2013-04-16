@@ -1,6 +1,9 @@
 - decorators created with @decorator are now able to pass additional args and kwargs
-- export @collecting and @joining from funcy
+- @collecting, @joining() and @limit_error_rate() now exported directly from funcy
+- @tap(), @log_calls and @log_errors() now exported directly from funcy
 - better handling passing None to optional parameter
+Backward incompatible changes:
+- @log renamed to @log_calls
 
 0.4.0
 - extended predicate/mapping semantics for seq and coll utils
