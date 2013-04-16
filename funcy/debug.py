@@ -4,7 +4,7 @@ from __future__ import print_function
 from .decorators import decorator
 
 
-__all__ = ['tap', 'log', 'log_errors']
+__all__ = ['tap', 'log_calls', 'log_errors']
 
 
 def tap(x):
@@ -13,7 +13,7 @@ def tap(x):
 
 
 @decorator
-def log(call, print_func=print):
+def log_calls(call, print_func=print):
     arg_words = list(call.args) + ['%s=%s' % t for t in call.kwargs.items()]
     print_func('Call %s(%s)' % (call.func.__name__, ', '.join(map(str, arg_words))))
     result = call()
