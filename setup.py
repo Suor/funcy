@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='funcy',
-    version='0.4.0',
+    version='0.4.1',
     author='Alexander Schepanovski',
     author_email='suor.web@gmail.com',
 

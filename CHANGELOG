@@ -1,3 +1,4 @@
+0.4.1
 - decorators created with @decorator are now able to pass additional args and kwargs
 - @collecting, @joining() and @limit_error_rate() now exported directly from funcy
 - @tap(), @log_calls and @log_errors() now exported directly from funcy
