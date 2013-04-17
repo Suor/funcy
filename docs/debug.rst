@@ -27,5 +27,6 @@ Debugging
         @silent
         @log_errors(logging.warning)
         def guess_user_id(username):
+            initial = first_guess(username)
             # ...
 
