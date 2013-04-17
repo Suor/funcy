@@ -127,6 +127,5 @@ TODO
 - merge_with()
 - object util monkey()?
 - reversed() to work with iterators?
-- isa(Mapping)(coll)?
 - without()
 
