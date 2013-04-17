@@ -3,7 +3,6 @@
 ## Collections
 Generic ops: not_empty,p
 Content tests: not-all,p
-# Capabilities and type tests - postpone
 
 Set: sorted-set,p sorted-set-by,p
 Dict: items,p

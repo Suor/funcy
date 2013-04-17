@@ -8,7 +8,7 @@ from .funcmakers import wrap_mapper, wrap_selector
 from .seqs import take, imap, ifilter
 
 
-__all__ = ['iterable', 'empty', 'iteritems',
+__all__ = ['empty', 'iteritems',
            'join', 'merge',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
@@ -18,9 +18,6 @@ __all__ = ['iterable', 'empty', 'iteritems',
 
 EMPTY = object()
 
-
-def iterable(value):
-    return isinstance(value, Iterable)
 
 ### Generic ops
 def _factory(coll):

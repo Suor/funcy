@@ -18,16 +18,6 @@ def hinc(xs):
     return map(inc, xs)
 
 
-def test_iterable():
-    assert iterable([])
-    assert iterable({})
-    assert iterable('abc')
-    assert iterable(iter([]))
-    assert iterable(x for x in range(10))
-
-    assert not iterable(1)
-
-
 def test_empty():
     assert eq(empty({'a': 1}), {})
     assert eq(empty(defaultdict(int)), defaultdict(int))

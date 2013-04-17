@@ -4,6 +4,7 @@ from .decorators import *
 from .funcolls import *
 from .funcs import *
 from .seqs import *
+from .types import *
 from .strings import *
 from .flow import *
 from .objects import cached_property
