@@ -14,6 +14,7 @@ Contents:
    seqs
    colls
    funcs
+   types
    decorators
    flow
    strings

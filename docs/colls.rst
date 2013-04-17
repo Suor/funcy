@@ -166,10 +166,6 @@ Data mangling
 Content tests
 -------------
 
-.. function:: iterable(value)
-
-    Tests if ``value`` is iterable.
-
 .. function:: is_distinct(coll)
 
     Checks if all elements in collection are diffrent.
