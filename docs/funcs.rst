@@ -2,7 +2,15 @@ Functions
 =========
 
 .. function:: identity(x)
+
+    Returns its argument.
+
+
 .. function:: constantly(x)
+
+    Returns function accepting any args, but always returning ``x``.
+
+
 .. function:: caller(*args, **kwargs)
 .. function:: partial(func, *args, **kwargs)
 
