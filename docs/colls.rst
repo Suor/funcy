@@ -177,6 +177,10 @@ Content tests
         they_are_ints = all(is_instance(n, int) for n in seq)
         they_are_even = all(even, seq)
 
+    Note that, first example could be rewritten using :func:`isa` like this::
+
+        they_are_ints = all(isa(int), seq)
+
 .. function:: any([pred], seq)
 
     Returns ``True`` if ``pred`` holds for any item in given sequence. If ``pred`` is omitted checks if any element of ``seq`` is true.
