@@ -1,7 +1,7 @@
 Type testing
 ============
 
-.. function:: isa(*types):
+.. function:: isa(*types)
 
     Returns function checking if it's argument is of any of given ``types``.
 
