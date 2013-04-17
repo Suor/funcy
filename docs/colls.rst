@@ -186,6 +186,12 @@ Content tests
         any(r'needle', haystack_strings)
 
 .. function:: none([pred], seq)
+
+    ::
+
+        assert none(' ' in name for name in names), "Spaces in names not allowed"
+
+
 .. function:: one([pred], seq)
 .. function:: some([pred], seq)
 
