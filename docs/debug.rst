@@ -3,7 +3,7 @@ Debugging
 
 .. function:: tap(value)
 
-    Print value and then returns it. Useful to tap into some functional pipeline for debugging::
+    Prints value and then returns it. Useful to tap into some functional pipeline for debugging::
 
         fields = (f for f in fields_for(category) if section in tap(tap(f).sections))
         # ... do something with fields
