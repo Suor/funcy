@@ -12,12 +12,22 @@ Functions
 
 
 .. function:: caller(*args, **kwargs)
+
+    Returns function calling its argument with passed arguments.
+
+
 .. function:: partial(func, *args, **kwargs)
 
-    Like :func:`functools.partial` but returns real function.
+    Like :func:`functools.partial` but returns real function. Which is useful when, for example, you want to create a method of it.
 
 
 .. function:: curry(func[, n])
+
+    Curries function. For example, given function of two arguments ``f(a, b)`` returns function::
+
+        lambda a: lambda b: f(a, b)
+
+
 .. function:: compose(*fs)
 .. function:: complement(pred)
 .. function:: juxt(*fs)
