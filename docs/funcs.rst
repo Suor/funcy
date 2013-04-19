@@ -16,6 +16,7 @@ Functions
 
     Like :func:`functools.partial` but returns real function.
 
+
 .. function:: curry(func[, n])
 .. function:: compose(*fs)
 .. function:: complement(pred)

@@ -3,9 +3,11 @@ Flow
 
 .. decorator:: ignore(errors, [default])
 
+
 .. decorator:: silent
 
     Ignore all real exceptions.
+
 
 .. decorator:: retry(tries, errors=Exception)
 

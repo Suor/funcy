@@ -71,6 +71,7 @@ Generate
 
         repeatedly(list, n)
 
+
 .. function:: iterate(f, x)
 
     Returns an infinite iterator of ``x, f(x), f(f(x)), ...`` etc.
@@ -93,6 +94,7 @@ Manipulate
 
 This section provides some robust tools for sequence slicing. Consider :ref:`slicings` or :func:`itertools.islice` for more generic cases.
 
+
 .. function:: take(n, seq)
 
     Returns a list of the first ``n`` items in sequence, or all items if there are fewer than ``n``.
@@ -102,6 +104,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
         take(3, [2, 3, 4, 5]) # [2, 3, 4]
         take(3, count(5))     # [5, 6, 7]
         take(3, 'ab')         # ['a', 'b']
+
 
 .. function:: drop(n, seq)
 
@@ -280,6 +283,7 @@ Sequence mangling
 
     Returns an iterator yielding first item in each sequence, then second and so on until some sequence ends. Numbers of items taken from all sequences are always equal.
 
+
 .. function:: interpose(sep, seq)
 
     Returns an iterator yielding elements of ``seq`` separated by ``sep``.
@@ -289,6 +293,7 @@ Sequence mangling
         def visit_BoolOp(self, node):
             # ... do generic visit
             node.code = mapcat(translate, interpose(node.op, node.values))
+
 
 .. function:: takewhile(pred, seq)
 
@@ -316,6 +321,7 @@ Data mangling
 
     Returns given sequence with duplicates removed. Preserves order.
 
+
 .. function:: split(pred, seq)
 
     Splits sequence items which pass predicate from ones that don't, essentially returning a tuple ``filter(pred, seq), remove(pred, seq)``.
@@ -328,9 +334,11 @@ Data mangling
 
         absolute, relative = split(re_tester(r'^http://'), urls)
 
+
 .. function:: split_at(n, seq)
 
     Splits sequence at given position, returning a tuple ``take(n, seq), list(drop(n, seq))``.
+
 
 .. function:: split_by(pred, seq)
 
@@ -338,6 +346,7 @@ Data mangling
 
         split_by(bool, iter([-2, -1, 0, 1, 2]))
         # [-2, -1], [0, 1, 2]
+
 
 .. function:: group_by(f, seq)
 
@@ -350,6 +359,7 @@ Data mangling
     .. group_by(lambda f: f.section, fields)
 
     One can use :func:`split_by` when grouping by boolean predicate. See also :func:`itertools.groupby`.
+
 
 .. function:: partition(n, [step], seq)
 
@@ -370,6 +380,7 @@ Data mangling
 
     Other use of :func:`partition` is processing sequence of data elements or jobs in chunks. Take a look at :func:`chunks` for that.
 
+
 .. function:: chunks(n, [step], seq)
 
     Returns a list of lists like :func:`partition`, but may include partitions with fewer than ``n`` items at the end::
@@ -381,6 +392,7 @@ Data mangling
         # -> ['ab', 'e'])
 
     Handy for batch processing.
+
 
 .. function:: with_prev(seq)
 
