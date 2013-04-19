@@ -54,6 +54,7 @@ Most of functions in this section support :ref:`extended_fns`.r
 
     .. note about constructor interface?
 
+
 .. function:: walk_keys(f, coll)
 
     Walks keys of ``coll``, mapping them with given function. Works with mappings and collections of pairs::
@@ -62,6 +63,7 @@ Most of functions in this section support :ref:`extended_fns`.r
 
 
     Important to note that it preserves collection type whether it is simple :class:`dict`, :class:`~collections.defaultdict`, :class:`~collections.OrderedDict` or any other mapping class or a collection of pairs.
+
 
 .. function:: walk_values(f, coll)
 
@@ -85,6 +87,7 @@ Most of functions in this section support :ref:`extended_fns`.r
         select(lambda (k, v): k == v, {1: 1, 2: 3})
         # -> {1: 1}
 
+
 .. function:: select_keys(pred, coll)
 
     Select part of a dict or a collection of pairs with keys passing given predicate.
@@ -93,6 +96,7 @@ Most of functions in this section support :ref:`extended_fns`.r
 
         is_public = complement(re_tester('^_'))
         public = select_keys(is_public, instance.__dict__)
+
 
 .. function:: select_values(pred, coll)
 
@@ -125,12 +129,14 @@ Dict utils
         zipdict('abc', count())
         # -> {'a': 0, 'b': 1, 'c': 2}
 
+
 .. function:: flip(mapping)
 
     Flip passed dict swapping its keys and values. Also works for sequences of pairs. Preserves collection type::
 
         flip(OrderedDict(['aA', 'bB']))
         # -> OrderedDict([('A', 'a'), ('B', 'b')])
+
 
 .. function:: project(mapping, keys)
 
@@ -152,11 +158,13 @@ Data mangling
         # => [{"title": "Cymbeline", "author": "Shakespeare", "year": 1611},
         #     {"title": "The Tempest", "author": "Shakespeare", "year": 1611}]
 
+
 .. function:: pluck(key, mappings)
 
     Returns list of values for ``key`` in each mapping in given sequence. Essentialy a shortcut for::
 
         map(operator.itemgetter(key), mappings)
+
 
 .. function:: invoke(objects, name, *args, **kwargs)
 
@@ -170,6 +178,7 @@ Content tests
 
     Checks if all elements in collection are diffrent.
 
+
 .. function:: all([pred], seq)
 
     Checks if ``pred`` holds every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` is true (which is the same as in builtin :func:`~builtin.all`)::
@@ -181,6 +190,7 @@ Content tests
 
         they_are_ints = all(isa(int), seq)
 
+
 .. function:: any([pred], seq)
 
     Returns ``True`` if ``pred`` holds for any item in given sequence. If ``pred`` is omitted checks if any element of ``seq`` is true.
@@ -189,15 +199,24 @@ Content tests
 
         any(r'needle', haystack_strings)
 
+
 .. function:: none([pred], seq)
 
-    ::
+    Checks if none of items in given sequence pass ``pred`` or true if ``pred`` is omitted.
+
+    Just a stylish way to write ``not any(...)``::
 
         assert none(' ' in name for name in names), "Spaces in names not allowed"
 
 
 .. function:: one([pred], seq)
+
+    Returns true if exactly one of items in ``seq`` passes ``pred``. Cheks for boolean true if ``pred`` is omitted.
+
+
 .. function:: some([pred], seq)
+
+    Finds first item in ``seq`` passing ``pred`` or first that is true if ``pred`` is omitted.
 
 
 Collections of functions
