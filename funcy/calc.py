@@ -6,6 +6,9 @@ import inspect
 __all__ = ['memoize', 'make_lookuper', 'cache']
 
 
+# TODO: guard from keyword arguments in memoize, cache and make_lookuper
+
+
 class SkipMemoization(Exception):
     pass
 
