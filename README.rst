@@ -128,4 +128,5 @@ TODO
 - object util monkey()?
 - reversed() to work with iterators?
 - without()
-
+- one argument select*()? other name?
+- any_values() and such?
