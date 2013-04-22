@@ -3,7 +3,7 @@ from functools import wraps
 import inspect
 
 
-__all__ = ['memoize', 'make_lookuper', 'cache']
+__all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 
 
 # TODO: guard from keyword arguments in memoize, cache and make_lookuper
@@ -11,7 +11,6 @@ __all__ = ['memoize', 'make_lookuper', 'cache']
 
 class SkipMemoization(Exception):
     pass
-
 
 def memoize(func):
     cache = {}
@@ -29,26 +28,30 @@ def memoize(func):
 memoize.skip = SkipMemoization
 
 
-def make_lookuper(func):
-    spec = inspect.getargspec(func)
-    assert not spec.keywords,  \
-           'Lookup table building function should not have keyword arguments'
+def _make_lookuper(silent):
+    def make_lookuper(func):
+        spec = inspect.getargspec(func)
+        assert not spec.keywords,  \
+               'Lookup table building function should not have keyword arguments'
 
-    if spec.args or spec.varargs:
-        @memoize
-        def wrapper(*args):
-            return make_lookuper(lambda: func(*args))
-    else:
-        memory = {}
+        if spec.args or spec.varargs:
+            @memoize
+            def wrapper(*args):
+                return make_lookuper(lambda: func(*args))
+        else:
+            memory = {}
 
-        @wraps(func)
-        def wrapper(arg):
-            if not memory:
-                memory[object()] = None # prevent continuos memory refilling
-                memory.update(func())
-            return memory.get(arg)
+            def wrapper(arg):
+                if not memory:
+                    memory[object()] = None # prevent continuos memory refilling
+                    memory.update(func())
+                return memory.get(arg) if silent else memory[arg]
 
-    return wraps(func)(wrapper)
+        return wraps(func)(wrapper)
+    return make_lookuper
+
+make_lookuper = _make_lookuper(False)
+silent_lookuper = _make_lookuper(True)
 
 
 def cache(timeout):

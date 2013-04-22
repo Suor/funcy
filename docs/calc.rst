@@ -20,7 +20,7 @@ Calculation
 
 .. decorator:: make_lookuper
 
-    As :func:`memoize`, but with prefilled memory. Decorated function should return fully filled memory, resulting function will return ``None`` for any argument missing in it::
+    As :func:`memoize`, but with prefilled memory. Decorated function should return fully filled memory, resulting function will ``raise KeyError`` for any argument missing in it::
 
         @make_lookuper
         def city_location():
@@ -42,6 +42,11 @@ Calculation
             return make_list_of_pairs(load_translation_file(lang))
 
         russian_phrases = map(translate('ru'), english_phrases)
+
+
+.. decorator:: silent_lookuper
+
+    Same as :func:`make_lookuper`, but retuns ``None`` on memory miss.
 
 
 .. decorator:: cache(timeout)

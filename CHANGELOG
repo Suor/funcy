@@ -1,6 +1,8 @@
 - added type testing utilities
+- added @silent_lookuper
 Backward incompatible changes:
 - removed defaults for log_calls() and log_errors()
+- @make_lookuper decorated functions now will raise KeyError on memry miss
 
 0.4.1
 - decorators created with @decorator are now able to pass additional args and kwargs
