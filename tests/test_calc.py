@@ -10,7 +10,7 @@ def test_make_lookuper():
         return {c: i for i, c in enumerate('abcdefghij')}
 
     assert letter_index('c') == 2
-    with pytest.raises(KeyError): letter_index('_')
+    with pytest.raises(LookupError): letter_index('_')
 
 
 def test_make_lookuper_nested():
@@ -26,7 +26,7 @@ def test_make_lookuper_nested():
     assert function_table(sin)(3) == sin(3)
     assert tables_built[0] == 2
 
-    with pytest.raises(KeyError): function_table(cos)(-1)
+    with pytest.raises(LookupError): function_table(cos)(-1)
 
 
 def test_silent_lookuper():

@@ -31,13 +31,15 @@ memoize.skip = SkipMemoization
 def _make_lookuper(silent):
     def make_lookuper(func):
         spec = inspect.getargspec(func)
-        assert not spec.keywords,  \
+        assert not spec.keywords, \
                'Lookup table building function should not have keyword arguments'
 
         if spec.args or spec.varargs:
             @memoize
             def wrapper(*args):
-                return make_lookuper(lambda: func(*args))
+                f = lambda: func(*args)
+                f.__name__ = '%s(%s)' % (func.__name__, ', '.join(map(str, args)))
+                return make_lookuper(f)
         else:
             memory = {}
 
@@ -45,7 +47,13 @@ def _make_lookuper(silent):
                 if not memory:
                     memory[object()] = None # prevent continuos memory refilling
                     memory.update(func())
-                return memory.get(arg) if silent else memory[arg]
+
+                if silent:
+                    return memory.get(arg)
+                elif arg in memory:
+                    return memory[arg]
+                else:
+                    raise LookupError("Failed to look up %s(%s)" % (func.__name__, arg))
 
         return wraps(func)(wrapper)
     return make_lookuper

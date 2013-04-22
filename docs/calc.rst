@@ -20,7 +20,7 @@ Calculation
 
 .. decorator:: make_lookuper
 
-    As :func:`memoize`, but with prefilled memory. Decorated function should return fully filled memory, resulting function will ``raise KeyError`` for any argument missing in it::
+    As :func:`memoize`, but with prefilled memory. Decorated function should return fully filled memory, resulting function will raise ``LookupError`` for any argument missing in it::
 
         @make_lookuper
         def city_location():
