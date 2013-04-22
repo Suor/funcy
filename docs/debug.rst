@@ -9,7 +9,7 @@ Debugging
         # ... do something with fields
 
 
-.. decorator:: log_calls(print_func=print)
+.. decorator:: log_calls(print_func)
                print_calls
 
    Will log or print all function calls, including argument and result values. Can be used as decorator or tapped into call expression::
@@ -17,7 +17,7 @@ Debugging
        sorted_fields = sorted(fields, key=print_calls(lambda f: f.order))
 
 
-.. decorator:: log_errors(print_func=print)
+.. decorator:: log_errors(print_func)
                print_errors
 
     Will log or print all function errors.

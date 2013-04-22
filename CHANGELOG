@@ -1,4 +1,6 @@
 - added type testing utilities
+Backward incompatible changes:
+- removed defaults for log_calls() and log_errors()
 
 0.4.1
 - decorators created with @decorator are now able to pass additional args and kwargs
