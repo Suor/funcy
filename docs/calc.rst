@@ -46,4 +46,4 @@ Calculation
 
 .. decorator:: cache(timeout)
 
-    ``timeout`` can be either number of seconds or :class:`datetime.timedelta`.
+    Same as memoize, but doesn't use cached results older than ``timeout``. It can be either number of seconds or :class:`datetime.timedelta`. Also, doesn't support skipping.
