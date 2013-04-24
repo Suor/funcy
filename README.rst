@@ -130,3 +130,5 @@ TODO
 - without()
 - one argument select*()? other name?
 - any_values() and such?
+- accept ints and slices as predicates and mappers
+
