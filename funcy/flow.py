@@ -5,7 +5,8 @@ from itertools import imap
 from .decorators import decorator
 
 
-__all__ = ['ignore', 'silent', 'fallback', 'limit_error_rate', 'ErrorRateExceeded',
+__all__ = ['ignore', 'silent', 'retry', 'fallback',
+           'limit_error_rate', 'ErrorRateExceeded',
            'collecting', 'joining']
 
 
