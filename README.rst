@@ -123,7 +123,7 @@ TODO
 - write docs
 - vector chained boolean test (like perl 6 [<])
 - lazy, lazy_seq, lazy_dict (a separate library?)
-- reject*(), split collections
+- reject*(), disjoint*() collections
 - merge_with()
 - object util monkey()?
 - reversed() to work with iterators?
