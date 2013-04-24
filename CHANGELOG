@@ -1,6 +1,7 @@
 - added type testing utilities
 - added @silent_lookuper
 - exported @retry directly from from funcy
+- better support for arg introspection in @decorator
 Backward incompatible changes:
 - removed defaults for log_calls() and log_errors()
 - @make_lookuper decorated functions now will raise LookupError on memry miss

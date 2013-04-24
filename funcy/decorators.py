@@ -7,10 +7,16 @@ __all__ = ['decorator']
 
 def make_call(func, args, kwargs):
     call = lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
+
     # Support args and func introspection
     call.func = func
     call.args = args
     call.kwargs = kwargs
+
+    # Save actual arg values on call "object"
+    for arg_name, arg_value in inspect.getcallargs(func, *args, **kwargs).items():
+        setattr(call, arg_name, arg_value)
+
     return call
 
 def make_decorator(deco, dargs=(), dkwargs={}):

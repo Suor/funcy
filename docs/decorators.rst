@@ -1,4 +1,6 @@
 Decorators
 ==========
 
-.. decorator:: decorator(*args, **kwargs)
+.. decorator:: decorator
+
+    An easy way to create decorators.

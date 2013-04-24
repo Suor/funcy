@@ -27,3 +27,15 @@ def test_decorator_with_args():
         return 10
 
     assert ten() == 12
+
+
+def test_decorator_access_arg():
+    @decorator
+    def multiply(call):
+        return call() * call.n
+
+    @multiply
+    def square(n):
+        return n
+
+    assert square(5) == 25
