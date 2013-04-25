@@ -9,9 +9,9 @@ def make_call(func, args, kwargs):
     call = lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
     # Support args and func introspection
-    call.func = func
-    call.args = args
-    call.kwargs = kwargs
+    call._func = func
+    call._args = args
+    call._kwargs = kwargs
 
     # Save actual arg values on call "object"
     for arg_name, arg_value in inspect.getcallargs(func, *args, **kwargs).items():

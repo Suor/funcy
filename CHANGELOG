@@ -4,7 +4,9 @@
 - better support for arg introspection in @decorator
 Backward incompatible changes:
 - removed defaults for log_calls() and log_errors()
-- @make_lookuper decorated functions now will raise LookupError on memry miss
+- @make_lookuper decorated functions now will raise LookupError on memory miss
+- call object in @decorator access to func, args and kwargs
+  is now done through _func, _args and _kwargs
 
 0.4.1
 - decorators created with @decorator are now able to pass additional args and kwargs

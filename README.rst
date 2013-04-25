@@ -82,7 +82,7 @@ Easy decorators::
 
     @decorator
     def log(call):
-        print call.func.__name__, call.args
+        print call._func.__name__, call._args
         return call()
 
 
