@@ -1,3 +1,4 @@
+0.5.0
 - added type testing utilities
 - added @monkey
 - added cut_prefix() and cut_suffix() privately
