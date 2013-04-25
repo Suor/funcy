@@ -20,11 +20,13 @@ def cached_property(func):
 def monkey(cls):
     assert isinstance(cls, type), "Attempting to monkey patch non-class"
 
-    def decorator(func):
+    def decorator(value):
+        func = getattr(value, 'fget', value) # Support properties
         name = cut_prefix(func.__name__, '%s__' % cls.__name__)
-        func.__name__ = name
 
+        func.__name__ = name
         func.original = getattr(cls, name, None)
-        setattr(cls, name, func)
-        return func
+
+        setattr(cls, name, value)
+        return value
     return decorator
