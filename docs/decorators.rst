@@ -24,4 +24,12 @@ Decorators
             # ... some code using phone
             return # ...
 
-    You can see more examples in :mod:`flow` and :mod:`debug` modules source code.
+    You can easily create decorators with arguments too::
+
+        @decorator
+        def joining(call, sep):
+            return sep.join(imap(sep.__class__, call()))
+
+    Usage example shown in :func:`joining` docs.
+
+    You can see more examples in :mod:`flow` and :mod:`debug` submodules source code.
