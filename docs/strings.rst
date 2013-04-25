@@ -13,3 +13,5 @@ String utils
 
     Joins sequence by ``sep``. Same as ``sep.join(seq)``, but forcefully stringifies elements.
 
+.. function:: cut_prefix(s, prefix)
+.. function:: cut_suffix(s, suffix)

@@ -63,3 +63,9 @@ def str_join(sep, seq=EMPTY):
         return str_join('', sep)
     else:
         return sep.join(imap(sep.__class__, seq))
+
+def cut_prefix(s, prefix):
+    return s[len(prefix):] if s.startswith(prefix) else s
+
+def cut_suffix(s, suffix):
+    return s[:-len(suffix)] if s.endswith(suffix) else s
