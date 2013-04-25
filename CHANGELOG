@@ -1,4 +1,5 @@
 - added type testing utilities
+- added @monkey
 - added cut_prefix() and cut_suffix() privately
 - added @silent_lookuper
 - exported @retry directly from from funcy

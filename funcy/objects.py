@@ -1,5 +1,10 @@
 from functools import wraps
 
+from .strings import cut_prefix
+
+
+__all__ = ['cached_property', 'monkey']
+
 
 def cached_property(func):
     @property
@@ -10,3 +15,16 @@ def cached_property(func):
             setattr(self, attname, func(self))
         return getattr(self, attname)
     return wrapper
+
+
+def monkey(cls):
+    assert isinstance(cls, type), "Attempting to monkey patch non-class"
+
+    def decorator(func):
+        name = cut_prefix(func.__name__, '%s__' % cls.__name__)
+        func.__name__ = name
+
+        func.original = getattr(cls, name, None)
+        setattr(cls, name, func)
+        return func
+    return decorator

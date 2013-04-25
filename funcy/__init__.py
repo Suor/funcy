@@ -7,7 +7,7 @@ from .seqs import *
 from .types import *
 from .strings import *
 from .flow import *
-from .objects import cached_property
+from .objects import *
 from .namespaces import namespace
 from .debug import *
 
