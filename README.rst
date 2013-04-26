@@ -122,14 +122,11 @@ TODO
 
 - create cheatsheet html
 - write docs
-- vector chained boolean test (like perl 6 [<])
-- lazy, lazy_seq, lazy_dict (a separate library?)
 - reject*(), disjoint*() collections
-- merge_with()
-- object util monkey()?
-- reversed() to work with iterators?
 - without()
 - one argument select*()? other name?
-- any_values() and such?
-- accept ints and slices as predicates and mappers
+- vector chained boolean test (like perl 6 [<])
+- merge_with()
+- reversed() to work with iterators?
+- lazy, lazy_seq, lazy_dict (a separate library?)
 
