@@ -1,3 +1,5 @@
+- added ints and slices to extended fn semantics
+
 0.5.0
 - added type testing utilities
 - added @monkey

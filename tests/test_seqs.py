@@ -37,6 +37,8 @@ def test_map():
     assert map(r'\d+', ['a2', '13b']) == ['2', '13']
     assert map({'a': 1, 'b': 2}, 'ab') == [1, 2]
     assert map({1,2,3}, [0, 1, 2]) == [False, True, True]
+    assert map(1, ['abc', '123']) == ['b', '2']
+    assert map(slice(2), ['abc', '123']) == ['ab', '12']
 
 def test_map_multi():
     assert map(None, [1, 2, 3], 'abc') == [(1, 'a'), (2, 'b'), (3, 'c')]

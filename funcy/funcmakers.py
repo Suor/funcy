@@ -1,5 +1,6 @@
 from inspect import isbuiltin
 from functools import wraps
+from operator import itemgetter
 from collections import Mapping, Set
 from itertools import ifilter, ifilterfalse
 
@@ -19,6 +20,8 @@ def make_func(f, builtin=False, test=False):
                bool if test else identity
     elif isinstance(f, (str, unicode, _re_type)):
         return re_tester(f) if test else re_finder(f)
+    elif isinstance(f, (int, slice)):
+        return itemgetter(f)
     elif isinstance(f, Mapping):
         return f.get
     elif isinstance(f, Set):
