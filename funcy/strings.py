@@ -2,7 +2,7 @@ import re
 from operator import methodcaller
 from itertools import imap
 
-from .funcs import identity, iffy
+from .simple_funcs import identity, iffy
 
 
 __all__ = ['re_iter', 're_all', 're_find', 're_finder', 're_test', 're_tester',

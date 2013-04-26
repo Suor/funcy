@@ -27,6 +27,7 @@ def test_compose():
     inc    = _ + 1
     assert compose(inc, double)(10) == 21
     assert compose(str, inc, double)(10) == '21'
+    assert compose(int, r'\d+')('abc1234xy') == 1234
 
 def test_complement():
     assert complement(identity)(0) == True

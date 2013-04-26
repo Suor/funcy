@@ -68,6 +68,7 @@ More tools for mappings::
     pluck('a', [{'a': 1, 'b': 2}, {'a': 10}])     # [1, 10]
     where([{'a': 1, 'b': 2}, {'a': 10}], a=1)     # [{'a': 1, 'b': 2}]
 
+
 Manipulate functions::
 
     partial(add, 1)                # inc

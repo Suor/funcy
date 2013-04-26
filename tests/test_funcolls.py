@@ -14,3 +14,11 @@ def test_none_fn():
 
 def test_some_fn():
     assert some_fn(_-1, _*0, _+1, _*2)(1) == 2
+
+
+def test_extended_fns():
+    f = any_fn(None, {1,2,0})
+    assert f(1)
+    assert f(0)
+    assert f(10)
+    assert not f('')

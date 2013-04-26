@@ -4,7 +4,7 @@ from operator import itemgetter
 from collections import Mapping, Set
 from itertools import ifilter, ifilterfalse
 
-from .funcs import identity
+from .simple_funcs import identity
 from .strings import re_tester, re_finder, _re_type
 
 
