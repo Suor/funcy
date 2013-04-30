@@ -1,3 +1,4 @@
+from inspect import isclass, ismodule
 from functools import wraps
 
 from .strings import cut_prefix
@@ -18,7 +19,7 @@ def cached_property(func):
 
 
 def monkey(cls):
-    assert isinstance(cls, type), "Attempting to monkey patch non-class"
+    assert isclass(cls) or ismodule(cls), "Attempting to monkey patch non-class and non-module"
 
     def decorator(value):
         func = getattr(value, 'fget', value) # Support properties

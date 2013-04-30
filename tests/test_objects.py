@@ -1,3 +1,4 @@
+import sys
 from funcy.objects import *
 
 
@@ -23,3 +24,16 @@ def test_monkey_property():
         return 42
 
     assert A().prop == 42
+
+
+def f(x):
+    return x
+
+def test_monkey_module():
+    this_module = sys.modules[__name__]
+
+    @monkey(this_module)
+    def f(x):
+        return f.original(x) * 2
+
+    assert f(21) == 42
