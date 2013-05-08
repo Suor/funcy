@@ -1,3 +1,4 @@
+0.5.1
 - added ints and slices to extended fn semantics
 - added extended semantics to *_fn(), compose(), complement and i?juxt()
 - can now @monkey() patch modules
