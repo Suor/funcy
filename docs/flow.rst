@@ -46,7 +46,7 @@ Flow
 
 .. decorator:: joining(sep)
 
-    Wraps common python idiom "collect then join" into a decorator. Transforms generator or alike into function, returning string of joined results.
+    Wraps common python idiom "collect then join" into a decorator. Transforms generator or alike into function, returning string of joined results. Automatically converts all elements to separator type for convenience.
 
     Goes well with generators with some ad-hoc logic within::
 
@@ -57,6 +57,15 @@ Flow
             if self.transmission:  yield self.get_transmission_display()
             if self.gear:          yield self.get_gear_display()
             # ...
+
+    Use ``unicode`` separator to get unicode result::
+
+        @joining(u', ')
+        def car_desc(self):
+            yield self.year_made
+            # ...
+
+    See also :func:`str_join`.
 
 
 .. .. decorator:: postprocessing(func)

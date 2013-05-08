@@ -11,7 +11,9 @@ String utils
 
 .. function:: str_join([sep=""], seq)
 
-    Joins sequence by ``sep``. Same as ``sep.join(seq)``, but forcefully stringifies elements.
+    Joins sequence by ``sep``. Same as ``sep.join(seq)``, but forcefully converts all elements to separator type, ``str`` by default.
+
+    See also :func:`joining`.
 
 .. function:: cut_prefix(s, prefix)
 .. function:: cut_suffix(s, suffix)
