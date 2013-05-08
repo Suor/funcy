@@ -31,3 +31,6 @@ def monkey(cls):
         setattr(cls, name, value)
         return value
     return decorator
+
+
+# TODO: monkey_mix()?
