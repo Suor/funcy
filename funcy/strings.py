@@ -46,9 +46,6 @@ def re_test(regex, s, flags=0):
 def re_finder(regex, flags=0):
     regex, getter = _prepare(regex, flags)
     return lambda s: iffy(getter)(regex.search(s))
-    # TODO: optimize compose() and use:
-    # from .funcs import compose
-    # return compose(iffy(getter), regex.search)
 
 def re_tester(regex, flags=0):
     return lambda s: bool(re.search(regex, s, flags))
