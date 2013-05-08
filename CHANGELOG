@@ -1,6 +1,7 @@
 - added ints and slices to extended fn semantics
 - added extended semantics to *_fn(), compose(), complement and i?juxt()
 - can now @monkey() patch modules
+- cached properties can now be set
 
 0.5.0
 - added type testing utilities

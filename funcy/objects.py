@@ -8,14 +8,17 @@ __all__ = ['cached_property', 'monkey']
 
 
 def cached_property(func):
-    @property
-    @wraps(func)
-    def wrapper(self):
-        attname = '_' + func.__name__
-        if not hasattr(self, attname):
-            setattr(self, attname, func(self))
-        return getattr(self, attname)
-    return wrapper
+    cache_attname = '_' + func.__name__
+
+    def getter(self):
+        if not hasattr(self, cache_attname):
+            setattr(self, cache_attname, func(self))
+        return getattr(self, cache_attname)
+
+    def setter(self, value):
+        setattr(self, cache_attname, value)
+
+    return property(getter, setter)
 
 
 def monkey(cls):

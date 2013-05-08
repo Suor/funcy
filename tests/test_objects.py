@@ -2,6 +2,23 @@ import sys
 from funcy.objects import *
 
 
+### @cached_property
+
+def test_set_cached_property():
+    class A(object):
+        @cached_property
+        def prop(self):
+            return 7
+
+    a = A()
+    assert a.prop == 7
+
+    a.prop = 42
+    assert a.prop == 42
+
+
+### Monkey tests
+
 def test_monkey():
     class A(object):
         def f(self):
