@@ -27,5 +27,12 @@ String utils
 
     See also :func:`joining`.
 
+
 .. function:: cut_prefix(s, prefix)
+
+    Cuts prefix from given string if it's present.
+
+
 .. function:: cut_suffix(s, suffix)
+
+    Cuts suffix from given string if it's present.
