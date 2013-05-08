@@ -6,8 +6,20 @@ String utils
 .. function:: re_iter(regex, s, flags=0)
 .. function:: re_all(regex, s, flags=0)
 
+
 .. function:: re_finder(regex, flags=0)
+
+    Returns a function that calls :func:`re_find` for it's sole argument. Main it's purpose is quickly constructing mapper functions for :func:`map` and friends.
+
+    See also :ref:`extended_fns`.
+
+
 .. function:: re_tester(regex, flags=0)
+
+    Returns a function that calls :func:`re_test` for it's sole argument. Aimed at quick construction of predicated to :func:`filter` and friends.
+
+    See also :ref:`extended_fns`.
+
 
 .. function:: str_join([sep=""], seq)
 
