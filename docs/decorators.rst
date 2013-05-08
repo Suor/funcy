@@ -3,14 +3,14 @@ Decorators
 
 .. decorator:: decorator
 
-    An easy way to create decorators. Here is simple logging decorator::
+    An easy way to create decorators. Here is simple a  logging decorator::
 
         @decorator
         def log(call):
             print call._func.__name__, call._args, call._kwargs
             return call()
 
-    ``call`` object also support by name arg introspection and passing additional arguments to decorated function::
+    ``call`` object also supports by name arg introspection and passing additional arguments to decorated function::
 
         @decorator
         def with_phone(call):
