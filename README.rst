@@ -129,4 +129,5 @@ TODO
 - merge_with()
 - reversed() to work with iterators?
 - lazy, lazy_seq, lazy_dict (a separate library?)
+- @decorator to handle methods
 
