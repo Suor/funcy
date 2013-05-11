@@ -3,7 +3,7 @@ Flow
 
 .. decorator:: silent
 
-    Ignore all real exceptions (descendants of :class:`Exception`). Handy for cleaning data such a user input::
+    Ignore all real exceptions (descendants of :class:`Exception`). Handy for cleaning data such as user input::
 
 
         brand_id = silent(int)(request.GET['brand_id'])
