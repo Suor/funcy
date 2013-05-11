@@ -1,12 +1,27 @@
 Flow
 ====
 
-.. decorator:: ignore(errors, [default])
-
-
 .. decorator:: silent
 
-    Ignore all real exceptions.
+    Ignore all real exceptions (descendants of :class:`Exception`). Handy for cleaning data such a user input::
+
+
+        brand_id = silent(int)(request.GET['brand_id'])
+        ids = keep(silent(int), request.GET.getlist('id'))
+
+    And in data import/transform::
+
+        choices = {1: 'a', 2: ' b', 4: ' c '}
+        get_caption = compose(silent(string.strip), choices)
+        map(get_caption, [0, 1, 2, 3, 4])
+        # -> [None, 'a', 'b', None, 'c']
+
+    .. note:: avoid silencing non-primitive functions, use :func:`ignore` instead and even then be careful not to swallow exceptions unintentionally.
+
+
+.. decorator:: ignore(errors, default=None)
+
+    Same as :func:`silent`, but able to specify ``errors`` to catch and ``default`` to return in case of error catched. ``errors`` can either be exception class or tuple of them.
 
 
 .. decorator:: retry(tries, errors=Exception)
