@@ -198,6 +198,22 @@ Unite
     :func:`icat` is an alias for :meth:`itertools.chain.from_iterable`.
 
 
+.. function:: interleave(*seqs)
+
+    Returns an iterator yielding first item in each sequence, then second and so on until some sequence ends. Numbers of items taken from all sequences are always equal.
+
+
+.. function:: interpose(sep, seq)
+
+    Returns an iterator yielding elements of ``seq`` separated by ``sep``.
+
+    Helpful when :meth:`str.join` is not good enough. This code is a part of translator working with operation node::
+
+        def visit_BoolOp(self, node):
+            # ... do generic visit
+            node.code = mapcat(translate, interpose(node.op, node.values))
+
+
 Transform and filter
 --------------------
 
@@ -276,51 +292,8 @@ Most of functions in this section support :ref:`extended_fns`. Among other thing
         mapcat(partial(re_all, r'\d+'), bunch_of_strings)
 
 
-Sequence mangling
------------------
-
-.. function:: interleave(*seqs)
-
-    Returns an iterator yielding first item in each sequence, then second and so on until some sequence ends. Numbers of items taken from all sequences are always equal.
-
-
-.. function:: interpose(sep, seq)
-
-    Returns an iterator yielding elements of ``seq`` separated by ``sep``.
-
-    Helpful when :meth:`str.join` is not good enough. This code is a part of translator working with operation node::
-
-        def visit_BoolOp(self, node):
-            # ... do generic visit
-            node.code = mapcat(translate, interpose(node.op, node.values))
-
-
-.. function:: takewhile(pred, seq)
-
-    Returns an iterator of ``seq`` elements as long as ``pred`` for each of them is true. Stop on first one which makes predicate falsy::
-
-        # Extract first paragraph of text
-        takewhile(re_tester(r'\S'), text.splitlines())
-
-        # Build path from node to tree root
-        takewhile(bool, iterate(attrgetter('parent'), node))
-
-
-.. function:: dropwhile(pred, seq)
-
-    This is a mirror of :func:`takewhile`. Returns iterator skipping elements of given sequence while ``pred`` is true and then yielding the rest of it::
-
-        # Skip leading whitespace-only lines
-        dropwhile(re_tester('^\s*$'), text_lines)
-
-
-Data mangling
--------------
-
-.. function:: distinct(seq)
-
-    Returns given sequence with duplicates removed. Preserves order.
-
+Split and chunk
+---------------
 
 .. function:: split(pred, seq)
 
@@ -346,6 +319,25 @@ Data mangling
 
         split_by(bool, iter([-2, -1, 0, 1, 2]))
         # [-2, -1], [0, 1, 2]
+
+
+.. function:: takewhile(pred, seq)
+
+    Returns an iterator of ``seq`` elements as long as ``pred`` for each of them is true. Stop on first one which makes predicate falsy::
+
+        # Extract first paragraph of text
+        takewhile(re_tester(r'\S'), text.splitlines())
+
+        # Build path from node to tree root
+        takewhile(bool, iterate(attrgetter('parent'), node))
+
+
+.. function:: dropwhile(pred, seq)
+
+    This is a mirror of :func:`takewhile`. Returns iterator skipping elements of given sequence while ``pred`` is true and then yielding the rest of it::
+
+        # Skip leading whitespace-only lines
+        dropwhile(re_tester('^\s*$'), text_lines)
 
 
 .. function:: group_by(f, seq)
@@ -392,6 +384,14 @@ Data mangling
         # -> ['ab', 'e'])
 
     Handy for batch processing.
+
+
+Data handling
+-------------
+
+.. function:: distinct(seq)
+
+    Returns given sequence with duplicates removed. Preserves order.
 
 
 .. function:: with_prev(seq)

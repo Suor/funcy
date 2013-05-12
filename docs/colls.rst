@@ -147,8 +147,8 @@ Dict utils
         merge(project(__builtins__, names), project(globals(), names))
 
 
-Data mangling
--------------
+Data manipulation
+-----------------
 
 .. function:: where(mappings, **cond)
 
