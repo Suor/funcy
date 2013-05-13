@@ -46,7 +46,7 @@ Calculation
 
 .. decorator:: silent_lookuper
 
-    Same as :func:`make_lookuper`, but retuns ``None`` on memory miss.
+    Same as :func:`make_lookuper`, but returns ``None`` on memory miss.
 
 
 .. decorator:: cache(timeout)
