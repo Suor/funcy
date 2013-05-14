@@ -3,7 +3,7 @@ Decorators
 
 .. decorator:: decorator
 
-    An easy way to create decorators. Here is simple a  logging decorator::
+    An easy way to create decorators. Here is a simple logging decorator::
 
         @decorator
         def log(call):
