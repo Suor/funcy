@@ -8,7 +8,6 @@ Many of funcy functions expecting predicate or mapping function as an argument c
 ============  ================================= =================================
 f passed      Predicate                         Mapping function
 ============  ================================= =================================
-callable      f                                 f
 ``None``      bool                              :func:`identity <identity>`
 string        :func:`re_tester(f) <re_tester>`  :func:`re_finder(f) <re_finder>`
 int or slice  ``itemgetter(f)``                 ``itemgetter(f)``
