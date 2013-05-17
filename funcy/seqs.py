@@ -14,7 +14,7 @@ __all__ = [
     'izip', 'interleave', 'interpose', 'distinct',
     'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
     'group_by', 'partition', 'chunks', 'with_prev',
-    'ireductions', 'reductions', 'isums', 'sums',
+    'ireductions', 'reductions', 'isums', 'sums', 'without', 'iwithout'
 ]
 
 
@@ -167,3 +167,11 @@ def reductions(f, seq, acc=EMPTY):
 
 isums = partial(ireductions, add)
 sums = partial(reductions, add)
+
+def iwithout(seq, *args):
+    for value in seq:
+        if not value in args:
+            yield value
+
+def without(seq, *args):
+    return list(iwithout(seq, *args))

@@ -115,3 +115,8 @@ def test_sums():
     assert sums([]) == []
     assert sums([1, 2, 3, 4]) == [1, 3, 6, 10]
     assert sums([[1],[2],[3]]) == [[1], [1, 2], [1, 2, 3]]
+
+def test_without():
+    assert without([]) == []
+    assert without([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert without([1, 2, 1, 0, 3, 1, 4], 0, 1) == [2, 3, 4]
