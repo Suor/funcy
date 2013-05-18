@@ -292,6 +292,20 @@ Most of functions in this section support :ref:`extended_fns`. Among other thing
         mapcat(partial(re_all, r'\d+'), bunch_of_strings)
 
 
+.. function:: without(seq, *items)
+              iwithout(seq, *items)
+
+    Returns sequence without ``items`` specified, preserves order. Designed to work with a few ``items``, this allows removing unhashable objects::
+
+        no_empty_lists = without(lists, [])
+
+    In case of large amount of unwanted elements one can use :func:`remove`::
+
+        remove(set(unwanted_elements), seq)
+
+    Or simple set difference if order of sequence is irrelevant.
+
+
 Split and chunk
 ---------------
 

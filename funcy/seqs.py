@@ -9,12 +9,12 @@ from .funcmakers import wrap_mapper, wrap_selector
 __all__ = [
     'count', 'cycle', 'repeat', 'repeatedly', 'iterate',
     'take', 'drop', 'first', 'second', 'rest', 'ilen',
-    'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep',
+    'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep', 'without', 'iwithout',
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct',
     'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
     'group_by', 'partition', 'chunks', 'with_prev',
-    'ireductions', 'reductions', 'isums', 'sums', 'without', 'iwithout'
+    'ireductions', 'reductions', 'isums', 'sums',
 ]
 
 
@@ -75,6 +75,15 @@ def ikeep(f, seq=EMPTY):
         return ifilter(bool, f)
     else:
         return ifilter(bool, imap(f, seq))
+
+def iwithout(seq, *items):
+    for value in seq:
+        if not value in items:
+            yield value
+
+def without(seq, *items):
+    return list(iwithout(seq, *items))
+
 
 def concat(*seqs):
     return list(chain(*seqs))
@@ -167,11 +176,3 @@ def reductions(f, seq, acc=EMPTY):
 
 isums = partial(ireductions, add)
 sums = partial(reductions, add)
-
-def iwithout(seq, *args):
-    for value in seq:
-        if not value in args:
-            yield value
-
-def without(seq, *args):
-    return list(iwithout(seq, *args))
