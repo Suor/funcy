@@ -18,19 +18,25 @@ Installation
 Overview
 --------
 
-Just import stuff from funcy to make things happen::
+Just import stuff from funcy to make things happen:
+
+.. code:: python
 
     from funcy import * # or whatever you need
 
 
 Merge collections of same type
-(works for dicts, sets, lists, tuples, iterators and even strings)::
+(works for dicts, sets, lists, tuples, iterators and even strings):
+
+.. code:: python
 
     merge(coll1, coll2, coll3, ...)
     join(colls)
 
 
-Walk through collection, creating it's transform (like map but preserves type)::
+Walk through collection, creating it's transform (like map but preserves type):
+
+.. code:: python
 
     walk(str.upper, {'a', 'b'})            # {'A', 'B'}
     walk(reversed, {'a': 1, 'b': 2})       # {1: 'a', 2: 'b'}
@@ -38,7 +44,9 @@ Walk through collection, creating it's transform (like map but preserves type)::
     walk_values(inc, {'a': 1, 'b': 2})     # {'a': 2, 'b': 3}
 
 
-Select a part of collection::
+Select a part of collection:
+
+.. code:: python
 
     select(even, {1,2,3,10,20})                  # {2,10,20}
     select(r'^a', ('a','b','ab','ba'))           # ('a','ab')
@@ -46,7 +54,9 @@ Select a part of collection::
     compact({2, None, '', 0})                    # {2,'',0}
 
 
-Test collection contents::
+Test collection contents:
+
+.. code:: python
 
     all(callable, [abs, open, int]) # True
     all(even, [1, 2, 5])            # False
@@ -55,13 +65,17 @@ Test collection contents::
     is_distinct('adbec')            # True
 
 
-Or search for something::
+Or search for something:
+
+.. code:: python
 
     some(even, [1, 2, 5])      # 2
     some([0, '', -1, None, 2]) # -1
 
 
-More tools for mappings::
+More tools for mappings:
+
+.. code:: python
 
     flip({'a': 1, 'b': 2})                        # {1: 'a', 2: 'b'}
     project({'a': 1, 'b': 2, 'c': 3}, ['a', 'c']) # {'a': 1, 'c': 3}
@@ -69,7 +83,9 @@ More tools for mappings::
     where([{'a': 1, 'b': 2}, {'a': 10}], a=1)     # [{'a': 1, 'b': 2}]
 
 
-Manipulate functions::
+Manipulate functions:
+
+.. code:: python
 
     partial(add, 1)                # inc
     curry(add)(1)(2)               # 3
@@ -79,7 +95,9 @@ Manipulate functions::
     iffy(callable, caller())(val)  # val() if callable(val) else val
 
 
-Easy decorators::
+Easy decorators:
+
+.. code:: python
 
     @decorator
     def log(call):
@@ -87,7 +105,9 @@ Easy decorators::
         return call()
 
 
-Work with sequences::
+Work with sequences:
+
+.. code:: python
 
     take(4, iterate(double, 1)) # [1, 2, 4, 8]
     first(drop(3, count(10)))   # 13
