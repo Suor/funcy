@@ -111,9 +111,9 @@ def test_select_values():
 
 
 def test_compact():
-    assert eq(compact([0, 1, None, 3]), [0, 1, 3])
-    assert eq(compact((0, 1, None, 3)), (0, 1, 3))
-    assert eq(compact({'a': None, 'b': 0, 'c': 1}), {'b': 0, 'c': 1})
+    assert eq(compact([0, 1, None, 3]), [1, 3])
+    assert eq(compact((0, 1, None, 3)), (1, 3))
+    assert eq(compact({'a': None, 'b': 0, 'c': 1}), {'c': 1})
 
 
 def test_is_distinct():

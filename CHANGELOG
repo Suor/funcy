@@ -1,5 +1,7 @@
 - added i?without()
 - more and better docs
+Backward incompatible changes:
+- compact() now strips all falsy values not just None
 
 0.5.1
 - added ints and slices to extended fn semantics

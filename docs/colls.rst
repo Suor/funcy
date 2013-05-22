@@ -109,7 +109,7 @@ Most of functions in this section support :ref:`extended_fns`.r
 
 .. function:: compact(coll)
 
-    Removes ``None`` values from given collection. When compacting a dict all keys with ``None`` values are trashed.
+    Removes falsy values from given collection. When compacting a dict all keys with falsy values are trashed.
 
     Extract integer data from request::
 

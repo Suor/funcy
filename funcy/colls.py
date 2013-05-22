@@ -104,11 +104,10 @@ def select_values(pred, coll):
 
 
 def compact(coll):
-    pred = lambda x: x is not None
     if isinstance(coll, Mapping):
-        return select_values(pred, coll)
+        return select_values(bool, coll)
     else:
-        return select(pred, coll)
+        return select(bool, coll)
 
 
 ### Content tests
