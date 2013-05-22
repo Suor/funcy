@@ -143,7 +143,6 @@ TODO
 - create cheatsheet html
 - write docs
 - reject*(), disjoint*() collections
-- without()
 - one argument select*()? other name?
 - vector chained boolean test (like perl 6 [<])
 - merge_with()
