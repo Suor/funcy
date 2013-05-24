@@ -1,3 +1,5 @@
+- fixed decorators produced with @decorator other non-functions
+
 0.5.2
 - added i?without()
 - more and better docs

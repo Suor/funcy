@@ -14,8 +14,10 @@ def make_call(func, args, kwargs):
     call._kwargs = kwargs
 
     # Save actual arg values on call "object"
-    for arg_name, arg_value in inspect.getcallargs(func, *args, **kwargs).items():
-        setattr(call, arg_name, arg_value)
+    if inspect.isfunction(func):
+        call_args = inspect.getcallargs(func, *args, **kwargs)
+        for arg_name, arg_value in call_args.items():
+            setattr(call, arg_name, arg_value)
 
     return call
 
