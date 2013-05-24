@@ -10,12 +10,18 @@ __all__ = ['ignore', 'silent', 'retry', 'fallback',
            'collecting', 'joining']
 
 
-@decorator
-def ignore(call, errors, default=None):
-    try:
-        return call()
-    except errors:
-        return default
+# Not using @decorator here for speed,
+# since @ignore and @silent should be used for very simple and fast functions
+def ignore(errors, default=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except errors:
+                return default
+        return wrapper
+    return decorator
 
 silent = ignore(Exception) # Ignore all real exceptions
 
