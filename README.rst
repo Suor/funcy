@@ -149,4 +149,5 @@ TODO
 - reversed() to work with iterators?
 - lazy, lazy_seq, lazy_dict (a separate library?)
 - @decorator to handle methods
+- distinct() to work with unhashable values, id_func?
 
