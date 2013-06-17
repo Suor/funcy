@@ -32,5 +32,17 @@ Functions
 .. function:: complement(pred)
 .. function:: juxt(*fs)
 .. function:: ijuxt(*fs)
+
+
+Function logic
+--------------
+
+.. function:: complement(pred)
 .. function:: iffy([pred], action, [default=identity])
 
+.. function:: all_fn(*fs)
+.. function:: any_fn(*fs)
+.. function:: none_fn(*fs)
+.. function:: one_fn(*fs)
+
+.. function:: some_fn(*fs)

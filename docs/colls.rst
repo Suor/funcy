@@ -217,13 +217,3 @@ Content tests
 .. function:: some([pred], seq)
 
     Finds first item in ``seq`` passing ``pred`` or first that is true if ``pred`` is omitted.
-
-
-Collections of functions
-------------------------
-
-.. function:: all_fn(*fs)
-.. function:: any_fn(*fs)
-.. function:: none_fn(*fs)
-.. function:: one_fn(*fs)
-.. function:: some_fn(*fs)
