@@ -46,3 +46,13 @@ Function logic
 .. function:: one_fn(*fs)
 
 .. function:: some_fn(*fs)
+
+    Constructs function calling ``fs`` one by one and returning first true result.
+
+    Enables creating functions by short-circuiting several behaviours::
+
+        get_amount = some_fn(
+            compose(int, r'(\d+) wheels?'),
+            compose({'one': 1, 'two': 2, 'pair': 2}, r'(\w+) wheels?')
+        )
+
