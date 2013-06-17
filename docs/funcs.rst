@@ -29,7 +29,6 @@ Functions
 
 
 .. function:: compose(*fs)
-.. function:: complement(pred)
 .. function:: juxt(*fs)
 .. function:: ijuxt(*fs)
 
@@ -38,9 +37,22 @@ Function logic
 --------------
 
 .. function:: complement(pred)
+
+    ::
+
+        is_private = re_tester('^_')
+        is_public = complement(is_private)
+
+
 .. function:: iffy([pred], action, [default=identity])
 
 .. function:: all_fn(*fs)
+
+    ::
+
+        is_even_int = all_fn(isa(int), even)
+
+
 .. function:: any_fn(*fs)
 .. function:: none_fn(*fs)
 .. function:: one_fn(*fs)
