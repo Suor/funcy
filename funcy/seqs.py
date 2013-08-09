@@ -1,6 +1,6 @@
 from operator import add
 from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile
-from collections import defaultdict
+from collections import defaultdict, Sequence
 
 from .funcs import partial
 from .funcmakers import wrap_mapper, wrap_selector
@@ -13,7 +13,7 @@ __all__ = [
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct',
     'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
-    'group_by', 'partition', 'chunks', 'with_prev',
+    'group_by', 'partition', 'ipartition', 'chunks', 'ichunks', 'with_prev',
     'ireductions', 'reductions', 'isums', 'sums',
 ]
 
@@ -145,15 +145,45 @@ def group_by(f, seq):
         result[f(item)].append(item)
     return result
 
-def partition(n, step, seq=EMPTY):
+
+# For efficiency we use separate implementation for cutting sequences (those capable of slicing)
+def _icut_seq(drop_tail, n, step, seq):
+    limit = len(seq)-n+1 if drop_tail else len(seq)
+    return (seq[i:i+n] for i in xrange(0, limit, step))
+
+def _icut_iter(drop_tail, n, step, seq):
+    it = iter(seq)
+    pool = take(n, it)
+    while True:
+        if len(pool) < n:
+            break
+        yield pool
+        pool = pool[step:]
+        pool.extend(islice(it, step))
+    if not drop_tail:
+        for item in _icut_seq(drop_tail, n, step, pool):
+            yield item
+
+def _icut(drop_tail, n, step, seq=EMPTY):
     if seq is EMPTY:
-        return partition(n, n, step)
-    return [seq[i:i+n] for i in xrange(0, len(seq)-n+1, step)]
+        step, seq = n, step
+    if isinstance(seq, Sequence):
+        return _icut_seq(drop_tail, n, step, seq)
+    else:
+        return _icut_iter(drop_tail, n, step, seq)
+
+def ipartition(n, step, seq=EMPTY):
+    return _icut(True, n, step, seq)
+
+def partition(n, step, seq=EMPTY):
+    return list(ipartition(n, step, seq))
+
+def ichunks(n, step, seq=EMPTY):
+    return _icut(False, n, step, seq)
 
 def chunks(n, step, seq=EMPTY):
-    if seq is EMPTY:
-        return chunks(n, n, step)
-    return [seq[i:i+n] for i in xrange(0, len(seq), step)]
+    return list(ichunks(n, step, seq))
+
 
 def with_prev(seq):
     a, b = tee(seq)

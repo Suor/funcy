@@ -1,3 +1,6 @@
+- partition() and chunks() can handle iterators now
+- added ipartition() and ichunks()
+
 0.5.3
 - fixed decorators produced with @decorator other non-functions
 - optimized @ignore and @silent

@@ -368,6 +368,7 @@ Split and chunk
 
 
 .. function:: partition(n, [step], seq)
+              ipartition(n, [step], seq)
 
     Returns a list of lists of ``n`` items each, at offsets ``step`` apart. If ``step`` is not supplied, defaults to ``n``, i.e. the partitions do not overlap. Returns only full length-``n`` partitions, in case there are not enough elements for last partition they are ignored.
 
@@ -388,6 +389,7 @@ Split and chunk
 
 
 .. function:: chunks(n, [step], seq)
+              ichunks(n, [step], seq)
 
     Returns a list of lists like :func:`partition`, but may include partitions with fewer than ``n`` items at the end::
 
