@@ -18,7 +18,14 @@ Functions
 
 .. function:: partial(func, *args, **kwargs)
 
-    Like :func:`functools.partial` but returns real function. Which is useful when, for example, you want to create a method of it.
+    Like :func:`functools.partial` but returns real function. Which is useful when, for example, you want to create a method of it::
+
+        setattr(self, 'get_%s_display' % field.name, partial(_get_FIELD_display, field))
+
+    Can be also used in a variety of ways, same as :mod:`functools` version. DSLs is one of them::
+
+        field = dict
+        json_field = partial(field, json=True)
 
 
 .. function:: curry(func[, n])
@@ -26,6 +33,14 @@ Functions
     Curries function. For example, given function of two arguments ``f(a, b)`` returns function::
 
         lambda a: lambda b: f(a, b)
+
+    Handy to make a partial factory::
+
+        make_tester = curry(re_test)
+        is_word = make_tester(r'^\w+$')
+        is_int = make_tester(r'^[1-9]\d*$')
+
+    But see :func:`re_tester` if you really need this.
 
 
 .. function:: compose(*fs)
