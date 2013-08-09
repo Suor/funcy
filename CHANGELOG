@@ -1,3 +1,4 @@
+- added @post_processing() flow utility
 - partition() and chunks() can handle iterators now
 - added ipartition() and ichunks()
 

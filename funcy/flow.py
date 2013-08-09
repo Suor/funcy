@@ -7,7 +7,7 @@ from .decorators import decorator
 
 __all__ = ['ignore', 'silent', 'retry', 'fallback',
            'limit_error_rate', 'ErrorRateExceeded',
-           'collecting', 'joining']
+           'post_processing', 'collecting', 'joining']
 
 
 # Not using @decorator here for speed,
@@ -82,10 +82,11 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
         return wrapper
     return decorator
 
-
 @decorator
-def collecting(call):
-    return list(call())
+def post_processing(call, func):
+    return func(call())
+
+collecting = post_processing(list)
 
 @decorator
 def joining(call, sep):
