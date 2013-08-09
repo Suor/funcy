@@ -41,7 +41,7 @@ Flow
 
     Transforms generator or other iterator returning function into list returning one.
 
-    Handy to prevent quirky properties::
+    Handy to prevent quirky iterator-returning properties::
 
         @property
         @collecting
@@ -51,12 +51,14 @@ Flow
                 yield node
                 node = node.parent
 
-    Or you could just write::
+    Also makes list constructing functions beautifully yielding.
 
-        @property
-        def path_up(self):
-            going_up = iterate(attrgetter('parent'), self)
-            return list(takewhile(bool, going_up))
+    .. Or you could just write::
+
+    ..     @property
+    ..     def path_up(self):
+    ..         going_up = iterate(attrgetter('parent'), self)
+    ..         return list(takewhile(bool, going_up))
 
 
 .. decorator:: joining(sep)
