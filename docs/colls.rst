@@ -176,7 +176,9 @@ Content tests
 
 .. function:: is_distinct(coll)
 
-    Checks if all elements in collection are diffrent.
+    Checks if all elements in collection are diffrent::
+
+        assert is_distinct(field_names), "All fields should be named diffrently"
 
 
 .. function:: all([pred], seq)
