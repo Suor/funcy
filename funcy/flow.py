@@ -10,6 +10,8 @@ __all__ = ['ignore', 'silent', 'retry', 'fallback',
            'post_processing', 'collecting', 'joining']
 
 
+### Error handling utilities
+
 # Not using @decorator here for speed,
 # since @ignore and @silent should be used for very simple and fast functions
 def ignore(errors, default=None):
@@ -81,6 +83,9 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
                 return result
         return wrapper
     return decorator
+
+
+### Post processing decorators
 
 @decorator
 def post_processing(call, func):
