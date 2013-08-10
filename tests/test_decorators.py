@@ -39,3 +39,26 @@ def test_decorator_access_arg():
         return n
 
     assert square(5) == 25
+
+
+def test_decorator_with_method():
+    @decorator
+    def inc(call):
+        return call() + 1
+
+    class A(object):
+        def ten(self):
+            return 10
+
+        @classmethod
+        def ten_cls(cls):
+            return 10
+
+        @staticmethod
+        def ten_static():
+            return 10
+
+    assert inc(A().ten)() == 11
+    assert inc(A.ten_cls)() == 11
+    assert inc(A.ten_cls)() == 11
+    assert inc(A.ten_static)() == 11
