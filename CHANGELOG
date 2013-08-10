@@ -3,7 +3,7 @@
 - added ipartition() and ichunks()
 
 0.5.3
-- fixed decorators produced with @decorator other non-functions
+- fixed decorators produced with @decorator over non-functions
 - optimized @ignore and @silent
 
 0.5.2
