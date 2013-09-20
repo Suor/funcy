@@ -401,6 +401,11 @@ Split and chunk
 
     Handy for batch processing.
 
+.. function:: partition_by(f, seq)
+              ipartition_by(f, seq)
+
+    Partition seq into list of lists or iterator of iterators splitting at ``f(item)`` change.
+
 
 Data handling
 -------------

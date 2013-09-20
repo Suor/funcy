@@ -1,3 +1,5 @@
+- added i?partition_by()
+
 0.5.4
 - added @post_processing() flow utility
 - partition() and chunks() can handle iterators now

@@ -1,5 +1,6 @@
 from operator import add
-from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile
+from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile, \
+                      groupby
 from collections import defaultdict, Sequence
 
 from .funcs import partial
@@ -13,7 +14,8 @@ __all__ = [
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct',
     'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
-    'group_by', 'partition', 'ipartition', 'chunks', 'ichunks', 'with_prev',
+    'group_by', 'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
+    'with_prev',
     'ireductions', 'reductions', 'isums', 'sums',
 ]
 
@@ -183,6 +185,13 @@ def ichunks(n, step, seq=EMPTY):
 
 def chunks(n, step, seq=EMPTY):
     return list(ichunks(n, step, seq))
+
+def ipartition_by(f, seq):
+    for g, items in groupby(seq, f):
+        yield items
+
+def partition_by(f, seq):
+    return map(list, ipartition_by(f, seq))
 
 
 def with_prev(seq):

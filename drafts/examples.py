@@ -76,3 +76,12 @@ def path(self):
     return reversed(rest(path))
 
 mro = unique(sum((b.__mro__ for b in bases), ()))
+
+users_cond = str_join(',', users)
+tests = fetch_named('''
+    select user_id, full_min, full_max, datetime from player_testtracking
+    where %s and user_id in %s
+    order by user_id, datetime
+''' % (USEFUL_TEST_COND, users_cond))
+get_pairs = partial(partition, 2, 1)
+return mapcat(get_pairs, ipartition_by(itemgetter(0), tests))
