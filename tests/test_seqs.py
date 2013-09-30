@@ -94,6 +94,9 @@ def test_split_by():
 def test_group_by():
     assert group_by(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}
 
+def test_count_by():
+    assert count_by(_ % 2, range(5)) == {0: 3, 1: 2}
+
 def test_partition():
     assert partition(2, range(5)) == [[0, 1], [2, 3]]
     assert partition(2, 1, range(4)) == [[0, 1], [1, 2], [2, 3]]

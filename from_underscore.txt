@@ -1,5 +1,4 @@
 # Collections
-countby
 foldl?=reduce foldr?
 
 # Array

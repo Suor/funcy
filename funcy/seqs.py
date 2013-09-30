@@ -14,7 +14,8 @@ __all__ = [
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct',
     'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
-    'group_by', 'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
+    'group_by', 'count_by',
+    'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
     'with_prev',
     'ireductions', 'reductions', 'isums', 'sums',
 ]
@@ -145,6 +146,12 @@ def group_by(f, seq):
     result = defaultdict(list)
     for item in seq:
         result[f(item)].append(item)
+    return result
+
+def count_by(f, seq):
+    result = defaultdict(int)
+    for item in seq:
+        result[f(item)] += 1
     return result
 
 

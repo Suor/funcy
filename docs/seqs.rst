@@ -429,6 +429,16 @@ Data handling
     See also :func:`itertools.groupby` for chunking sequence by condition.
 
 
+.. function:: count_by(f, seq)
+
+    Counts number of occurences of values of ``f`` on elements of ``seq`` and returns a dict of counts.
+
+    Calculation a histogram is one common use::
+
+        # Get a length histogram of given words
+        count_by(len, words)
+
+
 .. function:: reductions(f, seq, [acc])
               ireductions(f, seq, [acc])
 
