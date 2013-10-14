@@ -1,0 +1,22 @@
+##-- Travis Build config
+##-- Guide for Python projects: http://about.travis-ci.org/docs/user/languages/python/
+language: python
+
+##-- which python version(s)
+python:
+  - "2.7"
+
+##-- install dependencies
+virtualenv:
+  system_site_packages: true
+
+install:
+ - "pip install -r test_requirements.txt --use-mirrors"
+
+##-- run tests
+script: py.test
+
+##-- choose git branches
+branches:
+  only:
+    - master
