@@ -25,7 +25,7 @@ def make_func(f, builtin=False, test=False):
     elif isinstance(f, Mapping):
         return f.get
     elif isinstance(f, Set):
-        return lambda item: item in f
+        return f.__contains__
     else:
         raise TypeError("Can't make a func from %s" % f.__class__.__name__)
 
