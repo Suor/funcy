@@ -7,6 +7,13 @@ def identity(x):
 def constantly(x):
     return lambda *a, **kw: x
 
+def is_none(x):
+    return x is None
+
+def not_none(x):
+    return x is not None
+
+
 # an operator.methodcaller() brother
 def caller(*a, **kw):
     return lambda f: f(*a, **kw)
