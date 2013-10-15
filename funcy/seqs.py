@@ -224,9 +224,9 @@ def partition_by(f, seq):
     return map(list, ipartition_by(f, seq))
 
 
-def with_prev(seq):
+def with_prev(seq, fill=None):
     a, b = tee(seq)
-    return izip(a, chain([None], b))
+    return izip(a, chain([fill], b))
 
 
 def ireductions(f, seq, acc=EMPTY):
