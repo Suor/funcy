@@ -44,6 +44,14 @@ Functions
 
 
 .. function:: compose(*fs)
+
+    Returns composition of functions::
+
+        extract_int = compose(int, r'\d+')
+
+    Supports :ref:`extended_fns`.
+
+
 .. function:: juxt(*fs)
 .. function:: ijuxt(*fs)
 
