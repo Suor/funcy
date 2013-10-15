@@ -1,4 +1,5 @@
 - added i?zip_values()
+- added last() and butlast()
 - added is_none() and not_none() primitives
 
 0.5.6

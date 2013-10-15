@@ -9,7 +9,7 @@ from .funcmakers import wrap_mapper, wrap_selector
 
 __all__ = [
     'count', 'cycle', 'repeat', 'repeatedly', 'iterate',
-    'take', 'drop', 'first', 'second', 'rest', 'ilen',
+    'take', 'drop', 'first', 'second', 'last', 'rest', 'butlast', 'ilen',
     'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep', 'without', 'iwithout',
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct',
@@ -49,8 +49,31 @@ def first(seq):
 def second(seq):
     return first(rest(seq))
 
+def last(seq):
+    if hasattr(seq, '__getslice__'):
+        try:
+            return seq[-1]
+        except IndexError:
+            return None
+
+    item = None
+    for item in iter(l):
+        pass
+    return item
+
 def rest(seq):
     return drop(1, seq)
+
+def butlast(seq):
+    it = iter(seq)
+    try:
+        prev = next(it)
+    except StopIteration:
+        pass
+    else:
+        for item in it:
+            yield prev
+            prev = item
 
 def ilen(seq):
     return sum(1 for _ in seq)
