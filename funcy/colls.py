@@ -12,7 +12,7 @@ __all__ = ['empty', 'iteritems',
            'join', 'merge',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
-           'zipdict', 'flip', 'project',
+           'zipdict', 'flip', 'project', 'izip_values', 'zip_values',
            'where', 'pluck', 'invoke']
 
 
@@ -156,6 +156,14 @@ def flip(mapping):
 
 def project(mapping, keys):
     return _factory(mapping)((k, mapping[k]) for k in keys if k in mapping)
+
+def izip_values(*dicts):
+    keys = set.intersection(*map(set, dicts))
+    for key in keys:
+        yield tuple(d[key] for d in dicts)
+
+def zip_values(*dicts):
+    return list(izip_values(*dicts))
 
 
 def where(mappings, **cond):
