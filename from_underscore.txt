@@ -2,14 +2,13 @@
 foldl?=reduce foldr?
 
 # Array
-without(relates to conj)
 flatten?
 
 # Functions
 throttle? once?
 
 # Objects -> to dicts
-pick=project omit? defaults?
+omit? defaults?
 
 # Utility
 times?

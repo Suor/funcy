@@ -14,6 +14,5 @@ diff,p # postpone
 ## Seqs
 From seq: keep_indexed,p
 Get shorter: idistinct,p
-Slicing: last,p butlast,p take_last,p drop_last,p
-Change: flatten,p partition_by,p replace?
+Change: flatten,p replace?
 Process: pmap,p map_indexed?
