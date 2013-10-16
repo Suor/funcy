@@ -165,12 +165,14 @@ def split_by(pred, seq):
 # NOTE: should I name it cluster? to distinguish from itertools.groupby
 #       or just group?
 # NOTE: should it return OrderedDict to preserve order of keys not just values?
+@wrap_mapper
 def group_by(f, seq):
     result = defaultdict(list)
     for item in seq:
         result[f(item)].append(item)
     return result
 
+@wrap_mapper
 def count_by(f, seq):
     result = defaultdict(int)
     for item in seq:
@@ -216,6 +218,7 @@ def ichunks(n, step, seq=EMPTY):
 def chunks(n, step, seq=EMPTY):
     return list(ichunks(n, step, seq))
 
+@wrap_selector
 def ipartition_by(f, seq):
     for g, items in groupby(seq, f):
         yield items

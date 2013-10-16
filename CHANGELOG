@@ -1,6 +1,7 @@
 - added i?zip_values()
 - added last() and butlast()
 - added is_none() and not_none() primitives
+- added extended fn semantics to group_by(), count_by() and i?partition_by()
 - added fill argument to with_prev()
 
 0.5.6

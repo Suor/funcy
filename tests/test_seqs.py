@@ -93,9 +93,11 @@ def test_split_by():
 
 def test_group_by():
     assert group_by(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}
+    assert group_by(r'\d', ['a1', 'b2', 'c1']) == {'1': ['a1', 'c1'], '2': ['b2']}
 
 def test_count_by():
     assert count_by(_ % 2, range(5)) == {0: 3, 1: 2}
+    assert count_by(r'\d', ['a1', 'b2', 'c1']) == {'1': 2, '2': 1}
 
 def test_partition():
     assert partition(2, range(5)) == [[0, 1], [2, 3]]
@@ -107,6 +109,7 @@ def test_chunks():
 
 def test_partition_by():
     assert partition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
+    assert partition_by('x', 'abxcd') == [['a', 'b'], ['x'], ['c', 'd']]
 
 def test_with_prev():
     assert list(with_prev(range(3))) == [(0, None), (1, 0), (2, 1)]
