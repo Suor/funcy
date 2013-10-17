@@ -146,6 +146,11 @@ Dict utils
 
         merge(project(__builtins__, names), project(globals(), names))
 
+.. function:: zip_values(*dicts)
+              izip_values(*dicts)
+
+    Returns a list or iterator of tuples of corresponding values of given dicts.
+
 
 Data manipulation
 -----------------
