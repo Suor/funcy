@@ -30,6 +30,10 @@ def test_first():
     assert first(count(7)) == 7
     assert first([]) is None
 
+def test_ilen():
+    assert ilen('xyz') == 3
+    assert ilen(xrange(10)) == 10
+
 
 def test_map():
     assert map(_ * 2, [2, 3]) == [4, 6]

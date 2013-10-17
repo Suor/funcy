@@ -3,6 +3,7 @@
 - added is_none() and not_none() primitives
 - added extended fn semantics to group_by(), count_by() and i?partition_by()
 - added fill argument to with_prev()
+- optimized ilen()
 
 0.5.6
 - fixed installation issue

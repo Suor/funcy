@@ -1,7 +1,7 @@
 from operator import add
 from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile, \
                       groupby
-from collections import defaultdict, Sequence
+from collections import defaultdict, deque, Sequence
 
 from .funcs import partial
 from .funcmakers import wrap_mapper, wrap_selector
@@ -76,7 +76,13 @@ def butlast(seq):
             prev = item
 
 def ilen(seq):
-    return sum(1 for _ in seq)
+    """
+    Consume an iterable not reading it into memory; return the number of items.
+    Implementation borrowed from http://stackoverflow.com/a/15112059/753382
+    """
+    counter = count()
+    deque(izip(seq, counter), maxlen=0)  # (consume at C speed)
+    return next(counter)
 
 
 # TODO: tree-seq equivalent
