@@ -57,7 +57,7 @@ def last(seq):
             return None
 
     item = None
-    for item in iter(l):
+    for item in iter(seq):
         pass
     return item
 
