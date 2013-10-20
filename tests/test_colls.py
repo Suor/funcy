@@ -165,12 +165,12 @@ def test_project():
     assert eq(project(dd, 'ac'), defaultdict(int, {'a':1, 'c': 3}))
 
 def test_zip_values():
-    assert zip_values({1: 10}, {1: 20, 2: 30}) == [(10, 20)]
-    with pytest.raises(TypeError): zip_values()
+    assert list(zip_values({1: 10}, {1: 20, 2: 30})) == [(10, 20)]
+    with pytest.raises(TypeError): list(zip_values())
 
 def test_zip_dicts():
-    assert zip_dicts({1: 10}, {1: 20, 2: 30}) == [(1, 10, 20)]
-    with pytest.raises(TypeError): zip_dicts()
+    assert list(zip_dicts({1: 10}, {1: 20, 2: 30})) == [(1, 10, 20)]
+    with pytest.raises(TypeError): list(zip_dicts())
 
 def test_where():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]

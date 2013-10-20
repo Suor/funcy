@@ -148,17 +148,15 @@ Dict utils
 
 
 .. function:: zip_values(*dicts)
-              izip_values(*dicts)
 
-    Returns a list or iterator of tuples of corresponding values of given dicts. Skips any keys not present in all of the dicts. Comes in handy when comparing two or more dicts::
+    Yields tuples of corresponding values of given dicts. Skips any keys not present in all of the dicts. Comes in handy when comparing two or more dicts::
 
         max_change = max(abs(x - y) for x, y in izip_values(items, old_items))
 
 
 .. function:: zip_dicts(*dicts)
-              izip_dicts(*dicts)
 
-    Returns a list or iterator of tuples of ``(key, value1, value2, ...)`` for each common key of all given dicts. A neat way to process several dicts at once::
+    Yields tuples like ``(key, value1, value2, ...)`` for each common key of all given dicts. A neat way to process several dicts at once::
 
         changed_items = [id for id, new, old in izip_dicts(items, old_items)
                          if abs(new - old) >= PRECISION]
