@@ -425,9 +425,9 @@ Data handling
     Returns given sequence with duplicates removed. Preserves order.
 
 
-.. function:: with_prev(seq)
+.. function:: with_prev(seq, fill=None)
 
-    Returns an iterator of a pair of each item with one preceding it.
+    Returns an iterator of a pair of each item with one preceding it. Yields `fill` or `None` as preceding element for first item.
 
     Great for getting rid of clunky ``prev`` housekeeping in for loops. This way one can indent first line of each paragraph while printing text::
 
@@ -436,7 +436,7 @@ Data handling
                 print '    ',
             print line
 
-    See also :func:`itertools.groupby` for chunking sequence by condition.
+    See also :func:`ipartition_by` and :func:`itertools.groupby` for chunking sequence by condition.
 
 
 .. function:: count_by(f, seq)
