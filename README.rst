@@ -141,7 +141,7 @@ TODO
 ----
 
 - write a philoshophy docs section
-- separate and document primitives
+- document primitives
 - create cheatsheet html
 - reject*(), disjoint*() collections
 - merge_with(), zip_with()

@@ -1,4 +1,4 @@
-EMPTY = object()
+from .primitives import EMPTY
 
 
 def identity(x):
@@ -6,13 +6,6 @@ def identity(x):
 
 def constantly(x):
     return lambda *a, **kw: x
-
-def isnone(x):
-    return x is None
-
-def notnone(x):
-    return x is not None
-
 
 # an operator.methodcaller() brother
 def caller(*a, **kw):

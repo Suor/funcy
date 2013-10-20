@@ -2,6 +2,7 @@ import re
 from operator import methodcaller
 from itertools import imap
 
+from .primitives import EMPTY
 from .simple_funcs import identity, iffy
 
 
@@ -50,8 +51,6 @@ def re_finder(regex, flags=0):
 def re_tester(regex, flags=0):
     return lambda s: bool(re.search(regex, s, flags))
 
-
-EMPTY = object()
 
 def str_join(sep, seq=EMPTY):
     if seq is EMPTY:

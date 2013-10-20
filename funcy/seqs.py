@@ -3,6 +3,7 @@ from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dro
                       groupby
 from collections import defaultdict, deque, Sequence
 
+from .primitives import EMPTY
 from .funcs import partial
 from .funcmakers import wrap_mapper, wrap_selector
 
@@ -19,9 +20,6 @@ __all__ = [
     'with_prev',
     'ireductions', 'reductions', 'isums', 'sums',
 ]
-
-
-EMPTY = object() # Used as default for optional arguments
 
 
 # Re-export

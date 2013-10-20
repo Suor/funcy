@@ -6,7 +6,6 @@ from .funcmakers import make_func, make_pred
 
 
 __all__ = ['identity', 'constantly', 'caller',
-           'isnone', 'notnone',
            'partial', 'curry', 'compose', 'complement',
            'juxt', 'ijuxt',
            'iffy']

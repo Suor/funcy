@@ -3,6 +3,7 @@ from operator import itemgetter, methodcaller
 from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import chain, tee
 
+from .primitives import EMPTY
 from .funcs import identity, partial, complement
 from .funcmakers import wrap_mapper, wrap_selector
 from .seqs import take, imap, ifilter
@@ -14,9 +15,6 @@ __all__ = ['empty', 'iteritems',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'zip_values', 'zip_dicts',
            'where', 'pluck', 'invoke']
-
-
-EMPTY = object()
 
 
 ### Generic ops
