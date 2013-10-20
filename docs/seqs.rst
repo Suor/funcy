@@ -149,9 +149,19 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
         OrderedDict(sorted(plain_dict.items(), key=second))
 
 
+.. function:: last(seq)
+
+    Returns last item in sequence. Returns ``None`` if sequence is empty. Tries to be efficient when sequence supports indexed access and fallbacks to iterating over it if not.
+
+
 .. function:: rest(seq)
 
     Skips first item in sequence, returning iterator starting just after it. A shortcut for :func:`drop(1, seq) <drop>`.
+
+
+.. function:: butlast(seq)
+
+    Returns iterator of all elements of a sequence but last.
 
 
 .. function:: ilen(seq)
