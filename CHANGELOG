@@ -1,4 +1,4 @@
-- added i?zip_values()
+- added i?zip_values() and i?zip_dicts()
 - added last() and butlast()
 - added is_none() and not_none() primitives
 - added extended fn semantics to group_by(), count_by() and i?partition_by()
