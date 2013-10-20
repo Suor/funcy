@@ -50,8 +50,6 @@ def re_finder(regex, flags=0):
 def re_tester(regex, flags=0):
     return lambda s: bool(re.search(regex, s, flags))
 
-# TODO: re_allfinder? better name?
-
 
 EMPTY = object()
 

@@ -34,10 +34,6 @@ def _factory(coll):
 def empty(coll):
     return _factory(coll)()
 
-# TODO: not_empty/non_empty working with iterators?
-#       kinda bool(iterator)
-# NOTE: should I add it to seqs or even data?
-
 def iteritems(coll):
     return coll.iteritems() if hasattr(coll, 'iteritems') else coll
 
@@ -145,8 +141,6 @@ def some(pred, seq=EMPTY):
 # TODO: vector comparison tests - ascending, descending and such
 # def chain_test(compare, seq):
 #     return all(compare, izip(seq, rest(seq))
-
-# TODO: capabilities + type tests or skip?
 
 def zipdict(keys, vals):
     return dict(zip(keys, vals))
