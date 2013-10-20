@@ -7,10 +7,10 @@ def identity(x):
 def constantly(x):
     return lambda *a, **kw: x
 
-def is_none(x):
+def isnone(x):
     return x is None
 
-def not_none(x):
+def notnone(x):
     return x is not None
 
 
