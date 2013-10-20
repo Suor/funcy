@@ -30,7 +30,7 @@ def test_iteritems():
 
 def test_join():
     assert join([]) is None
-    assert pytest.raises(TypeError, join, [1])
+    with pytest.raises(TypeError): join([1])
     assert eq(join(['ab', '', 'cd']), 'abcd')
     assert eq(join([['a', 'b'], 'c']), list('abc'))
     assert eq(join([('a', 'b'), ('c',)]), tuple('abc'))
@@ -164,6 +164,13 @@ def test_project():
     dd = defaultdict(int, {'a':1, 'b':2, 'c': 3})
     assert eq(project(dd, 'ac'), defaultdict(int, {'a':1, 'c': 3}))
 
+def test_zip_values():
+    assert zip_values({1: 10}, {1: 20, 2: 30}) == [(10, 20)]
+    with pytest.raises(TypeError): zip_values()
+
+def test_zip_dicts():
+    assert zip_dicts({1: 10}, {1: 20, 2: 30}) == [(1, 10, 20)]
+    with pytest.raises(TypeError): zip_dicts()
 
 def test_where():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
