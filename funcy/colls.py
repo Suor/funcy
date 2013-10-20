@@ -158,6 +158,8 @@ def project(mapping, keys):
     return _factory(mapping)((k, mapping[k]) for k in keys if k in mapping)
 
 def izip_values(*dicts):
+    if len(dicts) < 1:
+        raise TypeError('izip_values expects at least one argument')
     keys = set.intersection(*map(set, dicts))
     for key in keys:
         yield tuple(d[key] for d in dicts)
