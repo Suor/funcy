@@ -141,11 +141,11 @@ TODO
 ----
 
 - create cheatsheet html
-- write docs
 - reject*(), disjoint*() collections
+- merge_with(), zip_with()
+- starfilter()
 - one argument select*()? other name?
-- vector chained boolean test (like perl 6 [<])
-- merge_with()
-- reversed() to work with iterators?
-- lazy, lazy_seq, lazy_dict (a separate library?)
 - distinct() to work with unhashable values, id_func?
+- reversed() to work with iterators?
+- vector chained boolean test (like perl 6 [<])
+- lazy, lazy_seq, lazy_dict (a separate library?)
