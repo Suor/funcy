@@ -30,6 +30,15 @@ def test_first():
     assert first(count(7)) == 7
     assert first([]) is None
 
+def test_last():
+    assert last('xyz') == 'z'
+    assert last(xrange(1, 10)) == 9
+    assert last([]) is None
+
+def test_butlast():
+    assert list(butlast('xyz')) == ['x', 'y']
+    assert list(butlast([])) == []
+
 def test_ilen():
     assert ilen('xyz') == 3
     assert ilen(xrange(10)) == 10
