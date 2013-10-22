@@ -70,12 +70,11 @@ def path(self):
     parents.reverse()
     return parents
 
-    # path = takewhile(bool, iterate(_.parent, self))
+    path = takewhile(bool, iterate(_.parent, self))
     path = takewhile(bool, iterate(attrgetter('parent'), self))
     path = takewhile(bool, iterate(lambda node: node.parent, self))
+    path = takewhile(notnone, iterate(lambda node: node.parent, self))
     return reversed(rest(path))
-
-mro = unique(sum((b.__mro__ for b in bases), ()))
 
 users_cond = str_join(',', users)
 tests = fetch_named('''
