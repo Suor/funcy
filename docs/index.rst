@@ -9,19 +9,19 @@ Welcome to funcy documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    seqs
    colls
    funcs
-   types
    decorators
    flow
    strings
    calc
+   types
    objects
    debug
-   other
+   primitives
    extended_fns
 
 
