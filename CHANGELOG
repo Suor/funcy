@@ -1,6 +1,6 @@
-- added i?zip_values() and i?zip_dicts()
+- added izip_values() and izip_dicts()
 - added last() and butlast()
-- added is_none() and not_none() primitives
+- added isnone() and notnone() primitives
 - added extended fn semantics to group_by(), count_by() and i?partition_by()
 - added fill argument to with_prev()
 - optimized ilen()
