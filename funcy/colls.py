@@ -13,7 +13,7 @@ __all__ = ['empty', 'iteritems',
            'join', 'merge',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
-           'zipdict', 'flip', 'project', 'zip_values', 'zip_dicts',
+           'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
            'where', 'pluck', 'invoke']
 
 
@@ -149,14 +149,14 @@ def flip(mapping):
 def project(mapping, keys):
     return _factory(mapping)((k, mapping[k]) for k in keys if k in mapping)
 
-def zip_values(*dicts):
+def izip_values(*dicts):
     if len(dicts) < 1:
         raise TypeError('izip_values expects at least one argument')
     keys = set.intersection(*map(set, dicts))
     for key in keys:
         yield tuple(d[key] for d in dicts)
 
-def zip_dicts(*dicts):
+def izip_dicts(*dicts):
     if len(dicts) < 1:
         raise TypeError('izip_dicts expects at least one argument')
     keys = set.intersection(*map(set, dicts))

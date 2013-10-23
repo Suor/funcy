@@ -147,14 +147,14 @@ Dict utils
         merge(project(__builtins__, names), project(globals(), names))
 
 
-.. function:: zip_values(*dicts)
+.. function:: izip_values(*dicts)
 
     Yields tuples of corresponding values of given dicts. Skips any keys not present in all of the dicts. Comes in handy when comparing two or more dicts::
 
         max_change = max(abs(x - y) for x, y in izip_values(items, old_items))
 
 
-.. function:: zip_dicts(*dicts)
+.. function:: izip_dicts(*dicts)
 
     Yields tuples like ``(key, value1, value2, ...)`` for each common key of all given dicts. A neat way to process several dicts at once::
 
@@ -163,7 +163,7 @@ Dict utils
 
         lines = {id: cnt * price for id, cnt, price in izip_dicts(amounts, prices)}
 
-    See also :func:`zip_values`.
+    See also :func:`izip_values`.
 
 
 
