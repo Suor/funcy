@@ -141,7 +141,6 @@ TODO
 ----
 
 - write a philoshophy docs section
-- document primitives
 - create cheatsheet html
 - reject*(), disjoint*() collections
 - merge_with(), zip_with()
@@ -150,4 +149,3 @@ TODO
 - distinct() to work with unhashable values, id_func?
 - reversed() to work with iterators?
 - vector chained boolean test (like perl 6 [<])
-- lazy, lazy_seq, lazy_dict (a separate library?)
