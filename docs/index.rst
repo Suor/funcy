@@ -24,6 +24,8 @@ Contents:
    primitives
    extended_fns
 
+You can also `look at the code <https://github.com/Suor/funcy>`_ or `create an issue <https://github.com/Suor/funcy/issues?state=open>`_.
+
 
 Indices and tables
 ==================
