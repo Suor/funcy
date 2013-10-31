@@ -140,7 +140,6 @@ Bring your ideas and/or code that can make functional python more fun.
 TODO
 ----
 
-- write a philoshophy docs section
 - create cheatsheet html
 - reject*(), disjoint*() collections
 - merge_with(), zip_with()

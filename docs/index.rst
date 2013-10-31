@@ -6,6 +6,9 @@
 Welcome to funcy documentation!
 =================================
 
+Funcy is designed to be a layer of functional tools over python.
+
+
 Contents:
 
 .. toctree::
