@@ -3,6 +3,8 @@ Decorators
 
 .. decorator:: decorator
 
+    Transforms a flat wrapper into a decorator with arguments or not. ``@decorator`` passes special ``call`` object as first argument to a wrapper.
+
     An easy way to create decorators. Here is a simple logging decorator::
 
         @decorator
