@@ -30,7 +30,7 @@ silent = ignore(Exception) # Ignore all real exceptions
 
 @decorator
 def retry(call, tries, errors=Exception):
-    for attempt in range(tries):
+    for attempt in xrange(tries):
         try:
             return call()
         except errors:
