@@ -1,5 +1,4 @@
 from inspect import isclass, ismodule
-from functools import wraps
 
 from .strings import cut_prefix
 

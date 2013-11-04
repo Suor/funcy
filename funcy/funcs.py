@@ -1,8 +1,7 @@
 from operator import __not__
-from itertools import ifilter
 
 from .simple_funcs import *
-from .funcmakers import make_func, make_pred
+from .funcmakers import make_func
 
 
 __all__ = ['identity', 'constantly', 'caller',
