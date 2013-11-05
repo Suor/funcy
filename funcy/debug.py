@@ -12,6 +12,10 @@ def tap(x):
     return x
 
 
+# TODO:
+#   - log exceptions
+#   - verbose return line (call func_name(args) returns ...)
+#   - better args/kwargs stringification
 @decorator
 def log_calls(call, print_func):
     arg_words = list(call._args) + ['%s=%s' % t for t in call._kwargs.items()]
