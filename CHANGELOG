@@ -1,3 +1,5 @@
+- greatly optimized @decorator
+
 0.6.0
 - added izip_values() and izip_dicts()
 - added last() and butlast()

@@ -32,20 +32,26 @@ def make_call(func, args, kwargs):
     Constructs a call object to pass as first argument to decorator.
     Call object is just a proxy for decorated function with call arguments saved in its attributes.
     """
-    call = lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
+    # NOTE: we use class enclosed this way instead of creating normal object with attributes
+    #       cause it's much faster
+    class Call(object):
+        def __call__(self, *a, **kw):
+            return func(*(args + a), **dict(kwargs, **kw))
 
-    # Support args and func introspection
-    call._func = func
-    call._args = args
-    call._kwargs = kwargs
+        _args = args
+        _kwargs = kwargs
+        _func = func
 
-    # Save actual arg values on call "object" with their names as attributes for easier access
-    if inspect.isfunction(func):
-        call_args = inspect.getcallargs(func, *args, **kwargs)
-        for arg_name, arg_value in call_args.items():
-            setattr(call, arg_name, arg_value)
+        def __getattr__(self, name):
+            if not self.__dict__:
+                self.__dict__ = inspect.getcallargs(func, *args, **kwargs)
+            try:
+                return self.__dict__[name]
+            except KeyError:
+                raise NameError('Function %s does not have argument %s' \
+                                % (func.__name__, name))
 
-    return call
+    return Call()
 
 
 def argcounts(func):
