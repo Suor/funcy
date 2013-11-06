@@ -1,4 +1,6 @@
 - greatly optimized @decorator
+- @logs_calls and @print_calls now provide call signature on return
+- better call signature stringification for @(log|print)_(calls|errors)
 
 0.6.0
 - added izip_values() and izip_dicts()
