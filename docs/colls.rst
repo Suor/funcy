@@ -60,6 +60,7 @@ Most of functions in this section support :ref:`extended_fns`.r
     Walks keys of ``coll``, mapping them with given function. Works with mappings and collections of pairs::
 
         walk_keys(str.upper, {'a': 1, 'b': 2}) # {'A': 1, 'B': 2}
+        walk_keys(int, json.loads(some_dict))  # restore key type lost in translation
 
 
     Important to note that it preserves collection type whether it is simple :class:`dict`, :class:`~collections.defaultdict`, :class:`~collections.OrderedDict` or any other mapping class or a collection of pairs.
