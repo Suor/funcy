@@ -21,7 +21,7 @@ Flow
 
 .. decorator:: ignore(errors, default=None)
 
-    Same as :func:`silent`, but able to specify ``errors`` to catch and ``default`` to return in case of error catched. ``errors`` can either be exception class or tuple of them.
+    Same as :func:`silent`, but able to specify ``errors`` to catch and ``default`` to return in case of error caught. ``errors`` can either be exception class or tuple of them.
 
 
 .. decorator:: retry(tries, errors=Exception)

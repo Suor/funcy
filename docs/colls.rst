@@ -62,8 +62,7 @@ Most of functions in this section support :ref:`extended_fns`.r
         walk_keys(str.upper, {'a': 1, 'b': 2}) # {'A': 1, 'B': 2}
         walk_keys(int, json.loads(some_dict))  # restore key type lost in translation
 
-
-    Important to note that it preserves collection type whether it is simple :class:`dict`, :class:`~collections.defaultdict`, :class:`~collections.OrderedDict` or any other mapping class or a collection of pairs.
+    Important to note that it preserves collection type whenever this is simple :class:`dict`, :class:`~collections.defaultdict`, :class:`~collections.OrderedDict` or any other mapping class or a collection of pairs.
 
 
 .. function:: walk_values(f, coll)
@@ -182,7 +181,7 @@ Data manipulation
 
 .. function:: pluck(key, mappings)
 
-    Returns list of values for ``key`` in each mapping in given sequence. Essentialy a shortcut for::
+    Returns list of values for ``key`` in each mapping in given sequence. Essentially a shortcut for::
 
         map(operator.itemgetter(key), mappings)
 
@@ -197,14 +196,14 @@ Content tests
 
 .. function:: is_distinct(coll)
 
-    Checks if all elements in collection are diffrent::
+    Checks if all elements in collection are different::
 
-        assert is_distinct(field_names), "All fields should be named diffrently"
+        assert is_distinct(field_names), "All fields should be named differently"
 
 
 .. function:: all([pred], seq)
 
-    Checks if ``pred`` holds every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` is true (which is the same as in builtin :func:`~builtin.all`)::
+    Checks if ``pred`` holds every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` is true (which is the same as in built-in :func:`~builtin.all`)::
 
         they_are_ints = all(is_instance(n, int) for n in seq)
         they_are_even = all(even, seq)

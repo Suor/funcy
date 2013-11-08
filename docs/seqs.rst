@@ -3,7 +3,7 @@ Sequences
 
 .. .. module:: seqs
 
-This functions are aimed at manipulating finite and infinite sequences of values. Some functions have two flavours: one returning list and other returning possibly infinite iterator, the latter ones follow convention of prepending ``i`` before list-returning function name.
+This functions are aimed at manipulating finite and infinite sequences of values. Some functions have two flavors: one returning list and other returning possibly infinite iterator, the latter ones follow convention of prepending ``i`` before list-returning function name.
 
 When working with sequences, see also :mod:`itertools` standard module. Funcy reexports and aliases some functions from it.
 
@@ -13,7 +13,7 @@ Generate
 
 .. function:: repeat(elem, [n])
 
-    Makes an iterator returning ``elem`` for ``n`` times or indefinitly if ``n`` is omitted. :func:`repeat` simply repeat given value, when you need to reevaluate something repeatedly use :func:`repeatedly` instead.
+    Makes an iterator returning ``elem`` for ``n`` times or indefinitely if ``n`` is omitted. :func:`repeat` simply repeat given value, when you need to reevaluate something repeatedly use :func:`repeatedly` instead.
 
     When you just need a length ``n`` list or tuple of ``elem`` you can use::
 
@@ -28,7 +28,7 @@ Generate
 
     Makes infinite iterator of values: ``start, start + step, start + 2*step, ...``.
 
-    Could be used to gererate sequence::
+    Could be used to generate sequence::
 
         imap(lambda x: x ** 2, count(1))
         # -> 1, 4, 9, 16, ...
@@ -47,7 +47,7 @@ Generate
 
 .. function:: cycle(seq)
 
-    Cycles passed ``seq`` indefinitly returning its elements one by one.
+    Cycles passed ``seq`` indefinitely returning its elements one by one.
 
     Useful when you need to cyclically decorate some sequence::
 
@@ -118,7 +118,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
 .. function:: first(seq)
 
-    Returns first item in sequence. Returns ``None`` if sequence is empty. Typical usage is choosing first of some inplace generated variants::
+    Returns first item in sequence. Returns ``None`` if sequence is empty. Typical usage is choosing first of some generated variants::
 
         # Get a text message of first failed validation rule
         fail = first(rule.text for rule in rules if not rule.test(instance))
@@ -168,7 +168,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
     Calculates length of iterator. Will consume it or hang up if it's infinite.
 
-    Especially useful in conjuction with filtering or slicing functions, for example, this way one can find common start length of two strings::
+    Especially useful in conjunction with filtering or slicing functions, for example, this way one can find common start length of two strings::
 
         ilen(takewhile(lambda (x,y): x == y, zip(s1, s2)))
 
@@ -187,7 +187,7 @@ Unite
 .. function:: cat(seqs)
               icat(seqs)
 
-    Returns concatenation of passed seqs. Useful when dealing with sequence of sequences, see :func:`concat` or :func:`iconcat` to join just a few sequences.
+    Returns concatenation of passed sequences. Useful when dealing with sequence of sequences, see :func:`concat` or :func:`iconcat` to join just a few sequences.
 
     Flattening of various nested sequences is most common use::
 
@@ -390,7 +390,7 @@ Split and chunk
         # Structure user credentials
         {id: (name, password) for id, name, password in partition(3, users)}
 
-    A three argument variant of :func:`partition` can be used to process sequence items in context of their neighbours::
+    A three argument variant of :func:`partition` can be used to process sequence items in context of their neighbors::
 
         # Check if seq is non-descending
         all(left <= right for left, right in partition(2, 1, seq))
@@ -415,7 +415,7 @@ Split and chunk
 .. function:: partition_by(f, seq)
               ipartition_by(f, seq)
 
-    Partition seq into list of lists or iterator of iterators splitting at ``f(item)`` change.
+    Partition ``seq`` into list of lists or iterator of iterators splitting at ``f(item)`` change.
 
 
 Data handling
@@ -446,7 +446,7 @@ Data handling
 
 .. function:: count_by(f, seq)
 
-    Counts number of occurences of values of ``f`` on elements of ``seq`` and returns a dict of counts.
+    Counts number of occurrences of values of ``f`` on elements of ``seq`` and returns a dict of counts.
 
     Calculation a histogram is one common use::
 
