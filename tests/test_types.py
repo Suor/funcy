@@ -15,6 +15,6 @@ def test_iterable():
 def test_is_iter():
     assert is_iter(iter([]))
     assert is_iter(x for x in range(10))
-    assert is_iter(xrange(10))
 
     assert not is_iter([])
+    assert not is_iter(xrange(10))

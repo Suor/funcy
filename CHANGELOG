@@ -5,6 +5,8 @@
 - @logs_calls and @print_calls now log errors, optional for @log_calls
 - better call signature stringification for @(log|print)_(calls|errors)
 - fixed i?partition() and i?chunks() with xrange()
+Backward incompatible changes:
+- is_iter() now returns False given xrange() object
 
 0.6.0
 - added izip_values() and izip_dicts()

@@ -14,4 +14,4 @@ is_seqcoll = isa(list, tuple)
 is_list = isa(list)
 
 iterable = isa(Iterable)
-is_iter = isa(Iterator, xrange)
+is_iter = isa(Iterator)
