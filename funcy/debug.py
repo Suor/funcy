@@ -12,14 +12,18 @@ def tap(x):
     return x
 
 
-# TODO: log exceptions
 @decorator
-def log_calls(call, print_func):
-    arg_words = list(call._args) + ['%s=%s' % t for t in call._kwargs.items()]
-    print_func('Call %s(%s)' % (call._func.__name__, ', '.join(map(str, arg_words))))
-    result = call()
-    print_func('-> %s from %s' % (smart_repr(result), signature))
-    return result
+def log_calls(call, print_func, errors=True):
+    signature = signature_repr(call)
+    try:
+        print_func('Call %s' % signature)
+        result = call()
+        print_func('-> %s from %s' % (smart_repr(result), signature))
+        return result
+    except BaseException as e:
+        if errors:
+            print_func('-> raised %s: %s in %s' % (e.__class__.__name__, e, signature))
+        raise
 
 print_calls = log_calls(print)
 
