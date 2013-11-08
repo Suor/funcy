@@ -124,8 +124,13 @@ def test_partition_by():
     assert partition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
     assert partition_by('x', 'abxcd') == [['a', 'b'], ['x'], ['c', 'd']]
 
+
 def test_with_prev():
     assert list(with_prev(range(3))) == [(0, None), (1, 0), (2, 1)]
+
+def test_pairwise():
+    assert list(pairwise(range(3))) == [(0, 1), (1, 2)]
+
 
 def test_reductions():
     assert reductions(add, []) == []

@@ -1,3 +1,4 @@
+- added pairwise()
 - greatly optimized @decorator
 - added @log_durations and @print_durations
 - @logs_calls and @print_calls now provide call signature on return

@@ -395,7 +395,8 @@ Split and chunk
         # Check if seq is non-descending
         all(left <= right for left, right in partition(2, 1, seq))
 
-    Other use of :func:`partition` is processing sequence of data elements or jobs in chunks. Take a look at :func:`chunks` for that.
+    One should also look at :func:`pairwise` for this particular use. Other use of :func:`partition` is processing sequence of data elements or jobs in chunks, but take a look at :func:`chunks` for that.
+
 
 
 .. function:: chunks(n, [step], seq)
@@ -437,6 +438,10 @@ Data handling
             print line
 
     See also :func:`ipartition_by` and :func:`itertools.groupby` for chunking sequence by condition.
+
+.. function:: pairwise(seq)
+
+    Yields pairs of items in ``seq`` like ``(item0, item1), (item1, item2), ...``.
 
 
 .. function:: count_by(f, seq)
