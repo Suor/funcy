@@ -115,6 +115,9 @@ def test_count_by():
 def test_partition():
     assert partition(2, range(5)) == [[0, 1], [2, 3]]
     assert partition(2, 1, range(4)) == [[0, 1], [1, 2], [2, 3]]
+    # test iters
+    assert partition(2, iter(range(5))) == [[0, 1], [2, 3]]
+    assert partition(2, xrange(5)) == [[0, 1], [2, 3]]
 
 def test_chunks():
     assert chunks(2, range(5)) == [[0, 1], [2, 3], [4]]

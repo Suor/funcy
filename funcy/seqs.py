@@ -205,7 +205,7 @@ def _icut_iter(drop_tail, n, step, seq):
 def _icut(drop_tail, n, step, seq=EMPTY):
     if seq is EMPTY:
         step, seq = n, step
-    if isinstance(seq, Sequence):
+    if isinstance(seq, Sequence) and not isinstance(seq, xrange):
         return _icut_seq(drop_tail, n, step, seq)
     else:
         return _icut_iter(drop_tail, n, step, seq)
