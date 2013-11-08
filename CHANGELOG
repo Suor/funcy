@@ -1,4 +1,5 @@
 - greatly optimized @decorator
+- added @log_durations and @print_durations
 - @logs_calls and @print_calls now provide call signature on return
 - @logs_calls and @print_calls now log errors, optional for @log_calls
 - better call signature stringification for @(log|print)_(calls|errors)

@@ -39,3 +39,8 @@ Debugging
             initial = first_guess(username)
             # ...
 
+
+.. decorator:: log_durations(print_func)
+               print_durations
+
+    Will time each function call and log or print its duration.

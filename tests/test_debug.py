@@ -36,3 +36,15 @@ def test_log_calls_raise():
         "-> raised Exception: something bad in f()",
     ]
 
+
+def test_log_durations():
+    log = []
+
+    @log_durations(log.append)
+    def f():
+        time.sleep(0.010)
+
+    f()
+    m = re.search(r'^\s*(\d+\.\d+) ms in f\(\)$', log[0])
+    assert m
+    assert 10 <= float(m.group(1)) < 20
