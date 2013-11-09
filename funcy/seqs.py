@@ -108,7 +108,7 @@ def ikeep(f, seq=EMPTY):
 
 def iwithout(seq, *items):
     for value in seq:
-        if not value in items:
+        if value not in items:
             yield value
 
 def without(seq, *items):
