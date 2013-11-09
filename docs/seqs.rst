@@ -477,7 +477,7 @@ Data handling
 
         reduce(f, seq[:1], [acc]), reduce(f, seq[:2], [acc]), ...
 
-    You can use :func:`sums` or :func:`isums` for a common use of getting list of sums.
+    You can use :func:`sums` or :func:`isums` for a common use of getting list of partial sums.
 
 
 .. function:: sums(seq, [acc])
