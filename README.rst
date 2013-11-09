@@ -4,7 +4,7 @@ Funcy
 A collection of fancy functional tools focused on practicality.
 
 Inspired by clojure, underscore and my own abstractions. Keep reading to get an overview
-or `read the docs <http://funcy.readthedocs.org/>`_ (not complete yet).
+or `read the docs <http://funcy.readthedocs.org/>`_.
 
 
 Installation
