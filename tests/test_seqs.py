@@ -83,6 +83,12 @@ def test_cat():
     assert cat('abcd') == list('abcd')
     assert cat(range(x) for x in range(3)) == [0, 0, 1]
 
+def test_flatten():
+    assert flatten([1, [2, 3]]) == [1, 2, 3]
+    assert flatten([[1, 2], 3]) == [1, 2, 3]
+    assert flatten([(2, 3)]) == [2, 3]
+    assert flatten([iter([2, 3])]) == [2, 3]
+
 def test_mapcat():
     assert mapcat(lambda x: [x, x], 'abc') == list('aabbcc')
 

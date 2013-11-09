@@ -215,6 +215,12 @@ Unite
     :func:`icat` is an alias for :meth:`itertools.chain.from_iterable`.
 
 
+.. function:: flatten(seq, follow=is_seqcont)
+              iflatten(seq, follow=is_seqcont)
+
+    Flattens arbitrary nested sequence of values and other sequences. ``follow`` argument determines whether to unpack each item. By default it dives into lists, tuples and iterators, see :func:`is_seqcont` for further explanation.
+
+
 .. function:: interleave(*seqs)
 
     Returns an iterator yielding first item in each sequence, then second and so on until some sequence ends. Numbers of items taken from all sequences are always equal.

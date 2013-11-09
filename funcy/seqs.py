@@ -4,6 +4,7 @@ from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dro
 from collections import defaultdict, deque, Sequence
 
 from .primitives import EMPTY
+from .types import is_seqcont
 from .funcs import partial
 from .funcmakers import wrap_mapper, wrap_selector
 
@@ -12,7 +13,7 @@ __all__ = [
     'count', 'cycle', 'repeat', 'repeatedly', 'iterate',
     'take', 'drop', 'first', 'second', 'nth', 'last', 'rest', 'butlast', 'ilen',
     'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep', 'without', 'iwithout',
-    'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
+    'concat', 'iconcat', 'chain', 'cat', 'icat', 'flatten', 'iflatten', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct',
     'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
     'group_by', 'count_by',
@@ -127,6 +128,17 @@ iconcat = chain
 def cat(seqs):
     return list(icat(seqs))
 icat = chain.from_iterable
+
+def iflatten(seq, follow=is_seqcont):
+    for item in seq:
+        if follow(item):
+            for sub in iflatten(item, is_seqcont):
+                yield sub
+        else:
+            yield item
+
+def flatten(seq, follow=is_seqcont):
+    return list(iflatten(seq, follow))
 
 def mapcat(f, *seqs):
     return cat(imap(f, *seqs))

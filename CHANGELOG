@@ -1,3 +1,4 @@
+- added i?flatten()
 - added pairwise()
 - added nth()
 - added is_seqcont()
