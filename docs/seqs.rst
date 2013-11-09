@@ -398,17 +398,17 @@ Split and chunk
     Most common use is deflattening data::
 
         # Make a dict from flat list of pairs
-        dict(partition(2, flat_list_of_pairs))
+        dict(ipartition(2, flat_list_of_pairs))
 
         # Structure user credentials
-        {id: (name, password) for id, name, password in partition(3, users)}
+        {id: (name, password) for id, name, password in ipartition(3, users)}
 
     A three argument variant of :func:`partition` can be used to process sequence items in context of their neighbors::
 
-        # Check if seq is non-descending
-        all(left <= right for left, right in partition(2, 1, seq))
+        # Smooth data by averaging out with a sliding window
+        [sum(window) / n for window in ipartition(n, 1, data_points)]
 
-    One should also look at :func:`pairwise` for this particular use. Other use of :func:`partition` is processing sequence of data elements or jobs in chunks, but take a look at :func:`chunks` for that.
+    Also look at :func:`pairwise` for similar use. Other use of :func:`partition` is processing sequence of data elements or jobs in chunks, but take a look at :func:`chunks` for that.
 
 
 
@@ -454,7 +454,10 @@ Data handling
 
 .. function:: pairwise(seq)
 
-    Yields pairs of items in ``seq`` like ``(item0, item1), (item1, item2), ...``.
+    Yields pairs of items in ``seq`` like ``(item0, item1), (item1, item2), ...``. A great way to process sequence items in a context of each neighbor::
+
+        # Check if seq is non-descending
+        all(left <= right for left, right in pairwise(seq))
 
 
 .. function:: count_by(f, seq)
