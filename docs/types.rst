@@ -20,7 +20,19 @@ Type testing
 
 .. function:: is_seqcoll(value)
 
-    Checks if ``value`` is a list or a tuple.
+    Checks if ``value`` is a list or a tuple, which are both sequences and collections.
+
+
+.. function:: is_seqcont(value)
+
+    Checks if ``value`` is a list, a tuple or an iterator, which are sequential containers. It can be used to distinguish between value and multiple values in dual-interface functions::
+
+        def add_to_selection(view, region):
+            if is_seqcont(region):
+                # A sequence of regions
+                view.sel().add_all(region)
+            else:
+                view.sel().add(region)
 
 
 .. function:: iterable(value)
