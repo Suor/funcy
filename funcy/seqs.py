@@ -10,7 +10,7 @@ from .funcmakers import wrap_mapper, wrap_selector
 
 __all__ = [
     'count', 'cycle', 'repeat', 'repeatedly', 'iterate',
-    'take', 'drop', 'first', 'second', 'last', 'rest', 'butlast', 'ilen',
+    'take', 'drop', 'first', 'second', 'nth', 'last', 'rest', 'butlast', 'ilen',
     'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep', 'without', 'iwithout',
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct',
@@ -46,6 +46,11 @@ def first(seq):
 
 def second(seq):
     return first(rest(seq))
+
+# TODO: decide how negative indexes should work - count from end or just return None?
+#       it raises ValueError for now
+def nth(n, seq):
+    return next(islice(seq, n, n+1), None)
 
 def last(seq):
     if hasattr(seq, '__getslice__'):

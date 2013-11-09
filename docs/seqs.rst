@@ -149,6 +149,13 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
         OrderedDict(sorted(plain_dict.items(), key=second))
 
 
+.. function:: nth(n, seq)
+
+    Returns nth item in sequence or ``None`` if no one exists. Items are counted from 0, so it's like indexed access but works for iterators. E.g. here is how one can get 6th line of `some_file`::
+
+        nth(5, repeatedly(open('some_file').readline))
+
+
 .. function:: last(seq)
 
     Returns last item in sequence. Returns ``None`` if sequence is empty. Tries to be efficient when sequence supports indexed access and fallbacks to iterating over it if not.

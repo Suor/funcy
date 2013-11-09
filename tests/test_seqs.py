@@ -35,6 +35,12 @@ def test_last():
     assert last(xrange(1, 10)) == 9
     assert last([]) is None
 
+def test_nth():
+    assert nth(0, 'xyz') == 'x'
+    assert nth(2, 'xyz') == 'z'
+    assert nth(3, 'xyz') is None
+    assert nth(3, count(7)) == 10
+
 def test_butlast():
     assert list(butlast('xyz')) == ['x', 'y']
     assert list(butlast([])) == []

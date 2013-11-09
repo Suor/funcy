@@ -1,4 +1,5 @@
 - added pairwise()
+- added nth()
 - added is_seqcont()
 - greatly optimized @decorator
 - added @log_durations and @print_durations
