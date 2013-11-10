@@ -43,12 +43,14 @@ def make_call(func, args, kwargs):
         _func = func
 
         def __getattr__(self, name):
+            if not inspect.isfunction(func):
+                raise TypeError("Can't introspect argument %s for non-function" % name)
             if not self.__dict__:
                 self.__dict__ = inspect.getcallargs(func, *args, **kwargs)
             try:
                 return self.__dict__[name]
             except KeyError:
-                raise NameError('Function %s does not have argument %s' \
+                raise NameError("Function %s does not have argument %s" \
                                 % (func.__name__, name))
 
     return Call()
