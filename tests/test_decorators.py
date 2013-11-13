@@ -1,7 +1,3 @@
-# from collections import Iterator
-# import pytest
-# from whatever import _
-
 from funcy.decorators import *
 
 
