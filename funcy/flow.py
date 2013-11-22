@@ -5,12 +5,21 @@ from itertools import imap
 from .decorators import decorator
 
 
-__all__ = ['ignore', 'silent', 'retry', 'fallback',
+__all__ = ['raiser', 'ignore', 'silent', 'retry', 'fallback',
            'limit_error_rate', 'ErrorRateExceeded',
            'post_processing', 'collecting', 'joining']
 
 
 ### Error handling utilities
+
+def raiser(exception_or_class, *args, **kwargs):
+    def _raiser(*a, **kw):
+        if not args and not kwargs:
+            raise exception_or_class
+        else:
+            raise exception_or_class(*args, **kwargs)
+    return _raiser
+
 
 # Not using @decorator here for speed,
 # since @ignore and @silent should be used for very simple and fast functions

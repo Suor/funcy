@@ -1,3 +1,4 @@
+import pytest
 from funcy.flow import *
 
 
@@ -5,6 +6,17 @@ def test_silent():
     assert silent(int)(1) == 1
     assert silent(int)('1') == 1
     assert silent(int)('hello') is None
+
+
+def test_raiser():
+    class MyError(Exception):
+        pass
+
+    with pytest.raises(MyError): raiser(MyError)()
+    with pytest.raises(MyError): raiser(MyError, 'some message')()
+    with pytest.raises(MyError): raiser(MyError('some message'))()
+
+    with pytest.raises(MyError): raiser(MyError)('junk', keyword='junk')
 
 
 def test_post_processing():

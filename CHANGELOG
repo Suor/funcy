@@ -1,3 +1,5 @@
+- added raiser()
+
 0.7
 - added i?flatten()
 - added pairwise()
