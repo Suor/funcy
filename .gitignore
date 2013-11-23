@@ -4,3 +4,5 @@ dist
 build
 docs/_build
 .tags*
+.tox
+.coverage
