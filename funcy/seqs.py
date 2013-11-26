@@ -156,10 +156,27 @@ dropwhile = wrap_selector(dropwhile)
 takewhile = wrap_selector(takewhile)
 
 
-def distinct(seq):
+def distinct(seq, key=None):
     "Order preserving distinct"
+    return list(idistinct(seq, key))
     seen = set()
     return [x for x in seq if x not in seen and not seen.add(x)]
+
+def idistinct(seq, key=None):
+    seen = set()
+    # check if key is supplied out of loop for efficiency
+    if key:
+        for item in seq:
+            k = key(item)
+            if k not in seen:
+                seen.add(k)
+                yield item
+    else:
+        for item in seq:
+            if item not in seen:
+                seen.add(item)
+                yield item
+
 
 def isplit(pred, seq):
     a, b = tee(seq)

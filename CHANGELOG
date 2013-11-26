@@ -1,4 +1,6 @@
 - added raiser()
+- added idistinct()
+- added key argument to i?distinct()
 
 0.7
 - added i?flatten()

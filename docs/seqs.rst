@@ -434,9 +434,12 @@ Split and chunk
 Data handling
 -------------
 
-.. function:: distinct(seq)
+.. function:: distinct(seq, key=identity)
+              idistinct(seq, key=identity)
 
-    Returns given sequence with duplicates removed. Preserves order.
+    Returns given sequence with duplicates removed. Preserves order. If ``key`` is supplied then distinguishes values by comparing their keys.
+
+    .. note:: Elements of a sequence or their keys should be hashable.
 
 
 .. function:: with_prev(seq, fill=None)
