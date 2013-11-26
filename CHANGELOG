@@ -1,6 +1,7 @@
 - added raiser()
 - added idistinct()
 - added key argument to i?distinct()
+- added group_by_keys()
 Backward incompatible changes:
 - group_by() and count_by() no longer return defaultdicts
 

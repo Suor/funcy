@@ -390,6 +390,14 @@ Split and chunk
     One can use :func:`split_by` when grouping by boolean predicate. See also :func:`itertools.groupby`.
 
 
+.. function:: group_by_keys(get_keys, seq)
+
+    Groups elements of ``seq`` having multiple keys each. Can be used to reverse grouping::
+
+        posts_by_tag = group_by_keys(attrgetter(tags), posts)
+        sentences_with_word = group_by_keys(str.split, sentences)
+
+
 .. function:: partition(n, [step], seq)
               ipartition(n, [step], seq)
 

@@ -1,5 +1,6 @@
 from collections import Iterator
 from operator import add
+import re
 import pytest
 from whatever import _
 
@@ -120,6 +121,9 @@ def test_split_by():
 def test_group_by():
     assert group_by(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}
     assert group_by(r'\d', ['a1', 'b2', 'c1']) == {'1': ['a1', 'c1'], '2': ['b2']}
+
+def test_group_by_keys():
+    assert group_by_keys(r'(\d)(\d)', ['12', '23']) == {'1': ['12'], '2': ['12', '23'], '3': ['23']}
 
 def test_count_by():
     assert count_by(_ % 2, range(5)) == {0: 3, 1: 2}

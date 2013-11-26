@@ -16,7 +16,7 @@ __all__ = [
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'flatten', 'iflatten', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct',
     'dropwhile', 'takewhile', 'split', 'split_at', 'split_by',
-    'group_by', 'count_by',
+    'group_by', 'group_by_keys', 'count_by',
     'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
     'with_prev', 'pairwise',
     'ireductions', 'reductions', 'isums', 'sums',
@@ -211,8 +211,17 @@ def group_by(f, seq):
             result[k] = [item]
     return result
 
-# TODO: group_by_multi(get_keys, seq). Better name?
-#       group_by_keys(...)?
+@wrap_mapper
+def group_by_keys(get_keys, seq):
+    result = {}
+    for item in seq:
+        keys = get_keys(item)
+        for k in keys:
+            if k in result:
+                result[k].append(item)
+            else:
+                result[k] = [item]
+    return result
 
 @wrap_mapper
 def count_by(f, seq):
