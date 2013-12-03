@@ -1,7 +1,7 @@
 from operator import add
 from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile, \
                       groupby
-from collections import defaultdict, deque, Sequence
+from collections import deque, Sequence
 
 from .primitives import EMPTY
 from .types import is_seqcont
