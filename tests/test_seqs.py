@@ -129,6 +129,10 @@ def test_count_by():
     assert count_by(_ % 2, range(5)) == {0: 3, 1: 2}
     assert count_by(r'\d', ['a1', 'b2', 'c1']) == {'1': 2, '2': 1}
 
+def test_count_by_is_defaultdict():
+    cnts = count_by(len, [])
+    assert cnts[1] == 0
+
 def test_partition():
     assert partition(2, range(5)) == [[0, 1], [2, 3]]
     assert partition(2, 1, range(4)) == [[0, 1], [1, 2], [2, 3]]
