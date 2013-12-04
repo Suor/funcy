@@ -200,10 +200,6 @@ def split_by(pred, seq):
     return map(list, isplit_by(pred, seq))
 
 
-# NOTE: should I name it cluster? to distinguish from itertools.groupby
-#       or just group?
-# NOTE: should it return OrderedDict to preserve order of keys not just values?
-# TODO: do not return defaultdict(), it can be confusing, especially after walk_values()
 @wrap_mapper
 def group_by(f, seq):
     result = defaultdict(list)
