@@ -209,14 +209,10 @@ def group_by(f, seq):
 
 @wrap_mapper
 def group_by_keys(get_keys, seq):
-    result = {}
+    result = defaultdict(list)
     for item in seq:
-        keys = get_keys(item)
-        for k in keys:
-            if k in result:
-                result[k].append(item)
-            else:
-                result[k] = [item]
+        for k in get_keys(item):
+            result[k].append(item)
     return result
 
 @wrap_mapper
