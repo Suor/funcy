@@ -1,7 +1,7 @@
 from operator import add
 from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile, \
                       groupby
-from collections import deque, Sequence
+from collections import defaultdict, deque, Sequence
 
 from .primitives import EMPTY
 from .types import is_seqcont
@@ -200,15 +200,15 @@ def split_by(pred, seq):
     return map(list, isplit_by(pred, seq))
 
 
+# NOTE: should I name it cluster? to distinguish from itertools.groupby
+#       or just group?
+# NOTE: should it return OrderedDict to preserve order of keys not just values?
+# TODO: do not return defaultdict(), it can be confusing, especially after walk_values()
 @wrap_mapper
 def group_by(f, seq):
-    result = {}
+    result = defaultdict(list)
     for item in seq:
-        k = f(item)
-        if k in result:
-            result[k].append(item)
-        else:
-            result[k] = [item]
+        result[f(item)].append(item)
     return result
 
 @wrap_mapper
@@ -225,13 +225,9 @@ def group_by_keys(get_keys, seq):
 
 @wrap_mapper
 def count_by(f, seq):
-    result = {}
+    result = defaultdict(int)
     for item in seq:
-        k = f(item)
-        if k in result:
-            result[k] += 1
-        else:
-            result[k] = 1
+        result[f(item)] += 1
     return result
 
 

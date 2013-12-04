@@ -2,8 +2,6 @@
 - added idistinct()
 - added key argument to i?distinct()
 - added group_by_keys()
-Backward incompatible changes:
-- group_by() and count_by() no longer return defaultdicts
 
 0.7
 - added i?flatten()
