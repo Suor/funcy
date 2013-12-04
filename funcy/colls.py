@@ -4,7 +4,7 @@ from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import chain, tee
 
 from .primitives import EMPTY
-from .funcs import identity, partial, complement
+from .funcs import identity, partial, compose, complement
 from .funcmakers import wrap_mapper, wrap_selector
 from .seqs import take, imap, ifilter
 
@@ -18,10 +18,11 @@ __all__ = ['empty', 'iteritems',
 
 
 ### Generic ops
-def _factory(coll):
+def _factory(coll, mapper=None):
     # Hack for defaultdicts overriden constructor
     if isinstance(coll, defaultdict):
-        return partial(defaultdict, coll.default_factory)
+        item_factory = compose(mapper, coll.default_factory) if mapper else coll.default_factory
+        return partial(defaultdict, item_factory)
     elif isinstance(coll, Iterator):
         return identity
     elif isinstance(coll, basestring):
@@ -80,7 +81,8 @@ def walk_keys(f, coll):
 
 @wrap_mapper
 def walk_values(f, coll):
-    return walk(lambda (k, v): (k, f(v)), coll)
+    pair_f = lambda (k, v): (k, f(v))
+    return _factory(coll, mapper=f)(imap(pair_f, iteritems(coll)))
 
 # TODO: prewalk, postwalk and friends
 

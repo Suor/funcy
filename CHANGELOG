@@ -2,6 +2,8 @@
 - added idistinct()
 - added key argument to i?distinct()
 - added group_by_keys()
+Backward incompatible changes:
+- walk_values() now updates defaultdict item factory to composition of mapper and old one.
 
 0.7
 - added i?flatten()

@@ -84,10 +84,12 @@ def test_walk_keys():
 def test_walk_values():
     assert walk_values(_ * 2, {'a': 1, 'b': 2}) == {'a': 2, 'b': 4}
 
-    dd = defaultdict(int, {'a': 1, 'b': 2})
-    walked_dd = walk_values(_ * 2, dd)
-    assert walked_dd == {'a': 2, 'b': 4}
-    assert walked_dd.default_factory is dd.default_factory
+def test_walk_values_defaultdict():
+    dd = defaultdict(lambda: 'hey', {1: 'a', 2: 'ab'})
+    walked_dd = walk_values(len, dd)
+    assert walked_dd == {1: 1, 2: 2}
+    # resulting default factory should be compose(len, lambda: 'hey')
+    assert walked_dd[0] == 3
 
 
 def test_select():
