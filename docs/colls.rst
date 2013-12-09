@@ -194,11 +194,15 @@ Data manipulation
 Content tests
 -------------
 
-.. function:: is_distinct(coll)
+.. function:: is_distinct(coll, key=identity)
 
     Checks if all elements in collection are different::
 
         assert is_distinct(field_names), "All fields should be named differently"
+
+    Uses ``key`` to differentiate values. This way one can check if all first letters of ``words`` are different::
+
+        is_distinct(words, key=0)
 
 
 .. function:: all([pred], seq)

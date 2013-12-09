@@ -108,8 +108,11 @@ def compact(coll):
 
 ### Content tests
 
-def is_distinct(coll):
-    return len(coll) == len(set(coll))
+def is_distinct(coll, key=EMPTY):
+    if key is EMPTY:
+        return len(coll) == len(set(coll))
+    else:
+        return len(coll) == len(set(imap(key, coll)))
 
 
 def all(pred, seq=EMPTY):

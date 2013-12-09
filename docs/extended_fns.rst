@@ -30,7 +30,7 @@ Sequence splitting        :func:`dropwhile`, :func:`takewhile`, :func:`split`, :
 Sequence chunking         :func:`group_by`, :func:`count_by`, :func:`partition_by`, :func:`ipartition_by`
 Collection transformation :func:`walk`, :func:`walk_keys`, :func:`walk_values`
 Collection filtering      :func:`select`, :func:`select_keys`, :func:`select_values`
-Content tests             :func:`all`, :func:`any`, :func:`none`, :func:`one`, :func:`some`
+Content tests             :func:`all`, :func:`any`, :func:`none`, :func:`one`, :func:`some`, :func:`is_distinct`
 Function logic            :func:`all_fn`, :func:`any_fn`, :func:`none_fn`, :func:`one_fn`, :func:`some_fn`
 Function tools            :func:`compose`, :func:`complement`, :func:`juxt`, :func:`ijuxt`
 ========================= ==============================================================

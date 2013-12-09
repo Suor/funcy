@@ -121,6 +121,8 @@ def test_compact():
 def test_is_distinct():
     assert is_distinct('abc')
     assert not is_distinct('aba')
+    assert is_distinct(['a', 'ab', 'abc'], key=len)
+    assert not is_distinct(['ab', 'cb', 'ad'], key=0)
 
 
 def test_all():
