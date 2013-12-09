@@ -60,22 +60,6 @@ translate_items(interpose(node.op, node.values))
 36              name = name_fmt % i
 37              i += 1
 
-@property
-def path(self):
-    parents = []
-    p = self
-    while p.parent:
-        p = p.parent
-        parents.append(p)
-    parents.reverse()
-    return parents
-
-    path = takewhile(bool, iterate(_.parent, self))
-    path = takewhile(bool, iterate(attrgetter('parent'), self))
-    path = takewhile(bool, iterate(lambda node: node.parent, self))
-    path = takewhile(notnone, iterate(lambda node: node.parent, self))
-    return reversed(rest(path))
-
 users_cond = str_join(',', users)
 tests = fetch_named('''
     select user_id, full_min, full_max, datetime from player_testtracking
