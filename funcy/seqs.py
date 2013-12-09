@@ -6,7 +6,7 @@ from collections import defaultdict, deque, Sequence
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcs import partial
-from .funcmakers import wrap_mapper, wrap_selector
+from .funcmakers import wrap_mapper, wrap_selector, make_func
 
 
 __all__ = [
@@ -156,23 +156,24 @@ dropwhile = wrap_selector(dropwhile)
 takewhile = wrap_selector(takewhile)
 
 
-def distinct(seq, key=None):
+def distinct(seq, key=EMPTY):
     "Order preserving distinct"
     return list(idistinct(seq, key))
 
-def idistinct(seq, key=None):
+def idistinct(seq, key=EMPTY):
     seen = set()
     # check if key is supplied out of loop for efficiency
-    if key:
+    if key is EMPTY:
+        for item in seq:
+            if item not in seen:
+                seen.add(item)
+                yield item
+    else:
+        key = make_func(key)
         for item in seq:
             k = key(item)
             if k not in seen:
                 seen.add(k)
-                yield item
-    else:
-        for item in seq:
-            if item not in seen:
-                seen.add(item)
                 yield item
 
 

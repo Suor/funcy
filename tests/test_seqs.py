@@ -104,6 +104,7 @@ def test_iterpose():
 def test_distinct():
     assert distinct('abcbad') == list('abcd')
     assert distinct([{}, {}, {'a': 1}, {'b': 2}], key=len) == [{}, {'a': 1}]
+    assert distinct(['ab', 'cb', 'ad'], key=0) == ['ab', 'cb']
 
 def test_split():
     assert split(_ % 2, range(5)) == [[1, 3], [0, 2, 4]]

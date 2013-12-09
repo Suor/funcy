@@ -25,7 +25,7 @@ Here is a full list of functions supporting extended predicate/mapper semantics:
 Group                     Functions
 ========================= ==============================================================
 Sequence transformation   :func:`map`, :func:`imap`, :func:`keep`, :func:`ikeep`, :func:`mapcat`, :func:`imapcat`
-Sequence filtering        :func:`filter`, :func:`ifilter`, :func:`remove`, :func:`iremove`
+Sequence filtering        :func:`filter`, :func:`ifilter`, :func:`remove`, :func:`iremove`, :func:`distinct`, :func:`idistinct`
 Sequence splitting        :func:`dropwhile`, :func:`takewhile`, :func:`split`, :func:`split_by`
 Sequence chunking         :func:`group_by`, :func:`count_by`, :func:`partition_by`, :func:`ipartition_by`
 Collection transformation :func:`walk`, :func:`walk_keys`, :func:`walk_values`
