@@ -28,6 +28,9 @@ def test_iteritems():
     assert list(iteritems((1,2))) == [1,2]
     assert list(iteritems({'a': 1})) == [('a', 1)]
 
+def test_merge():
+    assert eq(merge({1: 2}, {3: 4}), {1: 2, 3: 4})
+
 def test_join():
     assert join([]) is None
     with pytest.raises(TypeError): join([1])
@@ -173,7 +176,7 @@ def test_izip_values():
     with pytest.raises(TypeError): list(izip_values())
 
 def test_izip_dicts():
-    assert list(izip_dicts({1: 10}, {1: 20, 2: 30})) == [(1, 10, 20)]
+    assert list(izip_dicts({1: 10}, {1: 20, 2: 30})) == [(1, (10, 20))]
     with pytest.raises(TypeError): list(izip_dicts())
 
 def test_where():

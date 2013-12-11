@@ -158,10 +158,10 @@ Dict utils
 
     Yields tuples like ``(key, value1, value2, ...)`` for each common key of all given dicts. A neat way to process several dicts at once::
 
-        changed_items = [id for id, new, old in izip_dicts(items, old_items)
+        changed_items = [id for id, (new, old) in izip_dicts(items, old_items)
                          if abs(new - old) >= PRECISION]
 
-        lines = {id: cnt * price for id, cnt, price in izip_dicts(amounts, prices)}
+        lines = {id: cnt * price for id, (cnt, price) in izip_dicts(amounts, prices)}
 
     See also :func:`izip_values`.
 

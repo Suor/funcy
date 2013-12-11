@@ -4,7 +4,8 @@
 - added key argument to is_distinct()
 - added group_by_keys()
 Backward incompatible changes:
-- walk_values() now updates defaultdict item factory to composition of mapper and old one.
+- walk_values() now updates defaultdict item factory to composition of mapper and old one
+- izip_dicts() now packs values in tuple separate from key
 
 0.7
 - added i?flatten()

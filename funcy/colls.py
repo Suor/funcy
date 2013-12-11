@@ -166,7 +166,7 @@ def izip_dicts(*dicts):
         raise TypeError('izip_dicts expects at least one argument')
     keys = set.intersection(*map(set, dicts))
     for key in keys:
-        yield tuple([key] + [d[key] for d in dicts])
+        yield key, tuple(d[key] for d in dicts)
 
 
 def where(mappings, **cond):
