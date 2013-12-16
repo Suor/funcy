@@ -13,9 +13,10 @@ def test_raiser():
         pass
 
     with pytest.raises(MyError): raiser(MyError)()
-    with pytest.raises(MyError): raiser(MyError, 'some message')()
-    with pytest.raises(MyError): raiser(MyError('some message'))()
+    with pytest.raises(MyError) as e: raiser(MyError, 'some message')()
+    assert e.value.args == ('some message',)
 
+    with pytest.raises(MyError): raiser(MyError('some message'))()
     with pytest.raises(MyError): raiser(MyError)('junk', keyword='junk')
 
 

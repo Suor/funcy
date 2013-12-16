@@ -14,10 +14,10 @@ __all__ = ['raiser', 'ignore', 'silent', 'retry', 'fallback',
 
 def raiser(exception_or_class, *args, **kwargs):
     def _raiser(*a, **kw):
-        if not args and not kwargs:
-            raise exception_or_class
-        else:
+        if args or kwargs:
             raise exception_or_class(*args, **kwargs)
+        else:
+            raise exception_or_class
     return _raiser
 
 
