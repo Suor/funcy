@@ -1,3 +1,4 @@
+import pytest
 from funcy.decorators import *
 
 
@@ -35,6 +36,18 @@ def test_decorator_access_arg():
         return n
 
     assert square(5) == 25
+
+
+def test_decorator_access_nonexistent_arg():
+    @decorator
+    def return_x(call):
+        return call.x
+
+    @return_x
+    def f():
+        pass
+
+    with pytest.raises(AttributeError): f()
 
 
 def test_decorator_with_method():

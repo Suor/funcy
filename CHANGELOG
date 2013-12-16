@@ -6,6 +6,7 @@
 Backward incompatible changes:
 - walk_values() now updates defaultdict item factory to composition of mapper and old one
 - izip_dicts() now packs values in tuple separate from key
+- @decorator raises AttributeError not NameError when non-existent argument is accessed by name
 
 0.7
 - added i?flatten()

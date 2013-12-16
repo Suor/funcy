@@ -50,8 +50,8 @@ def make_call(func, args, kwargs):
             try:
                 return self.__dict__[name]
             except KeyError:
-                raise NameError("Function %s does not have argument %s" \
-                                % (func.__name__, name))
+                raise AttributeError("Function %s does not have argument %s" \
+                                     % (func.__name__, name))
 
     return Call()
 
