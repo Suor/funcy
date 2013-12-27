@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from functools import wraps
-from itertools import imap
 
+from .cross import imap
 from .decorators import decorator
 
 

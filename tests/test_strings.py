@@ -16,4 +16,4 @@ def test_re_all():
 def test_str_join():
     assert str_join([1, 2, 3]) == '123'
     assert str_join('_', [1, 2, 3]) == '1_2_3'
-    assert isinstance(str_join(u'_', [1, 2, 3]), unicode)
+    assert isinstance(str_join(u'_', [1, 2, 3]), type(u''))

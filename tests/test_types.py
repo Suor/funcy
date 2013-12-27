@@ -1,3 +1,4 @@
+from funcy.cross import xrange
 from funcy.types import *
 
 

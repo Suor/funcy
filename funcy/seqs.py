@@ -1,8 +1,9 @@
+import sys
 from operator import add
-from itertools import islice, ifilter, imap, izip, chain, tee, ifilterfalse, dropwhile, takewhile, \
-                      groupby
+from itertools import islice, chain, tee, dropwhile, takewhile, groupby
 from collections import defaultdict, deque, Sequence
 
+from .cross import ifilter, imap, izip, ifilterfalse, xrange
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcs import partial
@@ -91,10 +92,19 @@ def ilen(seq):
 
 # TODO: tree-seq equivalent
 
-map = wrap_mapper(map)
+
 imap = wrap_mapper(imap)
-filter = wrap_selector(filter)
 ifilter = wrap_selector(ifilter)
+
+if sys.version_info[0] == 2:
+    map = wrap_mapper(map)
+    filter = wrap_selector(filter)
+else:
+    def map(f, *seqs):
+        return list(imap(f, *seqs))
+    def filter(pred, seq):
+        return list(ifilter(pred, seq))
+
 
 def remove(pred, seq):
     return list(iremove(pred, seq))

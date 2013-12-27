@@ -1,5 +1,6 @@
 from whatever import _
 
+from funcy.cross import filter
 from funcy.funcolls import *
 
 

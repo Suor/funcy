@@ -1,14 +1,17 @@
+import sys
 from collections import Iterator
 from operator import add
 import re
 import pytest
 from whatever import _
 
+from funcy.cross import xrange, is_pypy
 from funcy.seqs import *
 
 
 def test_repeatedly():
-    c = count().next
+    counter = count()
+    c = lambda: next(counter)
     assert take(2, repeatedly(c)) == [0, 1]
 
 def test_iterate():
@@ -60,6 +63,8 @@ def test_map():
     assert map(1, ['abc', '123']) == ['b', '2']
     assert map(slice(2), ['abc', '123']) == ['ab', '12']
 
+@pytest.mark.skipif(sys.version_info[0] == 3,
+                    reason="map(None, ...) doesn't work in python 3")
 def test_map_multi():
     assert map(None, [1, 2, 3], 'abc') == [(1, 'a'), (2, 'b'), (3, 'c')]
 

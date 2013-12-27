@@ -2,8 +2,8 @@ from inspect import isbuiltin
 from functools import wraps
 from operator import itemgetter
 from collections import Mapping, Set
-from itertools import ifilter, ifilterfalse
 
+from .cross import ifilter, ifilterfalse, basestring
 from .simple_funcs import identity
 from .strings import re_tester, re_finder, _re_type
 
@@ -18,7 +18,7 @@ def make_func(f, builtin=False, test=False):
         # pass None to builtin as predicate or mapping function for speed
         return None if builtin else \
                bool if test else identity
-    elif isinstance(f, (str, unicode, _re_type)):
+    elif isinstance(f, (basestring, _re_type)):
         return re_tester(f) if test else re_finder(f)
     elif isinstance(f, (int, slice)):
         return itemgetter(f)

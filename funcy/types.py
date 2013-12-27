@@ -1,5 +1,7 @@
 from collections import Mapping, Sequence, Iterator, Iterable
 
+from .cross import xrange
+
 
 __all__ = ('isa', 'is_mapping', 'is_seq', 'is_list',
            'is_seqcoll', 'is_seqcont',

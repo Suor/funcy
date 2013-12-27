@@ -1,7 +1,7 @@
 import re
 from operator import methodcaller
-from itertools import imap
 
+from .cross import imap
 from .primitives import EMPTY
 from .simple_funcs import identity, iffy
 

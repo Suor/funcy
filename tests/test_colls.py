@@ -179,6 +179,13 @@ def test_izip_dicts():
     assert list(izip_dicts({1: 10}, {1: 20, 2: 30})) == [(1, (10, 20))]
     with pytest.raises(TypeError): list(izip_dicts())
 
+
+# These things are named differently in python 3
+try:
+    from funcy.colls import lwhere as where, lpluck as pluck, linvoke as invoke
+except ImportError:
+    pass
+
 def test_where():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
     assert where(data, a=1) == [{'a': 1, 'b': 2}]

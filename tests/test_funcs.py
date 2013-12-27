@@ -1,6 +1,7 @@
 from operator import __add__, __sub__
 from whatever import _
 
+from funcy.cross import map
 from funcy.funcs import *
 
 
@@ -35,6 +36,7 @@ def test_complement():
 
 def test_juxt():
     assert juxt(__add__, __sub__)(10, 2) == [12, 8]
+    assert map(juxt(_ + 1, _ - 1), [2, 3]) == [[3, 1], [4, 2]]
 
 def test_iffy():
     assert map(iffy(_ % 2, _ * 2, _ / 2), [1,2,3,4]) == [2,1,6,2]

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 import time
+from itertools import chain
 
+from .cross import imap, basestring
 from .decorators import decorator
 
 
@@ -69,12 +71,12 @@ def format_time(sec):
 ### Call signature stringification utils
 
 def signature_repr(call):
-    args_repr = map(smart_repr, call._args)
-    kwargs_repr = ['%s=%s' % (key, smart_repr(value)) for key, value in call._kwargs.items()]
-    return '%s(%s)' % (call._func.__name__, ', '.join(args_repr + kwargs_repr))
+    args_repr = imap(smart_repr, call._args)
+    kwargs_repr = ('%s=%s' % (key, smart_repr(value)) for key, value in call._kwargs.items())
+    return '%s(%s)' % (call._func.__name__, ', '.join(chain(args_repr, kwargs_repr)))
 
 def smart_repr(value):
-    if isinstance(value, (str, unicode)):
+    if isinstance(value, basestring):
         return repr(value)
     else:
         return str(value)
