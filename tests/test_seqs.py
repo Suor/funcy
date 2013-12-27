@@ -118,6 +118,9 @@ def test_split():
 
 def test_split_at():
     assert split_at(2, range(5)) == [[0, 1], [2, 3, 4]]
+
+@pytest.mark.xfail(is_pypy, reason="Exception class is messed up in pypy")
+def test_split_at_pred():
     # This behaviour moved to split_by()
     with pytest.raises(ValueError): split_at(_ % 2, range(5))
 
