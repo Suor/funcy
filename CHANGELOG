@@ -1,3 +1,5 @@
+- published idistinct(), isplit(), isplit_at(), isplit_by()
+
 0.8
 - added raiser()
 - added idistinct()
