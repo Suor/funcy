@@ -250,6 +250,8 @@ def _icut_iter(drop_tail, n, step, seq):
 def _icut(drop_tail, n, step, seq=EMPTY):
     if seq is EMPTY:
         step, seq = n, step
+    # NOTE: range() is capable of slicing in python 3,
+    #       so this implementation could be updated
     if isinstance(seq, Sequence) and not isinstance(seq, xrange):
         return _icut_seq(drop_tail, n, step, seq)
     else:
