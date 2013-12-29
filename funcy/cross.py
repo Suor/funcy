@@ -17,6 +17,3 @@ except ImportError:
 
     def filter(f, seq):
         return list(_filter(f, seq))
-
-import sys
-is_pypy = hasattr(sys, 'pypy_translation_info')
