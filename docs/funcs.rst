@@ -101,7 +101,8 @@ Function logic
     Enables creating functions by short-circuiting several behaviours::
 
         get_amount = some_fn(
-            compose(int, r'(\d+) wheels?'),
+            lambda s: 4 if 'set of' in s else None,
+            r'(\d+) wheels?',
             compose({'one': 1, 'two': 2, 'pair': 2}, r'(\w+) wheels?')
         )
 
