@@ -18,7 +18,7 @@ def test_some_fn():
 
 
 def test_extended_fns():
-    f = any_fn(None, {1,2,0})
+    f = any_fn(None, set([1,2,0]))
     assert f(1)
     assert f(0)
     assert f(10)

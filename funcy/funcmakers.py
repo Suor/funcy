@@ -36,7 +36,7 @@ def make_pred(pred, builtin=False):
 def _wrap_higher_order(func, test):
     # NOTE: builtin housekeeping is optimization:
     #       map(None, ...) is much faster than map(identity, ...)
-    builtin = isbuiltin(func) or func in {ifilter, ifilterfalse}
+    builtin = isbuiltin(func) or func in set([ifilter, ifilterfalse])
     return wraps(func)(lambda f, *seqs: func(make_func(f, builtin=builtin, test=test), *seqs))
 
 def wrap_mapper(func):

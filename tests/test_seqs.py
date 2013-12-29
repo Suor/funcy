@@ -59,7 +59,7 @@ def test_map():
     assert map(None, [2, 3]) == [2, 3]
     assert map(r'\d+', ['a2', '13b']) == ['2', '13']
     assert map({'a': 1, 'b': 2}, 'ab') == [1, 2]
-    assert map({1,2,3}, [0, 1, 2]) == [False, True, True]
+    assert map(set([1,2,3]), [0, 1, 2]) == [False, True, True]
     assert map(1, ['abc', '123']) == ['b', '2']
     assert map(slice(2), ['abc', '123']) == ['ab', '12']
 
@@ -71,7 +71,7 @@ def test_map_multi():
 def test_filter():
     assert filter(None, [2, 3, 0]) == [2, 3]
     assert filter(r'\d+', ['a2', '13b', 'c']) == ['a2', '13b']
-    assert filter({1,2,3}, [0, 1, 2, 4, 1]) == [1, 2, 1]
+    assert filter(set([1,2,3]), [0, 1, 2, 4, 1]) == [1, 2, 1]
 
 def test_remove():
     assert remove(_ > 3, range(10)) == [0, 1, 2, 3]
