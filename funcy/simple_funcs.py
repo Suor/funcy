@@ -26,6 +26,24 @@ def curry(func, n=EMPTY):
     else:
         return lambda x: curry(lambda *y: func(x, *y), n - 1)
 
+
+def autocurry(func, n=EMPTY, _args=(), _kwargs={}):
+    if n is EMPTY:
+        n = func.__code__.co_argcount
+
+    def autocurried(*a, **kw):
+        args = _args + a
+        kwargs = _kwargs.copy()
+        kwargs.update(kw)
+
+        if len(args) + len(kwargs) >= n:
+            return func(*args, **kwargs)
+        else:
+            return autocurry(func, n, _args=args, _kwargs=kwargs)
+
+    return autocurried
+
+
 def iffy(pred, action=EMPTY, default=identity):
     if action is EMPTY:
         return iffy(bool, pred)

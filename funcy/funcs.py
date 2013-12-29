@@ -7,7 +7,7 @@ from .funcmakers import make_func
 
 
 __all__ = ['identity', 'constantly', 'caller',
-           'partial', 'curry', 'compose', 'complement',
+           'partial', 'curry', 'autocurry', 'compose', 'complement',
            'juxt', 'ijuxt',
            'iffy']
 

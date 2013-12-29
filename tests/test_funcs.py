@@ -1,4 +1,5 @@
 from operator import __add__, __sub__
+import pytest
 from whatever import _
 
 from funcy.cross import map
@@ -22,6 +23,22 @@ def test_curry():
     assert curry(_ * _)(6)(7) == 42
     assert curry(__add__, 2)(10)(1) == 11
     assert curry(lambda x,y,z: x+y+z)('a')('b')('c') == 'abc'
+
+def test_autocurry():
+    at = autocurry(lambda a, b, c: (a, b, c))
+
+    assert at(1)(2)(3) == (1, 2, 3)
+    assert at(1, 2)(3) == (1, 2, 3)
+    assert at(1)(2, 3) == (1, 2, 3)
+    assert at(1, 2, 3) == (1, 2, 3)
+    with pytest.raises(TypeError): at(1, 2, 3, 4)
+    with pytest.raises(TypeError): at(1, 2)(3, 4)
+
+    assert at(a=1, b=2, c=3) == (1, 2, 3)
+    assert at(c=3)(1, 2) == (1, 2, 3)
+    assert at(c=4)(c=3)(1, 2) == (1, 2, 3)
+    with pytest.raises(TypeError): at(a=1)(1, 2, 3)
+
 
 def test_compose():
     double = _ * 2

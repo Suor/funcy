@@ -43,6 +43,20 @@ Functions
     But see :func:`re_tester` if you really need this.
 
 
+.. function:: autocurry(func[, n])
+
+    Constructs a version of ``func`` returning it's partial application if insufficient arguments passed::
+
+        def remainder(what, by):
+            return what % by
+        rem = autocurry(remainder)
+
+        assert rem(10, 3) == rem(10)(3) == rem()(10, 3) == 1
+        assert map(rem(by=3), range(5)) == [0, 1, 2, 0, 1]
+
+    Can clean your code a bit when :func:`partial` makes it too cluttered.
+
+
 .. function:: compose(*fs)
 
     Returns composition of functions::

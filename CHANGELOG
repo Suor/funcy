@@ -1,5 +1,6 @@
 - added experimental python 3 support
 - added python 2.6 support
+- added autocurry()
 - published idistinct(), isplit(), isplit_at(), isplit_by()
 
 0.8
