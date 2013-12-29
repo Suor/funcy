@@ -12,12 +12,12 @@ __all__ = ['identity', 'constantly', 'caller',
            'iffy']
 
 
-# NOTE: could be optimized in two ways:
-#       1. Don't use an `identity` in reduce if fs is not empty.
-#       2. Use special `pair` version depending on fs[-1] signature.
 def compose(*fs):
-    pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
-    return reduce(pair, imap(make_func, fs), identity)
+    if fs:
+        pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
+        return reduce(pair, imap(make_func, fs))
+    else:
+        return identity
 
 def complement(pred):
     return compose(__not__, pred)
