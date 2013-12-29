@@ -2,6 +2,7 @@
 - added python 2.6 support
 - added autocurry()
 - published idistinct(), isplit(), isplit_at(), isplit_by()
+- some optimizations
 
 0.8
 - added raiser()

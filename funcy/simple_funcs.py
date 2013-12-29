@@ -1,3 +1,5 @@
+from functools import partial as _partial
+
 from .primitives import EMPTY
 
 
@@ -15,6 +17,7 @@ def caller(*a, **kw):
 def partial(func, *args, **kwargs):
     return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
+
 def curry(func, n=EMPTY):
     if n is EMPTY:
         n = func.__code__.co_argcount
@@ -24,7 +27,7 @@ def curry(func, n=EMPTY):
     elif n == 2:
         return lambda x: lambda y: func(x, y)
     else:
-        return lambda x: curry(lambda *y: func(x, *y), n - 1)
+        return lambda x: curry(_partial(func, x), n - 1)
 
 
 def autocurry(func, n=EMPTY, _args=(), _kwargs={}):
