@@ -55,16 +55,13 @@ def nth(n, seq):
     return next(islice(seq, n, n+1), None)
 
 def last(seq):
-    if hasattr(seq, '__getslice__'):
-        try:
-            return seq[-1]
-        except IndexError:
-            return None
-
-    item = None
-    for item in iter(seq):
-        pass
-    return item
+    try:
+        return first(reversed(seq))
+    except TypeError:
+        item = None
+        for item in iter(seq):
+            pass
+        return item
 
 def rest(seq):
     return drop(1, seq)
