@@ -333,6 +333,7 @@ Split and chunk
 ---------------
 
 .. function:: split(pred, seq)
+              isplit(pred, seq)
 
     Splits sequence items which pass predicate from ones that don't, essentially returning a tuple ``filter(pred, seq), remove(pred, seq)``.
 
@@ -346,11 +347,13 @@ Split and chunk
 
 
 .. function:: split_at(n, seq)
+              isplit_at(n, seq)
 
     Splits sequence at given position, returning a tuple ``take(n, seq), list(drop(n, seq))``.
 
 
 .. function:: split_by(pred, seq)
+              isplit_by(pred, seq)
 
     Splits start of sequence, consisting of items passing predicate, from the rest of it. Works similar to ``takewhile(pred, seq), dropwhile(pred, seq)``, but returns lists and works with iterator ``seq`` correctly::
 
