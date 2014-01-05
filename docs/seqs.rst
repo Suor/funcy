@@ -1,8 +1,6 @@
 Sequences
 =========
 
-.. .. module:: seqs
-
 This functions are aimed at manipulating finite and infinite sequences of values. Some functions have two flavors: one returning list and other returning possibly infinite iterator, the latter ones follow convention of prepending ``i`` before list-returning function name.
 
 When working with sequences, see also :mod:`itertools` standard module. Funcy reexports and aliases some functions from it.
@@ -115,6 +113,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
         drop(3, [2, 3, 4, 5]) # iter([5])
         drop(3, count(5))     # count(8)
         drop(3, 'ab')         # empty iterator
+
 
 .. function:: first(seq)
 
@@ -245,13 +244,13 @@ Most of functions in this section support :ref:`extended_fns`. Among other thing
 .. function:: map(pred, seq)
               imap(pred, seq)
 
-    Extended versions of :func:`python:map` and :func:`~itertools.imap`.
+    Extended versions of :func:`py:map` and :func:`~itertools.imap`.
 
 
 .. function:: filter(pred, seq)
               ifilter(pred, seq)
 
-    Extended versions of :func:`python:filter` and :func:`~itertools.ifilter`.
+    Extended versions of :func:`py:filter` and :func:`~itertools.ifilter`.
 
 
 .. function:: remove(pred, seq)

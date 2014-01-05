@@ -8,6 +8,14 @@ Welcome to funcy documentation!
 
 Funcy is designed to be a layer of functional tools over python.
 
+Special topics:
+
+.. toctree::
+   :maxdepth: 1
+
+   python3
+   extended_fns
+
 
 Contents:
 
@@ -25,7 +33,6 @@ Contents:
    objects
    debug
    primitives
-   extended_fns
 
 You can also `look at the code <https://github.com/Suor/funcy>`_ or `create an issue <https://github.com/Suor/funcy/issues?state=open>`_.
 
