@@ -147,6 +147,5 @@ TODO
 - merge_with(), zip_with()
 - starfilter()
 - one argument select*()? other name?
-- distinct() to work with unhashable values, id_func?
 - reversed() to work with iterators?
 - vector chained boolean test (like perl 6 [<])
