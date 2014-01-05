@@ -158,7 +158,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
 .. function:: last(seq)
 
-    Returns last item in sequence. Returns ``None`` if sequence is empty. Tries to be efficient when sequence supports indexed access and fallbacks to iterating over it if not.
+    Returns last item in sequence. Returns ``None`` if sequence is empty. Tries to be efficient when sequence supports indexed or reversed access and fallbacks to iterating over it if not.
 
 
 .. function:: rest(seq)
@@ -177,7 +177,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
     Especially useful in conjunction with filtering or slicing functions, for example, this way one can find common start length of two strings::
 
-        ilen(takewhile(lambda (x,y): x == y, zip(s1, s2)))
+        ilen(takewhile(lambda (x, y): x == y, zip(s1, s2)))
 
 
 Unite
