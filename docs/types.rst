@@ -13,9 +13,10 @@ Type testing
 .. function:: is_mapping(value)
               is_seq(value)
               is_list(value)
+              is_tuple(value)
               is_iter(value)
 
-    These functions check if value is ``Mapping``, ``Sequence``, ``list`` or iterator respectively.
+    These functions check if value is ``Mapping``, ``Sequence``, ``list``, ``tuple`` or iterator respectively.
 
 
 .. function:: is_seqcoll(value)
