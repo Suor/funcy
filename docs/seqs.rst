@@ -219,6 +219,8 @@ Unite
 
     Flattens arbitrary nested sequence of values and other sequences. ``follow`` argument determines whether to unpack each item. By default it dives into lists, tuples and iterators, see :func:`is_seqcont` for further explanation.
 
+    See also :func:`cat` or :func:`icat` if you need to flatten strictly two-level sequence of sequences.
+
 
 .. function:: interleave(*seqs)
 
