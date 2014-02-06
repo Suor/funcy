@@ -17,7 +17,9 @@ def memoize(func):
 
     @wraps(func)
     def wrapper(*args):
-        if args not in cache:
+        try:
+            return cache[args]
+        except KeyError:
             try:
                 cache[args] = func(*args)
             except SkipMemoization as e:

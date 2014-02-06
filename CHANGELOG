@@ -1,4 +1,5 @@
 - added is_tuple()
+- optimized @memoize
 
 0.9
 - added experimental python 3 support
