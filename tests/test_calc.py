@@ -4,6 +4,20 @@ import pytest
 from funcy.calc import *
 
 
+def test_memoize():
+    calls = []
+
+    @memoize
+    def inc(x):
+        calls.append(x)
+        return x + 1
+
+    assert inc(0) == 1
+    assert inc(1) == 2
+    assert inc(0) == 1
+    assert calls == [0, 1]
+
+
 def test_make_lookuper():
     @make_lookuper
     def letter_index():
