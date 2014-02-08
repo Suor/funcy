@@ -112,19 +112,19 @@ def test_distinct():
     assert distinct(['ab', 'cb', 'ad'], key=0) == ['ab', 'cb']
 
 def test_split():
-    assert split(_ % 2, range(5)) == [[1, 3], [0, 2, 4]]
+    assert split(_ % 2, range(5)) == ([1, 3], [0, 2, 4])
     # This behaviour moved to split_at()
     with pytest.raises(TypeError): split(2, range(5))
 
 def test_split_at():
-    assert split_at(2, range(5)) == [[0, 1], [2, 3, 4]]
+    assert split_at(2, range(5)) == ([0, 1], [2, 3, 4])
 
 def test_split_at_pred():
     # This behaviour moved to split_by()
     with pytest.raises(ValueError): split_at(_ % 2, range(5))
 
 def test_split_by():
-    assert split_by(_ % 2, [1, 2, 3]) == [[1], [2, 3]]
+    assert split_by(_ % 2, [1, 2, 3]) == ([1], [2, 3])
 
 def test_group_by():
     assert group_by(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}

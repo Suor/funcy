@@ -1,5 +1,8 @@
 - added is_tuple()
+- optimized i?split(), split_at() and split_by()
 - optimized @memoize
+Backward incompatible changes:
+- split(), split_at() and split_by() now return a tuple of two lists instead of list of them
 
 0.9
 - added experimental python 3 support

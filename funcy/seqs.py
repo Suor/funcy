@@ -184,26 +184,45 @@ def idistinct(seq, key=EMPTY):
                 yield item
 
 
+@wrap_selector
 def isplit(pred, seq):
-    a, b = tee(seq)
-    return ifilter(pred, a), iremove(pred, b)
+    yes, no = deque(), deque()
+    splitter = (yes.append(item) if pred(item) else no.append(item) for item in seq)
 
+    def _isplit(q):
+        while True:
+            while q:
+                yield q.popleft()
+            next(splitter)
+
+    return _isplit(yes), _isplit(no)
+
+@wrap_selector
 def split(pred, seq):
-    return map(list, isplit(pred, seq))
+    yes, no = [], []
+    for item in seq:
+        if pred(item):
+            yes.append(item)
+        else:
+            no.append(item)
+    return yes, no
+
 
 def isplit_at(n, seq):
     a, b = tee(seq)
     return islice(a, n), islice(b, n, None)
 
 def split_at(n, seq):
-    return map(list, isplit_at(n, seq))
+    a, b = isplit_at(n, seq)
+    return list(a), list(b)
 
 def isplit_by(pred, seq):
     a, b = tee(seq)
     return takewhile(pred, a), dropwhile(pred, b)
 
 def split_by(pred, seq):
-    return map(list, isplit_by(pred, seq))
+    a, b = isplit_by(pred, seq)
+    return list(a), list(b)
 
 
 @wrap_mapper
