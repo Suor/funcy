@@ -1,8 +1,11 @@
 - added is_tuple()
 - optimized i?split(), split_at() and split_by()
 - optimized @memoize
+- optimized and cleaned up @cached_property
+- support del @cached_property
 Backward incompatible changes:
 - split(), split_at() and split_by() now return a tuple of two lists instead of list of them
+- @cached_property no longer uses _name to store cached value
 
 0.9
 - added experimental python 3 support

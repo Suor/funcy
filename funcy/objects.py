@@ -6,18 +6,24 @@ from .strings import cut_prefix
 __all__ = ['cached_property', 'monkey']
 
 
-def cached_property(func):
-    cache_attname = '_' + func.__name__
+class cached_property(object):
+    """
+    Decorator that converts a method with a single self argument into a
+    property cached on the instance.
 
-    def getter(self):
-        if not hasattr(self, cache_attname):
-            setattr(self, cache_attname, func(self))
-        return getattr(self, cache_attname)
+    NOTE: implementation borrowed from Django.
+    NOTE: we use fget, fset and fdel attributes to mimic @property.
+    """
+    fset = fdel = None
 
-    def setter(self, value):
-        setattr(self, cache_attname, value)
+    def __init__(self, fget):
+        self.fget = fget
 
-    return property(getter, setter)
+    def __get__(self, instance, type=None):
+        if instance is None:
+            return self
+        res = instance.__dict__[self.fget.__name__] = self.fget(instance)
+        return res
 
 
 def monkey(cls):
