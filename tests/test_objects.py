@@ -5,16 +5,22 @@ from funcy.objects import *
 ### @cached_property
 
 def test_set_cached_property():
+    calls = [0]
+
     class A(object):
         @cached_property
         def prop(self):
+            calls[0] += 1
             return 7
 
     a = A()
     assert a.prop == 7
+    assert a.prop == 7
+    assert calls == [1]
 
     a.prop = 42
     assert a.prop == 42
+
 
 
 ### Monkey tests
