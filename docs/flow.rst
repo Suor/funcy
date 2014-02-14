@@ -24,7 +24,7 @@ Flow
     Same as :func:`silent`, but able to specify ``errors`` to catch and ``default`` to return in case of error caught. ``errors`` can either be exception class or tuple of them.
 
 
-.. function:: raiser(exception_or_class, *args, **kwargs)
+.. function:: raiser(exception_or_class=Exception, *args, **kwargs)
 
     Constructs function that raises given exception with given arguments on any invocation.
 

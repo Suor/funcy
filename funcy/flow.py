@@ -12,7 +12,7 @@ __all__ = ['raiser', 'ignore', 'silent', 'retry', 'fallback',
 
 ### Error handling utilities
 
-def raiser(exception_or_class, *args, **kwargs):
+def raiser(exception_or_class=Exception, *args, **kwargs):
     def _raiser(*a, **kw):
         if args or kwargs:
             raise exception_or_class(*args, **kwargs)

@@ -12,6 +12,9 @@ def test_raiser():
     class MyError(Exception):
         pass
 
+    with pytest.raises(Exception) as e: raiser()()
+    assert e.type is Exception
+
     with pytest.raises(MyError): raiser(MyError)()
     with pytest.raises(MyError) as e: raiser(MyError, 'some message')()
     assert e.value.args == ('some message',)
