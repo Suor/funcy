@@ -8,7 +8,7 @@ from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import chain, tee
 from functools import reduce
 
-from .cross import basestring, xrange
+from .cross import basestring, xrange, izip
 from .primitives import EMPTY
 from .funcs import identity, partial, compose, complement
 from .funcmakers import wrap_mapper, wrap_selector
@@ -168,7 +168,7 @@ def some(pred, seq=EMPTY):
 #     return all(compare, izip(seq, rest(seq))
 
 def zipdict(keys, vals):
-    return dict(zip(keys, vals))
+    return dict(izip(keys, vals))
 
 def flip(mapping):
     def flip_pair(pair):

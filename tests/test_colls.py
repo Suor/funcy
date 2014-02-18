@@ -167,6 +167,9 @@ def test_some():
     assert some(_ > 3, range(10)) == 4
 
 
+def test_zipdict():
+    assert zipdict([1, 2], 'ab') == {1:'a', 2:'b'}
+
 def test_flip():
     assert flip({'a':1, 'b':2}) == {1:'a', 2:'b'}
 
