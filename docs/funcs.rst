@@ -18,14 +18,19 @@ Functions
 
 .. function:: partial(func, *args, **kwargs)
 
-    Like :func:`functools.partial` but returns real function. Which is useful when, for example, you want to create a method of it::
-
-        setattr(self, 'get_%s_display' % field.name, partial(_get_FIELD_display, field))
-
-    Can be also used in a variety of ways, same as :mod:`functools` version. DSLs is one of them::
+    A re-export of :func:`functools.partial`. Can be used in a variety of ways. DSLs is one of them::
 
         field = dict
         json_field = partial(field, json=True)
+
+
+.. function:: func_partial(func, *args, **kwargs)
+
+    Like :func:`partial` but returns a real function. Which is useful when, for example, you want to create a method of it::
+
+        setattr(self, 'get_%s_display' % field.name, func_partial(_get_FIELD_display, field))
+
+    Note: use :func:`partial` if you are ok to get callable object instead of function as it's faster.
 
 
 .. function:: curry(func[, n])

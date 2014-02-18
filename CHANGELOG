@@ -8,6 +8,7 @@
 Backward incompatible changes:
 - split(), split_at() and split_by() now return a tuple of two lists instead of list of them
 - @cached_property no longer uses _name to store cached value
+- partial() is now an alias to functools.partial, use func_partial() for old behaviour
 
 0.9
 - added experimental python 3 support

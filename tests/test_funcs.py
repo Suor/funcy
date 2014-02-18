@@ -17,6 +17,12 @@ def test_partial():
     assert partial(merge, a='abra')(b='cadabra') == 'abracadabra'
     assert partial(merge, b='abra')(a='cadabra') == 'cadabraabra'
 
+def test_func_partial():
+    class A(object):
+        f = func_partial(lambda x, self: x + 1, 10)
+
+    assert A().f() == 11
+
 def test_curry():
     assert curry(lambda: 42)() == 42
     assert curry(_ * 2)(21) == 42

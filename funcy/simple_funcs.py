@@ -1,4 +1,4 @@
-from functools import partial as _partial
+from functools import partial
 
 from .primitives import EMPTY
 
@@ -14,7 +14,11 @@ def caller(*a, **kw):
     return lambda f: f(*a, **kw)
 
 # not using functools.partial to get real function
-def partial(func, *args, **kwargs):
+def func_partial(func, *args, **kwargs):
+    """
+    A functools.partial alternative, which is a real function.
+    Can be used to construct methods.
+    """
     return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
 
@@ -27,7 +31,7 @@ def curry(func, n=EMPTY):
     elif n == 2:
         return lambda x: lambda y: func(x, y)
     else:
-        return lambda x: curry(_partial(func, x), n - 1)
+        return lambda x: curry(partial(func, x), n - 1)
 
 
 def autocurry(func, n=EMPTY, _args=(), _kwargs={}):
