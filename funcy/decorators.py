@@ -35,6 +35,9 @@ def make_call(func, args, kwargs):
     # NOTE: we use class enclosed this way instead of creating normal object with attributes
     #       cause it's much faster
     class Call(object):
+        # TODO: optimize it by using static __call__,
+        #       ultimately if there is no args and kwargs we can do:
+        #           Call.__call__ = staticmethod(func)
         def __call__(self, *a, **kw):
             return func(*(args + a), **dict(kwargs, **kw))
 
