@@ -111,6 +111,10 @@ def test_distinct():
     assert distinct([{}, {}, {'a': 1}, {'b': 2}], key=len) == [{}, {'a': 1}]
     assert distinct(['ab', 'cb', 'ad'], key=0) == ['ab', 'cb']
 
+# Separate test as split() is not implemented via it.
+def test_isplit():
+    assert map(list, isplit(_ % 2, range(5))) == [[1, 3], [0, 2, 4]]
+
 def test_split():
     assert split(_ % 2, range(5)) == ([1, 3], [0, 2, 4])
     # This behaviour moved to split_at()
