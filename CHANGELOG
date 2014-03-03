@@ -1,3 +1,4 @@
+0.10
 - added is_tuple()
 - raiser() can now be called without arguments, defaults to Exception
 - support del @cached_property
