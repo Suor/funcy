@@ -205,13 +205,12 @@ def invoke(objects, name, *args, **kwargs):
     return map(methodcaller(name, *args, **kwargs), objects)
 
 
-### For Python 3
+if sys.version_info[0] == 3:
+    def lwhere(mappings, **cond):
+        return list(where(mappings, **cond))
 
-def lwhere(mappings, **cond):
-    return list(where(mappings, **cond))
+    def lpluck(key, mappings):
+        return list(pluck(key, mappings))
 
-def lpluck(key, mappings):
-    return list(pluck(key, mappings))
-
-def linvoke(objects, name, *args, **kwargs):
-    return list(invoke(objects, name, *args, **kwargs))
+    def linvoke(objects, name, *args, **kwargs):
+        return list(invoke(objects, name, *args, **kwargs))
