@@ -232,6 +232,7 @@ def group_by(f, seq):
         result[f(item)].append(item)
     return result
 
+# TODO: better name? group_by_multi? multi_group? group_by_features?
 @wrap_mapper
 def group_by_keys(get_keys, seq):
     result = defaultdict(list)
@@ -239,6 +240,27 @@ def group_by_keys(get_keys, seq):
         for k in get_keys(item):
             result[k].append(item)
     return result
+
+# TODO: group_by_values()? better name?
+#       - group_by_second()
+#       - group_keys()
+#       - group_first()
+#       - flipgroup() / groupflip() / flip_n_group() # should these treat dicts specially?
+# def group_by_values(seq_or_dict):
+#     result = defaultdict(list)
+#     for key, value in iteritems(seq_or_dict):
+#         result[value].append(key)
+#     return result
+#
+# TODO: a generalization:
+# def group_something_by_something(key, extract, seq):
+#     result = defaultdict(list)
+#     for item in seq:
+#         result[key(item)].append(extract(item))
+#     return result
+#
+# NOTE: furter generalization is possible with multiple keys per item
+#       and, probably, even multiple extracts.
 
 @wrap_mapper
 def count_by(f, seq):
