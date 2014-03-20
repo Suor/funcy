@@ -71,3 +71,17 @@ def test_decorator_with_method():
     assert inc(A.ten_cls)() == 11
     assert inc(A.ten_cls)() == 11
     assert inc(A.ten_static)() == 11
+
+
+@pytest.mark.xfail
+def test_chain_arg_access():
+    @decorator
+    def decor(call):
+        return call.x + call()
+
+    @decor
+    @decor
+    def func(x):
+        return x
+
+    assert func(2) == 6
