@@ -259,6 +259,13 @@ def group_by_keys(get_keys, seq):
 #         result[key(item)].append(extract(item))
 #     return result
 #
+# def group_custom(seq, key=..., extract=..., keys=...): # custom_group()?
+#                                                        # extract -> value, permits values
+#     result = defaultdict(list)
+#     for item in seq:
+#         result[key(item)].append(extract(item))
+#     return result
+#
 # NOTE: furter generalization is possible with multiple keys per item
 #       and, probably, even multiple extracts.
 
