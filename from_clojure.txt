@@ -1,5 +1,7 @@
 # Things to steal from Clojure
 
+fnil
+
 ## Collections
 Generic ops: not_empty,p
 Content tests: not-all,p
