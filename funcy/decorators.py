@@ -21,42 +21,33 @@ def decorator(deco):
 def make_decorator(deco, dargs=(), dkwargs={}):
     def _decorator(func):
         def wrapper(*args, **kwargs):
-            call = make_call(func, args, kwargs)
+            call = Call(func, args, kwargs)
             return deco(call, *dargs, **dkwargs)
         return wraps(func)(wrapper)
     return _decorator
 
 
-def make_call(func, args, kwargs):
+class Call(object):
     """
-    Constructs a call object to pass as first argument to decorator.
+    A call object to pass as first argument to decorator.
     Call object is just a proxy for decorated function with call arguments saved in its attributes.
     """
-    # NOTE: we use class enclosed this way instead of creating normal object with attributes
-    #       cause it's much faster
-    class Call(object):
-        # TODO: optimize it by using static __call__,
-        #       ultimately if there is no args and kwargs we can do:
-        #           Call.__call__ = staticmethod(func)
-        def __call__(self, *a, **kw):
-            return func(*(args + a), **dict(kwargs, **kw))
+    def __init__(self, func, args, kwargs):
+        self._func, self._args, self._kwargs = func, args, kwargs
+        self._introspected = False
 
-        _args = args
-        _kwargs = kwargs
-        _func = func
+    def __call__(self, *a, **kw):
+        return self._func(*(self._args + a), **dict(self._kwargs, **kw))
 
-        def __getattr__(self, name):
-            if not inspect.isfunction(func):
-                raise TypeError("Can't introspect argument %s for non-function" % name)
-            if not self.__dict__:
-                self.__dict__ = getcallargs(func, *args, **kwargs)
-            try:
-                return self.__dict__[name]
-            except KeyError:
-                raise AttributeError("Function %s does not have argument %s" \
-                                     % (func.__name__, name))
-
-    return Call()
+    def __getattr__(self, name):
+        if not self._introspected:
+            self.__dict__.update(getcallargs(self._func, *self._args, **self._kwargs))
+            self._introspected = True
+        try:
+            return self.__dict__[name]
+        except KeyError:
+            raise AttributeError('Function %s does not have argument %s' \
+                                 % (self._func.__name__, name))
 
 
 def argcounts(func):

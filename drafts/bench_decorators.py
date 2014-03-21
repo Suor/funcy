@@ -16,19 +16,28 @@ def empty_f2(func):
         return func(*args, **kwargs)
     return wrapper
 
+import wrapt
+
+@wrapt.decorator
+def empty_wrapt(wrapped, instance, args, kwargs):
+    return wrapped(*args, **kwargs)
+
 
 f = lambda x: x
 f1 = empty_f(f)
 f2 = empty_f2(f)
+fw = empty_wrapt(f)
 
 l = range(100)
 
-def mf():
+def undecorated():
     return map(f, l)
-def mf1():
-    return map(f1, l)
-def mf2():
+def old_school_decorated():
     return map(f2, l)
+def funcy_decorated():
+    return map(f1, l)
+def wrapt_decorated():
+    return map(fw, l)
 
 def bench_test(test):
     print 'Benchmarking %s ...' % test.__name__
@@ -66,8 +75,7 @@ def format_time(sec):
         return '%s s' % sec
 
 
-bench_test(mf)
-bench_test(mf1)
-bench_test(mf2)
-
-
+bench_test(undecorated)
+bench_test(old_school_decorated)
+bench_test(funcy_decorated)
+bench_test(wrapt_decorated)
