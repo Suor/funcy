@@ -3,7 +3,7 @@ Sequences
 
 This functions are aimed at manipulating finite and infinite sequences of values. Some functions have two flavors: one returning list and other returning possibly infinite iterator, the latter ones follow convention of prepending ``i`` before list-returning function name.
 
-When working with sequences, see also :mod:`itertools` standard module. Funcy reexports and aliases some functions from it.
+When working with sequences, see also :mod:`py:itertools` standard module. Funcy reexports and aliases some functions from it.
 
 
 Generate
@@ -31,7 +31,7 @@ Generate
         imap(lambda x: x ** 2, count(1))
         # -> 1, 4, 9, 16, ...
 
-    Or annotate sequence using :func:`zip` or :func:`~itertools.izip`::
+    Or annotate sequence using :func:`py:zip` or :func:`~itertools.izip`::
 
         zip(count(), 'abcd')
         # -> [(0, 'a'), (1, 'b'), (2, 'c'), (3, 'd')]
@@ -40,7 +40,7 @@ Generate
         for line in izip(count(10, 10), code.splitlines()):
             print '%d %s' % line
 
-    See also :func:`enumerate` and original :func:`itertools.count` documentation.
+    See also :func:`py:enumerate` and original :func:`py:itertools.count` documentation.
 
 
 .. function:: cycle(seq)
@@ -90,7 +90,7 @@ Generate
 Manipulate
 ----------
 
-This section provides some robust tools for sequence slicing. Consider :ref:`slicings` or :func:`itertools.islice` for more generic cases.
+This section provides some robust tools for sequence slicing. Consider :ref:`py:slicings` or :func:`py:itertools.islice` for more generic cases.
 
 
 .. function:: take(n, seq)
@@ -139,7 +139,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`sli
 
     Returns second item in sequence. Returns ``None`` if there are less than two items in it.
 
-    Could come in handy with sequences of pairs, e.g. :meth:`dict.items`. Following code extract values of a dict sorted by keys::
+    Could come in handy with sequences of pairs, e.g. :meth:`py:dict.items`. Following code extract values of a dict sorted by keys::
 
         map(second, sorted(some_dict.items()))
 
@@ -187,7 +187,7 @@ Unite
 
     Concats several sequences into one. :func:`iconcat` returns an iterator yielding concatenation.
 
-    :func:`iconcat` is an alias for :func:`itertools.chain`.
+    :func:`iconcat` is an alias for :func:`py:itertools.chain`.
 
 
 .. function:: cat(seqs)
@@ -211,7 +211,7 @@ Unite
         # [list('atx'), list('apqx'), list('btx'), list('bpqx')]
 
 
-    :func:`icat` is an alias for :meth:`itertools.chain.from_iterable`.
+    :func:`icat` is an alias for :meth:`py:itertools.chain.from_iterable`.
 
 
 .. function:: flatten(seq, follow=is_seqcont)
@@ -231,7 +231,7 @@ Unite
 
     Returns an iterator yielding elements of ``seq`` separated by ``sep``.
 
-    Helpful when :meth:`str.join` is not good enough. This code is a part of translator working with operation node::
+    Helpful when :meth:`py:str.join` is not good enough. This code is a part of translator working with operation node::
 
         def visit_BoolOp(self, node):
             # ... do generic visit
@@ -391,7 +391,7 @@ Split and chunk
 
     .. group_by(lambda f: f.section, fields)
 
-    One can use :func:`split_by` when grouping by boolean predicate. See also :func:`itertools.groupby`.
+    One can use :func:`split_by` when grouping by boolean predicate. See also :func:`py:itertools.groupby`.
 
 
 .. function:: group_by_keys(get_keys, seq)
@@ -465,7 +465,7 @@ Data handling
                 print '    ',
             print line
 
-    See also :func:`ipartition_by` and :func:`itertools.groupby` for chunking sequence by condition.
+    See also :func:`ipartition_by` and :func:`py:itertools.groupby` for chunking sequence by condition.
 
 .. function:: pairwise(seq)
 

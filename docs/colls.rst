@@ -62,7 +62,7 @@ Most of functions in this section support :ref:`extended_fns`.r
         walk_keys(str.upper, {'a': 1, 'b': 2}) # {'A': 1, 'B': 2}
         walk_keys(int, json.loads(some_dict))  # restore key type lost in translation
 
-    Important to note that it preserves collection type whenever this is simple :class:`dict`, :class:`~collections.defaultdict`, :class:`~collections.OrderedDict` or any other mapping class or a collection of pairs.
+    Important to note that it preserves collection type whenever this is simple :class:`py:dict`, :class:`~py:collections.defaultdict`, :class:`~py:collections.OrderedDict` or any other mapping class or a collection of pairs.
 
 
 .. function:: walk_values(f, coll)
@@ -74,7 +74,7 @@ Most of functions in this section support :ref:`extended_fns`.r
         clean_values = walk_values(int, form_values)
         sorted_groups = walk_values(sorted, groups)
 
-    Hint: you can use :func:`partial(sorted, key=...) <partial>` instead of :func:`sorted` to sort in non-default way.
+    Hint: you can use :func:`partial(sorted, key=...) <partial>` instead of :func:`py:sorted` to sort in non-default way.
 
 
 .. function:: select(pred, coll)

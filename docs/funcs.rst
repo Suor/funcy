@@ -18,7 +18,7 @@ Functions
 
 .. function:: partial(func, *args, **kwargs)
 
-    A re-export of :func:`functools.partial`. Can be used in a variety of ways. DSLs is one of them::
+    A re-export of :func:`py:functools.partial`. Can be used in a variety of ways. DSLs is one of them::
 
         field = dict
         json_field = partial(field, json=True)

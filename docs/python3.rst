@@ -19,7 +19,7 @@ You can do that two ways: writing python 2 code that works in python 3 or vice v
 
     # write python 3 style code here
 
-You can even import :func:`map`, :func:`imap`, :func:`filter`, :func:`ifilter`, :func:`zip` and :func:`~itertools.izip`.
+You can even import :func:`map`, :func:`imap`, :func:`filter`, :func:`ifilter`, :func:`py:zip` and :func:`~itertools.izip`.
 
 
 Full table of python dependent function names
@@ -30,7 +30,7 @@ Python 2 / list         Python 2 / iterator     Python 3 / list       Python 3 /
 ======================  ======================= ===================== ==========================
 :func:`map`             :func:`imap`            :func:`lmap`          :func:`map`
 :func:`filter`          :func:`ifilter`         :func:`lfilter`       :func:`filter`
-:func:`zip` (built-in)  :func:`~itertools.izip` :func:`lzip`          :func:`py3:zip` (built-in)
+:func:`py:zip`          :func:`~itertools.izip` :func:`lzip`          :func:`py3:zip`
 :func:`remove`          :func:`iremove`         :func:`lremove`       :func:`remove`
 :func:`keep`            :func:`ikeep`           :func:`lkeep`         :func:`keep`
 :func:`without`         :func:`iwithout`        :func:`lwithout`      :func:`without`
