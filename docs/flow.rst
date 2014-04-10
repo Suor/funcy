@@ -3,7 +3,7 @@ Flow
 
 .. decorator:: silent
 
-    Ignore all real exceptions (descendants of :class:`py:Exception`). Handy for cleaning data such as user input::
+    Ignore all real exceptions (descendants of :exc:`~py:exceptions.Exception`). Handy for cleaning data such as user input::
 
 
         brand_id = silent(int)(request.GET['brand_id'])
@@ -31,16 +31,29 @@ Flow
 
 .. decorator:: retry(tries, errors=Exception)
 
+    Every call of decorated function retried up to ``tries`` times if any subclass of ``errors`` occurs (could be exception class or a tuple of them).
+
 
 .. function:: fallback(*approaches)
 
+    Tries several approaches until one works. Each approach is either callable or a tuple ``(callable, errors)``, where errors is an exception class or a tuple of classes, which signal to fall back to next approach. If ``errors`` is not supplied then fall back is done for any :exc:`~py:exceptions.Exception`::
 
-..
-    def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
-    """
-    If function fails to complete `fails` times in a row,
-    calls to it will be intercepted for `timeout` with `exception` raised instead.
-    """
+        fallback(
+            (partial(send_mail, admin_mail, message), SMTPException),
+            partial(log.error, message),
+            raiser(FeedbackError, "Unable to log error")
+        )
+
+
+.. function:: limit_error_rate(fails, timeout, exception=ErrorRateExceeded)
+
+    If function fails to complete ``fails`` times in a row, calls to it will be intercepted for ``timeout`` with ``exception`` raised instead. A clean way to short-circuit function taking too long to fail::
+
+        @limit_error_rate(fails=5, timeout=60, exception=RequestError('Temporary unavailable'))
+        def do_request(query):
+            # ... make a http request
+            return data
+
 
 .. decorator:: collecting
 
