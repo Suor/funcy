@@ -72,32 +72,54 @@ Functions
 
 
 .. function:: juxt(*fs)
-.. function:: ijuxt(*fs)
+              ijuxt(*fs)
+
+    Takes several functions and returns a new function that is the juxtaposition of those. The resulting function takes a variable number of arguments, and returns a list or iterator containing the result of applying each function to the arguments.
+
+
+.. function:: iffy([pred], action, [default=identity])
+
+    Returns function, which conditionally, depending on ``pred``, applies ``action`` or  ``default``. If ``default`` is not callable then it is returned as is from resulting function. E.g. this will call all callable values leaving rest of them as is::
+
+        map(iffy(callable, caller()), values)
+
+    Common use it to deal with messy data::
+
+        dirty_data = ['hello', None, 'bye']
+        map(iffy(len), dirty_data)              # => [5, None, 3]
+        map(iffy(isa(str), len, 0), dirty_data) # => [5, 0, 3], also safer
+
 
 
 Function logic
 --------------
 
+This family of functions supports creating predicates from other predicates and regular expressions.
+
+
 .. function:: complement(pred)
 
-    ::
+    Constructs a predicate of passed function, i.e. a function returning a boolean opposite of original function::
 
-        is_private = re_tester('^_')
+        is_private = re_tester(r'^_')
         is_public = complement(is_private)
 
+        # or just
+        is_piblic = complement(r'^_')
 
-.. function:: iffy([pred], action, [default=identity])
 
 .. function:: all_fn(*fs)
+              any_fn(*fs)
+              none_fn(*fs)
+              one_fn(*fs)
+
+    Constructs a predicate returning ``True`` when all, any, none or exactly one of ``fs`` return ``True``. Support short-circuit behavior.
 
     ::
 
         is_even_int = all_fn(isa(int), even)
 
 
-.. function:: any_fn(*fs)
-.. function:: none_fn(*fs)
-.. function:: one_fn(*fs)
 
 .. function:: some_fn(*fs)
 
