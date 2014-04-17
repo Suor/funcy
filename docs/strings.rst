@@ -2,6 +2,33 @@ String utils
 ============
 
 .. function:: re_find(regex, s, flags=0)
+
+    Finds ``regex`` in ``s``, returning the match in most simple form guessed by captures in given regular expression:
+
+    ================================= ==================================
+    Captures                          Return value
+    ================================= ==================================
+    no captures                       a matched string
+    single positional capture         a substring matched by capture
+    only positional captures          a tuple of substrings for captures
+    only named captures               a dict of substrings for captures
+    mixed pos/named captures          a match object
+    ================================= ==================================
+
+    Returns ``None`` on mismatch.
+
+    ::
+
+        # Find first number in a line
+        silent(int)(re_find(r'\d+', line))
+
+        # Find number of men in a line
+        re_find(r'(\d+) m[ae]n', line)
+
+        # Parse uri into nice dict
+        re_find(r'^/post/(?P<id>\d+)/(?P<action>\w+)$', uri)
+
+
 .. function:: re_test(regex, s, flags=0)
 .. function:: re_iter(regex, s, flags=0)
 .. function:: re_all(regex, s, flags=0)
