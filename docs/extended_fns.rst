@@ -5,15 +5,15 @@ Extended predicate/mapper semantics
 
 Many of funcy functions expecting predicate or mapping function as an argument can take something uncallable instead of it with semantics described in this table:
 
-============  ================================= =================================
-f passed      Predicate                         Mapping function
-============  ================================= =================================
-``None``      bool                              :func:`identity <identity>`
-string        :func:`re_tester(f) <re_tester>`  :func:`re_finder(f) <re_finder>`
-int or slice  ``itemgetter(f)``                 ``itemgetter(f)``
-mapping       ``f.get``                         ``f.get``
-set           ``lambda x: x in f``              ``lambda x: x in f``
-============  ================================= =================================
+============   =================================  =================================
+f passed       Function                           Predicate
+============   =================================  =================================
+``None``       :func:`identity <identity>`        bool
+string         :func:`re_finder(f) <re_finder>`   :func:`re_tester(f) <re_tester>`
+int or slice   ``itemgetter(f)``                  ``itemgetter(f)``
+mapping        ``f.get``                          ``f.get``
+set            ``lambda x: x in f``               ``lambda x: x in f``
+============   =================================  =================================
 
 
 Supporting functions
