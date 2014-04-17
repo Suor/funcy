@@ -14,3 +14,21 @@ Objects
 
 
 .. decorator:: @monkey(cls_or_module)
+
+    Monkey-patches class or module by adding decorated function or property to it. Saves overwritten method to ``original`` attribute of decorated function for a kind of inheritance::
+
+        # A simple caching of all get requests,
+        # even for models for which you can't easily change Manager
+        @monkey(QuerySet)
+        def get(self, *args, **kwargs):
+            if not args and list(kwargs) == ['pk']:
+                cache_key = '%s:%d' % (self.model, kwargs['pk'])
+                result = cache.get(cache_key)
+                if result is None:
+                    result = get.original(self, *args, **kwargs)
+                    cache.set(cache_key, result)
+                return result
+            else:
+                return get.original(self, *args, **kwargs)
+
+    :func:`monkey` returns original function, this way you can monkey-patch several classes or modules at once.
