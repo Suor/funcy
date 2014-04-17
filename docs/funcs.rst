@@ -133,3 +133,4 @@ This family of functions supports creating predicates from other predicates and 
             compose({'one': 1, 'two': 2, 'pair': 2}, r'(\w+) wheels?')
         )
 
+    If you wonder how on Earth one can :func:`compose` dict and string see :ref:`extended_fns`.
