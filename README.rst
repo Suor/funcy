@@ -6,7 +6,7 @@ A collection of fancy functional tools focused on practicality.
 Inspired by clojure, underscore and my own abstractions. Keep reading to get an overview
 or `read the docs <http://funcy.readthedocs.org/>`_.
 
-Works with Python 2.6, 2.7, 3.3 (experimental) and pypy.
+Works with Python 2.6+, 3.3+ and pypy.
 
 
 Installation
