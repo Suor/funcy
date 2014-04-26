@@ -34,10 +34,16 @@ def test_first():
     assert first(count(7)) == 7
     assert first([]) is None
 
+def test_second():
+    assert second('xyz') == 'y'
+    assert second(count(7)) == 8
+    assert second('x') is None
+
 def test_last():
     assert last('xyz') == 'z'
     assert last(xrange(1, 10)) == 9
     assert last([]) is None
+    assert last(x for x in 'xyz') == 'z'
 
 def test_nth():
     assert nth(0, 'xyz') == 'x'
@@ -155,6 +161,7 @@ def test_partition():
 def test_chunks():
     assert chunks(2, range(5)) == [[0, 1], [2, 3], [4]]
     assert chunks(2, 1, range(4)) == [[0, 1], [1, 2], [2, 3], [3]]
+    assert chunks(3, 1, iter(range(3))) == [[0, 1, 2], [1, 2], [2]]
 
 def test_partition_by():
     assert partition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
