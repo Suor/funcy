@@ -7,7 +7,8 @@ from .simple_funcs import identity, iffy
 
 
 __all__ = ['re_iter', 're_all', 're_find', 're_finder', 're_test', 're_tester',
-           'str_join']
+           'str_join',
+           'cut_prefix', 'cut_suffix']
 
 
 def _make_getter(regex):
