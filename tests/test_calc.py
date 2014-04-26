@@ -59,3 +59,32 @@ def test_silnent_lookuper_nested():
 
     assert function_table(sin)(5) == sin(5)
     assert function_table(cos)(-1) is None
+
+
+def test_cache():
+    calls = []
+
+    @cache(timeout=60)
+    def inc(x):
+        calls.append(x)
+        return x + 1
+
+    assert inc(0) == 1
+    assert inc(1) == 2
+    assert inc(0) == 1
+    inc.invalidate(0)
+    assert inc(0) == 1
+    assert calls == [0, 1, 0]
+
+
+def test_cache_timedout():
+    calls = []
+
+    @cache(timeout=0)
+    def inc(x):
+        calls.append(x)
+        return x + 1
+
+    assert inc(0) == 1
+    assert inc(0) == 1
+    assert calls == [0, 0]
