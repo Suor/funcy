@@ -9,6 +9,10 @@ from funcy.funcs import *
 def test_caller():
     assert caller([1, 2])(sum) == 3
 
+def test_constantly():
+    assert constantly(42)() == 42
+    assert constantly(42)('hi', 'there', volume='shout') == 42
+
 def test_partial():
     assert partial(__add__, 10)(1) == 11
     assert partial(__add__, 'abra')('cadabra') == 'abracadabra'
@@ -49,6 +53,8 @@ def test_autocurry():
 def test_compose():
     double = _ * 2
     inc    = _ + 1
+    assert compose()(10) == 10
+    assert compose(double)(10) == 20
     assert compose(inc, double)(10) == 21
     assert compose(str, inc, double)(10) == '21'
     assert compose(int, r'\d+')('abc1234xy') == 1234

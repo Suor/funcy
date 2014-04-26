@@ -13,6 +13,9 @@ def test_any_fn():
 def test_none_fn():
     assert filter(none_fn(_ > 3, _ % 2), range(10)) == [0, 2]
 
+def test_one_fn():
+    assert filter(one_fn(_ > 3, _ % 2), range(10)) == [1, 3, 4, 6, 8]
+
 def test_some_fn():
     assert some_fn(_-1, _*0, _+1, _*2)(1) == 2
 
