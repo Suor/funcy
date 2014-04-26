@@ -30,8 +30,19 @@ String utils
 
 
 .. function:: re_test(regex, s, flags=0)
-.. function:: re_iter(regex, s, flags=0)
+
+    Tests whether ``regex`` can be found in ``s``.
+
+
 .. function:: re_all(regex, s, flags=0)
+              re_iter(regex, s, flags=0)
+
+    Returns a list or iterator of all matches of ``regex`` in ``s``. Matches are presented in most simple form possible, see table in :func:`re_find` docs.
+
+    ::
+
+        # A fast and dirty way to parse ini section into dict
+        dict(re_iter('(\w+)=(\w+)', ini_text))
 
 
 .. function:: re_finder(regex, flags=0)
