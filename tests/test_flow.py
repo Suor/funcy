@@ -8,9 +8,11 @@ def test_silent():
     assert silent(int)('hello') is None
 
 
+class MyError(Exception):
+    pass
+
+
 def test_raiser():
-    class MyError(Exception):
-        pass
 
     with pytest.raises(Exception) as e: raiser()()
     assert e.type is Exception
@@ -21,6 +23,42 @@ def test_raiser():
 
     with pytest.raises(MyError): raiser(MyError('some message'))()
     with pytest.raises(MyError): raiser(MyError)('junk', keyword='junk')
+
+
+def test_retry():
+    calls = []
+
+    def failing(n=1):
+        if len(calls) < n:
+            calls.append(1)
+            raise MyError
+        return 1
+
+    with pytest.raises(MyError): failing()
+    calls = []
+    assert retry(2, MyError)(failing)() == 1
+    calls = []
+    with pytest.raises(MyError): retry(2, MyError)(failing)(2)
+
+
+def test_fallback():
+    assert fallback(raiser(), lambda: 1) == 1
+    with pytest.raises(Exception): fallback((raiser(), MyError), lambda: 1)
+    assert fallback((raiser(MyError), MyError), lambda: 1) == 1
+
+
+def test_limit_error_rate():
+    calls = []
+
+    @limit_error_rate(2, 60, MyError)
+    def limited(x):
+        calls.append(x)
+        raise TypeError
+
+    with pytest.raises(TypeError): limited(1)
+    with pytest.raises(TypeError): limited(2)
+    with pytest.raises(MyError): limited(3)
+    assert calls == [1, 2]
 
 
 def test_post_processing():
