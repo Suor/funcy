@@ -11,10 +11,10 @@ Flow
 
     And in data import/transform::
 
-        choices = {1: 'a', 2: ' b', 4: ' c '}
-        get_caption = compose(silent(string.strip), choices)
-        map(get_caption, [0, 1, 2, 3, 4])
-        # -> [None, 'a', 'b', None, 'c']
+        choices = {'a': 1, 'b': 2, 'c': 3}
+        get_caption = compose(choices, silent(string.strip))
+        map(get_caption, ['a', ' b', 'c\n'])
+        # -> [1, 2, 3]
 
     .. note:: avoid silencing non-primitive functions, use :func:`ignore` instead and even then be careful not to swallow exceptions unintentionally.
 
