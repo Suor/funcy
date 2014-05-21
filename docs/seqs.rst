@@ -264,7 +264,7 @@ Most of functions in this section support :ref:`extended_fns`. Among other thing
 
         remove(re_tester('^\s+$'), lines)
 
-    Note, you can rewrite it shorter using :ref:`extended predicate semantics <extended_fns>`::
+    Note, you can rewrite it shorter using :ref:`extended_fns`::
 
         remove('^\s+$', lines)
 

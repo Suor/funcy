@@ -1,6 +1,6 @@
 .. _extended_fns:
 
-Extended predicate/mapper semantics
+Extended function semantics
 ===================================
 
 Many of funcy functions expecting predicate or mapping function as an argument can take something uncallable instead of it with semantics described in this table:
@@ -19,7 +19,7 @@ set            ``lambda x: x in f``               ``lambda x: x in f``
 Supporting functions
 --------------------
 
-Here is a full list of functions supporting extended predicate/mapper semantics:
+Here is a full list of functions supporting extended function semantics:
 
 ========================= ==============================================================
 Group                     Functions
