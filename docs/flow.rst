@@ -11,12 +11,11 @@ Flow
 
     And in data import/transform::
 
-        choices = {'a': 1, 'b': 2, 'c': 3}
-        get_caption = compose(choices, silent(string.strip))
-        map(get_caption, ['a', ' b', 'c\n'])
-        # -> [1, 2, 3]
+        get_greeting = compose(silent(string.lower), re_finder(r'(\w+)!'))
+        map(get_greeting, ['a!', ' B!', 'c.'])
+        # -> ['a', 'b', None]
 
-    .. note:: avoid silencing non-primitive functions, use :func:`ignore` instead and even then be careful not to swallow exceptions unintentionally.
+    .. note:: Avoid silencing non-primitive functions, use :func:`ignore` instead and even then be careful not to swallow exceptions unintentionally.
 
 
 .. decorator:: ignore(errors, default=None)
