@@ -4,7 +4,7 @@ from funcy.objects import *
 
 ### @cached_property
 
-def test_set_cached_property():
+def test_cached_property():
     calls = [0]
 
     class A(object):
@@ -21,6 +21,9 @@ def test_set_cached_property():
     a.prop = 42
     assert a.prop == 42
 
+    del a.prop
+    assert a.prop == 7
+    assert calls == [2]
 
 
 ### Monkey tests
