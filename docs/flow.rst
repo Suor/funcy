@@ -38,9 +38,9 @@ Flow
     Tries several approaches until one works. Each approach is either callable or a tuple ``(callable, errors)``, where errors is an exception class or a tuple of classes, which signal to fall back to next approach. If ``errors`` is not supplied then fall back is done for any :exc:`~py:exceptions.Exception`::
 
         fallback(
-            (partial(send_mail, admin_mail, message), SMTPException),
+            (partial(send_mail, ADMIN_EMAIL, message), SMTPException),
             partial(log.error, message),
-            raiser(FeedbackError, "Unable to log error")
+            raiser(FeedbackError, "Unable to notify admin")
         )
 
 
