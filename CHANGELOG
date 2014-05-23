@@ -1,3 +1,4 @@
+- fixed @retry in python 3
 Backward incompatible changes:
 - function made from dict will now use __getitem__ instead of get.
   Means possible KeyErrors for dicts and factory function calls for defaultdict.
