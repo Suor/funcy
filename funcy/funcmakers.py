@@ -23,7 +23,7 @@ def make_func(f, builtin=False, test=False):
     elif isinstance(f, (int, slice)):
         return itemgetter(f)
     elif isinstance(f, Mapping):
-        return f.get
+        return f.__getitem__
     elif isinstance(f, Set):
         return f.__contains__
     else:

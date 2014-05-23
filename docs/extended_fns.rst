@@ -11,7 +11,7 @@ f passed       Function                           Predicate
 ``None``       :func:`identity <identity>`        bool
 string         :func:`re_finder(f) <re_finder>`   :func:`re_tester(f) <re_tester>`
 int or slice   ``itemgetter(f)``                  ``itemgetter(f)``
-mapping        ``f.get``                          ``f.get``
+mapping        ``lambda x: f[x]``                 ``lambda x: f[x]``
 set            ``lambda x: x in f``               ``lambda x: x in f``
 ============   =================================  =================================
 
