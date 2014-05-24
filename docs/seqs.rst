@@ -383,20 +383,21 @@ Split and chunk
 
 .. function:: group_by(f, seq)
 
-    Returns a dict of the elements of ``seq`` keyed by the result of ``f`` on each element. The value at each key will be a list of the corresponding elements, in the order they appeared in ``seq``.
+    Groups elements of ``seq`` keyed by the result of ``f``. The value at each key will be a list of the corresponding elements, in the order they appear in ``seq``. Returns :class:`defaultdict(list) <py:collections.defaultdict>`.
+
     ::
 
-        group_by(len, ['a', 'ab', 'b'])
-        # -> {1: ['a', 'b'], 2: ['ab']}
-
-    .. group_by(lambda f: f.section, fields)
+        stats = group_by(len, ['a', 'ab', 'b'])
+        stats[1] # -> ['a', 'b']
+        stats[2] # -> ['ab']
+        stats[3] # -> [], since stats is defaultdict
 
     One can use :func:`split_by` when grouping by boolean predicate. See also :func:`py:itertools.groupby`.
 
 
 .. function:: group_by_keys(get_keys, seq)
 
-    Groups elements of ``seq`` having multiple keys each. Can be used to reverse grouping::
+    Groups elements of ``seq`` having multiple keys each into :class:`defaultdict(list) <py:collections.defaultdict>`. Can be used to reverse grouping::
 
         posts_by_tag = group_by_keys(attrgetter(tags), posts)
         sentences_with_word = group_by_keys(str.split, sentences)
@@ -477,9 +478,9 @@ Data handling
 
 .. function:: count_by(f, seq)
 
-    Counts number of occurrences of values of ``f`` on elements of ``seq`` and returns a dict of counts.
+    Counts number of occurrences of values of ``f`` on elements of ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts.
 
-    Calculation a histogram is one common use::
+    Calculating a histogram is one common use::
 
         # Get a length histogram of given words
         count_by(len, words)
