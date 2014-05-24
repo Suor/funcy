@@ -76,6 +76,12 @@ Most of functions in this section support :ref:`extended_fns`.r
 
     Hint: you can use :func:`partial(sorted, key=...) <partial>` instead of :func:`py:sorted` to sort in non-default way.
 
+    Note that ``walk_values()`` has special handling for :class:`defaultdicts <py:collections.defaultdict>`. It constructs new one with values mapped the same as for ordinary dict, but a default factory of new ``defaultdict`` would be a composition of ``f`` and old default factory::
+
+        d = defaultdict(lambda: 'default', a='hi', b='bye')
+        walk_values(str.upper, d)
+        # -> defaultdict(lambda: 'DEFAULT', a='HI', b='BYE')
+
 
 .. function:: select(pred, coll)
 
