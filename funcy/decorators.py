@@ -1,5 +1,5 @@
 import inspect
-from functools import wraps
+from functools import partial
 
 
 __all__ = ['decorator']
@@ -13,9 +13,9 @@ def decorator(deco):
         # A decorator with arguments is essentialy a decorator fab
         def decorator_fab(*dargs, **dkwargs):
             return make_decorator(deco, dargs, dkwargs)
-        return wraps(deco)(decorator_fab)
+        return safe_wraps(deco)(decorator_fab)
     else:
-        return wraps(deco)(make_decorator(deco))
+        return safe_wraps(deco)(make_decorator(deco))
 
 
 def make_decorator(deco, dargs=(), dkwargs={}):
@@ -23,7 +23,7 @@ def make_decorator(deco, dargs=(), dkwargs={}):
         def wrapper(*args, **kwargs):
             call = Call(func, args, kwargs)
             return deco(call, *dargs, **dkwargs)
-        return wraps(func)(wrapper)
+        return safe_wraps(func)(wrapper)
     return _decorator
 
 
@@ -53,6 +53,29 @@ class Call(object):
 def argcounts(func):
     spec = inspect.getargspec(func)
     return (len(spec.args), bool(spec.varargs), bool(spec.keywords))
+
+
+### Versions of wraps ans update_wrapper that will work with method_descriptors and such.
+
+WRAPPER_ASSIGNMENTS = ('__module__', '__name__', '__doc__')
+WRAPPER_UPDATES = ('__dict__',)
+def safe_update_wrapper(wrapper,
+                   wrapped,
+                   assigned = WRAPPER_ASSIGNMENTS,
+                   updated = WRAPPER_UPDATES):
+    for attr in assigned:
+        setattr(wrapper, attr, getattr(wrapped, attr,  None))
+    for attr in updated:
+        getattr(wrapper, attr).update(getattr(wrapped, attr, {}))
+    # Return the wrapper so this can be used as a decorator via partial()
+    return wrapper
+
+
+def safe_wraps(wrapped,
+          assigned = WRAPPER_ASSIGNMENTS,
+          updated = WRAPPER_UPDATES):
+    return partial(safe_update_wrapper, wrapped=wrapped,
+                   assigned=assigned, updated=updated)
 
 
 ### Backport of inspect.getcallargs for python 2.6

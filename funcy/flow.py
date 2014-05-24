@@ -1,8 +1,7 @@
 from datetime import datetime, timedelta
-from functools import wraps
 
 from .cross import imap, xrange
-from .decorators import decorator
+from .decorators import decorator, safe_wraps
 
 
 __all__ = ['raiser', 'ignore', 'silent', 'retry', 'fallback',
@@ -25,7 +24,7 @@ def raiser(exception_or_class=Exception, *args, **kwargs):
 # since @ignore and @silent should be used for very simple and fast functions
 def ignore(errors, default=None):
     def decorator(func):
-        @wraps(func)
+        @safe_wraps(func)
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
@@ -72,7 +71,7 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
         func.fails = 0
         func.blocked = None
 
-        @wraps(func)
+        @safe_wraps(func)
         def wrapper(*args, **kwargs):
             if func.blocked:
                 if datetime.now() - func.blocked < timeout:

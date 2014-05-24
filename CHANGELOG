@@ -1,4 +1,6 @@
 - fixed @retry in python 3
+- @silent, @ignore() and decorators created with @decorator will now work
+  with method_descriptors and other non-wrappable callables.
 Backward incompatible changes:
 - function made from dict will now use __getitem__ instead of get.
   Means possible KeyErrors for dicts and factory function calls for defaultdict.

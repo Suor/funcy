@@ -73,6 +73,14 @@ def test_decorator_with_method():
     assert inc(A.ten_static)() == 11
 
 
+def test_decorator_with_method_descriptor():
+    @decorator
+    def exclaim(call):
+        return call() + '!'
+
+    assert exclaim(str.upper)('hi') == 'HI!'
+
+
 @pytest.mark.xfail
 def test_chain_arg_access():
     @decorator

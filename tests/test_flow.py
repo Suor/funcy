@@ -7,6 +7,8 @@ def test_silent():
     assert silent(int)('1') == 1
     assert silent(int)('hello') is None
 
+    assert silent(str.upper)('hello') == 'HELLO'
+
 
 class MyError(Exception):
     pass
