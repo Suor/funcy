@@ -3,9 +3,9 @@ Decorators
 
 .. decorator:: decorator
 
-    Transforms a flat wrapper into a decorator with arguments or not. ``@decorator`` passes special ``call`` object as first argument to a wrapper.
+    Transforms a flat wrapper into a decorator with or without arguments. ``@decorator`` passes special ``call`` object as a first argument to a wrapper.
 
-    An easy way to create decorators. Here is a simple logging decorator::
+    Here is a simple logging decorator::
 
         @decorator
         def log(call):
@@ -17,7 +17,9 @@ Decorators
         @decorator
         def with_phone(call):
             # call.request gets actual request value upon function call
-            phone = Phone.objects.get(number=call.request.GET['phone'])
+            request = call.request
+            # ...
+            phone = Phone.objects.get(number=request.GET['phone'])
             # phone arg is added to *args passed to decorated function
             return call(phone)
 
@@ -26,12 +28,28 @@ Decorators
             # ... some code using phone
             return # ...
 
-    You can easily create decorators with arguments too::
+    A better practice would be adding keyword argument not positional. This makes such decorators more composable::
+
+        @decorator
+        def with_phone(call):
+            # ...
+            return call(phone=phone)
+
+        @decorator
+        def with_user(call):
+            # ...
+            return call(user=user)
+
+        @with_phone
+        @with_user
+        def some_view(request, phone=None, user=None):
+            # ...
+            return # ...
+
+    If a function wrapped with ``@decorator`` has arguments other than ``call``, then decorator with arguments is created::
 
         @decorator
         def joining(call, sep):
-            return sep.join(imap(sep.__class__, call()))
-
-    Usage example shown in :func:`joining` docs.
+            return sep.join(call())
 
     You can see more examples in :mod:`flow` and :mod:`debug` submodules source code.
