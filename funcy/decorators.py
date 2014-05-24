@@ -41,7 +41,13 @@ class Call(object):
 
     def __getattr__(self, name):
         if not self._introspected:
-            self.__dict__.update(getcallargs(self._func, *self._args, **self._kwargs))
+            # Find real func to call getcallargs() on it
+            # We need to do it since our decorators don't preserve signature
+            func = self._func
+            while hasattr(func, '_wrapped'):
+                func = func._wrapped
+
+            self.__dict__.update(getcallargs(func, *self._args, **self._kwargs))
             self._introspected = True
         try:
             return self.__dict__[name]
@@ -67,6 +73,9 @@ def safe_update_wrapper(wrapper,
         setattr(wrapper, attr, getattr(wrapped, attr,  None))
     for attr in updated:
         getattr(wrapper, attr).update(getattr(wrapped, attr, {}))
+
+    wrapper._wrapped = wrapped
+
     # Return the wrapper so this can be used as a decorator via partial()
     return wrapper
 

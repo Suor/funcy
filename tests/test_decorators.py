@@ -81,7 +81,6 @@ def test_decorator_with_method_descriptor():
     assert exclaim(str.upper)('hi') == 'HI!'
 
 
-@pytest.mark.xfail
 def test_chain_arg_access():
     @decorator
     def decor(call):
