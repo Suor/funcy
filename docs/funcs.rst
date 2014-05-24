@@ -105,7 +105,7 @@ This family of functions supports creating predicates from other predicates and 
         is_public = complement(is_private)
 
         # or just
-        is_piblic = complement(r'^_')
+        is_public = complement(r'^_')
 
 
 .. function:: all_fn(*fs)
@@ -113,7 +113,7 @@ This family of functions supports creating predicates from other predicates and 
               none_fn(*fs)
               one_fn(*fs)
 
-    Constructs a predicate returning ``True`` when all, any, none or exactly one of ``fs`` return ``True``. Support short-circuit behavior.
+    Construct a predicates returning ``True`` when all, any, none or exactly one of ``fs`` return ``True``. Support short-circuit behavior.
 
     ::
 
