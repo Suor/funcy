@@ -16,7 +16,7 @@ def caller(*a, **kw):
 # not using functools.partial to get real function
 def func_partial(func, *args, **kwargs):
     """
-    A functools.partial alternative, which is a real function.
+    A functools.partial alternative, which returns a real function.
     Can be used to construct methods.
     """
     return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
