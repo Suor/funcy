@@ -31,7 +31,7 @@ Unite
 Transform and select
 --------------------
 
-Most of functions in this section support :ref:`extended_fns`.r
+All functions in this section support :ref:`extended_fns`.
 
 .. function:: walk(f, coll)
 
