@@ -1,4 +1,4 @@
-import inspect
+import sys, inspect
 from functools import partial
 
 
@@ -13,9 +13,9 @@ def decorator(deco):
         # A decorator with arguments is essentialy a decorator fab
         def decorator_fab(*dargs, **dkwargs):
             return make_decorator(deco, dargs, dkwargs)
-        return safe_wraps(deco)(decorator_fab)
+        return wraps(deco)(decorator_fab)
     else:
-        return safe_wraps(deco)(make_decorator(deco))
+        return wraps(deco)(make_decorator(deco))
 
 
 def make_decorator(deco, dargs=(), dkwargs={}):
@@ -23,7 +23,7 @@ def make_decorator(deco, dargs=(), dkwargs={}):
         def wrapper(*args, **kwargs):
             call = Call(func, args, kwargs)
             return deco(call, *dargs, **dkwargs)
-        return safe_wraps(func)(wrapper)
+        return wraps(func)(wrapper)
     return _decorator
 
 
@@ -43,10 +43,7 @@ class Call(object):
         if not self._introspected:
             # Find real func to call getcallargs() on it
             # We need to do it since our decorators don't preserve signature
-            func = self._func
-            while hasattr(func, '_wrapped'):
-                func = func._wrapped
-
+            func = unwrap(self._func)
             self.__dict__.update(getcallargs(func, *self._args, **self._kwargs))
             self._introspected = True
         try:
@@ -61,30 +58,57 @@ def argcounts(func):
     return (len(spec.args), bool(spec.varargs), bool(spec.keywords))
 
 
-### Versions of wraps ans update_wrapper that will work with method_descriptors and such.
+### Fix functools.wraps to make it safely work with callables without all the attributes
 
-WRAPPER_ASSIGNMENTS = ('__module__', '__name__', '__doc__')
-WRAPPER_UPDATES = ('__dict__',)
-def safe_update_wrapper(wrapper,
-                   wrapped,
-                   assigned = WRAPPER_ASSIGNMENTS,
-                   updated = WRAPPER_UPDATES):
-    for attr in assigned:
-        setattr(wrapper, attr, getattr(wrapped, attr,  None))
-    for attr in updated:
-        getattr(wrapper, attr).update(getattr(wrapped, attr, {}))
+# These are already safe in python 3.2
+if sys.version_info >= (3, 2):
+    from functools import update_wrapper, wraps
+else:
+    # These are for python 2, so list of attributes is far shorter.
+    # Python 3.2 and ealier will get reduced functionality, but we don't support it :)
+    WRAPPER_ASSIGNMENTS = ('__module__', '__name__', '__doc__')
+    WRAPPER_UPDATES = ('__dict__',)
+    # Copy-pasted these two from python 3.3 functools source code
+    def update_wrapper(wrapper,
+                       wrapped,
+                       assigned = WRAPPER_ASSIGNMENTS,
+                       updated = WRAPPER_UPDATES):
+        wrapper.__wrapped__ = wrapped
+        for attr in assigned:
+            try:
+                value = getattr(wrapped, attr)
+            except AttributeError:
+                pass
+            else:
+                setattr(wrapper, attr, value)
+        for attr in updated:
+            getattr(wrapper, attr).update(getattr(wrapped, attr, {}))
+        # Return the wrapper so this can be used as a decorator via partial()
+        return wrapper
 
-    wrapper._wrapped = wrapped
+    def wraps(wrapped,
+              assigned = WRAPPER_ASSIGNMENTS,
+              updated = WRAPPER_UPDATES):
+        return partial(update_wrapper, wrapped=wrapped,
+                       assigned=assigned, updated=updated)
 
-    # Return the wrapper so this can be used as a decorator via partial()
-    return wrapper
 
+### Backport of python 3.4 inspect.unwrap utility
 
-def safe_wraps(wrapped,
-          assigned = WRAPPER_ASSIGNMENTS,
-          updated = WRAPPER_UPDATES):
-    return partial(safe_update_wrapper, wrapped=wrapped,
-                   assigned=assigned, updated=updated)
+try:
+    from inspect import unwrap
+except ImportError:
+    # A simplified version, no stop keyword-only argument
+    def unwrap(func):
+        f = func  # remember the original func for error reporting
+        memo = set([id(f)]) # Memoise by id to tolerate non-hashable objects
+        while hasattr(func, '__wrapped__'):
+            func = func.__wrapped__
+            id_func = id(func)
+            if id_func in memo:
+                raise ValueError('wrapper loop when unwrapping {!r}'.format(f))
+            memo.add(id_func)
+        return func
 
 
 ### Backport of inspect.getcallargs for python 2.6
