@@ -6,6 +6,7 @@ Backward incompatible changes:
 - function made from dict will now use __getitem__ instead of get.
   Means possible KeyErrors for dicts and factory function calls for defaultdict.
   Use `a_dict.get` instead of just `a_dict` for old behaviour.
+- reverted imap(None, seq) to default strange behaviour.
 
 0.10.1
 - optimized @decorator

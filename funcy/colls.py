@@ -12,7 +12,7 @@ from .cross import basestring, xrange, izip
 from .primitives import EMPTY
 from .funcs import identity, partial, compose, complement
 from .funcmakers import wrap_mapper, wrap_selector
-from .seqs import take, imap, ifilter
+from .seqs import take, ximap, ifilter
 
 
 __all__ = ['empty', 'iteritems',
@@ -86,7 +86,7 @@ def walk(f, coll):
     Walk coll transforming it's elements with f.
     Same as map, but preserves coll type.
     """
-    return _factory(coll)(imap(f, iteritems(coll)))
+    return _factory(coll)(ximap(f, iteritems(coll)))
 
 @wrap_mapper
 def walk_keys(f, coll):
@@ -104,7 +104,7 @@ def walk_values(f, coll):
         k, v = pair
         return k, f(v)
 
-    return _factory(coll, mapper=f)(imap(pair_f, iteritems(coll)))
+    return _factory(coll, mapper=f)(ximap(pair_f, iteritems(coll)))
 
 # TODO: prewalk, postwalk and friends
 
@@ -134,18 +134,18 @@ def is_distinct(coll, key=EMPTY):
     if key is EMPTY:
         return len(coll) == len(set(coll))
     else:
-        return len(coll) == len(set(imap(key, coll)))
+        return len(coll) == len(set(ximap(key, coll)))
 
 
 def all(pred, seq=EMPTY):
     if seq is EMPTY:
         return _all(pred)
-    return _all(imap(pred, seq))
+    return _all(ximap(pred, seq))
 
 def any(pred, seq=EMPTY):
     if seq is EMPTY:
         return _any(pred)
-    return _any(imap(pred, seq))
+    return _any(ximap(pred, seq))
 
 none = complement(any)
 

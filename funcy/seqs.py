@@ -90,13 +90,21 @@ def ilen(seq):
 # TODO: tree-seq equivalent
 
 
+_imap = imap
 imap = wrap_mapper(imap)
 ifilter = wrap_selector(ifilter)
 
+
 if sys.version_info[0] == 2:
+    # NOTE: Default imap() behaves strange when passed None as function,
+    #       returns 1-length tuples, which is inconvinient and incompatible with map().
+    #       This version is more sane: map() compatible and suitable for our internal use.
+    def ximap(f, *seqs):
+        return _imap(make_func(f), *seqs)
     map = wrap_mapper(map)
     filter = wrap_selector(filter)
 else:
+    ximap = imap
     def map(f, *seqs):
         return list(imap(f, *seqs))
     def filter(pred, seq):
@@ -111,13 +119,13 @@ def keep(f, seq=EMPTY):
     if seq is EMPTY:
         return filter(bool, f)
     else:
-        return filter(bool, imap(f, seq))
+        return filter(bool, ximap(f, seq))
 
 def ikeep(f, seq=EMPTY):
     if seq is EMPTY:
         return ifilter(bool, f)
     else:
-        return ifilter(bool, imap(f, seq))
+        return ifilter(bool, ximap(f, seq))
 
 def iwithout(seq, *items):
     for value in seq:
@@ -148,10 +156,10 @@ def flatten(seq, follow=is_seqcont):
     return list(iflatten(seq, follow))
 
 def mapcat(f, *seqs):
-    return cat(imap(f, *seqs))
+    return cat(ximap(f, *seqs))
 
 def imapcat(f, *seqs):
-    return icat(imap(f, *seqs))
+    return icat(ximap(f, *seqs))
 
 def interleave(*seqs):
     return icat(izip(*seqs))

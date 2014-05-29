@@ -70,9 +70,17 @@ def test_map():
     assert map(slice(2), ['abc', '123']) == ['ab', '12']
 
 @pytest.mark.skipif(sys.version_info[0] == 3,
-                    reason="map(None, ...) with multiple sequences doesn't work in python 3")
+                    reason="map(None, ...) doesn't work in python 3")
 def test_map_multi():
     assert map(None, [1, 2, 3], 'abc') == [(1, 'a'), (2, 'b'), (3, 'c')]
+
+@pytest.mark.skipif(sys.version_info[0] == 3,
+                    reason="imap(None, ...) doesn't work in python 3")
+def test_imap_strange():
+    """
+    Demonstrates funcy.imap and itertools.imap have behavior when given None as f.
+    """
+    assert list(imap(None, 'abc')) == [('a',), ('b',), ('c',)]
 
 def test_filter():
     assert filter(None, [2, 3, 0]) == [2, 3]
