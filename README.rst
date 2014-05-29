@@ -142,7 +142,6 @@ Bring your ideas and/or code that can make functional python more fun.
 TODO
 ----
 
-- factor out data handling utils to separate file
 - create cheatsheet html
 - reject*(), disjoint*() collections
 - merge_with(), zip_with()

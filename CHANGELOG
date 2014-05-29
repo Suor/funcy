@@ -1,6 +1,7 @@
 - @silent, @ignore() and decorators created with @decorator will now work
   with method_descriptors and other non-wrappable callables.
 - chained decorators now have access to arguments by name
+- exposed cut_prefix() and cut_suffix()
 - fixed @retry in python 3
 Backward incompatible changes:
 - function made from dict will now use __getitem__ instead of get.
