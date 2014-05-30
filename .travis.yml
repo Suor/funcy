@@ -7,6 +7,7 @@ python:
   - "2.6"
   - "2.7"
   - "3.3"
+  - "3.4"
   - "pypy"
 
 ##-- install dependencies
@@ -23,3 +24,8 @@ script: py.test
 branches:
   only:
     - master
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
