@@ -1,4 +1,4 @@
-Funcy
+Funcy |Build Status|
 =====
 
 A collection of fancy functional tools focused on practicality.
@@ -149,3 +149,7 @@ TODO
 - one argument select*()? other name?
 - reversed() to work with iterators?
 - vector chained boolean test (like perl 6 [<])
+
+
+.. |Build Status| image:: https://travis-ci.org/Suor/funcy.svg?branch=master
+   :target: https://travis-ci.org/Suor/funcy
