@@ -10,10 +10,6 @@ python:
   - "3.4"
   - "pypy"
 
-##-- install dependencies
-virtualenv:
-  system_site_packages: true
-
 install:
  - "pip install -r test_requirements.txt --use-mirrors"
 
