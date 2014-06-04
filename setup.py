@@ -7,7 +7,7 @@ setup(
     author_email='suor.web@gmail.com',
 
     description='A fancy and practical functional tools',
-    long_description=open('README.rst').read(),
+    long_description=open('README.rst').read().replace('|Build Status|', '', 1),
     url='http://github.com/Suor/funcy',
     license='BSD',
 
