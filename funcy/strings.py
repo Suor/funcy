@@ -50,7 +50,9 @@ def re_finder(regex, flags=0):
     return lambda s: iffy(getter)(regex.search(s))
 
 def re_tester(regex, flags=0):
-    return lambda s: bool(re.search(regex, s, flags))
+    if not isinstance(regex, _re_type):
+        regex = re.compile(regex, flags)
+    return lambda s: bool(regex.search(s))
 
 
 def str_join(sep, seq=EMPTY):
