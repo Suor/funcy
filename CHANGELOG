@@ -1,3 +1,4 @@
+1.0.0
 - @silent, @ignore() and decorators created with @decorator will now work
   with method_descriptors and other non-wrappable callables.
 - chained decorators now have access to arguments by name
