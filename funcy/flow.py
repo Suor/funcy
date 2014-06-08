@@ -3,7 +3,7 @@ from collections import Hashable
 import threading
 
 from .cross import imap, xrange
-from .decorators import decorator, wraps
+from .decorators import decorator, wraps, arggetter
 
 
 __all__ = ['raiser', 'ignore', 'silent', 'retry', 'fallback',
@@ -117,14 +117,7 @@ def once_per(*argnames):
         done_set = set()
         done_list = list()
 
-        func_argnames = func.__code__.co_varnames[:func.__code__.co_argcount]
-        def get_arg(name, args, kwargs):
-            if name in kwargs:
-                return kwargs[name]
-            elif name in func_argnames:
-                return args[func_argnames.index(name)]
-            else:
-                raise TypeError("%s() doesn't have argument named %s" % (func.__name__, name))
+        get_arg = arggetter(func)
 
         @wraps(func)
         def wrapper(*args, **kwargs):
