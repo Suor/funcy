@@ -1,3 +1,4 @@
+- added @once and @once_per()
 - added is_set()
 
 1.0.0

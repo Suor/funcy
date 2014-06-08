@@ -78,3 +78,31 @@ def test_collecting():
             yield i * 2
 
     assert doubles([1, 2]) == [2, 4]
+
+
+def test_once():
+    calls = []
+
+    @once
+    def call(n):
+        calls.append(n)
+        return n
+
+    call(1)
+    call(2)
+    assert calls == [1]
+
+
+def test_once_per():
+    calls = []
+
+    @once_per('n')
+    def call(n):
+        calls.append(n)
+        return n
+
+    call(1)
+    call(2)
+    call(1)
+    assert calls == [1, 2]
+

@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+from collections import Hashable
+import threading
 
 from .cross import imap, xrange
 from .decorators import decorator, wraps
@@ -6,7 +8,8 @@ from .decorators import decorator, wraps
 
 __all__ = ['raiser', 'ignore', 'silent', 'retry', 'fallback',
            'limit_error_rate', 'ErrorRateExceeded',
-           'post_processing', 'collecting', 'joining']
+           'post_processing', 'collecting', 'joining',
+           'once', 'once_per']
 
 
 ### Error handling utilities
@@ -104,3 +107,38 @@ collecting = post_processing(list)
 @decorator
 def joining(call, sep):
     return sep.join(imap(sep.__class__, call()))
+
+
+### Initialization helpers
+
+def once_per(*argnames):
+    def once(func):
+        lock = threading.Lock()
+        done_set = set()
+        done_list = list()
+
+        func_argnames = func.__code__.co_varnames[:func.__code__.co_argcount]
+        def get_arg(name, args, kwargs):
+            if name in kwargs:
+                return kwargs[name]
+            elif name in func_argnames:
+                return args[func_argnames.index(name)]
+            else:
+                raise TypeError("%s() doesn't have argument named %s" % (func.__name__, name))
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            with lock:
+                values = tuple(get_arg(name, args, kwargs) for name in argnames)
+                if isinstance(values, Hashable):
+                    done, add = done_set, done_set.add
+                else:
+                    done, add = done_list, done_list.append
+
+                if values not in done:
+                    add(values)
+                    return func(*args, **kwargs)
+        return wrapper
+    return once
+
+once = once_per()
