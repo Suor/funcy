@@ -76,9 +76,31 @@ def join(colls):
 def merge(*colls):
     return join(colls)
 
-# postponed
-# def conj(coll, *xs):
-#     return merge(coll, xs)
+
+def join_with(f, dicts):
+    dicts = list(dicts)
+    if not dicts:
+        return {}
+    elif len(dicts) == 1:
+        return dicts[0]
+
+    lists = {}
+    for c in dicts:
+        for k, v in iteritems(c):
+            if k in lists:
+                lists[k].append(v)
+            else:
+                lists[k] = [v]
+
+    if f is not list:
+        # kind of walk_values() inplace
+        for k, v in lists:
+            lists[k] = f(v)
+
+    return f
+
+def merge_with(f, *dicts):
+    return join_with(f, dicts)
 
 
 def walk(f, coll):
