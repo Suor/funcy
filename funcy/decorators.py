@@ -37,7 +37,10 @@ class Call(object):
         self._introspected = False
 
     def __call__(self, *a, **kw):
-        return self._func(*(self._args + a), **dict(self._kwargs, **kw))
+        if not a and not kw:
+            return self._func(*self._args, **self._kwargs)
+        else:
+            return self._func(*(self._args + a), **dict(self._kwargs, **kw))
 
     def __getattr__(self, name):
         if not self._introspected:

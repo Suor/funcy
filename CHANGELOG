@@ -1,5 +1,6 @@
 - added @once and @once_per()
 - added is_set()
+- optimized @decorator
 
 1.0.0
 - @silent, @ignore() and decorators created with @decorator will now work
