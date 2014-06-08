@@ -66,6 +66,16 @@ def test_join_iter():
     assert isinstance(chained, Iterator) and list(chained) == [0,1,5,6]
 
 
+def test_merge_with():
+    assert merge_with(list, {1: 1}, {1: 10, 2: 2}) == {1: [1, 10], 2: [2]}
+    assert merge_with(sum, {1: 1}, {1: 10, 2: 2}) == {1: 11, 2: 2}
+    # Also works for collection of pairs
+    assert merge_with(sum, {1: 1}, {1: 10, 2: 2}.items()) == {1: 11, 2: 2}
+
+def test_join_with():
+    assert join_with(sum, ({n % 3: n} for n in range(5))) == {0: 3, 1: 5, 2: 2}
+
+
 def test_walk():
     assert eq(walk(inc, [1,2,3]), [2,3,4])
     assert eq(walk(inc, (1,2,3)), (2,3,4))

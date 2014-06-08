@@ -16,7 +16,7 @@ from .seqs import take, ximap, ifilter
 
 
 __all__ = ['empty', 'iteritems',
-           'join', 'merge',
+           'join', 'merge', 'join_with', 'merge_with',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
@@ -94,10 +94,10 @@ def join_with(f, dicts):
 
     if f is not list:
         # kind of walk_values() inplace
-        for k, v in lists:
+        for k, v in iteritems(lists):
             lists[k] = f(v)
 
-    return f
+    return lists
 
 def merge_with(f, *dicts):
     return join_with(f, dicts)
