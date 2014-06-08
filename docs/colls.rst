@@ -125,6 +125,21 @@ All functions in this section support :ref:`extended_fns`.
 Dict utils
 ----------
 
+.. function:: merge_with(f, *dicts)
+              join_with(f, dicts)
+
+    Merge several dicts combining values for same key with given function::
+
+        merge_with(list, {1: 1}, {1: 10, 2: 2})
+        # -> {1: [1, 10], 2: [2]}
+
+        merge_with(sum, {1: 1}, {1: 10, 2: 2})
+        # -> {1: 11, 2: 2}
+
+        join_with(first, ({n % 3: n} for n in range(100, 110)))
+        # -> {0: 102, 1: 100, 2: 101}
+
+
 .. function:: zipdict(keys, vals)
 
     Returns a dict with the ``keys`` mapped to the corresponding ``vals``. Stops pairing on shorter sequence end::
