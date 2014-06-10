@@ -3,13 +3,13 @@ from collections import Hashable
 import threading
 
 from .cross import imap, xrange
-from .decorators import decorator, wraps, arggetter
+from .decorators import decorator, wraps, get_argnames, arggetter
 
 
 __all__ = ['raiser', 'ignore', 'silent', 'suppress', 'retry', 'fallback',
            'limit_error_rate', 'ErrorRateExceeded',
            'post_processing', 'collecting', 'joining',
-           'once', 'once_per']
+           'once', 'once_per', 'once_per_args']
 
 
 ### Error handling utilities
@@ -169,3 +169,7 @@ def once_per(*argnames):
     return once
 
 once = once_per()
+
+def once_per_args(func):
+    print get_argnames(func)
+    return once_per(*get_argnames(func))(func)
