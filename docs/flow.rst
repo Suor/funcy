@@ -65,7 +65,12 @@ Flow
 
 .. decorator:: retry(tries, errors=Exception)
 
-    Every call of decorated function retried up to ``tries`` times if any subclass of ``errors`` occurs (could be exception class or a tuple of them).
+    Every call of decorated function retried up to ``tries`` times if any subclass of ``errors`` occurs (could be exception class or a tuple of them)::
+
+        @retry(3, errors=HttpError)
+        def download_image(url):
+            # ... make http request
+            return image
 
 
 .. function:: fallback(*approaches)
