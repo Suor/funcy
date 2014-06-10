@@ -171,5 +171,4 @@ def once_per(*argnames):
 once = once_per()
 
 def once_per_args(func):
-    print get_argnames(func)
     return once_per(*get_argnames(func))(func)
