@@ -27,6 +27,20 @@ def test_raiser():
     with pytest.raises(MyError): raiser(MyError)('junk', keyword='junk')
 
 
+def test_suppress():
+    with suppress(Exception):
+        raise Exception
+    with suppress(Exception):
+        raise MyError
+
+    with pytest.raises(TypeError):
+        with suppress(MyError):
+            raise TypeError
+
+    with suppress(TypeError, MyError):
+        raise MyError
+
+
 def test_retry():
     calls = []
 

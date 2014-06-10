@@ -1,5 +1,6 @@
 - added merge_with() and join_with()
 - added @once and @once_per()
+- added suppress() context manager
 - added is_set()
 - optimized @decorator
 - optimized nth() and last()
