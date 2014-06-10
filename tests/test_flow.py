@@ -14,8 +14,18 @@ class MyError(Exception):
     pass
 
 
-def test_raiser():
+def test_ignore():
+    assert ignore(Exception)(raiser(Exception))() is None
+    assert ignore(Exception)(raiser(MyError))() is None
+    assert ignore((TypeError, MyError))(raiser(MyError))() is None
 
+    with pytest.raises(TypeError):
+        ignore(MyError)(raiser(TypeError))()
+
+    assert ignore(MyError, default=42)(raiser(MyError))() == 42
+
+
+def test_raiser():
     with pytest.raises(Exception) as e: raiser()()
     assert e.type is Exception
 
