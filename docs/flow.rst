@@ -23,6 +23,15 @@ Flow
     Same as :func:`silent`, but able to specify ``errors`` to catch and ``default`` to return in case of error caught. ``errors`` can either be exception class or tuple of them.
 
 
+.. function:: suppress(*errors)
+
+    A context manager which suppresses given exceptions under its scope::
+
+        with suppress(HttpError):
+            # Assume this request can fail, and we are ok with it
+            make_http_request()
+
+
 .. function:: raiser(exception_or_class=Exception, *args, **kwargs)
 
     Constructs function that raises given exception with given arguments on any invocation.
