@@ -32,6 +32,32 @@ Flow
             make_http_request()
 
 
+.. decorator:: once
+               once_per_args
+               once_per(*argnames)
+
+    Call function only once, once for every combination of values of its arguments or once for every combination of given arguments. Thread safe. Handy for various initialization purposes::
+
+        # Global initialization
+        @once
+        def initialize_cache():
+            conn = some.Connection(...)
+            # ... set up everything
+
+        # Per argument initialization
+        @once_per_args
+        def initialize_language(lang):
+            conf = load_language_conf(lang)
+            # ... set up language
+
+        # Setup each class once
+        class SomeManager(Manager):
+            @once_per('cls')
+            def contribute_to_class(self, cls):
+                pre_save.connect(self._pre_save, sender=cls)
+                # ... set up signals, no dups
+
+
 .. function:: raiser(exception_or_class=Exception, *args, **kwargs)
 
     Constructs function that raises given exception with given arguments on any invocation.
