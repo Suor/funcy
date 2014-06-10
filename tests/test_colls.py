@@ -1,5 +1,5 @@
 import pytest
-from itertools import chain
+from itertools import chain, count
 from collections import Iterator, defaultdict
 from whatever import _
 
@@ -178,7 +178,8 @@ def test_some():
 
 
 def test_zipdict():
-    assert zipdict([1, 2], 'ab') == {1:'a', 2:'b'}
+    assert zipdict([1, 2], 'ab') == {1: 'a', 2:'b'}
+    assert zipdict('ab', count()) == {'a': 0, 'b': 1}
 
 def test_flip():
     assert flip({'a':1, 'b':2}) == {1:'a', 2:'b'}
