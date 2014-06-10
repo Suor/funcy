@@ -1,4 +1,5 @@
-from .primitives import *
+import sys
+
 from .calc import *
 from .colls import *
 from .decorators import *
@@ -14,11 +15,17 @@ from .debug import *
 from .primitives import *
 
 
-# Python 2 style zip() for Python 3
-import sys
+# Setup __all__
+modules = ('calc', 'colls', 'decorators', 'funcolls', 'funcs', 'seqs', 'types',
+           'strings', 'flow', 'objects', 'namespaces', 'debug', 'primitives')
+__all__ = cat(sys.modules['funcy.' + m].__all__ for m in modules)
 
+
+# Python 2 style zip() for Python 3
 if sys.version_info[0] == 3:
     _zip = zip
     def zip(*seqs):
         return list(_zip(*seqs))
-
+    __all__.append('zip')
+else:
+    zip = zip

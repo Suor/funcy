@@ -2,6 +2,9 @@ from .colls import walk_values
 from .funcs import iffy
 
 
+__all__ = ('namespace',)
+
+
 class namespace_meta(type):
     def __new__(cls, name, bases, attrs):
         attrs = walk_values(iffy(callable, staticmethod), attrs)
