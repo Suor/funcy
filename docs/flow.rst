@@ -88,6 +88,14 @@ Flow
             # ... make a http request
             return data
 
+    Can be combined with :func:`ignore` to silently stop trying for a while::
+
+        @ignore(ErrorRateExceeded, default={'id': None, 'name': 'Unknown'})
+        @limit_error_rate(fails=5, timeout=60)
+        def get_user(id):
+            # ... make a http request
+            return data
+
 
 .. decorator:: collecting
 
