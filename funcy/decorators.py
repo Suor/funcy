@@ -9,9 +9,9 @@ __all__ = ['decorator']
 
 def decorator(deco):
     # Any arguments after first become decorator arguments
-    args = argcounts(deco) != (1, False, False)
+    has_args = get_argcounts(deco) != (1, False, False)
 
-    if args:
+    if has_args:
         # A decorator with arguments is essentialy a decorator fab
         def decorator_fab(*dargs, **dkwargs):
             return make_decorator(deco, dargs, dkwargs)
@@ -52,14 +52,18 @@ class Call(object):
             raise AttributeError(*e.args)
 
 
-def argcounts(func):
+def get_argcounts(func):
     spec = inspect.getargspec(func)
     return (len(spec.args), bool(spec.varargs), bool(spec.keywords))
 
+def get_argnames(func):
+    func = unwrap(func)
+    return func.__code__.co_varnames[:func.__code__.co_argcount]
+
 @memoize
 def arggetter(func):
-    func = unwrap(func)
-    argnames = func.__code__.co_varnames[:func.__code__.co_argcount]
+    argnames = get_argnames(func)
+    argcount = len(argnames)
 
     def get_arg(name, args, kwargs):
         if name not in argnames:
@@ -68,7 +72,11 @@ def arggetter(func):
             if name in kwargs:
                 return kwargs[name]
             elif name in argnames:
-                return args[argnames.index(name)]
+                index = argnames.index(name)
+                if index < len(args):
+                    return args[index]
+                else:
+                    return func.__defaults__[index - argcount]
 
     return get_arg
 
