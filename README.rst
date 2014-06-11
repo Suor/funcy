@@ -53,7 +53,7 @@ Select a part of collection:
     select(even, {1,2,3,10,20})                  # {2,10,20}
     select(r'^a', ('a','b','ab','ba'))           # ('a','ab')
     select_keys(callable, {str: '', None: None}) # {str: ''}
-    compact({2, None, '', 0})                    # {2,'',0}
+    compact({2, None, 1, 0})                     # {1,2}
 
 
 Test collection contents:
