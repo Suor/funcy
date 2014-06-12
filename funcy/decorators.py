@@ -83,37 +83,33 @@ def arggetter(func):
 
 ### Fix functools.wraps to make it safely work with callables without all the attributes
 
-# These are already safe in python 3.4 and __wrapped__ works the new way
-if sys.version_info >= (3, 4):
-    from functools import update_wrapper, wraps
-else:
-    # These are for python 2, so list of attributes is far shorter.
-    # Python 3.2 and ealier will get reduced functionality, but we don't support it :)
-    WRAPPER_ASSIGNMENTS = ('__module__', '__name__', '__doc__')
-    WRAPPER_UPDATES = ('__dict__',)
-    # Copy-pasted these two from python 3.3 functools source code
-    def update_wrapper(wrapper,
-                       wrapped,
-                       assigned = WRAPPER_ASSIGNMENTS,
-                       updated = WRAPPER_UPDATES):
-        wrapper.__wrapped__ = wrapped
-        for attr in assigned:
-            try:
-                value = getattr(wrapped, attr)
-            except AttributeError:
-                pass
-            else:
-                setattr(wrapper, attr, value)
-        for attr in updated:
-            getattr(wrapper, attr).update(getattr(wrapped, attr, {}))
-        # Return the wrapper so this can be used as a decorator via partial()
-        return wrapper
+from functools import WRAPPER_ASSIGNMENTS, WRAPPER_UPDATES
 
-    def wraps(wrapped,
-              assigned = WRAPPER_ASSIGNMENTS,
-              updated = WRAPPER_UPDATES):
-        return partial(update_wrapper, wrapped=wrapped,
-                       assigned=assigned, updated=updated)
+def update_wrapper(wrapper,
+                   wrapped,
+                   assigned = WRAPPER_ASSIGNMENTS,
+                   updated = WRAPPER_UPDATES):
+    for attr in assigned:
+        try:
+            value = getattr(wrapped, attr)
+        except AttributeError:
+            pass
+        else:
+            setattr(wrapper, attr, value)
+    for attr in updated:
+        getattr(wrapper, attr).update(getattr(wrapped, attr, {}))
+
+    # Set it after to not gobble it in __dict__ update
+    wrapper.__wrapped__ = wrapped
+
+    # Return the wrapper so this can be used as a decorator via partial()
+    return wrapper
+
+def wraps(wrapped,
+          assigned = WRAPPER_ASSIGNMENTS,
+          updated = WRAPPER_UPDATES):
+    return partial(update_wrapper, wrapped=wrapped,
+                   assigned=assigned, updated=updated)
 
 
 ### Backport of python 3.4 inspect.unwrap utility
