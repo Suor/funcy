@@ -24,7 +24,7 @@ Just import stuff from funcy to make things happen:
 
 .. code:: python
 
-    from funcy import * # or whatever you need
+    from funcy import whatever, you, need
 
 
 Merge collections of same type
