@@ -92,3 +92,25 @@ def test_chain_arg_access():
         return x
 
     assert func(2) == 6
+
+
+def test_meta_attribtes():
+    @decorator
+    def decor(call):
+        return call()
+
+    def func(x):
+        "Some doc"
+        return x
+
+    decorated = decor(func)
+    double_decorated = decor(decorated)
+
+    assert decorated.__name__ == 'func'
+    assert decorated.__module__ == __name__
+    assert decorated.__doc__ == "Some doc"
+    assert decorated.__wrapped__ is func
+    assert decorated.__original__ is func
+
+    assert double_decorated.__wrapped__ is decorated
+    assert double_decorated.__original__ is func
