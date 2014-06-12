@@ -48,10 +48,6 @@ except ImportError:
 
         After the exception is suppressed, execution proceeds with the next
         statement following the with statement.
-
-             with suppress(FileNotFoundError):
-                 os.remove(somefile)
-             # Execution still resumes here if the file was already removed
         """
 
         def __init__(self, *exceptions):
