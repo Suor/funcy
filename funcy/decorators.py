@@ -83,8 +83,8 @@ def arggetter(func):
 
 ### Fix functools.wraps to make it safely work with callables without all the attributes
 
-# These are already safe in python 3.2
-if sys.version_info >= (3, 2):
+# These are already safe in python 3.4 and __wrapped__ works the new way
+if sys.version_info >= (3, 4):
     from functools import update_wrapper, wraps
 else:
     # These are for python 2, so list of attributes is far shorter.
