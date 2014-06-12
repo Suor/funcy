@@ -79,13 +79,11 @@ Manipulate functions:
 
 .. code:: python
 
-    partial(add, 1)                # inc
-    curry(add)(1)(2)               # 3
-    compose(inc, double)(10)       # 21
-    complement(even)               # odd
-    map(iffy(len), ['ab',None,'c'] # [2,None,1]
-    iffy(callable, caller())(val)  # val() if callable(val) else val
-
+    partial(add, 1)           # inc
+    curry(add)(1)(2)          # 3
+    compose(inc, double)(10)  # 21
+    complement(even)          # odd
+    all_fn(isa(int), even)    # is_even_int
 
 Easy decorators:
 
