@@ -118,6 +118,26 @@ Work with sequences:
     chunks(2, 1, range(4))      # [[0, 1], [1, 2], [2, 3], [3]]
 
 
+Manipulate flow:
+
+.. code:: python
+
+    walk_values(silent(int), {'a': '1', 'b': 'no'})
+    # => {'a': 1, 'b': None}
+
+    @once
+    def initialize():
+        # ...
+
+    with suppress(OSError):
+        os.remove('some.file')
+
+    @ignore(ErrorRateExceeded)
+    @limit_error_rate(fails=5, timeout=60)
+    def some_unreliable_action(...):
+        # ...
+
+
 And `many more <http://funcy.readthedocs.org/>`_.
 
 
