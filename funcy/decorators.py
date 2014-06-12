@@ -57,7 +57,7 @@ def get_argcounts(func):
     return (len(spec.args), bool(spec.varargs), bool(spec.keywords))
 
 def get_argnames(func):
-    func = unwrap(func)
+    func = getattr(func, '__original__', None) or unwrap(func)
     return func.__code__.co_varnames[:func.__code__.co_argcount]
 
 @memoize
@@ -82,6 +82,7 @@ def arggetter(func):
 
 
 ### Fix functools.wraps to make it safely work with callables without all the attributes
+### We also add __original__ to it
 
 from functools import WRAPPER_ASSIGNMENTS, WRAPPER_UPDATES
 
@@ -101,6 +102,9 @@ def update_wrapper(wrapper,
 
     # Set it after to not gobble it in __dict__ update
     wrapper.__wrapped__ = wrapped
+
+    # Set an original ref for faster and more convenient access
+    wrapper.__original__ = getattr(wrapped, '__original__', None) or unwrap(wrapped)
 
     # Return the wrapper so this can be used as a decorator via partial()
     return wrapper

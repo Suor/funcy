@@ -3,7 +3,11 @@ Decorators
 
 .. decorator:: decorator
 
-    Transforms a flat wrapper into a decorator with or without arguments. ``@decorator`` passes special ``call`` object as a first argument to a wrapper. A resulting decorator will preserve ``__module__``, ``__name__`` and ``__doc__`` attributes and also add ``__wrapped__`` attribute referring to wrapped function.
+    Transforms a flat wrapper into a decorator with or without arguments.
+    ``@decorator`` passes special ``call`` object as a first argument to a wrapper.
+    A resulting decorator will preserve function module, name and docstring.
+    It also adds ``__wrapped__`` attribute referring to wrapped function
+    and ``__original__`` attribute referring to innermost wrapped function.
 
     Here is a simple logging decorator::
 
