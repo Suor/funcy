@@ -141,23 +141,5 @@ Manipulate flow:
 And `many more <http://funcy.readthedocs.org/>`_.
 
 
-How you can help
-----------------
-
-Bring your ideas and/or code that can make functional python more fun.
-
-
-TODO
-----
-
-- create cheatsheet html
-- reject*(), disjoint*() collections
-- merge_with(), zip_with()
-- starfilter()
-- one argument select*()? other name?
-- reversed() to work with iterators?
-- vector chained boolean test (like perl 6 [<])
-
-
 .. |Build Status| image:: https://travis-ci.org/Suor/funcy.svg?branch=master
    :target: https://travis-ci.org/Suor/funcy
