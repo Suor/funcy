@@ -5,6 +5,7 @@
 - decorators created with @decorator now set __original__ attribute
 - optimized @decorator
 - optimized nth() and last()
+- lzip() is now exported by default from/for py3
 
 1.0.0
 - @silent, @ignore() and decorators created with @decorator will now work

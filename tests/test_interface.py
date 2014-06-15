@@ -27,3 +27,32 @@ def test_full_py2():
 
 def test_full():
     assert len(py2.__all__) == len(py3.__all__)
+
+
+def test_renames():
+    inames = [n for n in py2.__all__ if n.startswith('i')]
+    ipairs = [n[1:] for n in inames if n[1:] in py2.__all__]
+
+    for name in inames:
+        if name != 'izip':
+            assert name in py3.__all__ or name[1:] in py3.__all__
+
+    for name in ipairs:
+        assert name in py3.__all__
+        assert 'l' + name in py3.__all__
+
+    lnames = [n for n in py3.__all__ if n.startswith('l')]
+    lpairs = [n[1:] for n in lnames if n[1:] in py3.__all__]
+
+    for name in lnames:
+        if name != 'lzip':
+            assert name in py2.__all__ or name[1:] in py2.__all__
+
+    for name in lpairs:
+        assert name in py2.__all__
+        assert 'i' + name in py2.__all__
+
+    # Only inames a renamed
+    assert set(py2.__all__) - set(py3.__all__) <= set(inames)
+    # Only lnames a new, and zip_values/zip_dicts
+    assert set(py3.__all__) - set(py2.__all__) <= set(lnames) | set(['zip_values', 'zip_dicts'])

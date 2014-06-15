@@ -19,9 +19,11 @@ RENAMES['izip_values'] = 'zip_values'
 RENAMES['izip_dicts'] = 'zip_dicts'
 
 
-__all__ = [RENAMES.get(name, name) for name in __all__]
+__all__ = [RENAMES.get(name, name) for name in __all__ if name != 'izip']
+__all__.append('lzip')
 
 
 py3 = sys.modules[__name__]
 for old, new in RENAMES.items():
     setattr(py3, new, getattr(py2, old))
+setattr(py3, 'lzip', py2.zip)
