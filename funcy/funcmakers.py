@@ -3,7 +3,7 @@ from functools import wraps
 from operator import itemgetter
 from collections import Mapping, Set
 
-from .cross import imap, ifilter, ifilterfalse, basestring
+from .cross import imap, ifilter, ifilterfalse, basestring, PY2
 from .simple_funcs import identity
 from .strings import re_tester, re_finder, _re_type
 
@@ -37,7 +37,7 @@ def _wrap_higher_order(func, test):
     # NOTE: builtin housekeeping:
     #       map(None, ...) is much faster than map(identity, ...),
     #       also map(None, ...) works as zip() for multiple seqs
-    builtin = sys.version_info[0] == 2 and func in set([map, filter, imap, ifilter, ifilterfalse])
+    builtin = PY2 and func in set([map, filter, imap, ifilter, ifilterfalse])
     return wraps(func)(lambda f, *seqs: func(make_func(f, builtin=builtin, test=test), *seqs))
 
 def wrap_mapper(func):

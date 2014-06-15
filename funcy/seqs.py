@@ -3,7 +3,7 @@ from operator import add
 from itertools import islice, chain, tee, dropwhile, takewhile, groupby
 from collections import defaultdict, deque, Sequence
 
-from .cross import ifilter, imap, izip, ifilterfalse, xrange
+from .cross import ifilter, imap, izip, ifilterfalse, xrange, PY2
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcs import partial
@@ -100,7 +100,7 @@ imap = wrap_mapper(imap)
 ifilter = wrap_selector(ifilter)
 
 
-if sys.version_info[0] == 2:
+if PY2:
     # NOTE: Default imap() behaves strange when passed None as function,
     #       returns 1-length tuples, which is inconvinient and incompatible with map().
     #       This version is more sane: map() compatible and suitable for our internal use.

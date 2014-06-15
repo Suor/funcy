@@ -1,6 +1,7 @@
-import sys
+from .cross import PY2
 
-if sys.version_info[0] == 2:
+
+if PY2:
     from .py2 import *
     from .py2 import __all__
 else:

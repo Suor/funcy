@@ -8,7 +8,7 @@ from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import chain, tee
 from functools import reduce
 
-from .cross import basestring, xrange, izip
+from .cross import basestring, xrange, izip, PY2, PY3
 from .primitives import EMPTY
 from .funcs import identity, partial, compose, complement
 from .funcmakers import wrap_mapper, wrap_selector
@@ -39,7 +39,7 @@ def _factory(coll, mapper=None):
 def empty(coll):
     return _factory(coll)()
 
-if sys.version_info[0] == 2:
+if PY2:
     def iteritems(coll):
         return coll.iteritems() if hasattr(coll, 'iteritems') else coll
 else:
@@ -227,7 +227,7 @@ def invoke(objects, name, *args, **kwargs):
     return map(methodcaller(name, *args, **kwargs), objects)
 
 
-if sys.version_info[0] == 3:
+if PY3:
     def lwhere(mappings, **cond):
         return list(where(mappings, **cond))
 

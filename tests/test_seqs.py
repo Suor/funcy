@@ -5,7 +5,7 @@ import re
 import pytest
 from whatever import _
 
-from funcy.cross import xrange
+from funcy.cross import xrange, PY3
 from funcy.seqs import *
 
 
@@ -69,13 +69,11 @@ def test_map():
     assert map(1, ['abc', '123']) == ['b', '2']
     assert map(slice(2), ['abc', '123']) == ['ab', '12']
 
-@pytest.mark.skipif(sys.version_info[0] == 3,
-                    reason="map(None, ...) doesn't work in python 3")
+@pytest.mark.skipif(PY3, reason="map(None, ...) doesn't work in python 3")
 def test_map_multi():
     assert map(None, [1, 2, 3], 'abc') == [(1, 'a'), (2, 'b'), (3, 'c')]
 
-@pytest.mark.skipif(sys.version_info[0] == 3,
-                    reason="imap(None, ...) doesn't work in python 3")
+@pytest.mark.skipif(PY3, reason="imap(None, ...) doesn't work in python 3")
 def test_imap_strange():
     """
     Demonstrates funcy.imap and itertools.imap have behavior when given None as f.
