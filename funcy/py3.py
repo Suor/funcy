@@ -7,6 +7,7 @@ import sys
 from . import py2
 from .py2 import *
 from .py2 import __all__
+from .colls import iwhere as where, ipluck as pluck, iinvoke as invoke
 
 
 RENAMES = {}

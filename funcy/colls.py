@@ -8,7 +8,7 @@ from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import chain, tee
 from functools import reduce
 
-from .cross import basestring, xrange, izip, PY2, PY3
+from .cross import basestring, xrange, izip, map, filter, imap, ifilter, PY2
 from .primitives import EMPTY
 from .funcs import identity, partial, compose, complement
 from .funcmakers import wrap_mapper, wrap_selector
@@ -227,12 +227,13 @@ def invoke(objects, name, *args, **kwargs):
     return map(methodcaller(name, *args, **kwargs), objects)
 
 
-if PY3:
-    def lwhere(mappings, **cond):
-        return list(where(mappings, **cond))
+# Iterator versions for python 3 interface
+def iwhere(mappings, **cond):
+    match = lambda m: all(m[k] == v for k, v in cond.items())
+    return ifilter(match, mappings)
 
-    def lpluck(key, mappings):
-        return list(pluck(key, mappings))
+def ipluck(key, mappings):
+    return imap(itemgetter(key), mappings)
 
-    def linvoke(objects, name, *args, **kwargs):
-        return list(invoke(objects, name, *args, **kwargs))
+def iinvoke(objects, name, *args, **kwargs):
+    return imap(methodcaller(name, *args, **kwargs), objects)
