@@ -12,7 +12,7 @@ from .py2 import __all__
 RENAMES = {}
 for  name in ('map', 'filter', 'remove', 'keep', 'without', 'concat', 'cat', 'flatten',
               'mapcat', 'distinct', 'split', 'split_at', 'split_by', 'partition', 'chunks',
-              'partition_by', 'reductions', 'sums', 'zip', 'juxt'):
+              'partition_by', 'reductions', 'sums', 'juxt'):
     RENAMES['i' + name] = name
     RENAMES[name] = 'l' + name
 RENAMES['izip_values'] = 'zip_values'
