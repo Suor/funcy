@@ -7,6 +7,7 @@
 - optimized nth() and last()
 - lzip() is now exported by default from/for py3
 - made pluck(), where() and invoke() return interators in python 3
+- __wrapped__ attribute added by decorators now correctly refers to immediate wrapped not innermost
 
 1.0.0
 - @silent, @ignore() and decorators created with @decorator will now work
