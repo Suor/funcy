@@ -30,5 +30,3 @@ Objects
                 return result
             else:
                 return get.original(self, *args, **kwargs)
-
-    :func:`monkey` returns original function, this way you can monkey-patch several classes or modules at once.
