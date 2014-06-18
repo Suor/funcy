@@ -40,6 +40,18 @@ def test_monkey():
     assert A().f() == 42
 
 
+def test_monkey_with_name():
+    class A(object):
+        def f(self):
+            return 7
+
+    @monkey(A, name='f')
+    def g(self):
+        return g.original(self) * 6
+
+    assert A().f() == 42
+
+
 def test_monkey_property():
     class A(object):
         pass

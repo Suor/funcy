@@ -2,6 +2,7 @@
 - added @once, @once_per_args and @once_per()
 - added suppress() context manager
 - added is_set()
+- added name argument to @monkey
 - decorators created with @decorator now set __original__ attribute
 - optimized @decorator
 - optimized nth() and last()

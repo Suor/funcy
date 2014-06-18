@@ -26,17 +26,17 @@ class cached_property(object):
         return res
 
 
-def monkey(cls):
+def monkey(cls, name=None):
     assert isclass(cls) or ismodule(cls), "Attempting to monkey patch non-class and non-module"
 
     def decorator(value):
         func = getattr(value, 'fget', value) # Support properties
-        name = cut_prefix(func.__name__, '%s__' % cls.__name__)
+        func_name = name or cut_prefix(func.__name__, '%s__' % cls.__name__)
 
-        func.__name__ = name
-        func.original = getattr(cls, name, None)
+        func.__name__ = func_name
+        func.original = getattr(cls, func_name, None)
 
-        setattr(cls, name, value)
+        setattr(cls, func_name, value)
         return value
     return decorator
 
