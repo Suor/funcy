@@ -1,3 +1,4 @@
+1.1
 - added merge_with() and join_with()
 - added @once, @once_per_args and @once_per()
 - added suppress() context manager
@@ -7,6 +8,7 @@
 - optimized @decorator
 - optimized nth() and last()
 - lzip() is now exported by default from/for py3
+Backward incompatible fixes:
 - made pluck(), where() and invoke() return interators in python 3
 - __wrapped__ attribute added by decorators now correctly refers to immediate wrapped not innermost
 
