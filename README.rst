@@ -117,6 +117,7 @@ Abstract control flow:
 
     @ignore(ErrorRateExceeded)
     @limit_error_rate(fails=5, timeout=60)
+    @retry(tries=2, errors=(HttpError, ServiceDown))
     def some_unreliable_action(...):
         # ...
 
