@@ -68,7 +68,7 @@ Manipulate sequences:
     concat([1, 2], [5, 6])      # [1, 2, 5, 6]
     cat(map(range, range(4)))   # [0, 0, 1, 0, 1, 2]
     mapcat(range, range(4)))    # same
-    flatten(nested_structure)
+    flatten(nested_structure)   # flat_list
     distinct('abacbdd')         # list('abcd')
 
     split(odd, range(5))        # ([1, 3], [0, 2, 4])
