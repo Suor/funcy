@@ -37,7 +37,7 @@ Merge collections of same type
     merge_with(sum, dict1, dict2, ...)
 
 
-Walk through collection, creating it's transform (like map but preserves type):
+Walk through collection, creating its transform (like map but preserves type):
 
 .. code:: python
 
