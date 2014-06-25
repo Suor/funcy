@@ -1,4 +1,4 @@
-- optimized last()
+- slightly optimized last() and nth()
 
 1.1
 - added merge_with() and join_with()

@@ -55,7 +55,7 @@ def nth(n, seq):
     except IndexError:
         return None
     except TypeError:
-        return next(islice(seq, n, n+1), None)
+        return next(islice(seq, n, None), None)
 
 def last(seq):
     try:
