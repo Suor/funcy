@@ -85,8 +85,8 @@ def butlast(seq):
 def ilen(seq):
     """
     Consume an iterable not reading it into memory; return the number of items.
-    Implementation borrowed from http://stackoverflow.com/a/15112059/753382
     """
+    # NOTE: implementation borrowed from http://stackoverflow.com/a/15112059/753382
     counter = count()
     deque(izip(seq, counter), maxlen=0)  # (consume at C speed)
     return next(counter)

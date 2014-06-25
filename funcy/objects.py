@@ -8,12 +8,11 @@ __all__ = ['cached_property', 'monkey']
 
 class cached_property(object):
     """
-    Decorator that converts a method with a single self argument into a
-    property cached on the instance.
-
-    NOTE: implementation borrowed from Django.
-    NOTE: we use fget, fset and fdel attributes to mimic @property.
+    Decorator that converts a method with a single self argument into
+    a property cached on the instance.
     """
+    # NOTE: implementation borrowed from Django.
+    # NOTE: we use fget, fset and fdel attributes to mimic @property.
     fset = fdel = None
 
     def __init__(self, fget):
