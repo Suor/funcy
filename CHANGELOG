@@ -1,3 +1,5 @@
+- optimized last()
+
 1.1
 - added merge_with() and join_with()
 - added @once, @once_per_args and @once_per()

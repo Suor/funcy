@@ -64,7 +64,7 @@ def last(seq):
         return None
     except TypeError:
         item = None
-        for item in iter(seq):
+        for item in seq:
             pass
         return item
 
