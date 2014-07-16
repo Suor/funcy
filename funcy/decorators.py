@@ -4,7 +4,7 @@ from functools import partial
 from .calc import memoize
 
 
-__all__ = ['decorator']
+__all__ = ['decorator', 'wraps', 'unwrap']
 
 
 def decorator(deco):

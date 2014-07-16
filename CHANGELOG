@@ -1,3 +1,4 @@
+- exposed @wraps and unwrap()
 - slightly optimized last() and nth()
 
 1.1
