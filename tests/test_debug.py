@@ -51,8 +51,7 @@ def test_log_errors():
     silent(f)(0)
     assert len(log) == 1
     assert log[0].startswith('Traceback')
-    assert log[0].endswith('ZeroDivisionError: integer division or modulo by zero\n'
-                         + '    raised in f(0)')
+    assert re.search(r'ZeroDivisionError: .*\n    raised in f\(0\)$', log[0])
 
 
 def test_log_durations():
@@ -71,7 +70,10 @@ def test_log_durations():
 ### An utility to capture stdout
 
 import sys
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 def capture(command, *args, **kwargs):
     out, sys.stdout = sys.stdout, StringIO()
