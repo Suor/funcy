@@ -73,6 +73,8 @@ def format_time(sec):
 
 ### Call signature stringification utils
 
+MAX_REPR_LEN = 25
+
 def signature_repr(call):
     args_repr = imap(smart_repr, call._args)
     kwargs_repr = ('%s=%s' % (key, smart_repr(value)) for key, value in call._kwargs.items())
@@ -80,6 +82,11 @@ def signature_repr(call):
 
 def smart_repr(value):
     if isinstance(value, basestring):
-        return repr(value)
+        res = repr(value)
     else:
-        return str(value)
+        res = str(value)
+
+    res = res.replace('\n', ' ')
+    if len(res) > MAX_REPR_LEN:
+        res = res[MAX_REPR_LEN-3:] + '...'
+    return res
