@@ -1,3 +1,4 @@
+- added label argument for tap()
 - exposed @wraps and unwrap()
 - slightly optimized last() and nth()
 

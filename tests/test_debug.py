@@ -3,6 +3,11 @@ import re, time
 from funcy.debug import *
 
 
+def test_tap():
+    assert capture(tap, 42) == '42\n'
+    assert capture(tap, 42, label='Life and ...') == 'Life and ...: 42\n'
+
+
 def test_log_calls():
     log = []
 
@@ -48,3 +53,18 @@ def test_log_durations():
     m = re.search(r'^\s*(\d+\.\d+) ms in f\(\)$', log[0])
     assert m
     assert 10 <= float(m.group(1)) < 20
+
+
+### An utility to capture stdout
+
+import sys
+from cStringIO import StringIO
+
+def capture(command, *args, **kwargs):
+    out, sys.stdout = sys.stdout, StringIO()
+    try:
+        command(*args, **kwargs)
+        sys.stdout.seek(0)
+        return sys.stdout.read()
+    finally:
+        sys.stdout = out

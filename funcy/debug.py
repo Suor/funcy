@@ -13,8 +13,11 @@ __all__ = ['tap',
            'log_durations', 'print_durations']
 
 
-def tap(x):
-    print(x)
+def tap(x, label=None):
+    if label:
+        print('%s: %s' % (label, x))
+    else:
+        print(x)
     return x
 
 

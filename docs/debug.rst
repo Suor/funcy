@@ -1,12 +1,21 @@
 Debugging
 =========
 
-.. function:: tap(value)
+.. function:: tap(value, label=None)
 
     Prints value and then returns it. Useful to tap into some functional pipeline for debugging::
 
         fields = (f for f in fields_for(category) if section in tap(tap(f).sections))
         # ... do something with fields
+
+    If ``label`` is specified then it's printed before corresponding value::
+
+        squares = {tap(x, 'x'): tap(x * x, 'x^2') for x in [3, 4]}
+        # x: 3
+        # x^2: 9
+        # x: 4
+        # x^2: 16
+        # => {3: 9, 4: 16}
 
 
 .. decorator:: log_calls(print_func, errors=True)
