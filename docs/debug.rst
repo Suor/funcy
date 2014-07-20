@@ -18,7 +18,7 @@ Debugging
         # => {3: 9, 4: 16}
 
 
-.. decorator:: log_calls(print_func, errors=True)
+.. decorator:: log_calls(print_func, errors=True, stack=True)
                print_calls
 
     Will log or print all function calls, including arguments, results and raised exceptions. Can be used as decorator or tapped into call expression::
@@ -32,13 +32,14 @@ Debugging
         def some_suspicious_function(...):
             # ...
 
-    :func:`print_calls` always prints everything.
+    :func:`print_calls` always prints everything, including error stack traces.
 
 
-.. decorator:: log_errors(print_func)
+.. decorator:: log_errors(print_func, stack=True)
                print_errors
 
-    Will log or print all function errors providing function arguments causing them.
+    Will log or print all function errors providing function arguments causing them. If ``stack``
+    is set to ``False`` then each error is reported with simple one line message.
 
     Can be combined with :func:`silent` or :func:`ignore` to trace occasionally misbehaving function::
 
