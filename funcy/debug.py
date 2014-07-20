@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 import time
+import traceback
 from itertools import chain
 
 from .cross import imap, basestring
@@ -22,7 +23,7 @@ def tap(x, label=None):
 
 
 @decorator
-def log_calls(call, print_func, errors=True):
+def log_calls(call, print_func, errors=True, stack=True):
     signature = signature_repr(call)
     try:
         print_func('Call %s' % signature)
@@ -31,21 +32,28 @@ def log_calls(call, print_func, errors=True):
         return result
     except BaseException as e:
         if errors:
-            print_func('-> raised %s: %s in %s' % (e.__class__.__name__, e, signature))
+            print_func('-> ' + _format_error(call, e, stack))
         raise
 
 print_calls = log_calls(print)
 
 
 @decorator
-def log_errors(call, print_func):
+def log_errors(call, print_func, stack=True):
     try:
         return call()
     except Exception as e:
-        print_func('%s: %s in %s' % (e.__class__.__name__, e, signature_repr(call)))
+        print_func(_format_error(call, e, stack))
         raise
 
 print_errors = log_errors(print)
+
+
+def _format_error(call, e, stack=True):
+    if stack:
+        return traceback.format_exc() + '    raised in ' + signature_repr(call)
+    else:
+        return '%s: %s raised in %s' % (e.__class__.__name__, e, signature_repr(call))
 
 
 @decorator

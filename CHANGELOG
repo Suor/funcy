@@ -1,3 +1,4 @@
+- print stack trace in @(log|print)_(calls|errors)
 - added label argument for tap()
 - better formatted call signatures in debug utilities
 - exposed @wraps and unwrap()

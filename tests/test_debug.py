@@ -1,6 +1,7 @@
 import re, time
 
 from funcy.debug import *
+from funcy.flow import silent
 
 
 def test_tap():
@@ -28,18 +29,30 @@ def test_log_calls():
 def test_log_calls_raise():
     log = []
 
-    @log_calls(log.append)
+    @log_calls(log.append, stack=False)
     def f():
         raise Exception('something bad')
 
-    try:
-        f()
-    except:
-        pass
+    silent(f)()
     assert log == [
         "Call f()",
-        "-> raised Exception: something bad in f()",
+        "-> Exception: something bad raised in f()",
     ]
+
+
+def test_log_errors():
+    log = []
+
+    @log_errors(log.append)
+    def f(x):
+        return 1 / x
+
+    silent(f)(1)
+    silent(f)(0)
+    assert len(log) == 1
+    assert log[0].startswith('Traceback')
+    assert log[0].endswith('ZeroDivisionError: integer division or modulo by zero\n'
+                         + '    raised in f(0)')
 
 
 def test_log_durations():
