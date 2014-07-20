@@ -392,7 +392,7 @@ Split and chunk
         stats[2] # -> ['ab']
         stats[3] # -> [], since stats is defaultdict
 
-    One can use :func:`split_by` when grouping by boolean predicate. See also :func:`py:itertools.groupby`.
+    One can use :func:`split` when grouping by boolean predicate. See also :func:`py:itertools.groupby`.
 
 
 .. function:: group_by_keys(get_keys, seq)
