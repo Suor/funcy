@@ -11,9 +11,9 @@ from .colls import iwhere as where, ipluck as pluck, iinvoke as invoke
 
 
 RENAMES = {}
-for  name in ('map', 'filter', 'remove', 'keep', 'without', 'concat', 'cat', 'flatten',
-              'mapcat', 'distinct', 'split', 'split_at', 'split_by', 'partition', 'chunks',
-              'partition_by', 'reductions', 'sums', 'juxt'):
+for name in ('map', 'filter', 'remove', 'keep', 'without', 'concat', 'cat', 'flatten',
+             'mapcat', 'distinct', 'split', 'split_at', 'split_by', 'partition', 'chunks',
+             'partition_by', 'reductions', 'sums', 'juxt'):
     RENAMES['i' + name] = name
     RENAMES[name] = 'l' + name
 RENAMES['izip_values'] = 'zip_values'

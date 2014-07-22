@@ -57,3 +57,13 @@ Decorators
             return sep.join(call())
 
     You can see more examples in :mod:`flow` and :mod:`debug` submodules source code.
+
+
+.. decorator:: wraps
+
+
+.. decorator:: contextmanager
+
+
+.. class:: ContextDecorator
+

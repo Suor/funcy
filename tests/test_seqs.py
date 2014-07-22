@@ -1,7 +1,5 @@
-import sys
 from collections import Iterator
 from operator import add
-import re
 import pytest
 from whatever import _
 

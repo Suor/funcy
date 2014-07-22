@@ -12,4 +12,3 @@ class namespace_meta(type):
 
 class namespace(object):
     __metaclass__ = namespace_meta
-

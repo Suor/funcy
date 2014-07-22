@@ -22,8 +22,8 @@ def test_slice():
 def test_str():
     assert make_func('\d+')('ab42c') == '42'
     assert make_func('\d+')('abc') is None
-    assert make_pred('\d+')('ab42c') == True
-    assert make_pred('\d+')('abc') == False
+    assert make_pred('\d+')('ab42c') is True
+    assert make_pred('\d+')('abc') is False
 
 
 def test_dict():
@@ -37,5 +37,5 @@ def test_dict():
 
 def test_set():
     s = set([1,2,3])
-    assert make_func(s)(1) == True
-    assert make_func(s)(4) == False
+    assert make_func(s)(1) is True
+    assert make_func(s)(4) is False

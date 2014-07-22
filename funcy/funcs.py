@@ -33,4 +33,3 @@ def juxt(*fs):
 def ijuxt(*fs):
     extended_fs = map(make_func, fs)
     return lambda *a, **kw: (f(*a, **kw) for f in extended_fs)
-

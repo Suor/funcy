@@ -1,4 +1,3 @@
-import sys
 from operator import add
 from itertools import islice, chain, tee, dropwhile, takewhile, groupby
 from collections import defaultdict, deque, Sequence

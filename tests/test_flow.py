@@ -145,4 +145,3 @@ def test_once_per_args():
     assert calls == [1, 2, 1]
     call(1)
     assert calls == [1, 2, 1]
-

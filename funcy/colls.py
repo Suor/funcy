@@ -1,4 +1,3 @@
-import sys
 try:
     from __builtin__ import all as _all, any as _any
 except ImportError:
@@ -6,9 +5,8 @@ except ImportError:
 from operator import itemgetter, methodcaller
 from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import chain, tee
-from functools import reduce
 
-from .cross import basestring, xrange, izip, map, filter, imap, ifilter, PY2
+from .cross import basestring, xrange, izip, map, filter, imap, PY2
 from .primitives import EMPTY
 from .funcs import identity, partial, compose, complement
 from .funcmakers import wrap_mapper, wrap_selector
@@ -68,8 +66,9 @@ def join(colls):
     elif isinstance(dest, (Iterator, xrange)):
         return chain.from_iterable(colls)
     elif isinstance(dest, Iterable):
-        return cls(chain.from_iterable(colls)) # could be reduce(concat, ...)
-                                               # more effective for low count
+        # NOTE: this could be reduce(concat, ...),
+        #       more effective for low count
+        return cls(chain.from_iterable(colls))
     else:
         raise TypeError("Don't know how to join %s" % cls.__name__)
 

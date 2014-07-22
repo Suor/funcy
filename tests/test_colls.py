@@ -110,11 +110,11 @@ def test_walk_values_defaultdict():
 
 
 def test_select():
-    assert eq(select(_>1, [1,2,3]), [2,3])
-    assert eq(select(_>1, (1,2,3)), (2,3))
-    assert eq(select(_>1, S(1,2,3)), S(2,3))
-    assert eq(select(_[1]>1, {'a':1,'b':2,'c':3}), {'b':2,'c':3})
-    assert select(_[1]>1, defaultdict(int)) == {}
+    assert eq(select(_ > 1, [1,2,3]), [2,3])
+    assert eq(select(_ > 1, (1,2,3)), (2,3))
+    assert eq(select(_ > 1, S(1,2,3)), S(2,3))
+    assert eq(select(_[1] > 1, {'a':1,'b':2,'c':3}), {'b':2,'c':3})
+    assert select(_[1] > 1, defaultdict(int)) == {}
 
 def test_select_extended():
     assert select(None, [2, 3, 0]) == [2, 3]
@@ -156,9 +156,9 @@ def test_all_extended():
 
 def test_any():
     assert any([0, False, 3, ''])
-    assert any([0, False, '']) == False
+    assert not any([0, False, ''])
     assert any(_ > 0, [1,2,0])
-    assert any(_ < 0, [1,2,0]) == False
+    assert not any(_ < 0, [1,2,0])
 
 def test_one():
     assert one([0, False, 3, ''])
@@ -170,7 +170,7 @@ def test_one():
 
 def test_none():
     assert none([0, False])
-    assert none(_ < 0, [0, -1]) == False
+    assert not none(_ < 0, [0, -1])
 
 def test_some():
     assert some([0, '', 2, 3]) == 2

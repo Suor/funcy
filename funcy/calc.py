@@ -36,7 +36,7 @@ def _make_lookuper(silent):
     def make_lookuper(func):
         spec = inspect.getargspec(func)
         assert not spec.keywords, \
-               'Lookup table building function should not have keyword arguments'
+            'Lookup table building function should not have keyword arguments'
 
         if spec.args or spec.varargs:
             @memoize
@@ -96,4 +96,3 @@ def cache(timeout):
 
         return wrapper
     return decorator
-

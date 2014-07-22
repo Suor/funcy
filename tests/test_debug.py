@@ -1,4 +1,5 @@
-import re, time
+import re
+import time
 
 from funcy.debug import *
 from funcy.flow import silent

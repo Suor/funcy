@@ -1,4 +1,4 @@
-import sys, inspect
+import inspect
 import pytest
 
 import funcy

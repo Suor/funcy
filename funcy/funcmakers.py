@@ -1,4 +1,3 @@
-import sys
 from functools import wraps
 from operator import itemgetter
 from collections import Mapping, Set

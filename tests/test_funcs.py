@@ -60,8 +60,8 @@ def test_compose():
     assert compose(int, r'\d+')('abc1234xy') == 1234
 
 def test_complement():
-    assert complement(identity)(0) == True
-    assert complement(identity)([1, 2]) == False
+    assert complement(identity)(0) is True
+    assert complement(identity)([1, 2]) is False
 
 def test_juxt():
     assert juxt(__add__, __sub__)(10, 2) == [12, 8]
