@@ -1,22 +1,13 @@
-##-- Travis Build config
-##-- Guide for Python projects: http://about.travis-ci.org/docs/user/languages/python/
 language: python
-
-##-- which python version(s)
-python:
-  - "2.6"
-  - "2.7"
-  - "3.3"
-  - "3.4"
-  - "pypy"
-
+python: 2.7
+env:
+  - TOXENV=py26
+  - TOXENV=py27
+  - TOXENV=py33
+  - TOXENV=py34
+  - TOXENV=pypy
+  - TOXENV=flakes
 install:
- - "pip install -r test_requirements.txt --use-mirrors"
-
-##-- run tests
-script: py.test
-
-##-- choose git branches
-branches:
-  only:
-    - master
+  - pip install tox
+script:
+  - tox
