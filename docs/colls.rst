@@ -1,11 +1,14 @@
 Collections
 ===========
 
+.. function:: empty(coll)
+
+    Returns an empty collection of the same type as ``coll``.
+
+
+
 Unite
 -----
-
-.. .. function:: empty(coll)
-
 
 .. function:: merge(*colls)
 

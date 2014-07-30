@@ -2,6 +2,7 @@
 - added label argument for tap()
 - better formatted call signatures in debug utilities
 - exposed @wraps and unwrap()
+- published empty()
 - slightly optimized last() and nth()
 
 1.1
