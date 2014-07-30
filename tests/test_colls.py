@@ -32,6 +32,12 @@ def test_iteritems():
     assert list(iteritems((1,2))) == [1,2]
     assert list(iteritems({'a': 1})) == [('a', 1)]
 
+def test_itervalues():
+    assert list(itervalues([1,2])) == [1,2]
+    assert list(itervalues((1,2))) == [1,2]
+    assert list(itervalues({'a': 1})) == [1]
+
+
 def test_merge():
     assert eq(merge({1: 2}, {3: 4}), {1: 2, 3: 4})
 

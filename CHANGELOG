@@ -1,6 +1,7 @@
 - print stack trace in @(log|print)_(calls|errors)
 - added label argument for tap()
 - better formatted call signatures in debug utilities
+- added itervalues()
 - exposed @wraps and unwrap()
 - published empty()
 - slightly optimized last() and nth()

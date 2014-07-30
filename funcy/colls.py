@@ -13,7 +13,7 @@ from .funcmakers import wrap_mapper, wrap_selector
 from .seqs import take, ximap, ifilter
 
 
-__all__ = ['empty', 'iteritems',
+__all__ = ['empty', 'iteritems', 'itervalues',
            'join', 'merge', 'join_with', 'merge_with',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
@@ -40,9 +40,15 @@ def empty(coll):
 if PY2:
     def iteritems(coll):
         return coll.iteritems() if hasattr(coll, 'iteritems') else coll
+
+    def itervalues(coll):
+        return coll.itervalues() if hasattr(coll, 'itervalues') else coll
 else:
     def iteritems(coll):
         return coll.items() if hasattr(coll, 'items') else coll
+
+    def itervalues(coll):
+        return coll.values() if hasattr(coll, 'values') else coll
 
 
 def join(colls):
