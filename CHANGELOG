@@ -2,8 +2,8 @@
 - added label argument for tap()
 - better formatted call signatures in debug utilities
 - added itervalues()
+- exposed empty(), iteritems()
 - exposed @wraps and unwrap()
-- published empty()
 - slightly optimized last() and nth()
 
 1.1

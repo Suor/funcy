@@ -1,12 +1,6 @@
 Collections
 ===========
 
-.. function:: empty(coll)
-
-    Returns an empty collection of the same type as ``coll``.
-
-
-
 Unite
 -----
 
@@ -267,3 +261,35 @@ Content tests
 .. function:: some([pred], seq)
 
     Finds first item in ``seq`` passing ``pred`` or first that is true if ``pred`` is omitted.
+
+
+Low-level helpers
+-----------------
+
+.. function:: empty(coll)
+
+    Returns an empty collection of the same type as ``coll``.
+
+
+.. function:: iteritems(coll)
+
+    Returns an iterator of items of a ``coll``. This means ``key, value`` pairs for any dictionaries::
+
+        list(iteritems({1, 2, 42}))
+        # -> [1, 42, 2]
+
+        list(iteritems({'a': 1}))
+        # -> [('a', 1)]
+
+
+.. function:: itervalues(coll)
+
+    Returns an iterator of values of a ``coll``. This means values for any dictionaries and just elements for other collections::
+
+        list(itervalues({1, 2, 42}))
+        # -> [1, 42, 2]
+
+        list(itervalues({'a': 1}))
+        # -> [1]
+
+
