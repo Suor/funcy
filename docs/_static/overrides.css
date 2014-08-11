@@ -1,0 +1,15 @@
+@import "css/theme.css";
+
+.rst-content dl:not(.docutils) dt {
+    float: left;
+    clear: left;
+    margin: 2px 0 1px 0;
+}
+
+.rst-content dl:not(.docutils) dt + dd {
+    padding-top: 6px;
+}
+
+.rst-content dl dd {
+    clear: both;
+}
