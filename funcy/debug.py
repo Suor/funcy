@@ -11,6 +11,8 @@ from .decorators import decorator
 
 __all__ = ['tap',
            'log_calls', 'print_calls',
+           'log_enters', 'print_enters',
+           'log_exits', 'print_exits',
            'log_errors', 'print_errors',
            'log_durations', 'print_durations']
 
@@ -37,6 +39,28 @@ def log_calls(call, print_func, errors=True, stack=True):
         raise
 
 print_calls = log_calls(print)
+
+
+@decorator
+def log_enters(call, print_func):
+    print_func('Call %s' % signature_repr(call))
+    return call()
+
+print_enters = log_enters(print)
+
+
+@decorator
+def log_exits(call, print_func, errors=True, stack=True):
+    try:
+        result = call()
+        print_func('-> %s from %s' % (smart_repr(result), signature_repr(call)))
+        return result
+    except BaseException as e:
+        if errors:
+            print_func('-> ' + _format_error(call, e, stack))
+        raise
+
+print_exits = log_exits(print)
 
 
 @decorator

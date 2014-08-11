@@ -35,6 +35,15 @@ Debugging
     :func:`print_calls` always prints everything, including error stack traces.
 
 
+.. decorator:: log_enters(print_func)
+               print_enters
+               log_exits(print_func, errors=True, stack=True)
+               print_exits
+
+    Will log or print every time execution enters or exits the function. Should be used same way as :func:`log_calls` and :func:`print_calls` when you need to track only one event per
+    function call.
+
+
 .. decorator:: log_errors(print_func, stack=True)
                print_errors
 

@@ -1,4 +1,5 @@
 - added @contextmanager, ContextDecorator
+- added @(log|print)_(enters|exits)
 - print stack trace in @(log|print)_(calls|errors)
 - added label argument for tap()
 - better formatted call signatures in debug utilities
