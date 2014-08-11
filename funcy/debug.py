@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+import re
 import time
 import traceback
 from itertools import chain
@@ -94,7 +95,8 @@ def smart_repr(value):
     else:
         res = str(value)
 
-    res = res.replace('\n', ' ')
+    # res = res.replace('\n', ' ')
+    res = re.sub(r'\s+', ' ', res)
     if len(res) > MAX_REPR_LEN:
-        res = res[MAX_REPR_LEN-3:] + '...'
+        res = res[:MAX_REPR_LEN-3] + '...'
     return res
