@@ -6,6 +6,7 @@ TODO
 - pre_walk, post_walk
 - tree-seq
 - children arg to i?flatten
+- where_not
 
 - partial.func interface
 - invalidate/invalidate_all() to (make|silent)_lookuper
