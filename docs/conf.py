@@ -12,6 +12,7 @@
 # serve to show the default.
 
 import sys, os
+sys.path.insert(0, os.path.abspath('..'))
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -26,7 +27,7 @@ on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.coverage', 'sphinx.ext.intersphinx']
+extensions = ['sphinx.ext.coverage', 'sphinx.ext.intersphinx', 'sphinx.ext.autodoc']
 
 intersphinx_mapping = {
     'py': ('http://docs.python.org/2', None),
@@ -251,3 +252,21 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+rst_prolog = """
+.. module:: funcy
+
+"""
+
+
+from sphinx.ext.autodoc import FunctionDocumenter
+
+class DecoratorDocumenter(FunctionDocumenter):
+    """
+    Specialized Documenter subclass for methods.
+    """
+    objtype = 'decorator'
+
+
+def setup(app):
+    app.add_autodocumenter(DecoratorDocumenter)
