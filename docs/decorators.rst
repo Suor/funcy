@@ -7,7 +7,7 @@ Decorators
     ``@decorator`` passes special ``call`` object as a first argument to a wrapper.
     A resulting decorator will preserve function module, name and docstring.
     It also adds ``__wrapped__`` attribute referring to wrapped function
-    and ``__original__`` attribute referring to innermost wrapped function.
+    and ``__original__`` attribute referring to innermost wrapped one.
 
     Here is a simple logging decorator::
 
@@ -59,11 +59,11 @@ Decorators
     You can see more examples in :mod:`flow` and :mod:`debug` submodules source code.
 
 
-.. decorator:: wraps
+.. autodecorator:: contextmanager
 
+.. autodecorator:: wraps(wrapped, [assigned], [updated])
 
-.. decorator:: contextmanager
+.. autofunction:: unwrap
 
-
-.. class:: ContextDecorator
+.. autoclass:: ContextDecorator
 

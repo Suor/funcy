@@ -33,7 +33,9 @@ def make_decorator(deco, dargs=(), dkwargs={}):
 class Call(object):
     """
     A call object to pass as first argument to decorator.
-    Call object is just a proxy for decorated function with call arguments saved in its attributes.
+
+    Call object is just a proxy for decorated function
+    with call arguments saved in its attributes.
     """
     def __init__(self, func, args, kwargs):
         self._func, self._args, self._kwargs = func, args, kwargs
@@ -174,32 +176,30 @@ else:
 
 
     def contextmanager(func):
-        """@contextmanager decorator.
+        """
+        A decorator helping to create context managers. Resulting functions also
+        behave as decorators.
 
-        Typical usage:
+        A simple example::
 
             @contextmanager
-            def some_generator(<arguments>):
-                <setup>
-                try:
-                    yield <value>
-                finally:
-                    <cleanup>
+            def tag(name):
+                print "<%s>" % name,
+                yield
+                print "</%s>" % name
 
-        This makes this:
+            with tag("h1"):
+                print "foo",
+            # -> <h1> foo </h1>
 
-            with some_generator(<arguments>) as <variable>:
-                <body>
+        Using as decorator::
 
-        equivalent to this:
+            @tag('strong')
+            def shout(text):
+                print text.upper()
 
-            <setup>
-            try:
-                <variable> = <value>
-                <body>
-            finally:
-                <cleanup>
-
+            shout('hooray')
+            # -> <strong> HOORAY </strong>
         """
         @wraps(func)
         def helper(*args, **kwds):
@@ -238,6 +238,24 @@ def update_wrapper(wrapper,
 def wraps(wrapped,
           assigned = WRAPPER_ASSIGNMENTS,
           updated = WRAPPER_UPDATES):
+    """
+    An utility to pass function metadata from wrapped function to a wrapper.
+    Copies all function attributes including ``__name__``, ``__module__`` and
+    ``__doc__``.
+
+    In addition adds ``__wrapped__`` attribute referring to the wrapped function
+    and ``__original__`` attribute referring to innermost wrapped one.
+
+    Mostly used to create decorators::
+
+        def some_decorator(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                do_something(*args, **kwargs)
+                return func(*args, **kwargs)
+
+    But see also :func:`decorator` for that.
+    """
     return partial(update_wrapper, wrapped=wrapped,
                    assigned=assigned, updated=updated)
 
@@ -249,6 +267,12 @@ try:
 except ImportError:
     # A simplified version, no stop keyword-only argument
     def unwrap(func):
+        """
+        Get the object wrapped by ``func``.
+
+        Follows the chain of :attr:`__wrapped__` attributes returning the last
+        object in the chain.
+        """
         f = func  # remember the original func for error reporting
         memo = set([id(f)]) # Memoise by id to tolerate non-hashable objects
         while hasattr(func, '__wrapped__'):
