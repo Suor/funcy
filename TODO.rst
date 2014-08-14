@@ -2,16 +2,17 @@ TODO
 ====
 
 - @reraise((Err1, Err2), like=OtherErr)
+  with reraise(TypeError, ValueError) as MyError:
+      ...
 - add delay to @retry
 - pre_walk, post_walk
 - tree-seq
 - children arg to i?flatten
-- where_not
+- where_not?
 
 - partial.func interface
 - invalidate/invalidate_all() to (make|silent)_lookuper
 
-- separate (log|print)_(enters|exits)
 - (log|print)_errors to optionally hide causing call?
 - log_* and print_* to optionally hide args?
 
@@ -27,7 +28,6 @@ Or not TODO
 -----------
 
 - padding to chunks
-- @partial(compose, ...) for decorators
 - reject*(), disjoint*() collections
 - zip_with = map(f, izip(seqs))
 - starfilter()
