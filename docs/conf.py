@@ -253,10 +253,10 @@ texinfo_documents = [
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
 
-rst_prolog = """
-.. module:: funcy
+# rst_prolog = """
+# .. module:: funcy
 
-"""
+# """
 
 
 from sphinx.ext.autodoc import FunctionDocumenter

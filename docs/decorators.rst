@@ -1,6 +1,8 @@
 Decorators
 ==========
 
+.. module:: funcy
+
 .. decorator:: decorator
 
     Transforms a flat wrapper into a decorator with or without arguments.
