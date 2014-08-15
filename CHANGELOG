@@ -1,3 +1,4 @@
+- support pypy3
 - added @contextmanager, ContextDecorator
 - added @(log|print)_(enters|exits)
 - print stack trace in @(log|print)_(calls|errors)
