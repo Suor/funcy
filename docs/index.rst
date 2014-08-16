@@ -8,6 +8,7 @@ Special topics:
 .. toctree::
    :maxdepth: 1
 
+   overview
    extended_fns
    python3
 

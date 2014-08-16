@@ -67,7 +67,7 @@ Manipulate sequences:
     remove(even, [1, 2, 3])     # [1, 3]
     concat([1, 2], [5, 6])      # [1, 2, 5, 6]
     cat(map(range, range(4)))   # [0, 0, 1, 0, 1, 2]
-    mapcat(range, range(4)))    # same
+    mapcat(range, range(4))     # same
     flatten(nested_structure)   # flat_list
     distinct('abacbdd')         # list('abcd')
 
@@ -110,7 +110,7 @@ Abstract control flow:
 
     @once
     def initialize():
-        # ...
+        "..."
 
     with suppress(OSError):
         os.remove('some.file')
@@ -119,7 +119,7 @@ Abstract control flow:
     @limit_error_rate(fails=5, timeout=60)
     @retry(tries=2, errors=(HttpError, ServiceDown))
     def some_unreliable_action(...):
-        # ...
+        "..."
 
     class MyUser(AbstractBaseUser):
         @cached_property
@@ -138,12 +138,12 @@ Ease debugging:
 
     @print_exits
     def some_func(...):
-        # ...
+        "..."
 
     @log_calls(log.info, errors=False)
     @log_errors(log.exception)
     def some_suspicious_function(...):
-        # ...
+        "..."
 
 
 And `much more <http://funcy.readthedocs.org/>`_.
