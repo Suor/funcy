@@ -127,7 +127,26 @@ Abstract control flow:
             return self.phones.filter(public=True)
 
 
-And `many more <http://funcy.readthedocs.org/>`_.
+Ease debugging:
+
+.. code:: python
+
+    squares = {tap(x, 'x'): tap(x * x, 'x^2') for x in [3, 4]}
+    # x: 3
+    # x^2: 9
+    # ...
+
+    @print_exits
+    def some_func(...):
+        # ...
+
+    @log_calls(log.info, errors=False)
+    @log_errors(log.exception)
+    def some_suspicious_function(...):
+        # ...
+
+
+And `much more <http://funcy.readthedocs.org/>`_.
 
 
 .. |Build Status| image:: https://travis-ci.org/Suor/funcy.svg?branch=master
