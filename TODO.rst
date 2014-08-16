@@ -15,6 +15,7 @@ TODO
 - partial.func interface or (func, arg1, arg2) extended fns
 - invalidate/invalidate_all() to (make|silent)_lookuper
 
+- decorators with optional arguments
 - (log|print)_errors to optionally hide causing call?
 - log_* and print_* to optionally hide args?
 
