@@ -5,17 +5,41 @@ from funcy.calc import *
 
 
 def test_memoize():
-    calls = []
-
     @memoize
     def inc(x):
         calls.append(x)
         return x + 1
 
+    calls = []
     assert inc(0) == 1
     assert inc(1) == 2
     assert inc(0) == 1
     assert calls == [0, 1]
+
+    # using kwargs
+    assert inc(x=0) == 1
+    assert inc(x=1) == 2
+    assert inc(x=0) == 1
+    assert calls == [0, 1, 0, 1]
+
+
+def test_memoize_args_kwargs():
+    @memoize
+    def mul(x, by=1):
+        calls.append((x, by))
+        return x * by
+
+    calls = []
+    assert mul(0) == 0
+    assert mul(1) == 1
+    assert mul(0) == 0
+    assert calls == [(0, 1), (1, 1)]
+
+    # more with kwargs
+    assert mul(0, 1) == 0
+    assert mul(1, 1) == 1
+    assert mul(0, 1) == 0
+    assert calls == [(0, 1), (1, 1), (0, 1), (1, 1)]
 
 
 def test_make_lookuper():
