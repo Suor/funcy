@@ -1,3 +1,5 @@
+from time import time
+
 import pytest
 from funcy.flow import *
 
@@ -65,6 +67,16 @@ def test_retry():
     assert retry(2, MyError)(failing)() == 1
     calls = []
     with pytest.raises(MyError): retry(2, MyError)(failing)(2)
+
+
+def test_retry_backoff():
+    def failing():
+        raise MyError
+
+    start_time = time()
+    # sleep only between tries, so retry is 11, but sleep summary is ~0.1 sec
+    with pytest.raises(MyError): retry(11, MyError, backoff=0.01)(failing)()
+    assert 0.1 < time() - start_time < 0.2
 
 
 def test_fallback():

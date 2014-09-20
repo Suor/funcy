@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from collections import Hashable
+import time
 import threading
 
 from .cross import imap, xrange
@@ -70,7 +71,7 @@ except ImportError:
 
 
 @decorator
-def retry(call, tries, errors=Exception):
+def retry(call, tries, errors=Exception, backoff=0):
     for attempt in xrange(tries):
         try:
             return call()
@@ -78,6 +79,15 @@ def retry(call, tries, errors=Exception):
             # Reraise error on last attempt
             if attempt + 1 == tries:
                 raise
+            else:
+                if callable(backoff):
+                    backoff_value = backoff()
+                else:
+                    try:
+                        backoff_value = float(backoff)
+                    except (ValueError, TypeError):
+                        raise TypeError("Unknown backoff value %s" % backoff)
+                time.sleep(backoff_value)
 
 
 def fallback(*approaches):
