@@ -63,9 +63,9 @@ Flow
     Constructs function that raises given exception with given arguments on any invocation.
 
 
-.. decorator:: retry(tries, errors=Exception, backoff=0)
+.. decorator:: retry(tries, errors=Exception, timeout=0)
 
-    Every call of decorated function retried up to ``tries`` times if any subclass of ``errors`` occurs (could be exception class or a tuple of them). There will be delay in ``backoff`` seconds between tries. You can use callable object which returns value as backoff::
+    Every call of decorated function retried up to ``tries`` times if any subclass of ``errors`` occurs (could be exception class or a tuple of them). There will be delay in ``timeout`` seconds between tries. You can use callable object which returns value as ``timeout``::
 
         @retry(3, errors=HttpError)
         def download_image(url):

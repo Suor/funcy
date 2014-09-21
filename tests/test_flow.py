@@ -69,13 +69,13 @@ def test_retry():
     with pytest.raises(MyError): retry(2, MyError)(failing)(2)
 
 
-def test_retry_backoff():
+def test_retry_timeout():
     def failing():
         raise MyError
 
     start_time = time()
     # sleep only between tries, so retry is 11, but sleep summary is ~0.1 sec
-    with pytest.raises(MyError): retry(11, MyError, backoff=0.01)(failing)()
+    with pytest.raises(MyError): retry(11, MyError, timeout=0.01)(failing)()
     assert 0.1 < time() - start_time < 0.2
 
 

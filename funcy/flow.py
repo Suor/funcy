@@ -71,7 +71,7 @@ except ImportError:
 
 
 @decorator
-def retry(call, tries, errors=Exception, backoff=0):
+def retry(call, tries, errors=Exception, timeout=0):
     for attempt in xrange(tries):
         try:
             return call()
@@ -80,14 +80,15 @@ def retry(call, tries, errors=Exception, backoff=0):
             if attempt + 1 == tries:
                 raise
             else:
-                if callable(backoff):
-                    backoff_value = backoff()
+                if callable(timeout):
+                    timeout_value = timeout()
                 else:
                     try:
-                        backoff_value = float(backoff)
+                        timeout_value = float(timeout)
                     except (ValueError, TypeError):
-                        raise TypeError("Unknown backoff value %s" % backoff)
-                time.sleep(backoff_value)
+                        raise TypeError("Unknown timeout value %s" % timeout)
+                if timeout_value:
+                    time.sleep(timeout_value)
 
 
 def fallback(*approaches):
