@@ -78,6 +78,12 @@ def test_retry_timeout():
     with pytest.raises(MyError): retry(11, MyError, timeout=0.01)(failing)()
     assert 0.1 < time() - start_time < 0.11
 
+    # exponential timeout
+    start_time = time()
+    with pytest.raises(MyError): retry(4, MyError, timeout=lambda a: 0.01 * 2 ** a)(failing)()
+    d = time() - start_time
+    assert 0.07 < d < 0.08
+
 
 def test_fallback():
     assert fallback(raiser(), lambda: 1) == 1

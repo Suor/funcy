@@ -80,14 +80,8 @@ def retry(call, tries, errors=Exception, timeout=0):
             if attempt + 1 == tries:
                 raise
             else:
-                if callable(timeout):
-                    timeout_value = timeout()
-                else:
-                    try:
-                        timeout_value = float(timeout)
-                    except (ValueError, TypeError):
-                        raise TypeError("Unknown timeout value %s" % timeout)
-                if timeout_value:
+                timeout_value = timeout(attempt) if callable(timeout) else timeout
+                if timeout_value > 0:
                     time.sleep(timeout_value)
 
 
