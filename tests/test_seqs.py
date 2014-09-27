@@ -175,6 +175,9 @@ def test_partition_by():
 def test_with_prev():
     assert list(with_prev(range(3))) == [(0, None), (1, 0), (2, 1)]
 
+def test_with_next():
+    assert list(with_next(range(3))) == [(0, 1), (1, 2), (2, None)]
+
 def test_pairwise():
     assert list(pairwise(range(3))) == [(0, 1), (1, 2)]
 

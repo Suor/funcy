@@ -18,7 +18,7 @@ __all__ = [
     'dropwhile', 'takewhile', 'split', 'isplit', 'split_at', 'isplit_at', 'split_by', 'isplit_by',
     'group_by', 'group_by_keys', 'count_by',
     'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
-    'with_prev', 'pairwise',
+    'with_prev', 'with_next', 'pairwise',
     'ireductions', 'reductions', 'isums', 'sums',
 ]
 
@@ -341,6 +341,11 @@ def partition_by(f, seq):
 def with_prev(seq, fill=None):
     a, b = tee(seq)
     return izip(a, chain([fill], b))
+
+def with_next(seq, fill=None):
+    a, b = tee(seq)
+    next(b, None)
+    return izip(a, chain(b, [fill]))
 
 # An itertools recipe
 # NOTE: this is the same as ipartition(2, 1, seq) only faster and with distinct name

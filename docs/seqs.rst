@@ -468,6 +468,12 @@ Data handling
 
     See also :func:`ipartition_by` and :func:`py:itertools.groupby` for chunking sequence by condition.
 
+
+.. function:: with_prev(seq, fill=None)
+
+    Returns an iterator of a pair of each item with one next to it. Yields `fill` or `None` as next element for last item.
+
+
 .. function:: pairwise(seq)
 
     Yields pairs of items in ``seq`` like ``(item0, item1), (item1, item2), ...``. A great way to process sequence items in a context of each neighbor::
