@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from functools import wraps
 import inspect
 
-
 __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 
 
@@ -14,20 +13,24 @@ __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 class SkipMemoization(Exception):
     pass
 
+
 def memoize(func):
-    cache = {}
+    memory = {}
 
     @wraps(func)
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):
+        if kwargs:
+            key = args + tuple(sorted(kwargs.items()))
+        else:
+            key = args
         try:
-            return cache[args]
+            return memory[key]
         except KeyError:
             try:
-                cache[args] = func(*args)
+                value = memory[key] = func(*args, **kwargs)
+                return value
             except SkipMemoization as e:
                 return e.args[0] if e.args else None
-
-        return cache[args]
     return wrapper
 memoize.skip = SkipMemoization
 
