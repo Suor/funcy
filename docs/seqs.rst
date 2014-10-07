@@ -469,7 +469,7 @@ Data handling
     See also :func:`ipartition_by` and :func:`py:itertools.groupby` for chunking sequence by condition.
 
 
-.. function:: with_prev(seq, fill=None)
+.. function:: with_next(seq, fill=None)
 
     Returns an iterator of a pair of each item with one next to it. Yields `fill` or `None` as next element for last item.
 
