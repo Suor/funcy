@@ -31,7 +31,7 @@ def log_calls(call, print_func, errors=True, stack=True):
     try:
         print_func('Call %s' % signature)
         result = call()
-        print_func('-> %s from %s' % (smart_repr(result), signature))
+        print_func('-> %s from %s' % (smart_repr(result, max_len=None), signature))
         return result
     except BaseException as e:
         if errors:
@@ -53,7 +53,7 @@ print_enters = log_enters(print)
 def log_exits(call, print_func, errors=True, stack=True):
     try:
         result = call()
-        print_func('-> %s from %s' % (smart_repr(result), signature_repr(call)))
+        print_func('-> %s from %s' % (smart_repr(result, max_len=None), signature_repr(call)))
         return result
     except BaseException as e:
         if errors:
@@ -113,7 +113,7 @@ def signature_repr(call):
     kwargs_repr = ('%s=%s' % (key, smart_repr(value)) for key, value in call._kwargs.items())
     return '%s(%s)' % (call._func.__name__, ', '.join(chain(args_repr, kwargs_repr)))
 
-def smart_repr(value):
+def smart_repr(value, max_len=MAX_REPR_LEN):
     if isinstance(value, basestring):
         res = repr(value)
     else:
@@ -121,6 +121,6 @@ def smart_repr(value):
 
     # res = res.replace('\n', ' ')
     res = re.sub(r'\s+', ' ', res)
-    if len(res) > MAX_REPR_LEN:
-        res = res[:MAX_REPR_LEN-3] + '...'
+    if max_len and len(res) > max_len:
+        res = res[:max_len-3] + '...'
     return res
