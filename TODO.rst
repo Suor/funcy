@@ -1,16 +1,13 @@
 TODO
 ====
 
-- pipe, stream
 - @reraise((Err1, Err2), like=OtherErr)
   with reraise(TypeError, ValueError) as MyError:
       ...
-- add delay to @retry
 - pre_walk, post_walk
 - tree-seq
 - children arg to i?flatten
 - where_not?
-- check using eval in @decorator and @wraps to preserve signature
 
 - partial.func interface or (func, arg1, arg2) extended fns
 - invalidate/invalidate_all() to (make|silent)_lookuper
@@ -23,8 +20,7 @@ TODO
 Docs
 ----
 
-- cheatsheat
-- overview to docs
+- cheatsheet
 
 
 Or not TODO
