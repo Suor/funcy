@@ -6,7 +6,7 @@ import traceback
 from itertools import chain
 
 from .cross import imap, basestring
-from .decorators import decorator
+from .decorators import decorator, wraps, Call
 
 
 __all__ = ['tap',
@@ -81,16 +81,30 @@ def _format_error(call, e, stack=True):
         return '%s: %s raised in %s' % (e.__class__.__name__, e, signature_repr(call))
 
 
-@decorator
-def log_durations(call, print_func):
-    start = time.time()
-    result = call()
-    end = time.time()
+class log_durations(object):
+    def __init__(self, print_func, label=None):
+        self.print_func = print_func
+        self.label = label
 
-    print_func("%s in %s" % (format_time(end - start), signature_repr(call)))
-    return result
+    def __call__(self, func):
+        @wraps(func)
+        def inner(*args, **kwargs):
+            self.label = signature_repr(Call(func, args, kwargs))
+            with self:
+                return func(*args, **kwargs)
+        return inner
 
-print_durations = log_durations(print)
+    def __enter__(self):
+        self.start = time.time()
+        return self
+
+    def __exit__(self, *exc):
+        duration = format_time(time.time() - self.start)
+        self.print_func("%s in %s" % (duration, self.label) if self.label else duration)
+        return False
+
+def print_durations(label=None):
+    return log_durations(print, label)
 
 
 def format_time(sec):

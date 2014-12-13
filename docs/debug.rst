@@ -62,4 +62,9 @@ Debugging
 .. decorator:: log_durations(print_func)
                print_durations
 
-    Will time each function call and log or print its duration.
+    Will time each function call and log or print its duration. Can also be used as context manager::
+
+        with print_durations('Creating models'):
+            Model.objects.create(...)
+            # ...
+        # 10.2 ms in Creating models

@@ -63,9 +63,13 @@ def test_log_durations():
         time.sleep(0.010)
 
     f()
-    m = re.search(r'^\s*(\d+\.\d+) ms in f\(\)$', log[0])
-    assert m
-    assert 10 <= float(m.group(1)) < 20
+    with log_durations(log.append, 'hello'):
+        time.sleep(0.010)
+
+    for line in log:
+        m = re.search(r'^\s*(\d+\.\d+) ms in (f\(\)|hello)$', line)
+        assert m
+        assert 10 <= float(m.group(1)) < 20
 
 
 ### An utility to capture stdout
