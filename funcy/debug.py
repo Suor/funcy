@@ -35,7 +35,7 @@ def log_calls(call, print_func, errors=True, stack=True):
         return result
     except BaseException as e:
         if errors:
-            print_func('-> ' + _format_error(call, e, stack))
+            print_func('-> ' + _format_error(signature, e, stack))
         raise
 
 print_calls = log_calls(print)
@@ -51,37 +51,23 @@ print_enters = log_enters(print)
 
 @decorator
 def log_exits(call, print_func, errors=True, stack=True):
+    signature = signature_repr(call)
     try:
         result = call()
-        print_func('-> %s from %s' % (smart_repr(result, max_len=None), signature_repr(call)))
+        print_func('-> %s from %s' % (smart_repr(result, max_len=None), signature))
         return result
     except BaseException as e:
         if errors:
-            print_func('-> ' + _format_error(call, e, stack))
+            print_func('-> ' + _format_error(signature, e, stack))
         raise
 
 print_exits = log_exits(print)
 
 
-@decorator
-def log_errors(call, print_func, stack=True):
-    try:
-        return call()
-    except Exception as e:
-        print_func(_format_error(call, e, stack))
-        raise
-
-print_errors = log_errors(print)
-
-
-def _format_error(call, e, stack=True):
-    if stack:
-        return traceback.format_exc() + '    raised in ' + signature_repr(call)
-    else:
-        return '%s: %s raised in %s' % (e.__class__.__name__, e, signature_repr(call))
-
-
-class log_durations(object):
+class LabeledContextDecorator(object):
+    """
+    A context manager which also works as decorator, passing call signature as its label.
+    """
     def __init__(self, print_func, label=None):
         self.print_func = print_func
         self.label = label
@@ -89,11 +75,34 @@ class log_durations(object):
     def __call__(self, func):
         @wraps(func)
         def inner(*args, **kwargs):
-            self.label = signature_repr(Call(func, args, kwargs))
-            with self:
+            label = signature_repr(Call(func, args, kwargs))
+            cm = self.__class__(self.print_func, label)
+            with cm:
                 return func(*args, **kwargs)
         return inner
 
+
+class log_errors(LabeledContextDecorator):
+    def __init__(self, print_func, label=None, stack=True):
+        LabeledContextDecorator.__init__(self, print_func, label=label)
+        self.stack = stack
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, tb):
+        if exc_type:
+            if self.stack:
+                exc_message = ''.join(traceback.format_exception(exc_type, exc_value, tb))
+            else:
+                exc_message = '%s: %s' % (exc_type.__name__, exc_value)
+            self.print_func(_format_error(self.label, exc_message, self.stack))
+
+def print_errors(label=None):
+    return log_errors(print, label)
+
+
+class log_durations(LabeledContextDecorator):
     def __enter__(self):
         self.start = time.time()
         return self
@@ -101,11 +110,27 @@ class log_durations(object):
     def __exit__(self, *exc):
         duration = format_time(time.time() - self.start)
         self.print_func("%s in %s" % (duration, self.label) if self.label else duration)
-        return False
 
 def print_durations(label=None):
     return log_durations(print, label)
 
+
+### Formatting utils
+
+def _format_error(label, e, stack=True):
+    if isinstance(e, Exception):
+        if stack:
+            e_message = traceback.format_exc()
+        else:
+            e_message = '%s: %s' % (e.__class__.__name__, e)
+    else:
+        e_message = e
+
+    if label:
+        template = '%s    raised in %s' if stack else '%s raised in %s'
+        return template % (e_message, label)
+    else:
+        return e_message
 
 def format_time(sec):
     if sec < 1e-6:

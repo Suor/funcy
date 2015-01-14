@@ -58,6 +58,14 @@ Debugging
             initial = first_guess(username)
             # ...
 
+    Can also be used as context decorator::
+
+        with print_errors('initialization', stack=False):
+            load_this()
+            load_that()
+            # ...
+        # SomeException: a bad thing raised in initialization
+
 
 .. decorator:: log_durations(print_func)
                print_durations

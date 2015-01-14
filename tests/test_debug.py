@@ -55,6 +55,26 @@ def test_log_errors():
     assert re.search(r'ZeroDivisionError: .*\n    raised in f\(0\)$', log[0])
 
 
+def test_log_errors_manager():
+    log = []
+    try:
+        with log_errors(log.append):
+            1 / 0
+    except ZeroDivisionError:
+        pass
+    try:
+        with log_errors(log.append, 'name check', stack=False):
+            hey
+    except NameError:
+        pass
+    assert len(log) == 2
+    print(log)
+    assert log[0].startswith('Traceback')
+    assert re.search(r'ZeroDivisionError: .* zero\s*$', log[0])
+    assert not log[1].startswith('Traceback')
+    assert re.search(r"NameError: (global )?name 'hey' is not defined raised in name check", log[1])
+
+
 def test_log_durations():
     log = []
 
