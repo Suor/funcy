@@ -25,6 +25,15 @@ def test_cached_property():
     assert a.prop == 7
     assert calls == [2]
 
+def test_cached_property_doc():
+    class A(object):
+        @cached_property
+        def prop(self):
+            "prop doc"
+            return 7
+
+    assert A.prop.__doc__ == "prop doc"
+
 
 ### Monkey tests
 
