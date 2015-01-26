@@ -56,6 +56,21 @@ Functions
     But see :func:`re_tester` if you really need this.
 
 
+.. function:: backcurry(func[, n])
+
+    Curries function from last argument to first::
+
+        has_suffix = backcurry(str.endswith)
+        filter(has_suffix("ce"), ["nice", "cold", "ice"])
+        # -> ["nice", "ice"]
+
+    Can fix number of arguments when it's ambiguous::
+
+        to_power = backcurry(pow, 2) # curry 2 first args in reverse order
+        to_square = to_power(2)
+        to_cube = to_power(3)
+
+
 .. function:: autocurry(func[, n])
 
     Constructs a version of ``func`` returning it's partial application if insufficient arguments passed::

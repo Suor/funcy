@@ -25,7 +25,6 @@ def back_partial(func, *args):
     return lambda *a: func(*(a + args))
 
 
-
 def curry(func, n=EMPTY):
     if n is EMPTY:
         n = func.__code__.co_argcount
@@ -36,6 +35,18 @@ def curry(func, n=EMPTY):
         return lambda x: lambda y: func(x, y)
     else:
         return lambda x: curry(partial(func, x), n - 1)
+
+
+def backcurry(func, n=EMPTY):
+    if n is EMPTY:
+        n = func.__code__.co_argcount
+
+    if n <= 1:
+        return func
+    elif n == 2:
+        return lambda x: lambda y: func(y, x)
+    else:
+        return lambda x: backcurry(back_partial(func, x), n - 1)
 
 
 def autocurry(func, n=EMPTY, _args=(), _kwargs={}):

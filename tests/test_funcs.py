@@ -39,6 +39,10 @@ def test_curry():
     assert curry(__add__, 2)(10)(1) == 11
     assert curry(lambda x,y,z: x+y+z)('a')('b')('c') == 'abc'
 
+def test_backcurry():
+    assert backcurry(__sub__, 2)(10)(1) == -9
+    assert backcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
+
 def test_autocurry():
     at = autocurry(lambda a, b, c: (a, b, c))
 
