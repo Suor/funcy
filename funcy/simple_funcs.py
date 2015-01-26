@@ -21,6 +21,10 @@ def func_partial(func, *args, **kwargs):
     """
     return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
+def back_partial(func, *args):
+    return lambda *a: func(*(a + args))
+
+
 
 def curry(func, n=EMPTY):
     if n is EMPTY:

@@ -27,6 +27,11 @@ def test_func_partial():
 
     assert A().f() == 11
 
+def test_back_partial():
+    assert back_partial(__sub__, 10)(1) == -9
+    assert back_partial(pow, 2, 85)(10) == 15
+
+
 def test_curry():
     assert curry(lambda: 42)() == 42
     assert curry(_ * 2)(21) == 42
