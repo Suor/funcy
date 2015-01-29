@@ -38,7 +38,11 @@ def log_calls(call, print_func, errors=True, stack=True):
             print_func('-> ' + _format_error(signature, e, stack))
         raise
 
-print_calls = log_calls(print)
+def print_calls(errors=True, stack=True):
+    if callable(errors):
+        return log_calls(print)(errors)
+    else:
+        return log_calls(print, errors, stack)
 
 
 @decorator
@@ -61,7 +65,11 @@ def log_exits(call, print_func, errors=True, stack=True):
             print_func('-> ' + _format_error(signature, e, stack))
         raise
 
-print_exits = log_exits(print)
+def print_exits(errors=True, stack=True):
+    if callable(errors):
+        return log_exits(print)(errors)
+    else:
+        return log_exits(print, errors, stack)
 
 
 class LabeledContextDecorator(object):

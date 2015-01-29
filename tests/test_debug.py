@@ -26,6 +26,13 @@ def test_log_calls():
         "-> 'ab' from f('a', 'b')",
     ]
 
+def test_print_calls():
+    def f(x, y):
+        return x + y
+
+    capture(print_calls(f), 1, 2) == "Call f(1, 2)\n-> 3 from f(1, 2)\n",
+    capture(print_calls()(f), 1, 2) == "Call f(1, 2)\n-> 3 from f(1, 2)\n",
+
 
 def test_log_calls_raise():
     log = []
