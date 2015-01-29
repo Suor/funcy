@@ -88,6 +88,17 @@ def test_print_errors():
     assert capture(silent(g)).startswith('ZeroDivisionError')
 
 
+def test_print_errors_recursion():
+    @silent
+    @print_errors(stack=False)
+    def f(n):
+        if n:
+            f(0)
+            1 / 0
+
+    assert 'f(1)' in capture(f, 1)
+
+
 def test_log_durations():
     log = []
 
