@@ -75,6 +75,19 @@ def test_log_errors_manager():
     assert re.search(r"NameError: (global )?name 'hey' is not defined raised in name check", log[1])
 
 
+def test_print_errors():
+    def error():
+        1 / 0
+
+    f = print_errors(error)
+    assert f.__name__ == 'error'
+    assert 'ZeroDivisionError' in capture(silent(f))
+
+    g = print_errors(stack=False)(error)
+    assert g.__name__ == 'error'
+    assert capture(silent(g)).startswith('ZeroDivisionError')
+
+
 def test_log_durations():
     log = []
 

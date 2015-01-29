@@ -98,8 +98,11 @@ class log_errors(LabeledContextDecorator):
                 exc_message = '%s: %s' % (exc_type.__name__, exc_value)
             self.print_func(_format_error(self.label, exc_message, self.stack))
 
-def print_errors(label=None):
-    return log_errors(print, label)
+def print_errors(label=None, stack=True):
+    if callable(label):
+        return log_errors(print)(label)
+    else:
+        return log_errors(print, label, stack)
 
 
 class log_durations(LabeledContextDecorator):
@@ -112,7 +115,10 @@ class log_durations(LabeledContextDecorator):
         self.print_func("%s in %s" % (duration, self.label) if self.label else duration)
 
 def print_durations(label=None):
-    return log_durations(print, label)
+    if callable(label):
+        return log_durations(print)(label)
+    else:
+        return log_durations(print, label)
 
 
 ### Formatting utils
