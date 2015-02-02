@@ -29,12 +29,12 @@ Functions
         json_field = partial(field, json=True)
 
 
-.. function:: back_partial(func, *args)
+.. function:: rpartial(func, *args)
 
     Partially applies last arguments in ``func``::
 
         from operator import div
-        one_third = back_partial(div, 3.0)
+        one_third = rpartial(div, 3.0)
 
 
 .. function:: func_partial(func, *args, **kwargs)
@@ -61,17 +61,17 @@ Functions
     But see :func:`re_tester` if you really need this.
 
 
-.. function:: backcurry(func[, n])
+.. function:: rcurry(func[, n])
 
     Curries function from last argument to first::
 
-        has_suffix = backcurry(str.endswith)
+        has_suffix = rcurry(str.endswith)
         filter(has_suffix("ce"), ["nice", "cold", "ice"])
         # -> ["nice", "ice"]
 
     Can fix number of arguments when it's ambiguous::
 
-        to_power = backcurry(pow, 2) # curry 2 first args in reverse order
+        to_power = rcurry(pow, 2) # curry 2 first args in reverse order
         to_square = to_power(2)
         to_cube = to_power(3)
 

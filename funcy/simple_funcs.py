@@ -4,8 +4,8 @@ from .primitives import EMPTY
 
 
 __all__ = ['identity', 'constantly', 'caller',
-           'partial', 'back_partial', 'func_partial',
-           'curry', 'backcurry', 'autocurry',
+           'partial', 'rpartial', 'func_partial',
+           'curry', 'rcurry', 'autocurry',
            'iffy']
 
 
@@ -27,7 +27,7 @@ def func_partial(func, *args, **kwargs):
     """
     return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
-def back_partial(func, *args):
+def rpartial(func, *args):
     return lambda *a: func(*(a + args))
 
 
@@ -43,7 +43,7 @@ def curry(func, n=EMPTY):
         return lambda x: curry(partial(func, x), n - 1)
 
 
-def backcurry(func, n=EMPTY):
+def rcurry(func, n=EMPTY):
     if n is EMPTY:
         n = func.__code__.co_argcount
 
@@ -52,7 +52,7 @@ def backcurry(func, n=EMPTY):
     elif n == 2:
         return lambda x: lambda y: func(y, x)
     else:
-        return lambda x: backcurry(back_partial(func, x), n - 1)
+        return lambda x: rcurry(rpartial(func, x), n - 1)
 
 
 def autocurry(func, n=EMPTY, _args=(), _kwargs={}):

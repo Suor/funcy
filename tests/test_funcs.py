@@ -33,8 +33,8 @@ def test_func_partial():
     assert A().f() == 11
 
 def test_back_partial():
-    assert back_partial(__sub__, 10)(1) == -9
-    assert back_partial(pow, 2, 85)(10) == 15
+    assert rpartial(__sub__, 10)(1) == -9
+    assert rpartial(pow, 2, 85)(10) == 15
 
 
 def test_curry():
@@ -45,8 +45,8 @@ def test_curry():
     assert curry(lambda x,y,z: x+y+z)('a')('b')('c') == 'abc'
 
 def test_backcurry():
-    assert backcurry(__sub__, 2)(10)(1) == -9
-    assert backcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
+    assert rcurry(__sub__, 2)(10)(1) == -9
+    assert rcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
 
 def test_autocurry():
     at = autocurry(lambda a, b, c: (a, b, c))
