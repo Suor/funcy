@@ -3,14 +3,11 @@ from functools import reduce
 
 from .cross import map, imap
 from .simple_funcs import *
+from .simple_funcs import __all__ as all_simple
 from .funcmakers import make_func
 
 
-__all__ = ['identity', 'constantly', 'caller',
-           'partial', 'func_partial', 'back_partial',
-           'curry', 'backcurry', 'autocurry', 'compose', 'complement',
-           'juxt', 'ijuxt',
-           'iffy']
+__all__ = all_simple + ['compose', 'complement', 'juxt', 'ijuxt']
 
 
 def compose(*fs):

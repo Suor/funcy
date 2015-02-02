@@ -3,6 +3,12 @@ from functools import partial
 from .primitives import EMPTY
 
 
+__all__ = ['identity', 'constantly', 'caller',
+           'partial', 'back_partial', 'func_partial',
+           'curry', 'backcurry', 'autocurry',
+           'iffy']
+
+
 def identity(x):
     return x
 
