@@ -1,3 +1,4 @@
+from collections import Counter
 import inspect
 import pytest
 
@@ -21,12 +22,18 @@ def test_match():
 
 
 @pytest.mark.skipif(PY3, reason="modules use python 2 internally")
-def test_full_py2():
-    assert sorted(funcy.__all__) == sorted(cat(m.__all__ for m in modules))
-
-
 def test_full():
+    assert set(funcy.__all__) >= set(cat(m.__all__ for m in modules))
+
+
+def test_pythons_equivalent():
     assert len(py2.__all__) == len(py3.__all__)
+
+
+def test_name_clashes():
+    counts = Counter(py2.icat(m.__all__ for m in modules))
+    clashes = [name for name, c in counts.items() if c > 1]
+    assert not clashes, 'names clash for ' + ', '.join(clashes)
 
 
 def test_renames():

@@ -18,7 +18,20 @@ from .primitives import *
 # Setup __all__
 modules = ('calc', 'colls', 'decorators', 'funcolls', 'funcs', 'seqs', 'types',
            'strings', 'flow', 'objects', 'namespaces', 'debug', 'primitives')
-__all__ = cat(sys.modules['funcy.' + m].__all__ for m in modules)
+__all__ = cat(sys.modules['funcy.' + m].__all__ for m in modules) + ['flip']
+
+
+from collections import Mapping
+
+def flip(value):
+    def flip_pair(pair):
+        k, v = pair
+        return v, k
+
+    if isinstance(value, Mapping):
+        return walk(flip_pair, value)
+    else:
+        return lambda x, y: value(y, x)
 
 
 # Python 2 style zip() for Python 3

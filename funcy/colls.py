@@ -17,7 +17,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'join', 'merge', 'join_with', 'merge_with',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
-           'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
+           'zipdict', 'project', 'izip_values', 'izip_dicts',
            'where', 'pluck', 'invoke']
 
 
@@ -196,12 +196,6 @@ def some(pred, seq=EMPTY):
 
 def zipdict(keys, vals):
     return dict(izip(keys, vals))
-
-def flip(mapping):
-    def flip_pair(pair):
-        k, v = pair
-        return v, k
-    return walk(flip_pair, mapping)
 
 def project(mapping, keys):
     return _factory(mapping)((k, mapping[k]) for k in keys if k in mapping)
