@@ -80,7 +80,13 @@ class LabeledContextDecorator(object):
         self.print_func = print_func
         self.label = label
 
-    def __call__(self, func):
+    def __call__(self, label=None, **kwargs):
+        if callable(label):
+            return self.decorator(label)
+        else:
+            return self.__class__(self.print_func, label, **kwargs)
+
+    def decorator(self, func):
         @wraps(func)
         def inner(*args, **kwargs):
             # Recreate self with a new label so that nested and recursive calls will work
@@ -108,11 +114,7 @@ class log_errors(LabeledContextDecorator):
                 exc_message = '%s: %s' % (exc_type.__name__, exc_value)
             self.print_func(_format_error(self.label, exc_message, self.stack))
 
-def print_errors(label=None, stack=True):
-    if callable(label):
-        return log_errors(print)(label)
-    else:
-        return log_errors(print, label, stack)
+print_errors = log_errors(print)
 
 
 class log_durations(LabeledContextDecorator):
@@ -124,11 +126,7 @@ class log_durations(LabeledContextDecorator):
         duration = format_time(time.time() - self.start)
         self.print_func("%s in %s" % (duration, self.label) if self.label else duration)
 
-def print_durations(label=None):
-    if callable(label):
-        return log_durations(print)(label)
-    else:
-        return log_durations(print, label)
+print_durations = log_durations(print)
 
 
 ### Formatting utils

@@ -95,6 +95,16 @@ def test_print_errors():
     assert capture(silent(g)).startswith('ZeroDivisionError')
 
 
+def test_print_errors_manager():
+    @silent
+    def f():
+        with print_errors:
+            1 / 0
+
+    assert 'ZeroDivisionError' in capture(f)
+    assert capture(f).startswith('Traceback')
+
+
 def test_print_errors_recursion():
     @silent
     @print_errors(stack=False)
