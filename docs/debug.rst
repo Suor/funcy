@@ -19,7 +19,7 @@ Debugging
 
 
 .. decorator:: log_calls(print_func, errors=True, stack=True)
-               print_calls
+               print_calls(errors=True, stack=True)
 
     Will log or print all function calls, including arguments, results and raised exceptions. Can be used as decorator or tapped into call expression::
 
@@ -38,14 +38,14 @@ Debugging
 .. decorator:: log_enters(print_func)
                print_enters
                log_exits(print_func, errors=True, stack=True)
-               print_exits
+               print_exits(errors=True, stack=True)
 
     Will log or print every time execution enters or exits the function. Should be used same way as :func:`log_calls` and :func:`print_calls` when you need to track only one event per
     function call.
 
 
-.. decorator:: log_errors(print_func, stack=True)
-               print_errors
+.. decorator:: log_errors(print_func, label=None, stack=True)
+               print_errors(label=None, stack=True)
 
     Will log or print all function errors providing function arguments causing them. If ``stack``
     is set to ``False`` then each error is reported with simple one line message.
@@ -67,8 +67,8 @@ Debugging
         # SomeException: a bad thing raised in initialization
 
 
-.. decorator:: log_durations(print_func)
-               print_durations
+.. decorator:: log_durations(print_func, label=None)
+               print_durations(label=None)
 
     Will time each function call and log or print its duration. Can also be used as context manager::
 
