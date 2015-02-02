@@ -1,6 +1,9 @@
 TODO
 ====
 
+- flip function arguments func (revert?, rename?)
+- count_by(identity, ...) shortcut
+
 - @reraise((Err1, Err2), like=OtherErr)
   with reraise(TypeError, ValueError) as MyError:
       ...
