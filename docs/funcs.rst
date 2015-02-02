@@ -36,6 +36,10 @@ Functions
         from operator import div
         one_third = rpartial(div, 3.0)
 
+    Arguments are passed to ``func`` in the same order as they came to :func:`rpartial`::
+
+        separate_a_word = rpartial(str.split, ' ', 1)
+
 
 .. function:: func_partial(func, *args, **kwargs)
 
