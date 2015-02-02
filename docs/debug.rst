@@ -31,6 +31,7 @@ Debugging
         @log_errors(log.exception)
         def some_suspicious_function(...):
             # ...
+            return result
 
     :func:`print_calls` always prints everything, including error stack traces.
 
@@ -70,9 +71,21 @@ Debugging
 .. decorator:: log_durations(print_func, label=None)
                print_durations(label=None)
 
-    Will time each function call and log or print its duration. Can also be used as context manager::
+    Will time each function call and log or print its duration::
+
+        @log_durations(logging.info)
+        def do_hard_work(n):
+            samples = range(n)
+            # ...
+
+        # 121 ms in do_hard_work(10)
+        # 143 ms in do_hard_work(11)
+        # ...
+
+    A block of code could be timed with a help of context manager::
 
         with print_durations('Creating models'):
             Model.objects.create(...)
             # ...
+
         # 10.2 ms in Creating models
