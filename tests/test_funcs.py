@@ -4,7 +4,6 @@ from whatever import _
 
 from funcy.cross import map
 from funcy.funcs import *
-from funcy import flip
 
 
 def test_caller():
@@ -13,10 +12,6 @@ def test_caller():
 def test_constantly():
     assert constantly(42)() == 42
     assert constantly(42)('hi', 'there', volume='shout') == 42
-
-def test_flip():
-    assert flip(__sub__)(3, 4) == 1
-
 
 def test_partial():
     assert partial(__add__, 10)(1) == 11

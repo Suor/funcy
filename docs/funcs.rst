@@ -16,11 +16,6 @@ Functions
     Returns function calling its argument with passed arguments.
 
 
-.. function:: flip(func)
-
-    Swaps first and second function arguments.
-
-
 .. function:: partial(func, *args, **kwargs)
 
     Returns partial application of ``func``. A re-export of :func:`py:functools.partial`. Can be used in a variety of ways. DSLs is one of them::

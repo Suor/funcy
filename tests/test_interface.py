@@ -21,11 +21,11 @@ def test_match():
 
 
 @pytest.mark.skipif(PY3, reason="modules use python 2 internally")
+def test_full_py2():
+    assert sorted(funcy.__all__) == sorted(cat(m.__all__ for m in modules))
+
+
 def test_full():
-    assert set(funcy.__all__) >= set(cat(m.__all__ for m in modules))
-
-
-def test_pythons_equivalent():
     assert len(py2.__all__) == len(py3.__all__)
 
 

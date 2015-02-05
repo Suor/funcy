@@ -4,7 +4,6 @@ from collections import Iterator, defaultdict
 from whatever import _
 
 from funcy.colls import *
-from funcy import flip
 
 
 # Utilities
