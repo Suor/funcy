@@ -1,3 +1,11 @@
+1.4
+- added rpartial() and rcurry()
+- support arguments in print_(calls|exits)
+- made print_(errors|durations) work both with and without arguments
+- made (log|print)_errors() works as context manager
+- made (log|print)_durations() work as context managers
+- pass func docstring to @cached_property
+
 1.3
 - added with_next()
 - added timeout argument to @retry() (rocco66)
