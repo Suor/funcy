@@ -151,3 +151,8 @@ And `much more <http://funcy.readthedocs.org/>`_.
 
 .. |Build Status| image:: https://travis-ci.org/Suor/funcy.svg?branch=master
    :target: https://travis-ci.org/Suor/funcy
+
+
+.. image:: https://badges.gitter.im/Join%20Chat.svg
+   :alt: Join the chat at https://gitter.im/Suor/funcy
+   :target: https://gitter.im/Suor/funcy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
