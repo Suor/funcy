@@ -1,5 +1,13 @@
 from setuptools import setup
 
+
+# Remove build status and move Gitter link under title for PyPi
+README = open('README.rst').read()    \
+    .replace('|Build Status|', '', 1) \
+    .replace('|Gitter|', '', 1)       \
+    .replace('===\n', '===\n\n|Gitter|\n')
+
+
 setup(
     name='funcy',
     version=open('VERSION').read().strip(),
@@ -7,7 +15,7 @@ setup(
     author_email='suor.web@gmail.com',
 
     description='A fancy and practical functional tools',
-    long_description=open('README.rst').read().replace('|Build Status|', '', 1),
+    long_description=README,
     url='http://github.com/Suor/funcy',
     license='BSD',
 
