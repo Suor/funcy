@@ -12,8 +12,8 @@ py = py2 if PY2 else py3
 # Introspect all modules
 exclude = ('funcy.cross', 'funcy.py2', 'funcy.py3', 'funcy.simple_funcs', 'funcy.funcmakers')
 modules = [m for m in funcy.__dict__.values()
-             if inspect.ismodule(m)
-                and m.__name__.startswith('funcy.') and m.__name__ not in exclude]
+             if inspect.ismodule(m) and m.__name__.startswith('funcy.') and
+                m.__name__ not in exclude]
 
 
 def test_match():
