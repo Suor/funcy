@@ -184,6 +184,13 @@ Dict utils
     See also :func:`izip_values`.
 
 
+.. function:: get_in(d, path, not_found=None)
+
+    Returns the value corresponding to the path in the dictionary::
+
+        get_in({"a": {"b": "c"}}, ["a", "b"])  # "c"
+        get_in({"a": {"b": "c"}}, ["d"], "foo")  # "foo"
+
 
 Data manipulation
 -----------------
