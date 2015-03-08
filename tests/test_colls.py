@@ -205,7 +205,7 @@ def test_izip_dicts():
 
 
 def test_get_in():
-    d = {
+    m = {
         "a": {
             "b": "c",
             "d": "e",
@@ -215,11 +215,61 @@ def test_get_in():
         },
         "i": "j"
     }
-    assert get_in(d, ["m"]) is None
-    assert get_in(d, ["m", "n"], "foo") == "foo"
-    assert get_in(d, ["i"]) == "j"
-    assert get_in(d, ["a", "b"]) == "c"
-    assert get_in(d, ["a", "f", "g"]) == "h"
+    assert get_in(m, ["m"]) is None
+    assert get_in(m, ["m", "n"], "foo") == "foo"
+    assert get_in(m, ["i"]) == "j"
+    assert get_in(m, ["a", "b"]) == "c"
+    assert get_in(m, ["a", "f", "g"]) == "h"
+
+
+def test_set_in():
+    m = {
+        "a": {
+            "b": "c",
+            "d": "e",
+            "f": {
+                "g": "h"
+            }
+        },
+        "i": "j"
+    }
+
+    set_in(m, ["a", "b"], "k")
+    assert get_in(m, ["a", "b"]) == "k"
+
+    set_in(m, ["a", "f", "g"], "i")
+    assert get_in(m, ["a", "f", "g"]) == "i"
+
+    set_in(m, ["l"], "m")
+    assert get_in(m, "l") == "m"
+
+    set_in(m, ["n", "o", "p"], "q")
+    assert get_in(m, ["n", "o", "p"]) == "q"
+
+    with pytest.raises(ValueError):
+        set_in(m, [], "r")
+
+
+def test_update_in():
+    m = {
+        "a": {
+            "b": 0,
+            "c": 1,
+            "d": {
+                "e": 2
+            }
+        },
+        "f": 3
+    }
+
+    update_in(m, ["a", "b"], lambda x: x+1)
+    assert get_in(m, ["a", "b"]) == 1
+
+    update_in(m, ["a", "d", "e"], lambda x: x+10)
+    assert get_in(m, ["a", "d", "e"]) == 12
+
+    update_in(m, ["g", "h"], lambda x: x+20, not_found=0)
+    assert get_in(m, ["g", "h"]) == 20
 
 
 # These things are named differently in python 3
