@@ -10,7 +10,7 @@ from .cross import basestring, xrange, izip, map, filter, imap, PY2
 from .primitives import EMPTY
 from .funcs import identity, partial, compose, complement
 from .funcmakers import wrap_mapper, wrap_selector
-from .seqs import take, ximap, ifilter
+from .seqs import take, ximap, ifilter, first, second
 
 
 __all__ = ['empty', 'iteritems', 'itervalues',
@@ -18,7 +18,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
-           'where', 'pluck', 'invoke', 'get_in']
+           'where', 'pluck', 'invoke', 'get_in', 'set_in', 'update_in']
 
 
 ### Generic ops
@@ -221,14 +221,35 @@ def izip_dicts(*dicts):
         yield key, tuple(d[key] for d in dicts)
 
 
-def get_in(d, path, not_found=None):
-    value = d
-    for key in path:
-        if key in value:
-            value = value[key]
+def get_in(m, ks, not_found=None):
+    cursor = m
+    for k in ks:
+        if k in cursor:
+            cursor = cursor[k]
         else:
             return not_found
-    return value
+    return cursor
+
+
+def set_in(m, ks, v, dict_factory=dict):
+    if first(ks) is None:
+        raise ValueError("ks cannot be empty")
+    if second(ks) is None:
+        m[ks[0]] = v
+        return m
+
+    cursor = m
+    for k in ks[:-1]:
+        if k not in cursor:
+            cursor[k] = dict_factory()
+        cursor = cursor[k]
+    cursor[ks[-1]] = v
+    return m
+
+
+def update_in(m, ks, fn, not_found=None, dict_factory=dict):
+    v = get_in(m, ks, not_found)
+    return set_in(m, ks, fn(v), dict_factory)
 
 
 def where(mappings, **cond):

@@ -184,13 +184,29 @@ Dict utils
     See also :func:`izip_values`.
 
 
-.. function:: get_in(d, path, not_found=None)
+.. function:: get_in(m, ks, not_found=None)
 
-    Returns the value corresponding to the path in the dictionary::
+    Returns the value corresponding to the path given by the sequence ks in the dictionary::
 
         get_in({"a": {"b": "c"}}, ["a", "b"])  # "c"
         get_in({"a": {"b": "c"}}, ["d"], "foo")  # "foo"
 
+.. function:: set_in(m, ks, v, dict_factory=dict)
+
+    Sets the value in the path given by the sequence ks in the dictionary::
+
+        set_in({"a": {"b": "c"}}, ["a, "b"], "d")  # {"a": {"b": "d"}}
+
+    Note that this is not thread-safe. Wrap it with your own synchronization.
+
+.. function:: update_in(m, ks, fn, not_found=None, dict_factory=dict)
+
+    Modifies the value by calling fn with the existing value in the path given by the sequence ks in the dictionary::
+
+        update_in({"a": {"b": 5}}, ["a", "b"], lambda x: x+10)  # {"a": {"b": 15}}
+        update_in({}, ["a", "b"], lambda x:x+3, not_found=0)  # {"a": {"b": 3}}
+
+    Note that this is not thread-safe. Wrap it with your own synchronization.
 
 Data manipulation
 -----------------
