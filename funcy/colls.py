@@ -18,7 +18,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
-           'where', 'pluck', 'invoke']
+           'where', 'pluck', 'invoke', 'get_in']
 
 
 ### Generic ops
@@ -219,6 +219,16 @@ def izip_dicts(*dicts):
     keys = set.intersection(*map(set, dicts))
     for key in keys:
         yield key, tuple(d[key] for d in dicts)
+
+
+def get_in(d, path, not_found=None):
+    value = d
+    for key in path:
+        if key in value:
+            value = value[key]
+        else:
+            return not_found
+    return value
 
 
 def where(mappings, **cond):

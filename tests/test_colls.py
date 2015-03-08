@@ -204,6 +204,24 @@ def test_izip_dicts():
     with pytest.raises(TypeError): list(izip_dicts())
 
 
+def test_get_in():
+    d = {
+        "a": {
+            "b": "c",
+            "d": "e",
+            "f": {
+                "g": "h"
+            }
+        },
+        "i": "j"
+    }
+    assert get_in(d, ["m"]) is None
+    assert get_in(d, ["m", "n"], "foo") == "foo"
+    assert get_in(d, ["i"]) == "j"
+    assert get_in(d, ["a", "b"]) == "c"
+    assert get_in(d, ["a", "f", "g"]) == "h"
+
+
 # These things are named differently in python 3
 try:
     from funcy.colls import lwhere as where, lpluck as pluck, linvoke as invoke
