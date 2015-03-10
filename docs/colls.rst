@@ -188,8 +188,8 @@ Dict utils
 
     Returns the value corresponding to the path in the dictionary::
 
-        get_in({"a": {"b": "c"}}, ["a", "b"])  # "c"
-        get_in({"a": {"b": "c"}}, ["d"], "foo")  # "foo"
+        get_in({"a": {"b": 42}}, ["a", "b"])    # -> 42
+        get_in({"a": {"b": 42}}, ["c"], "foo")  # -> "foo"
 
 
 Data manipulation
