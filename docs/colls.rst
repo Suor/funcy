@@ -211,6 +211,13 @@ Data manipulation
         map(operator.itemgetter(key), mappings)
 
 
+.. function:: pluck_attr(name, objects)
+
+    Returns list of values for ``name`` in each object in given sequence. Essentially a shortcut for::
+
+        map(operator.attrgetter(name), objects)
+
+
 .. function:: invoke(objects, name, *args, **kwargs)
 
     Calls named method with given arguments for each object in ``objects`` and returns a list of results.

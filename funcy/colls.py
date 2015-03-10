@@ -237,8 +237,8 @@ def where(mappings, **cond):
 def pluck(key, mappings):
     return map(itemgetter(key), mappings)
 
-def pluck_attr(name, objs):
-    return map(attrgetter(name), objs)
+def pluck_attr(name, objects):
+    return map(attrgetter(name), objects)
 
 def invoke(objects, name, *args, **kwargs):
     return map(methodcaller(name, *args, **kwargs), objects)
@@ -251,8 +251,8 @@ def iwhere(mappings, **cond):
 def ipluck(key, mappings):
     return imap(itemgetter(key), mappings)
 
-def ipluck_attr(name, objs):
-    return imap(attrgetter(name), objs)
+def ipluck_attr(name, objects):
+    return imap(attrgetter(name), objects)
 
 def iinvoke(objects, name, *args, **kwargs):
     return imap(methodcaller(name, *args, **kwargs), objects)
