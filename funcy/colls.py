@@ -221,14 +221,13 @@ def izip_dicts(*dicts):
         yield key, tuple(d[key] for d in dicts)
 
 
-def get_in(d, path, not_found=None):
-    value = d
+def get_in(coll, path, default=None):
     for key in path:
-        if key in value:
-            value = value[key]
+        if key in coll:
+            coll = coll[key]
         else:
-            return not_found
-    return value
+            return default
+    return coll
 
 
 def where(mappings, **cond):

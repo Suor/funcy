@@ -184,7 +184,7 @@ Dict utils
     See also :func:`izip_values`.
 
 
-.. function:: get_in(d, path, not_found=None)
+.. function:: get_in(coll, path, default=None)
 
     Returns the value corresponding to the path in the dictionary::
 
