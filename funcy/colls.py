@@ -2,7 +2,7 @@ try:
     from __builtin__ import all as _all, any as _any
 except ImportError:
     from builtins import all as _all, any as _any
-from operator import itemgetter, methodcaller
+from operator import itemgetter, methodcaller, attrgetter
 from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import chain, tee
 
@@ -18,7 +18,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
-           'where', 'pluck', 'invoke', 'get_in']
+           'where', 'pluck', 'pluck_attr', 'invoke', 'get_in']
 
 
 ### Generic ops
@@ -237,9 +237,11 @@ def where(mappings, **cond):
 def pluck(key, mappings):
     return map(itemgetter(key), mappings)
 
+def pluck_attr(name, objs):
+    return map(attrgetter(name), objs)
+
 def invoke(objects, name, *args, **kwargs):
     return map(methodcaller(name, *args, **kwargs), objects)
-
 
 # Iterator versions for python 3 interface
 def iwhere(mappings, **cond):
@@ -248,6 +250,9 @@ def iwhere(mappings, **cond):
 
 def ipluck(key, mappings):
     return imap(itemgetter(key), mappings)
+
+def ipluck_attr(name, objs):
+    return imap(attrgetter(name), objs)
 
 def iinvoke(objects, name, *args, **kwargs):
     return imap(methodcaller(name, *args, **kwargs), objects)
