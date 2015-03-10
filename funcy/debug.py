@@ -172,7 +172,6 @@ def smart_repr(value, max_len=MAX_REPR_LEN):
     else:
         res = str(value)
 
-    # res = res.replace('\n', ' ')
     res = re.sub(r'\s+', ' ', res)
     if max_len and len(res) > max_len:
         res = res[:max_len-3] + '...'
