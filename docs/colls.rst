@@ -211,12 +211,16 @@ Data manipulation
         map(operator.itemgetter(key), mappings)
 
 
-.. function:: pluck_attr(name, objects)
+.. function:: pluck_attrs(attr, objects)
 
-    Returns list of values for ``name`` in each object in given sequence. Essentially a shortcut for::
+    Returns list of values for ``attr`` in each object in given sequence. Essentially a shortcut for::
 
-        map(operator.attrgetter(name), objects)
+        map(operator.attrgetter(attr), objects)
 
+    Useful when dealing with collections of ORM objects::
+
+        users = User.query.all()
+        ids = pluck_attrs('id', users)
 
 .. function:: invoke(objects, name, *args, **kwargs)
 
