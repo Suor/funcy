@@ -148,6 +148,11 @@ Ease debugging:
     def some_suspicious_function(...):
         "..."
 
+    with print_durations('Creating models'):
+        Model.objects.create(...)
+        # ...
+    # 10.2 ms in Creating models
+
 
 And `much more <http://funcy.readthedocs.org/>`_.
 
