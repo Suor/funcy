@@ -151,7 +151,7 @@ icat = chain.from_iterable
 def iflatten(seq, follow=is_seqcont):
     for item in seq:
         if follow(item):
-            for sub in iflatten(item, is_seqcont):
+            for sub in iflatten(item, follow):
                 yield sub
         else:
             yield item

@@ -4,6 +4,7 @@ import pytest
 from whatever import _
 
 from funcy.cross import xrange, PY3
+from funcy import is_list
 from funcy.seqs import *
 
 
@@ -104,6 +105,10 @@ def test_flatten():
     assert flatten([[1, 2], 3]) == [1, 2, 3]
     assert flatten([(2, 3)]) == [2, 3]
     assert flatten([iter([2, 3])]) == [2, 3]
+
+def test_flatten_follow():
+    assert flatten([1, [2, 3]], follow=is_list) == [1, 2, 3]
+    assert flatten([1, [(2, 3)]], follow=is_list) == [1, (2, 3)]
 
 def test_mapcat():
     assert mapcat(lambda x: [x, x], 'abc') == list('aabbcc')
