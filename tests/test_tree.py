@@ -1,4 +1,3 @@
-import ast
 from whatever import _
 
 from funcy import rest

@@ -1,4 +1,3 @@
-import inspect
 import pkgutil
 import pytest
 
