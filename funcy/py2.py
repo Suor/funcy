@@ -2,6 +2,7 @@ import sys
 
 from .calc import *
 from .colls import *
+from .tree import *
 from .decorators import *
 from .funcolls import *
 from .funcs import *
@@ -16,7 +17,7 @@ from .primitives import *
 
 
 # Setup __all__
-modules = ('calc', 'colls', 'decorators', 'funcolls', 'funcs', 'seqs', 'types',
+modules = ('calc', 'colls', 'tree', 'decorators', 'funcolls', 'funcs', 'seqs', 'types',
            'strings', 'flow', 'objects', 'namespaces', 'debug', 'primitives')
 __all__ = cat(sys.modules['funcy.' + m].__all__ for m in modules)
 

@@ -1,4 +1,5 @@
 import inspect
+import pkgutil
 import pytest
 
 import funcy
@@ -10,10 +11,10 @@ py = py2 if PY2 else py3
 
 
 # Introspect all modules
-exclude = ('funcy.cross', 'funcy.py2', 'funcy.py3', 'funcy.simple_funcs', 'funcy.funcmakers')
-modules = [m for m in funcy.__dict__.values()
-             if inspect.ismodule(m) and m.__name__.startswith('funcy.') and
-                m.__name__ not in exclude]
+exclude = ('cross', 'py2', 'py3', 'simple_funcs', 'funcmakers')
+module_names = list(name for _, name, _ in pkgutil.iter_modules(funcy.__path__)
+                    if name not in exclude)
+modules = [getattr(funcy, name) for name in module_names]
 
 
 def test_match():
