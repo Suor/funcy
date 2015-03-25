@@ -7,7 +7,7 @@ from .simple_funcs import __all__ as all_simple
 from .funcmakers import make_func
 
 
-__all__ = all_simple + ['compose', 'complement', 'juxt', 'ijuxt']
+__all__ = all_simple + ['compose', 'rcompose', 'complement', 'juxt', 'ijuxt']
 
 
 def compose(*fs):
@@ -16,6 +16,9 @@ def compose(*fs):
         return reduce(pair, imap(make_func, fs))
     else:
         return identity
+
+def rcompose(*fs):
+    return compose(*reversed(fs))
 
 def complement(pred):
     return compose(__not__, pred)

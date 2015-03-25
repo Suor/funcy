@@ -98,6 +98,23 @@ Functions
     Supports :ref:`extended_fns`.
 
 
+.. function:: rcompose(*fs)
+
+    Returns composition of functions, with functions called from left to right. Designed to facilitate transducer-like pipelines::
+
+        # Note the use of iterator function variants everywhere
+        process = rcompose(
+            partial(iremove, is_useless),
+            partial(imap, process_row),
+            partial(ichunks, 100)
+        )
+
+        for chunk in process(data):
+            write_chunk_to_db(chunk)
+
+    Supports :ref:`extended_fns`.
+
+
 .. function:: juxt(*fs)
               ijuxt(*fs)
 

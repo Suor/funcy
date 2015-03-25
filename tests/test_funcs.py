@@ -68,6 +68,14 @@ def test_compose():
     assert compose(str, inc, double)(10) == '21'
     assert compose(int, r'\d+')('abc1234xy') == 1234
 
+def test_rcompose():
+    double = _ * 2
+    inc    = _ + 1
+    assert rcompose()(10) == 10
+    assert rcompose(double)(10) == 20
+    assert rcompose(inc, double)(10) == 22
+    assert rcompose(double, inc)(10) == 21
+
 def test_complement():
     assert complement(identity)(0) is True
     assert complement(identity)([1, 2]) is False
