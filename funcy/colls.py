@@ -18,7 +18,8 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
-           'where', 'pluck', 'pluck_attrs', 'invoke', 'get_in']
+           'where', 'pluck', 'pluck_attrs', 'invoke',
+           'get_in', 'set_in', 'update_in']
 
 
 ### Generic ops
@@ -228,6 +229,18 @@ def get_in(coll, path, default=None):
         else:
             return default
     return coll
+
+def set_in(coll, path, value):
+    if not path:
+        return value
+    else:
+        copy = coll.copy()
+        copy[path[0]] = set_in(copy.get(path[0], {}), path[1:], value)
+        return copy
+
+def update_in(coll, path, update, default=None):
+    value = update(get_in(coll, path, default))
+    return set_in(coll, path, value)
 
 
 def where(mappings, **cond):

@@ -221,6 +221,30 @@ def test_get_in():
     assert get_in(d, ["a", "b"]) == "c"
     assert get_in(d, ["a", "f", "g"]) == "h"
 
+def test_set_in():
+    d = {
+        'a': {
+            'b': 1,
+            'c': 2,
+        },
+        'd': 5
+    }
+
+    d2 = set_in(d, ['a', 'c'], 7)
+    assert d['a']['c'] == 2
+    assert d2['a']['c'] == 7
+
+    d3 = set_in(d, ['e', 'f'], 42)
+    assert d3['e'] == {'f': 42}
+    assert d3['a'] is d['a']
+
+def test_update_in():
+    d = {'c': []}
+
+    d2 = update_in(d, ['a', 'b'], inc, default=0)
+    assert d2['a']['b'] == 1
+    assert d2['c'] is d['c']
+
 
 # These things are named differently in python 3
 try:

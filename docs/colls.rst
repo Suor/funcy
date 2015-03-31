@@ -192,6 +192,25 @@ Dict utils
         get_in({"a": {"b": 42}}, ["c"], "foo")  # -> "foo"
 
 
+.. function:: set_in(coll, path, value)
+
+    Creates a dictionary with a ``value`` set at specified ``path``. Original collection is not changed::
+
+        get_in({"a": {"b": 42}}, ["a", "b"], 10)
+        # -> {"a": {"b": 10}}
+
+        get_in({"a": {"b": 42}}, ["a", "c"], 10)
+        # -> {"a": {"b": 42, "c": 10}}
+
+
+.. function:: update_in(coll, path, update, default=None)
+
+    Creates a dictionary with a value at specified ``path`` updated::
+
+        update_in({"a": {}}, ["a", "cnt"], inc, default=0)
+        # -> {"a": {"cnt": 1}}
+
+
 Data manipulation
 -----------------
 
