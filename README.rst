@@ -157,6 +157,20 @@ Ease debugging:
 And `much more <http://funcy.readthedocs.org/>`_.
 
 
+Running tests
+--------------
+
+To run the tests using your default python:
+
+::
+
+    pip install -r test_requirements.txt
+    py.test
+
+To run `tox` you need all the supported pythons to be installed. These are
+2.6, 2.7, 3.3, 3.4, PyPy and PyPy3.
+
+
 .. |Build Status| image:: https://travis-ci.org/Suor/funcy.svg?branch=master
    :target: https://travis-ci.org/Suor/funcy
 
