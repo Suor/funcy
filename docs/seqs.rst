@@ -222,6 +222,15 @@ Unite
     See also :func:`cat` or :func:`icat` if you need to flatten strictly two-level sequence of sequences.
 
 
+.. function:: tree_leaves(root, follow=is_seqcont, children=iter)
+              itree_leaves(root, follow=is_seqcont, children=iter)
+
+    A way to list or iterate over all the tree leaves. E.g. this is how you can list all descendants of a class::
+
+        tree_leaves(Base, children=type.__subclasses__, follow=type.__subclasses__)
+
+
+
 .. function:: interleave(*seqs)
 
     Returns an iterator yielding first item in each sequence, then second and so on until some sequence ends. Numbers of items taken from all sequences are always equal.
