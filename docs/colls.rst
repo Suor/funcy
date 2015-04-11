@@ -222,6 +222,12 @@ Data manipulation
         # => [{"title": "Cymbeline", "author": "Shakespeare", "year": 1611},
         #     {"title": "The Tempest", "author": "Shakespeare", "year": 1611}]
 
+.. function:: find_where(mappings, **cond)
+
+    Returns the first value in a given sequence of dicts that contains all of the key-value pairs in ``cond``::
+
+        find_where(plays, title="Cymbeline")
+        # => {"title": "Cymbeline", "author": "Shakespeare", "year": 1611}
 
 .. function:: pluck(key, mappings)
 

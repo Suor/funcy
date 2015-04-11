@@ -18,7 +18,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
-           'where', 'pluck', 'pluck_attrs', 'invoke',
+           'where', 'find_where', 'pluck', 'pluck_attrs', 'invoke',
            'get_in', 'set_in', 'update_in']
 
 
@@ -246,6 +246,10 @@ def update_in(coll, path, update, default=None):
 def where(mappings, **cond):
     match = lambda m: all(m[k] == v for k, v in cond.items())
     return filter(match, mappings)
+
+def find_where(mappings, **cond):
+    match = lambda m: all(m[k] == v for k, v in cond.items())
+    return next(ifilter(match, mappings), None)
 
 def pluck(key, mappings):
     return map(itemgetter(key), mappings)

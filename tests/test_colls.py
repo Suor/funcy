@@ -258,6 +258,12 @@ def test_where():
     assert where(data, a=1, b=2) == [{'a': 1, 'b': 2}]
     assert where(data, b=2) == data
 
+def test_find_where():
+    data = [{'a': 1, 'b': 2}, {'a': 1, 'b': 3}, {'a': 10, 'b': 2}]
+    assert find_where(data, a=1) == {'a': 1, 'b': 2}
+    assert find_where(data, a=1, b=3) == {'a': 1, 'b': 3}
+    assert find_where(data, a=1, b=5) is None
+
 def test_pluck():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
     assert pluck('a', data) == [1, 10]
