@@ -55,6 +55,7 @@ Python 2 / list         Python 2 / iterator     Python 3 / list       Python 3 /
 
 :func:`where`           *-*                     *-*                   :func:`where`
 :func:`pluck`           *-*                     *-*                   :func:`pluck`
+:func:`pluck_attr`      *-*                     *-*                   :func:`pluck_attr`
 :func:`invoke`          *-*                     *-*                   :func:`invoke`
 
 *-*                     :func:`izip_values`     *-*                   :func:`zip_values`
