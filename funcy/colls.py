@@ -18,7 +18,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
-           'where', 'pluck', 'pluck_attrs', 'invoke',
+           'where', 'pluck', 'pluck_attr', 'invoke',
            'get_in', 'set_in', 'update_in']
 
 
@@ -250,7 +250,7 @@ def where(mappings, **cond):
 def pluck(key, mappings):
     return map(itemgetter(key), mappings)
 
-def pluck_attrs(attr, objects):
+def pluck_attr(attr, objects):
     return map(attrgetter(attr), objects)
 
 def invoke(objects, name, *args, **kwargs):
@@ -264,7 +264,7 @@ def iwhere(mappings, **cond):
 def ipluck(key, mappings):
     return imap(itemgetter(key), mappings)
 
-def ipluck_attrs(attr, objects):
+def ipluck_attr(attr, objects):
     return imap(attrgetter(attr), objects)
 
 def iinvoke(objects, name, *args, **kwargs):

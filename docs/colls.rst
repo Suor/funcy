@@ -230,7 +230,7 @@ Data manipulation
         map(operator.itemgetter(key), mappings)
 
 
-.. function:: pluck_attrs(attr, objects)
+.. function:: pluck_attr(attr, objects)
 
     Returns list of values for ``attr`` in each object in given sequence. Essentially a shortcut for::
 
@@ -239,7 +239,8 @@ Data manipulation
     Useful when dealing with collections of ORM objects::
 
         users = User.query.all()
-        ids = pluck_attrs('id', users)
+        ids = pluck_attr('id', users)
+
 
 .. function:: invoke(objects, name, *args, **kwargs)
 

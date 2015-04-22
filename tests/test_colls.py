@@ -265,7 +265,7 @@ def test_pluck():
 def test_pluck_attr():
     TestObj = namedtuple('TestObj', ('id', 'name'))
     objs = [TestObj(1, 'test1'), TestObj(5, 'test2'), TestObj(10, 'test3')]
-    assert pluck_attrs('id', objs) == [1, 5, 10]
+    assert pluck_attr('id', objs) == [1, 5, 10]
 
 def test_invoke():
     assert invoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
