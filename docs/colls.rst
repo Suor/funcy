@@ -196,10 +196,10 @@ Dict utils
 
     Creates a dictionary with a ``value`` set at specified ``path``. Original collection is not changed::
 
-        get_in({"a": {"b": 42}}, ["a", "b"], 10)
+        set_in({"a": {"b": 42}}, ["a", "b"], 10)
         # -> {"a": {"b": 10}}
 
-        get_in({"a": {"b": 42}}, ["a", "c"], 10)
+        set_in({"a": {"b": 42}}, ["a", "c"], 10)
         # -> {"a": {"b": 42, "c": 10}}
 
 
