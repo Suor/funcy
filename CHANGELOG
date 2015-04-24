@@ -1,8 +1,16 @@
+1.5
+- added rcompose()
+- added i?tree_leaves()
+- added pluck_attr() (Marcus McCurdy)
+- added set_in() and update_in()
+- added get_in() (Swaroop)
+- fixed bug with flatten() follow not passed deep
+
 1.4
 - added rpartial() and rcurry()
 - support arguments in print_(calls|exits)
 - made print_(errors|durations) work both with and without arguments
-- made (log|print)_errors() works as context manager
+- made (log|print)_errors() work as context manager
 - made (log|print)_durations() work as context managers
 - pass func docstring to @cached_property
 
