@@ -203,23 +203,29 @@ def test_izip_dicts():
     assert list(izip_dicts({1: 10}, {1: 20, 2: 30})) == [(1, (10, 20))]
     with pytest.raises(TypeError): list(izip_dicts())
 
-
 def test_get_in():
     d = {
-        "a": {
-            "b": "c",
-            "d": "e",
-            "f": {
-                "g": "h"
+        'a': {
+            'b': 'c',
+            'd': 'e',
+            'arr': [1, 2, 3, {
+                'a3': 'b3'
+            }],
+            'f': {
+                'g': 'h'
             }
         },
-        "i": "j"
+        'i': 'j',
     }
-    assert get_in(d, ["m"]) is None
-    assert get_in(d, ["m", "n"], "foo") == "foo"
-    assert get_in(d, ["i"]) == "j"
-    assert get_in(d, ["a", "b"]) == "c"
-    assert get_in(d, ["a", "f", "g"]) == "h"
+    assert get_in(d, ['m']) is None
+    assert get_in(d, ['m', 'n'], 'foo') == 'foo'
+    assert get_in(d, ['i']) == 'j'
+    assert get_in(d, ['a', 'b']) == 'c'
+    assert get_in(d, ['a', 'f', 'g']) == 'h'
+    assert get_in(d, ['a', 'arr', 0]) == 1
+    assert get_in(d, ['a', 'arr', 4]) is None
+    assert get_in(d, ['a', 'arr', 'stringkey']) is None
+    assert get_in(d, ['a', 'arr', 3, 'a3']) == 'b3'
 
 def test_set_in():
     d = {
@@ -227,6 +233,7 @@ def test_set_in():
             'b': 1,
             'c': 2,
         },
+        'arr': [{'g': 'h'}, 'f'],
         'd': 5
     }
 
@@ -237,6 +244,10 @@ def test_set_in():
     d3 = set_in(d, ['e', 'f'], 42)
     assert d3['e'] == {'f': 42}
     assert d3['a'] is d['a']
+
+    d4 = set_in(d, ['arr', 1], 'q')
+    assert d4['arr'][1] == 'q'
+    assert d4['arr'][0] is d['arr'][0]
 
 def test_update_in():
     d = {'c': []}

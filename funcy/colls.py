@@ -224,9 +224,9 @@ def izip_dicts(*dicts):
 
 def get_in(coll, path, default=None):
     for key in path:
-        if key in coll:
+        try:
             coll = coll[key]
-        else:
+        except (IndexError, TypeError, KeyError):  # First two for list indexing, last for dict
             return default
     return coll
 
@@ -234,9 +234,14 @@ def set_in(coll, path, value):
     if not path:
         return value
     else:
-        copy = coll.copy()
-        copy[path[0]] = set_in(copy.get(path[0], {}), path[1:], value)
-        return copy
+        if isinstance(coll, list):
+            copy = coll[:]
+            copy[path[0]] = set_in(coll[path[0]], path[1:], value)
+            return copy
+        else:
+            copy = coll.copy()
+            copy[path[0]] = set_in(copy.get(path[0], {}), path[1:], value)
+            return copy
 
 def update_in(coll, path, update, default=None):
     value = update(get_in(coll, path, default))
