@@ -231,16 +231,16 @@ def get_in(coll, path, default=None):
     return coll
 
 def set_in(coll, path, value):
-    if not path:
-        return value
-    else:
-        copy = coll.copy()
-        copy[path[0]] = set_in(copy.get(path[0], {}), path[1:], value)
-        return copy
+    return update_in(coll, path, lambda _: value)
 
 def update_in(coll, path, update, default=None):
-    value = update(get_in(coll, path, default))
-    return set_in(coll, path, value)
+    if not path:
+        return update(coll)
+    else:
+        copy = coll.copy()
+        current_default = {} if len(path) > 1 else default
+        copy[path[0]] = update_in(copy.get(path[0], current_default), path[1:], update, default)
+        return copy
 
 
 def where(mappings, **cond):

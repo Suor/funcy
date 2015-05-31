@@ -241,6 +241,8 @@ def test_set_in():
 def test_update_in():
     d = {'c': []}
 
+    assert update_in(d, ['c'], len) == {'c': 0}
+
     d2 = update_in(d, ['a', 'b'], inc, default=0)
     assert d2['a']['b'] == 1
     assert d2['c'] is d['c']
