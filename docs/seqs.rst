@@ -230,6 +230,13 @@ Unite
         tree_leaves(Base, children=type.__subclasses__, follow=type.__subclasses__)
 
 
+.. function:: tree_nodes(root, follow=is_seqcont, children=iter)
+              itree_nodes(root, follow=is_seqcont, children=iter)
+
+    A way to list or iterate over all the tree nodes. E.g. this is how you can list all classes in hierarchy::
+
+        tree_nodes(Base, children=type.__subclasses__, follow=type.__subclasses__)
+
 
 .. function:: interleave(*seqs)
 

@@ -14,7 +14,7 @@ RENAMES = {}
 for name in ('map', 'filter', 'remove', 'keep', 'without', 'concat', 'cat', 'flatten',
              'mapcat', 'distinct', 'split', 'split_at', 'split_by', 'partition', 'chunks',
              'partition_by', 'reductions', 'sums', 'juxt',
-             'tree_leaves'):
+             'tree_leaves', 'tree_nodes'):
     RENAMES['i' + name] = name
     RENAMES[name] = 'l' + name
 RENAMES['izip_values'] = 'zip_values'

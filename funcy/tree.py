@@ -2,7 +2,7 @@ from collections import deque
 from .types import is_seqcont
 
 
-__all__ = ['itree_leaves', 'tree_leaves']
+__all__ = ['itree_leaves', 'tree_leaves', 'itree_nodes', 'tree_nodes']
 
 
 def itree_leaves(root, follow=is_seqcont, children=iter):
@@ -19,3 +19,18 @@ def itree_leaves(root, follow=is_seqcont, children=iter):
 
 def tree_leaves(root, follow=is_seqcont, children=iter):
     return list(itree_leaves(root, follow, children))
+
+
+def itree_nodes(root, follow=is_seqcont, children=iter):
+    q = deque([[root]])
+    while q:
+        node_iter = iter(q.pop())
+        for sub in node_iter:
+            yield sub
+            if follow(sub):
+                q.append(node_iter)
+                q.append(children(sub))
+                break
+
+def tree_nodes(root, follow=is_seqcont, children=iter):
+    return list(itree_nodes(root, follow, children))

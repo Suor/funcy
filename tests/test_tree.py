@@ -10,3 +10,14 @@ def test_tree_leaves():
 
     assert tree_leaves(3, follow=_ > 1, children=range) == [0, 1, 0, 1]
     assert tree_leaves([1, [2, [3, 4], 5], 6], children=rest) == [4, 5, 6]
+
+
+def test_tree_nodes():
+    assert tree_nodes([1, 2, [3, [4]], 5]) == [
+        [1, 2, [3, [4]], 5],
+        1, 2,
+        [3, [4]], 3, [4], 4,
+        5
+    ]
+    assert tree_nodes(1) == [1]
+    assert tree_nodes(3, follow=_ > 1, children=range) == [3, 0, 1, 2, 0, 1]
