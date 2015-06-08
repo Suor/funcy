@@ -7,14 +7,14 @@ import sys
 from . import py2
 from .py2 import *
 from .py2 import __all__
-from .colls import iwhere as where, ipluck as pluck, iinvoke as invoke
 
 
 RENAMES = {}
 for name in ('map', 'filter', 'remove', 'keep', 'without', 'concat', 'cat', 'flatten',
              'mapcat', 'distinct', 'split', 'split_at', 'split_by', 'partition', 'chunks',
              'partition_by', 'reductions', 'sums', 'juxt',
-             'tree_leaves', 'tree_nodes'):
+             'tree_leaves', 'tree_nodes',
+             'where', 'pluck', 'pluck_attr', 'invoke'):
     RENAMES['i' + name] = name
     RENAMES[name] = 'l' + name
 RENAMES['izip_values'] = 'zip_values'

@@ -53,10 +53,10 @@ Python 2 / list         Python 2 / iterator     Python 3 / list       Python 3 /
 
 :func:`juxt`            :func:`ijuxt`           :func:`ljuxt`         :func:`juxt`
 
-:func:`where`           *-*                     *-*                   :func:`where`
-:func:`pluck`           *-*                     *-*                   :func:`pluck`
-:func:`pluck_attr`      *-*                     *-*                   :func:`pluck_attr`
-:func:`invoke`          *-*                     *-*                   :func:`invoke`
+:func:`where`           :func:`iwhere`          :func:`lwhere`        :func:`where`
+:func:`pluck`           :func:`ipluck`          :func:`lpluck`        :func:`pluck`
+:func:`pluck_attr`      :func:`ipluck_attr`     :func:`lpuck_attr`    :func:`pluck_attr`
+:func:`invoke`          :func:`iinvoke`         :func:`linvoke`       :func:`invoke`
 
 *-*                     :func:`izip_values`     *-*                   :func:`zip_values`
 *-*                     :func:`izip_dicts`      *-*                   :func:`zip_dicts`

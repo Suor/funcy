@@ -215,24 +215,33 @@ Data manipulation
 -----------------
 
 .. function:: where(mappings, **cond)
+              iwhere(mappings, **cond)
 
-    Looks through each value in given sequence of dicts, returning a list of all the dicts that contain all of the key-value pairs in ``cond``::
+    Looks through each value in given sequence of dicts, returning a list or an iterator of all the dicts that contain all of the key-value pairs in ``cond``::
 
         where(plays, author="Shakespeare", year=1611)
         # => [{"title": "Cymbeline", "author": "Shakespeare", "year": 1611},
         #     {"title": "The Tempest", "author": "Shakespeare", "year": 1611}]
 
+    Iterator version could be used for efficiency or when you don't need the whole list.
+    E.g. you are looking for the first match:
+
+        first(iwhere(plays, author="Shakespeare"))
+        # => {"title": "The Two Gentlemen of Verona", ...}
+
 
 .. function:: pluck(key, mappings)
+              ipluck(key, mappings)
 
-    Returns list of values for ``key`` in each mapping in given sequence. Essentially a shortcut for::
+    Returns a list or an iterator of values for ``key`` in each mapping in given sequence. Essentially a shortcut for::
 
         map(operator.itemgetter(key), mappings)
 
 
 .. function:: pluck_attr(attr, objects)
+              ipluck_attr(attr, objects)
 
-    Returns list of values for ``attr`` in each object in given sequence. Essentially a shortcut for::
+    Returns a list or an iterator of values for ``attr`` in each object in given sequence. Essentially a shortcut for::
 
         map(operator.attrgetter(attr), objects)
 
@@ -243,8 +252,9 @@ Data manipulation
 
 
 .. function:: invoke(objects, name, *args, **kwargs)
+              iinvoke(objects, name, *args, **kwargs)
 
-    Calls named method with given arguments for each object in ``objects`` and returns a list of results.
+    Calls named method with given arguments for each object in ``objects`` and returns a list or an iterator of results.
 
 
 Content tests

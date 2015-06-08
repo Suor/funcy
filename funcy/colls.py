@@ -18,7 +18,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'izip_values', 'izip_dicts',
-           'where', 'pluck', 'pluck_attr', 'invoke',
+           'where', 'pluck', 'pluck_attr', 'invoke', 'iwhere', 'ipluck', 'ipluck_attr', 'iinvoke',
            'get_in', 'set_in', 'update_in']
 
 
