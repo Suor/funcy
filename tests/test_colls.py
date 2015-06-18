@@ -221,6 +221,13 @@ def test_get_in():
     assert get_in(d, ["a", "b"]) == "c"
     assert get_in(d, ["a", "f", "g"]) == "h"
 
+
+def test_get_in_list():
+    assert get_in([1, 2], [0]) == 1
+    assert get_in([1, 2], [3]) is None
+    assert get_in({'x': [1, 2]}, ['x', 1]) == 2
+
+
 def test_set_in():
     d = {
         'a': {
@@ -237,6 +244,14 @@ def test_set_in():
     d3 = set_in(d, ['e', 'f'], 42)
     assert d3['e'] == {'f': 42}
     assert d3['a'] is d['a']
+
+
+def test_set_in_list():
+    l = [{}, 1]
+    l2 = set_in(l, [1], 7)
+    assert l2 == [{}, 7]
+    assert l2[0] is l[0]
+
 
 def test_update_in():
     d = {'c': []}
