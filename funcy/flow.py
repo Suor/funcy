@@ -72,6 +72,10 @@ except ImportError:
 
 @decorator
 def retry(call, tries, errors=Exception, timeout=0):
+    if isinstance(errors, list):
+        # because `except` does not catch exceptions from list
+        errors = tuple(errors)
+
     for attempt in xrange(tries):
         try:
             return call()
