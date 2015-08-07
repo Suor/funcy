@@ -85,6 +85,20 @@ def test_retry_timeout():
     assert 0.07 < d < 0.08
 
 
+def test_retry_many_errors():
+    calls = []
+
+    def failing(n=1):
+        if len(calls) < n:
+            calls.append(1)
+            raise MyError
+        return 1
+
+    assert retry(2, (MyError, RuntimeError))(failing)() == 1
+    calls = []
+    assert retry(2, [MyError, RuntimeError])(failing)() == 1
+
+
 def test_fallback():
     assert fallback(raiser(), lambda: 1) == 1
     with pytest.raises(Exception): fallback((raiser(), MyError), lambda: 1)
