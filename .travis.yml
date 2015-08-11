@@ -1,5 +1,7 @@
 language: python
 python: 2.7
+sudo: false
+cache: pip
 env:
   - TOXENV=py26
   - TOXENV=py27
