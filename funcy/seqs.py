@@ -331,7 +331,7 @@ def chunks(n, step, seq=EMPTY):
 
 @wrap_selector
 def ipartition_by(f, seq):
-    for g, items in groupby(seq, f):
+    for _, items in groupby(seq, f):
         yield items
 
 def partition_by(f, seq):
