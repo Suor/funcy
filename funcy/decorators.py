@@ -39,7 +39,6 @@ class Call(object):
     """
     def __init__(self, func, args, kwargs):
         self._func, self._args, self._kwargs = func, args, kwargs
-        self._introspected = False
 
     def __call__(self, *a, **kw):
         if not a and not kw:
