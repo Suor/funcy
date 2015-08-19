@@ -9,13 +9,11 @@ TODO
       ...
 - pre_walk, post_walk
 - tree-seq
-- children arg to i?flatten
 - where_not?
 
-- partial.func interface or (func, arg1, arg2) extended fns
 - invalidate/invalidate_all() to (make|silent)_lookuper
 
-- decorators with optional arguments
+- decorators with optional arguments?
 - (log|print)_errors to optionally hide causing call?
 - log_* and print_* to optionally hide args?
 
@@ -29,6 +27,7 @@ Docs
 Or not TODO
 -----------
 
+- partial.func interface or (func, arg1, arg2) extended fns
 - padding to chunks
 - reject*(), disjoint*() collections
 - zip_with = map(f, izip(seqs))
