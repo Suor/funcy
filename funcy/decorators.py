@@ -2,8 +2,6 @@ import sys
 import inspect
 from functools import partial
 
-from .calc import memoize
-
 
 __all__ = ['decorator', 'wraps', 'unwrap', 'ContextDecorator', 'contextmanager']
 
@@ -62,8 +60,10 @@ def get_argnames(func):
     func = getattr(func, '__original__', None) or unwrap(func)
     return func.__code__.co_varnames[:func.__code__.co_argcount]
 
-@memoize
-def arggetter(func):
+def arggetter(func, _cache={}):
+    if func in _cache:
+        return _cache[func]
+
     argnames = get_argnames(func)
     argcount = len(argnames)
 
@@ -80,6 +80,7 @@ def arggetter(func):
                 else:
                     return func.__defaults__[index - argcount]
 
+    _cache[func] = get_arg
     return get_arg
 
 

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
-from functools import wraps
 import inspect
+
+from .decorators import wraps
 
 __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 
