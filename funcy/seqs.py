@@ -2,7 +2,7 @@ from operator import add
 from itertools import islice, chain, tee, dropwhile, takewhile, groupby
 from collections import defaultdict, deque, Sequence
 
-from .cross import ifilter, imap, izip, ifilterfalse, xrange, PY2
+from .cross import ifilter as _ifilter, imap as _imap, izip, ifilterfalse, xrange, PY2
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcs import partial
@@ -93,11 +93,8 @@ def ilen(seq):
 
 # TODO: tree-seq equivalent
 
-
-_imap = imap
-imap = wrap_mapper(imap)
-ifilter = wrap_selector(ifilter)
-
+imap = wrap_mapper(_imap)
+ifilter = wrap_selector(_ifilter)
 
 if PY2:
     # NOTE: Default imap() behaves strange when passed None as function,
