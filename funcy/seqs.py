@@ -1,12 +1,13 @@
 from operator import add
-from itertools import islice, chain, tee, dropwhile, takewhile, groupby
+from itertools import islice, chain, tee, groupby, \
+                      takewhile as _takewhile, dropwhile as _dropwhile
 from collections import defaultdict, deque, Sequence
 
 from .cross import ifilter as _ifilter, imap as _imap, izip, ifilterfalse, xrange, PY2
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcs import partial
-from .funcmakers import wrap_mapper, wrap_selector, make_func
+from .funcmakers import wrap_mapper, wrap_selector, make_func, make_pred
 
 
 __all__ = [
@@ -168,8 +169,20 @@ def interleave(*seqs):
 def interpose(sep, seq):
     return drop(1, interleave(repeat(sep), seq))
 
-dropwhile = wrap_selector(dropwhile)
-takewhile = wrap_selector(takewhile)
+
+def takewhile(pred, seq=EMPTY):
+    if seq is EMPTY:
+        pred, seq = bool, pred
+    else:
+        pred = make_pred(pred)
+    return _takewhile(pred, seq)
+
+def dropwhile(pred, seq=EMPTY):
+    if seq is EMPTY:
+        pred, seq = bool, pred
+    else:
+        pred = make_pred(pred)
+    return _dropwhile(pred, seq)
 
 
 def distinct(seq, key=EMPTY):

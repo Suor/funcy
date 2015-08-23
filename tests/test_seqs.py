@@ -121,6 +121,10 @@ def test_iterpose():
     assert list(interpose('.', 'abc')) == list('a.b.c')
 
 
+def test_takewhile():
+    assert list(takewhile([1, 2, None, 3])) == [1, 2]
+
+
 def test_distinct():
     assert distinct('abcbad') == list('abcd')
     assert distinct([{}, {}, {'a': 1}, {'b': 2}], key=len) == [{}, {'a': 1}]

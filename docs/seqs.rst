@@ -378,7 +378,7 @@ Split and chunk
         # [-2, -1], [0, 1, 2]
 
 
-.. function:: takewhile(pred, seq)
+.. function:: takewhile([pred], seq)
 
     Returns an iterator of ``seq`` elements as long as ``pred`` for each of them is true. Stop on first one which makes predicate falsy::
 
@@ -389,7 +389,7 @@ Split and chunk
         takewhile(bool, iterate(attrgetter('parent'), node))
 
 
-.. function:: dropwhile(pred, seq)
+.. function:: dropwhile([pred], seq)
 
     This is a mirror of :func:`takewhile`. Returns iterator skipping elements of given sequence while ``pred`` is true and then yielding the rest of it::
 
