@@ -150,7 +150,7 @@ def format_time(sec):
     if sec < 1e-6:
         return '%6.2f ns' % (sec * 1e9)
     elif sec < 1e-3:
-        return '%6.2f µs' % (sec * 1e6)
+        return '%6.2f mks' % (sec * 1e6)
     elif sec < 1:
         return '%6.2f ms' % (sec * 1e3)
     else:
