@@ -9,12 +9,15 @@ from .cross import imap, basestring
 from .decorators import decorator, wraps, Call
 
 
-__all__ = ['tap',
-           'log_calls', 'print_calls',
-           'log_enters', 'print_enters',
-           'log_exits', 'print_exits',
-           'log_errors', 'print_errors',
-           'log_durations', 'print_durations']
+__all__ = [
+    'tap',
+    'log_calls', 'print_calls',
+    'log_enters', 'print_enters',
+    'log_exits', 'print_exits',
+    'log_errors', 'print_errors',
+    'log_durations', 'print_durations',
+    'log_iter_durations', 'print_iter_durations',
+]
 
 
 def tap(x, label=None):
@@ -127,6 +130,19 @@ class log_durations(LabeledContextDecorator):
         self.print_func("%s in %s" % (duration, self.label) if self.label else duration)
 
 print_durations = log_durations(print)
+
+
+def log_iter_durations(seq, print_func, label=None):
+    suffix = " of %s" % label if label else ""
+    it = iter(seq)
+    for i, item in enumerate(it):
+        start = time.time()
+        yield item
+        duration = format_time(time.time() - start)
+        print_func("%s in iteration %d%s" % (duration, i, suffix))
+
+def print_iter_durations(seq, label=None):
+    return log_iter_durations(seq, print, label)
 
 
 ### Formatting utils

@@ -133,6 +133,13 @@ def test_log_durations():
         assert 10 <= float(m.group(1)) < 20
 
 
+def test_log_iter_dirations():
+    log = []
+    for item in log_iter_durations([1, 2], log.append):
+        pass
+    assert len(log) == 2
+
+
 ### An utility to capture stdout
 
 import sys

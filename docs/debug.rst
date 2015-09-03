@@ -89,3 +89,17 @@ Debugging
             # ...
 
         # 10.2 ms in Creating models
+
+
+.. function:: log_iter_durations(seq, print_func, label=None)
+              print_iter_durations(seq, label=None)
+
+    Wraps iterable ``seq`` into generator logging duration of processing of each item:
+
+
+        for item in print_iter_durations(seq, label='hard work'):
+            # ... do work
+
+        # 121 ms in iteration 0 of hard work
+        # 143 ms in iteration 1 of hard work
+        # ...
