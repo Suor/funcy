@@ -482,12 +482,12 @@ Data handling
                 print '    ',
             print line
 
-    See also :func:`ipartition_by` and :func:`py:itertools.groupby` for chunking sequence by condition.
+    Use :func:`pairwise` to iterate only on full pairs.
 
 
 .. function:: with_next(seq, fill=None)
 
-    Returns an iterator of a pair of each item with one next to it. Yields `fill` or `None` as next element for last item.
+    Returns an iterator of a pair of each item with one next to it. Yields `fill` or `None` as next element for last item. See also :func:`with_prev` and :func:`pairwise`.
 
 
 .. function:: pairwise(seq)
