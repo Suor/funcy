@@ -346,7 +346,7 @@ def chunks(n, step, seq=EMPTY):
     return list(ichunks(n, step, seq))
 
 def ipartition_by(f, seq):
-    f = make_pred(f)
+    f = make_func(f)
     for _, items in groupby(seq, f):
         yield items
 

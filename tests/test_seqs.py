@@ -180,6 +180,7 @@ def test_chunks():
 def test_partition_by():
     assert partition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
     assert partition_by('x', 'abxcd') == [['a', 'b'], ['x'], ['c', 'd']]
+    assert partition_by('\d', '1211') == [['1'], ['2'], ['1','1']]
 
 
 def test_with_prev():
