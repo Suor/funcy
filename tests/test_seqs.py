@@ -86,6 +86,7 @@ def test_filter():
 
 def test_remove():
     assert remove(_ > 3, range(10)) == [0, 1, 2, 3]
+    assert remove('^a', ['a', 'b', 'ba']) == ['b', 'ba']
 
 def test_keep():
     assert keep(_ % 3, range(5)) == [1, 2, 1]

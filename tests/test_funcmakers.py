@@ -41,23 +41,3 @@ def test_set():
     s = set([1,2,3])
     assert make_func(s)(1) is True
     assert make_func(s)(4) is False
-
-
-def test_signature():
-    @wrap_mapper
-    def seq_f(f, seq):
-        pass
-    assert inspect.getargspec(seq_f).args == ['f', 'seq']
-
-    @wrap_mapper
-    def coll_f(f, coll):
-        pass
-    assert inspect.getargspec(coll_f).args == ['f', 'coll']
-
-    @wrap_selector
-    def seqs_f(f, *seqs):
-        pass
-
-    spec = inspect.getargspec(seqs_f)
-    assert spec.args == ['f']
-    assert spec.varargs == 'seqs'

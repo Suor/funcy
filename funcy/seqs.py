@@ -3,11 +3,12 @@ from itertools import islice, chain, tee, groupby, \
                       takewhile as _takewhile, dropwhile as _dropwhile
 from collections import defaultdict, deque, Sequence
 
-from .cross import ifilter as _ifilter, imap as _imap, izip, ifilterfalse, xrange, PY2
+from .cross import map as _map, filter as _filter, ifilter as _ifilter, imap as _imap, \
+                   izip, ifilterfalse, xrange, PY2
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcs import partial
-from .funcmakers import wrap_mapper, wrap_selector, make_func, make_pred
+from .funcmakers import make_func, make_pred
 
 
 __all__ = [
@@ -94,8 +95,17 @@ def ilen(seq):
 
 # TODO: tree-seq equivalent
 
-imap = wrap_mapper(_imap)
-ifilter = wrap_selector(_ifilter)
+def map(f, *seqs):
+    return _map(make_func(f, builtin=PY2), *seqs)
+
+def filter(pred, seq):
+    return _filter(make_pred(pred, builtin=PY2), seq)
+
+def imap(f, *seqs):
+    return _imap(make_func(f, builtin=PY2), *seqs)
+
+def ifilter(f, *seqs):
+    return _ifilter(make_pred(f, builtin=PY2), *seqs)
 
 if PY2:
     # NOTE: Default imap() behaves strange when passed None as function,
@@ -103,19 +113,15 @@ if PY2:
     #       This version is more sane: map() compatible and suitable for our internal use.
     def ximap(f, *seqs):
         return _imap(make_func(f), *seqs)
-    map = wrap_mapper(map)
-    filter = wrap_selector(filter)
 else:
     ximap = imap
-    def map(f, *seqs):
-        return list(imap(f, *seqs))
-    def filter(pred, seq):
-        return list(ifilter(pred, seq))
 
 
 def remove(pred, seq):
     return list(iremove(pred, seq))
-iremove = wrap_selector(ifilterfalse)
+
+def iremove(pred, seq):
+    return ifilterfalse(make_pred(pred, builtin=PY2), seq)
 
 def keep(f, seq=EMPTY):
     if seq is EMPTY:
@@ -206,8 +212,8 @@ def idistinct(seq, key=EMPTY):
                 yield item
 
 
-@wrap_selector
 def isplit(pred, seq):
+    pred = make_pred(pred)
     yes, no = deque(), deque()
     splitter = (yes.append(item) if pred(item) else no.append(item) for item in seq)
 
@@ -219,8 +225,8 @@ def isplit(pred, seq):
 
     return _isplit(yes), _isplit(no)
 
-@wrap_selector
 def split(pred, seq):
+    pred = make_pred(pred)
     yes, no = [], []
     for item in seq:
         if pred(item):
@@ -247,16 +253,16 @@ def split_by(pred, seq):
     return list(a), list(b)
 
 
-@wrap_mapper
 def group_by(f, seq):
+    f = make_func(f)
     result = defaultdict(list)
     for item in seq:
         result[f(item)].append(item)
     return result
 
 # TODO: better name? group_by_multi? multi_group? group_by_features?
-@wrap_mapper
 def group_by_keys(get_keys, seq):
+    get_keys = make_func(get_keys)
     result = defaultdict(list)
     for item in seq:
         for k in get_keys(item):
@@ -291,8 +297,8 @@ def group_by_keys(get_keys, seq):
 # NOTE: furter generalization is possible with multiple keys per item
 #       and, probably, even multiple extracts.
 
-@wrap_mapper
 def count_by(f, seq):
+    f = make_func(f)
     result = defaultdict(int)
     for item in seq:
         result[f(item)] += 1
@@ -339,8 +345,8 @@ def ichunks(n, step, seq=EMPTY):
 def chunks(n, step, seq=EMPTY):
     return list(ichunks(n, step, seq))
 
-@wrap_selector
 def ipartition_by(f, seq):
+    f = make_pred(f)
     for _, items in groupby(seq, f):
         yield items
 

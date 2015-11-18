@@ -9,7 +9,7 @@ from itertools import chain, tee
 from .cross import basestring, xrange, izip, map, filter, imap, PY2
 from .primitives import EMPTY
 from .funcs import identity, partial, compose, complement
-from .funcmakers import wrap_mapper, wrap_selector
+from .funcmakers import make_func, make_pred
 from .seqs import take, ximap, ifilter
 
 
@@ -116,8 +116,8 @@ def walk(f, coll):
     """
     return _factory(coll)(ximap(f, iteritems(coll)))
 
-@wrap_mapper
 def walk_keys(f, coll):
+    f = make_func(f)
     # NOTE: we use this awkward construct instead of lambda to be Python 3 compatible
     def pair_f(pair):
         k, v = pair
@@ -125,8 +125,8 @@ def walk_keys(f, coll):
 
     return walk(pair_f, coll)
 
-@wrap_mapper
 def walk_values(f, coll):
+    f = make_func(f)
     # NOTE: we use this awkward construct instead of lambda to be Python 3 compatible
     def pair_f(pair):
         k, v = pair
@@ -140,12 +140,12 @@ def select(pred, coll):
     """Same as filter but preserves coll type."""
     return _factory(coll)(ifilter(pred, iteritems(coll)))
 
-@wrap_selector
 def select_keys(pred, coll):
+    pred = make_pred(pred)
     return select(lambda pair: pred(pair[0]), coll)
 
-@wrap_selector
 def select_values(pred, coll):
+    pred = make_pred(pred)
     return select(lambda pair: pred(pair[1]), coll)
 
 

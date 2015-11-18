@@ -103,9 +103,11 @@ def test_walk_extended():
 
 def test_walk_keys():
     assert walk_keys(str.upper, {'a': 1, 'b':2}) == {'A': 1, 'B': 2}
+    assert walk_keys(r'\d', {'a1': 1, 'b2': 2}) == {'1': 1, '2': 2}
 
 def test_walk_values():
     assert walk_values(_ * 2, {'a': 1, 'b': 2}) == {'a': 2, 'b': 4}
+    assert walk_values(r'\d', {1: 'a1', 2: 'b2'}) == {1: '1', 2: '2'}
 
 def test_walk_values_defaultdict():
     dd = defaultdict(lambda: 'hey', {1: 'a', 2: 'ab'})
@@ -133,6 +135,7 @@ def test_select_keys():
 
 def test_select_values():
     assert select_values(_ % 2, {'a': 1, 'b': 2}) == {'a': 1}
+    assert select_values(r'a', {1: 'a', 2: 'b'}) == {1: 'a'}
 
 
 def test_compact():
