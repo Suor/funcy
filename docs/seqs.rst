@@ -419,6 +419,15 @@ Split and chunk
         sentences_with_word = group_by_keys(str.split, sentences)
 
 
+.. function:: group_values(seq)
+
+    Groups values of ``(key, value)`` pairs. May think of it like ``dict()`` but collecting collisions:
+
+    ::
+
+        group_values(keep(r'^--(\w+)=(.+)', sys.argv))
+
+
 .. function:: partition(n, [step], seq)
               ipartition(n, [step], seq)
 

@@ -157,6 +157,9 @@ def test_group_by():
 def test_group_by_keys():
     assert group_by_keys(r'(\d)(\d)', ['12', '23']) == {'1': ['12'], '2': ['12', '23'], '3': ['23']}
 
+def test_group_values():
+    assert group_values(['ab', 'ac', 'ba']) == {'a': ['b', 'c'], 'b': ['a']}
+
 def test_count_by():
     assert count_by(_ % 2, range(5)) == {0: 3, 1: 2}
     assert count_by(r'\d', ['a1', 'b2', 'c1']) == {'1': 2, '2': 1}

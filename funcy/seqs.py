@@ -18,7 +18,7 @@ __all__ = [
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'flatten', 'iflatten', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct', 'idistinct',
     'dropwhile', 'takewhile', 'split', 'isplit', 'split_at', 'isplit_at', 'split_by', 'isplit_by',
-    'group_by', 'group_by_keys', 'count_by',
+    'group_by', 'group_by_keys', 'group_values', 'count_by',
     'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
     'with_prev', 'with_next', 'pairwise',
     'ireductions', 'reductions', 'isums', 'sums',
@@ -260,7 +260,6 @@ def group_by(f, seq):
         result[f(item)].append(item)
     return result
 
-# TODO: better name? group_by_multi? multi_group? group_by_features?
 def group_by_keys(get_keys, seq):
     get_keys = make_func(get_keys)
     result = defaultdict(list)
@@ -269,33 +268,13 @@ def group_by_keys(get_keys, seq):
             result[k].append(item)
     return result
 
-# TODO: group_by_values()? better name?
-#       - group_by_second()
-#       - group_keys()
-#       - group_first()
-#       - flipgroup() / groupflip() / flip_n_group() # should these treat dicts specially?
-# def group_by_values(seq_or_dict):
-#     result = defaultdict(list)
-#     for key, value in iteritems(seq_or_dict):
-#         result[value].append(key)
-#     return result
-#
-# TODO: a generalization:
-# def group_something_by_something(key, extract, seq):
-#     result = defaultdict(list)
-#     for item in seq:
-#         result[key(item)].append(extract(item))
-#     return result
-#
-# def group_custom(seq, key=..., extract=..., keys=...): # custom_group()?
-#                                                        # extract -> value, permits values
-#     result = defaultdict(list)
-#     for item in seq:
-#         result[key(item)].append(extract(item))
-#     return result
-#
-# NOTE: furter generalization is possible with multiple keys per item
-#       and, probably, even multiple extracts.
+
+def group_values(seq):
+    result = defaultdict(list)
+    for key, value in seq:
+        result[key].append(value)
+    return result
+
 
 def count_by(f, seq):
     f = make_func(f)
