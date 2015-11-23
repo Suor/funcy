@@ -1,4 +1,3 @@
-import inspect
 from collections import defaultdict
 
 import pytest
