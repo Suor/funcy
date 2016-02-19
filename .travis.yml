@@ -17,7 +17,7 @@ env:
   - TOXENV=pypy
   - TOXENV=pypy3
   - TOXENV=docs
-  - TOXENV=flakes
+  - TOXENV=lint
 install:
   - pip install tox
 script:
