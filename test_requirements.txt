@@ -1,3 +1,2 @@
-py==1.4.17
-pytest==2.4.2
+pytest>=2.8.7
 whatever==0.4.1
