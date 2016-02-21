@@ -1,3 +1,9 @@
+1.7
+- support Python 3.5 officially
+- added group_values()
+- fixed i?partition_by() for non-boolean extended mapper
+- cleanups and optimizations in colls and seqs
+
 1.6
 - added i?tree_nodes()
 - added (log|print)_iter_durations() to debug utils
