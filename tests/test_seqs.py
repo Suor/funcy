@@ -62,6 +62,8 @@ def test_ilen():
 def test_map():
     assert map(_ * 2, [2, 3]) == [4, 6]
     assert map(None, [2, 3]) == [2, 3]
+    assert map(_ + _, [1, 2], [4, 5]) == [5, 7]
+
     assert map(r'\d+', ['a2', '13b']) == ['2', '13']
     assert map({'a': 1, 'b': 2}, 'ab') == [1, 2]
     assert map(set([1,2,3]), [0, 1, 2]) == [False, True, True]
