@@ -16,7 +16,7 @@ __all__ = [
     'take', 'drop', 'first', 'second', 'nth', 'last', 'rest', 'butlast', 'ilen',
     'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep', 'without', 'iwithout',
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'flatten', 'iflatten', 'mapcat', 'imapcat',
-    'izip', 'interleave', 'interpose', 'distinct', 'idistinct',
+    'izip', 'interleave', 'interpose', 'distinct', 'idistinct', 'accumulate_with_remainder',
     'dropwhile', 'takewhile', 'split', 'isplit', 'split_at', 'isplit_at', 'split_by', 'isplit_by',
     'group_by', 'group_by_keys', 'group_values', 'count_by',
     'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
@@ -174,6 +174,10 @@ def interleave(*seqs):
 
 def interpose(sep, seq):
     return drop(1, interleave(repeat(sep), seq))
+
+def accumulate_with_remainder(seq):
+    for i in xrange(len(seq)+1):
+        yield split_at(i, seq)
 
 
 def takewhile(pred, seq=EMPTY):
