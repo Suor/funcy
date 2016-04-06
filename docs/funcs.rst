@@ -157,7 +157,7 @@ This family of functions supports creating predicates from other predicates and 
               none_fn(*fs)
               one_fn(*fs)
 
-    Construct a predicates returning ``True`` when all, any, none or exactly one of ``fs`` return ``True``. Support short-circuit behavior.
+    Construct a predicate returning ``True`` when all, any, none or exactly one of ``fs`` return ``True``. Support short-circuit behavior.
 
     ::
 
