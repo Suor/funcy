@@ -65,7 +65,7 @@ Flow
 
 .. decorator:: retry(tries, errors=Exception, timeout=0)
 
-    Every call of decorated function retried up to ``tries`` times if any subclass of ``errors`` occurs (could be exception class or a tuple of them). There will be delay in ``timeout`` seconds between tries.
+    Every call of the decorated function is tried up to ``tries`` times. The first attempt counts as a try. Retries occur when any subclass of ``errors`` is raised (``errors`` can be an exception class or a list/tuple of exception classes). There will be a delay in ``timeout`` seconds between tries.
 
     A common use is to wrap some unreliable action::
 
