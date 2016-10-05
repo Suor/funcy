@@ -173,7 +173,7 @@ of all of the above::
 
     tox -e py27
     tox -e py34
-    tox -e flakes # lint
+    tox -e lint
 
 
 .. |Build Status| image:: https://travis-ci.org/Suor/funcy.svg?branch=master
