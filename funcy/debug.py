@@ -4,6 +4,7 @@ import re
 import time
 import traceback
 from itertools import chain
+from functools import partial
 
 from .cross import imap, basestring
 from .decorators import decorator, wraps, Call
@@ -178,9 +179,16 @@ def format_time(sec):
 MAX_REPR_LEN = 25
 
 def signature_repr(call):
+    if isinstance(call._func, partial):
+        if hasattr(call._func.func, '__name__'):
+            name = '<%s partial>' % call._func.func.__name__
+        else:
+            name = '<unknown partial>'
+    else:
+        name = getattr(call._func, '__name__', '<unknown>')
     args_repr = imap(smart_repr, call._args)
     kwargs_repr = ('%s=%s' % (key, smart_repr(value)) for key, value in call._kwargs.items())
-    return '%s(%s)' % (call._func.__name__, ', '.join(chain(args_repr, kwargs_repr)))
+    return '%s(%s)' % (name, ', '.join(chain(args_repr, kwargs_repr)))
 
 def smart_repr(value, max_len=MAX_REPR_LEN):
     if isinstance(value, basestring):
