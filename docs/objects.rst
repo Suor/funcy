@@ -13,7 +13,7 @@ Objects
                 return list(self.phones.filter(confirmed=True, public=True))
 
 
-.. decorator:: @monkey(cls_or_module, name=None)
+.. decorator:: monkey(cls_or_module, name=None)
 
     Monkey-patches class or module by adding decorated function or property to it named ``name`` or the same as decorated function. Saves overwritten method to ``original`` attribute of decorated function for a kind of inheritance::
 
