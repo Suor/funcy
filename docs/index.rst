@@ -9,6 +9,7 @@ Special topics:
    :maxdepth: 1
 
    overview
+   cheatsheet
    extended_fns
    python3
 
