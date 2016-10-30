@@ -1,7 +1,7 @@
 Primitives
 ==========
 
-.. function:: isnone(x):
+.. function:: isnone(x)
 
     Checks if ``x`` is ``None``. Handy with filtering functions::
 
@@ -14,7 +14,7 @@ Primitives
     Note that it's usually simpler to use :func:`keep` or :func:`compact` if you don't need to distinguish between ``None`` and other falsy values.
 
 
-.. function:: notnone(x):
+.. function:: notnone(x)
 
     Checks if ``x`` is not ``None``. A shortcut for ``complement(isnone)`` meant to be used when ``bool`` is not specific enough. Compare::
 
@@ -22,22 +22,22 @@ Primitives
         compact(data_dict)                # removes all falsy values
 
 
-.. function:: inc(x):
+.. function:: inc(x)
 
     Increments its argument by 1.
 
 
-.. function:: dec(x):
+.. function:: dec(x)
 
     Decrements its argument by 1.
 
 
-.. function:: even(x):
+.. function:: even(x)
 
     Checks if ``x`` is even.
 
 
-.. function:: odd(x):
+.. function:: odd(x)
 
     Checks if ``x`` is odd.
 
