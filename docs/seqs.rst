@@ -259,8 +259,8 @@ Transform and filter
 
 Most of functions in this section support :ref:`extended_fns`. Among other things it allows to rewrite examples using :func:`re_tester` and :func:`re_finder` tighter.
 
-.. function:: map(pred, seq)
-              imap(pred, seq)
+.. function:: map(f, seq)
+              imap(f, seq)
 
     Extended versions of :func:`py:map` and :func:`~itertools.imap`.
 
