@@ -39,8 +39,7 @@ Debugging
                log_exits(print_func, errors=True, stack=True)
                print_exits(errors=True, stack=True)
 
-    Will log or print every time execution enters or exits the function. Should be used same way as :func:`log_calls` and :func:`print_calls` when you need to track only one event per
-    function call.
+    Will log or print every time execution enters or exits the function. Should be used same way as :func:`@log_calls()<log_calls>` and :func:`@print_calls()<print_calls>` when you need to track only one event per function call.
 
 
 .. decorator:: log_errors(print_func, label=None, stack=True)
@@ -49,7 +48,7 @@ Debugging
     Will log or print all function errors providing function arguments causing them. If ``stack``
     is set to ``False`` then each error is reported with simple one line message.
 
-    Can be combined with :func:`silent` or :func:`ignore` to trace occasionally misbehaving function::
+    Can be combined with :func:`@silent<silent>` or :func:`@ignore()<ignore>` to trace occasionally misbehaving function::
 
         @silent
         @log_errors(logging.warning)

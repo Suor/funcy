@@ -254,7 +254,7 @@ def wraps(wrapped,
                 do_something(*args, **kwargs)
                 return func(*args, **kwargs)
 
-    But see also :func:`decorator` for that.
+    But see also :func:`@decorator<decorator>` for that.
     """
     return partial(update_wrapper, wrapped=wrapped,
                    assigned=assigned, updated=updated)

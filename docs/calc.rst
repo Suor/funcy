@@ -20,7 +20,7 @@ Calculation
 
 .. decorator:: make_lookuper
 
-    As :func:`memoize`, but with prefilled memory. Decorated function should return fully filled memory, which should be a dict or a sequence of pairs. Resulting function will raise ``LookupError`` for any argument missing in it::
+    As :func:`@memoize<memoize>`, but with prefilled memory. Decorated function should return all available arg-value pairs, which should be a dict or a sequence of pairs. Resulting function will raise ``LookupError`` for any argument missing in it::
 
         @make_lookuper
         def city_location():
@@ -46,9 +46,9 @@ Calculation
 
 .. decorator:: silent_lookuper
 
-    Same as :func:`make_lookuper`, but returns ``None`` on memory miss.
+    Same as :func:`@make_lookuper<make_lookuper>`, but returns ``None`` on memory miss.
 
 
 .. decorator:: cache(timeout)
 
-    Same as :func:`memoize`, but doesn't use cached results older than ``timeout``. It can be either number of seconds or :class:`py:datetime.timedelta`. Also, doesn't support skipping.
+    Same as :func:`@memoize<memoize>`, but doesn't use cached results older than ``timeout``. It can be either number of seconds or :class:`py:datetime.timedelta`. Also, doesn't support skipping.

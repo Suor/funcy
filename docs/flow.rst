@@ -15,12 +15,12 @@ Flow
         map(get_greeting, ['a!', ' B!', 'c.'])
         # -> ['a', 'b', None]
 
-    .. note:: Avoid silencing non-primitive functions, use :func:`ignore` instead and even then be careful not to swallow exceptions unintentionally.
+    .. note:: Avoid silencing non-primitive functions, use :func:`@ignore()<ignore>` instead and even then be careful not to swallow exceptions unintentionally.
 
 
 .. decorator:: ignore(errors, default=None)
 
-    Same as :func:`silent`, but able to specify ``errors`` to catch and ``default`` to return in case of error caught. ``errors`` can either be exception class or tuple of them.
+    Same as :func:`@silent<silent>`, but able to specify ``errors`` to catch and ``default`` to return in case of error caught. ``errors`` can either be exception class or tuple of them.
 
 
 .. function:: suppress(*errors)
