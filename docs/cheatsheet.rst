@@ -7,22 +7,35 @@
     #pup {
       position:absolute;
       z-index:200; /* aaaalways on top*/
-      padding: 3px 7px 4px;
+      padding: 3px 7px 5px;
       margin-left: 5px;
       margin-top: 15px;
       border-radius: 3px;
       background-color: #343131;
       color: #b3b3b3;
       font-size: 0.95em;
+      white-space: nowrap;
     }
     .descriptions {display: none}
-    .rst-content table.docutils td {vertical-align: top}
+    .rst-content table.docutils td {vertical-align: top; padding: 6px 16px; line-height: 20px}
     .wy-table-responsive table td {white-space: normal}
-    .rst-content tt {font-size: 100%; padding: 0px 2px; border: none; background: none; line-height: 20px}
+
+    .rst-content code.xref {color: #2E7FB3; font-size: 90%;
+        padding: 0px 2px; border: none; background: none; line-height: 20px}
+    .--rst-content code.xref {color: #2E7FB3; font-size: 95%; font-weight: normal;
+        padding: 0px 2px; border: none; background: none; line-height: 20px}
+
+    .--rst-content code.xref {color: #E74C3C; font-size: 90%;
+        padding: 0px 2px; border: none; background: none; line-height: 20px}
+
+
+    .rst-content code.xref {line-height: 20px}
 
     #pup strong, #pup b {color: #ddd}
-    #pup em {color: #3591CC; font-weight: bold}
-    #pup code {background: transparent; border: none}
+    #pup em {color: #3591CC; font-weight: bold; margin-right: 1px}
+    #pup em span {color: #b3b3b3; opacity: 0.7; font-style: normal;
+                  display:inline-block; padding:0 1px 0 3px}
+    #pup code {background: transparent; border: none; font-size: 90%; padding: 0 3px;}
     </style>
 
     <script>
@@ -42,8 +55,7 @@
             nhpup.initialize()
             $('.descriptions div').each(function () {
                 var name = this.getAttribute('name');
-                var width = this.getAttribute('width') || 260;
-                $('a[title='+name+']').on('mouseover', nhpup.popup(this.innerHTML, {width: width})).removeAttr('title');
+                $('a[title='+name+']').on('mouseover', nhpup.popup(this.innerHTML, {width: ''})).removeAttr('title');
             })
         })
     </script>
