@@ -159,4 +159,17 @@ Flow
     See also :func:`str_join`.
 
 
-.. .. decorator:: postprocessing(func)
+.. decorator:: post_processing(func)
+
+    Passes decorated function result through ``func``. This is the generalization of :func:`@collecting<collecting>` and :func:`@joining()<joining>`. Could save you writing a decorator or serve as extended comprehensions:
+
+    ::
+
+        @post_processing(dict)
+        def make_cond(request):
+            if request.GET['new']:
+                yield 'year__gt', 2000
+            for key, value in request.GET.items():
+                if value == '':
+                    continue
+                # ...
