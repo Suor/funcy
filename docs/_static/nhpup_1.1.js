@@ -67,6 +67,11 @@ nhpup = {
                 }
             }
 
+            if (nhpup.hiding) {
+                clearTimeout(nhpup.hiding);
+                nhpup.hiding = null;
+            }
+
             // Write content and display
             this.pup.html(p_msg).show();
 
@@ -77,8 +82,11 @@ nhpup = {
             var t = this.getTarget(e);
             $jq(t).unbind('mouseout').bind('mouseout',
                 function(e){
-                    nhpup.pup.hide();
                     nhpup.move = false;
+                    if (nhpup.hiding) clearTimeout(nhpup.hiding);
+                    nhpup.hiding = setTimeout(function () {
+                        nhpup.pup.hide();
+                    }, 50)
                 }
             );
         }.bind(this);
