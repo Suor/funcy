@@ -9,15 +9,15 @@ When working with sequences, see also :mod:`py:itertools` standard module. Funcy
 Generate
 --------
 
-.. function:: repeat(elem, [n])
+.. function:: repeat(item, [n])
 
-    Makes an iterator returning ``elem`` for ``n`` times or indefinitely if ``n`` is omitted. :func:`repeat` simply repeat given value, when you need to reevaluate something repeatedly use :func:`repeatedly` instead.
+    Makes an iterator yielding ``item`` for ``n`` times or indefinitely if ``n`` is omitted. :func:`repeat` simply repeat given value, when you need to reevaluate something repeatedly use :func:`repeatedly` instead.
 
-    When you just need a length ``n`` list or tuple of ``elem`` you can use::
+    When you just need a length ``n`` list or tuple of ``item`` you can use::
 
-        [elem] * n
+        [item] * n
         # or
-        (elem,) * n
+        (item,) * n
 
     .. Is a reexport of :func:`itertools.repeat`.
 
@@ -95,7 +95,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`py:
 
 .. function:: take(n, seq)
 
-    Returns a list of the first ``n`` items in sequence, or all items if there are fewer than ``n``.
+    Returns a list of the first ``n`` items in the sequence, or all items if there are fewer than ``n``.
 
     ::
 
@@ -106,7 +106,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`py:
 
 .. function:: drop(n, seq)
 
-    Skips first ``n`` items in sequence, returning iterator yielding rest of its items.
+    Skips first ``n`` items in the sequence, returning iterator yielding rest of its items.
 
     ::
 
@@ -117,7 +117,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`py:
 
 .. function:: first(seq)
 
-    Returns first item in sequence. Returns ``None`` if sequence is empty. Typical usage is choosing first of some generated variants::
+    Returns the first item in the sequence. Returns ``None`` if the sequence is empty. Typical usage is choosing first of some generated variants::
 
         # Get a text message of first failed validation rule
         fail = first(rule.text for rule in rules if not rule.test(instance))
@@ -137,7 +137,7 @@ This section provides some robust tools for sequence slicing. Consider :ref:`py:
 
 .. function:: second(seq)
 
-    Returns second item in sequence. Returns ``None`` if there are less than two items in it.
+    Returns the second item in given sequence. Returns ``None`` if there are less than two items in it.
 
     Could come in handy with sequences of pairs, e.g. :meth:`py:dict.items`. Following code extract values of a dict sorted by keys::
 
@@ -157,17 +157,17 @@ This section provides some robust tools for sequence slicing. Consider :ref:`py:
 
 .. function:: last(seq)
 
-    Returns last item in sequence. Returns ``None`` if sequence is empty. Tries to be efficient when sequence supports indexed or reversed access and fallbacks to iterating over it if not.
+    Returns the last item in the sequence. Returns ``None`` if the sequence is empty. Tries to be efficient when sequence supports indexed or reversed access and fallbacks to iterating over it if not.
 
 
 .. function:: rest(seq)
 
-    Skips first item in sequence, returning iterator starting just after it. A shortcut for :func:`drop(1, seq) <drop>`.
+    Skips first item in the sequence, returning iterator starting just after it. A shortcut for :func:`drop(1, seq) <drop>`.
 
 
 .. function:: butlast(seq)
 
-    Returns iterator of all elements of a sequence but last.
+    Returns an iterator of all elements of the sequence but last.
 
 
 .. function:: ilen(seq)
@@ -193,7 +193,7 @@ Unite
 .. function:: cat(seqs)
               icat(seqs)
 
-    Returns concatenation of passed sequences. Useful when dealing with sequence of sequences, see :func:`concat` or :func:`iconcat` to join just a few sequences.
+    Concatenates passed sequences. Useful when dealing with sequence of sequences, see :func:`concat` or :func:`iconcat` to join just a few sequences.
 
     Flattening of various nested sequences is most common use::
 
@@ -352,21 +352,21 @@ Split and chunk
 .. function:: split(pred, seq)
               isplit(pred, seq)
 
-    Splits sequence items which pass predicate from ones that don't, essentially returning a tuple ``filter(pred, seq), remove(pred, seq)``.
+    Splits sequence items which pass predicate from the ones that don't, essentially returning a tuple ``filter(pred, seq), remove(pred, seq)``.
 
     For example, this way one can separate private attributes of an instance from public ones::
 
         private, public = split(re_tester('^_'), dir(instance))
 
-    Split absolute and relative urls::
+    Split absolute and relative urls using extended predicate semantics::
 
-        absolute, relative = split(re_tester(r'^http://'), urls)
+        absolute, relative = split(r'^http://', urls)
 
 
 .. function:: split_at(n, seq)
               isplit_at(n, seq)
 
-    Splits sequence at given position, returning a tuple ``take(n, seq), list(drop(n, seq))``.
+    Splits sequence at given position, returning a tuple of its start and tail.
 
 
 .. function:: split_by(pred, seq)
@@ -380,7 +380,7 @@ Split and chunk
 
 .. function:: takewhile([pred], seq)
 
-    Returns an iterator of ``seq`` elements as long as ``pred`` for each of them is true. Stop on first one which makes predicate falsy::
+    Yeilds elements of ``seq`` as long as they pass ``pred``. Stops on first one which makes predicate falsy::
 
         # Extract first paragraph of text
         takewhile(re_tester(r'\S'), text.splitlines())
@@ -391,7 +391,7 @@ Split and chunk
 
 .. function:: dropwhile([pred], seq)
 
-    This is a mirror of :func:`takewhile`. Returns iterator skipping elements of given sequence while ``pred`` is true and then yielding the rest of it::
+    This is a mirror of :func:`takewhile`. Skips elements of given sequence while ``pred`` is true and yields the rest of it::
 
         # Skip leading whitespace-only lines
         dropwhile(re_tester('^\s*$'), text_lines)
@@ -475,7 +475,7 @@ Data handling
 .. function:: distinct(seq, key=identity)
               idistinct(seq, key=identity)
 
-    Returns given sequence with duplicates removed. Preserves order. If ``key`` is supplied then distinguishes values by comparing their keys.
+    Returns the given sequence with duplicates removed. Preserves order. If ``key`` is supplied then distinguishes values by comparing their keys.
 
     .. note:: Elements of a sequence or their keys should be hashable.
 
@@ -509,7 +509,7 @@ Data handling
 
 .. function:: count_by(f, seq)
 
-    Counts number of occurrences of values of ``f`` on elements of ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts.
+    Counts number of distinct values of ``f`` on elements of ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts.
 
     Calculating a histogram is one common use::
 

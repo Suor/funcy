@@ -1,5 +1,3 @@
-    .. <script src="http://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-
 .. raw:: html
 
     <script src="_static/nhpup_1.1.js"></script>
@@ -73,7 +71,7 @@ Sequences
 ---------
 
 ========== ==============================================================
-Create     :func:`count` :func:`cycle` :func:`repeat` :func:`repeatedly` :func:`iterate` :func:`re_iter` :func:`re_all`
+Create     :func:`count` :func:`cycle` :func:`repeat` :func:`repeatedly` :func:`iterate` :func:`re_all` :func:`re_iter`
 Access     :func:`first` :func:`second` :func:`last` :func:`nth` :func:`some` :func:`take`
 Slice      :func:`take` :func:`drop` :func:`rest` :func:`butlast` :func:`takewhile` :func:`dropwhile` :func:`split_at` :func:`split_by`
 Transform  :func:`map` :func:`mapcat` :func:`keep` :func:`pluck` :func:`pluck_attr` :func:`invoke`
@@ -81,8 +79,8 @@ Filter     :func:`filter` :func:`remove` :func:`keep` :func:`distinct` :func:`wh
 Join       :func:`cat` :func:`concat` :func:`flatten` :func:`mapcat` :func:`interleave` :func:`interpose`
 Partition  :func:`chunks` :func:`partition` :func:`partition_by` :func:`split_at` :func:`split_by`
 Group      :func:`split` :func:`count_by` :func:`group_by` :func:`group_by_keys` :func:`group_values`
-Aggregate  :func:`ilen` :func:`reductions` :func:`sums` :func:`all` :func:`any` :func:`none` :func:`one`
-Iterate    :func:`pairwise` :func:`with_next` :func:`with_prev` :func:`izip_values` :func:`izip_dicts` :func:`tree_leaves` :func:`tree_nodes`
+Aggregate  :func:`ilen` :func:`reductions` :func:`sums` :func:`all` :func:`any` :func:`none` :func:`one` :func:`count_by`
+Iterate    :func:`pairwise` :func:`with_prev` :func:`with_next` :func:`izip_values` :func:`izip_dicts` :func:`tree_leaves` :func:`tree_nodes`
 ========== ==============================================================
 
 
@@ -127,27 +125,4 @@ Primitives         :func:`isnone` :func:`notnone` :func:`inc` :func:`dec` :func:
 
 
 .. raw:: html
-
-    <div class="descriptions">
-
-    <div name="count" width="280">
-    <b>count<em>(start=0, step=1)</em></b><br><br>
-    Makes infinite iterator of values:<br>
-    <code><em>start</em>, <em>start</em> + <em>step</em>, <em>start</em> + 2*<em>step</em>, ...</code>
-    </div>
-
-    <div name="first">
-    <b>first<em>(seq)</em></b><br><br>
-    Returns first item in sequence.<br>Returns <code>None</code> if sequence is empty.
-    </div>
-
-    <div name="map">
-    <strong>map<em>(f, *seqs)</em><br>imap<em>(f, *seqs)</em></strong><br><br>
-    Extended versions of <b>map()</b> and <b>imap()</b>
-    </div>
-
-    <div name="constantly">
-    <strong>constantly<em>(x)</em></strong><br><br>
-    Creates function accepting any args, but always returning <em>x</em>.
-    </div>
-    </div>
+    :file: descriptions.html

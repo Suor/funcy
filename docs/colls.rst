@@ -217,7 +217,7 @@ Data manipulation
 .. function:: where(mappings, **cond)
               iwhere(mappings, **cond)
 
-    Looks through each value in given sequence of dicts, returning a list or an iterator of all the dicts that contain all of the key-value pairs in ``cond``::
+    Looks through each value in given sequence of dicts, returning a list or an iterator of all the dicts that contain all key-value pairs in ``cond``::
 
         where(plays, author="Shakespeare", year=1611)
         # => [{"title": "Cymbeline", "author": "Shakespeare", "year": 1611},
@@ -233,7 +233,7 @@ Data manipulation
 .. function:: pluck(key, mappings)
               ipluck(key, mappings)
 
-    Returns a list or an iterator of values for ``key`` in each mapping in given sequence. Essentially a shortcut for::
+    Returns a list or an iterator of values for ``key`` in each mapping in the given sequence. Essentially a shortcut for::
 
         map(operator.itemgetter(key), mappings)
 
@@ -241,7 +241,7 @@ Data manipulation
 .. function:: pluck_attr(attr, objects)
               ipluck_attr(attr, objects)
 
-    Returns a list or an iterator of values for ``attr`` in each object in given sequence. Essentially a shortcut for::
+    Returns a list or an iterator of values for ``attr`` in each object in the given sequence. Essentially a shortcut for::
 
         map(operator.attrgetter(attr), objects)
 

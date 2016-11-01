@@ -1,0 +1,463 @@
+<div class="descriptions">
+
+<!-- Seqs Create -->
+<div name="count">
+    <b>count<em>(start=0, step=1)</em></b><br><br>
+    Makes infinite iterator of values:<br>
+    <code>start, start + step, start + 2*step, ...</code>
+</div>
+<div name="cycle">
+    <b>cycle<em>(seq)</em></b><br><br>
+    Cycles passed sequence indefinitely<br>
+     yielding its elements one by one.
+</div>
+<div name="repeat">
+    <b>repeat<em>(item<span>[, </span>n<span>]</span>)</em></b><br><br>
+    Makes an iterator yielding <em>item</em> for <em>n</em> times<br>
+     or indefinitely if <em>n</em> is omitted.
+</div>
+<div name="repeatedly">
+    <b>repeatedly<em>(f<span>[, </span>n<span>]</span>)</em></b><br><br>
+    Takes a function of no args, presumably with side effects,<br>
+     and returns an infinite (or length <em>n</em>) iterator of calls to it.
+</div>
+<div name="iterate">
+    <b>iterate<em>(f, x)</em></b><br><br>
+    Returns an infinite iterator of <code>x, f(x), f(f(x)), ...</code>
+</div>
+<div name="re_all">
+    <b>re_all<em>(regex, s, flags=0)</em></b><br><br>
+    Lists all matches of <em>regex</em> in <em>s</em>.
+</div>
+<div name="re_iter">
+    <b>re_iter<em>(regex, s, flags=0)</em></b><br><br>
+    Iterates over matches of <em>regex</em> in <em>s</em>.
+</div>
+
+<!-- Seqs Access -->
+<div name="first">
+    <b>first<em>(seq)</em></b><br><br>
+    Returns the first item in the sequence.<br>
+    Returns <code>None</code> if the sequence is empty.
+</div>
+<div name="second">
+    <b>second<em>(seq)</em></b><br><br>
+    Returns second item in the sequence.<br>
+    Returns <code>None</code> if there are less than two items in it.
+</div>
+<div name="last">
+    <b>last<em>(seq)</em></b><br><br>
+    Returns the last item in the sequence.<br>
+    Returns <code>None</code> if the sequence is empty.
+</div>
+<div name="nth">
+    <b>nth<em>(seq)</em></b><br><br>
+    Returns nth item in the sequence<br> or <code>None</code> if no such item exists.
+</div>
+<div name="some">
+    <b>some<em>(<span>[</span>pred<span>, ]</span>seq)</em></b><br><br>
+    Finds first item in <em>seq</em> passing <em>pred</em><br> or first that is true if <em>pred</em> is omitted.
+</div>
+
+<!-- Seqs Slice -->
+<div name="take">
+    <b>take<em>(n, seq)</em></b><br><br>
+    Returns a list of first <em>n</em> items in the sequence,<br>
+     or all items if there are fewer than <em>n</em>.
+</div>
+<div name="drop">
+    <b>drop<em>(n, seq)</em></b><br><br>
+    Skips first <em>n</em> items in the sequence,<br>
+     yields the rest of it.
+</div>
+<div name="rest">
+    <b>rest<em>(seq)</em></b><br><br>
+    Skips first item in the sequence, yields the rest.
+</div>
+<div name="butlast">
+    <b>butlast<em>(seq)</em></b><br><br>
+    Yields all elements of the sequence but last.
+</div>
+<div name="takewhile">
+    <b>takewhile<em>(<span>[</span>pred<span>, ]</span>seq)</em></b><br><br>
+    Yields <em>seq</em> items as long as they pass <em>pred</em>.
+</div>
+<div name="dropwhile">
+    <b>dropwhile<em>(<span>[</span>pred<span>, ]</span>seq)</em></b><br><br>
+    Skips elements of <em>seq</em> while <em>pred</em> passes<br>
+     and then yields the rest.
+</div>
+<div name="split_at">
+    <b>split_at<em>(n, seq)</em><br>isplit_at<em>(n, seq)</em></b><br><br>
+    Splits the sequence at given position,<br>
+     returning a tuple of its start and tail.
+</div>
+<div name="split_by">
+    <b>split_by<em>(pred, seq)</em><br>isplit_by<em>(pred, seq)</em></b><br><br>
+    Splits the start of the sequence,<br>
+     consisting of items passing <em>pred</em>,<br>
+     from the rest of it.
+</div>
+
+<!-- Seqs Transform -->
+<div name="map">
+    <b>map<em>(f, *seqs)</em><br>imap<em>(f, *seqs)</em></b><br><br>
+    Extended versions of <b>map()</b> and <b>imap()</b>
+</div>
+<div name="mapcat">
+    <b>mapcat<em>(f, *seqs)</em><br>imapcat<em>(f, *seqs)</em></b><br><br>
+    Maps given sequence(s) and then concatenates results.
+</div>
+<div name="keep">
+    <b>keep<em>(<span>[</span>f<span>, ]</span>*seqs)</em><br>ikeep<em>(<span>[</span>f<span>, ]</span>*seqs)</em></b><br><br>
+    Maps <em>seq</em> with <em>f</em> and filters out falsy results.<br>
+    Simply removes falsy values in one argument version.
+</div>
+<div name="pluck" width="300">
+    <b>pluck<em>(key, mappings)</em><br>ipluck<em>(key, mappings)</em></b><br><br>
+    Lists or yields values for <em>key</em> in each mapping.
+</div>
+<div name="pluck_attr">
+    <b>pluck_attr<em>(attr, objects)</em><br>ipluck_attr<em>(attr, objects)</em></b><br><br>
+    List or yields values of <em>attr</em> of each object.
+</div>
+<div name="invoke">
+    <b>invoke<em>(objects, name, *args, **kwargs)</em><br>
+       iinvoke<em>(objects, name, *args, **kwargs)</em></b><br><br>
+    Lists or yields results of the given method call<br>
+     for each object in <em>objects</em>.
+</div>
+
+<!-- Seqs Filter -->
+<div name="filter">
+    <b>filter<em>(pred, seq)</em><br>ifilter<em>(pred, seq)</em></b><br><br>
+    Extended versions of <b>filter()</b> and <b>ifilter()</b>.
+</div>
+<div name="remove">
+    <b>remove<em>(pred, seq)</em><br>iremove<em>(pred, seq)</em></b><br><br>
+    Removes items from <em>seq</em> passing given predicate.
+</div>
+<div name="distinct">
+    <b>distinct<em>(pred, key=identity)</em><br>idistinct<em>(pred, key=identity)</em></b><br><br>
+    Removes items having same <em>key</em> from <em>seq</em>.<br>
+     Preserves order.
+</div>
+<div name="where">
+    <b>where<em>(mappings, **cond)</em><br>iwhere<em>(mappings, **cond)</em></b><br><br>
+    Selects <em>mappings</em> containing all pairs in <em>cond</em>.
+</div>
+<div name="without">
+    <b>without<em>(seq, *items)</em><br>iwithout<em>(seq, *items)</em></b><br><br>
+    Returns sequence without <em>items</em> specified,<br>
+     preserves order.
+</div>
+
+<!-- Seqs Join -->
+<div name="cat">
+    <b>cat<em>(seqs)</em><br>icat<em>(seqs)</em></b><br><br>
+    Concatenates passed sequences.
+</div>
+<div name="concat">
+    <b>concat<em>(*seqs)</em><br>iconcat<em>(*seqs)</em></b><br><br>
+    Concatenates several sequences.
+</div>
+<div name="flatten">
+    <b>flatten<em>(seq, follow=is_seqcont)</em><br>
+       iflatten<em>(seq, follow=is_seqcont)</em></b><br><br>
+    Flattens arbitrary nested sequence,<br>
+     <em>follow</em> determines whether to unpack each item.
+</div>
+<div name="interleave">
+    <b>interleave<em>(*seqs)</em></b><br><br>
+    Yields first item of each sequence,<br>
+    then second one and so on.
+</div>
+<div name="interpose">
+    <b>interpose<em>(sep, seq)</em></b><br><br>
+    Yields items of <em>seq</em> separated by <em>sep</em>.
+</div>
+
+<!-- Seqs Partition -->
+<div name="chunks">
+    <b>chunks<em>(n<span>[, </span>step<span>, ]</span>seq)</em><br>
+      ichunks<em>(n<span>[, </span>step<span>, ]</span>seq)</em></b><br><br>
+    Chunks <em>seq</em> into parts of length <em>n</em> or less.<br>
+    Skips <em>step</em> items between chunks.
+</div>
+<div name="partition">
+    <b>partition<em>(n<span>[, </span>step<span>, ]</span>seq)</em><br>
+      ipartition<em>(n<span>[, </span>step<span>, ]</span>seq)</em></b><br><br>
+    Partitions <em>seq</em> into parts of length <em>n</em>. <br>
+    Skips <em>step</em> items between parts.<br>
+    Non-fitting tail is ignored.
+</div>
+<div name="partition_by">
+    <b>partition_by<em>(f, seq)</em><br>
+      ipartition_by<em>(f, seq)</em></b><br><br>
+    Partition <em>seq</em> into continuous chunks<br>
+     with constant value of <em>f</em>.
+</div>
+
+<!-- Seqs Group -->
+<div name="split">
+    <b>split<em>(pred, seq)</em><br>
+      isplit<em>(pred, seq)</em></b><br><br>
+     Splits <em>seq</em> items which pass <em>pred</em><br>
+      from the ones that don't.
+</div>
+<div name="count_by">
+    <b>count_by<em>(f, seq)</em></b><br><br>
+    Counts number of distinct values of <em>f</em><br>
+     on elements of <em>seq</em>.
+</div>
+<div name="group_by">
+    <b>group_by<em>(f, seq)</em></b><br><br>
+     Groups items of <em>seq</em> by <code>f(item)</code>.
+</div>
+<div name="group_by_keys">
+    <b>group_by_keys<em>(get_keys, seq)</em></b><br><br>
+    Groups elements of <em>seq</em> by multiple keys.
+</div>
+<div name="group_values">
+    <b>group_values<em>(seq)</em></b><br><br>
+    Groups values of <code>(key, value)</code> pairs by keys.
+</div>
+
+<!-- Seqs Aggregate -->
+<div name="ilen">
+    <b>ilen<em>(seq)</em></b><br><br>
+    Consumes the given iterator and returns its length.
+</div>
+<div name="reductions">
+    <b>reductions<em>(f, seq<span>[, </span>acc<span>]</span>)</em><br>
+      ireductions<em>(f, seq<span>[, </span>acc<span>]</span>)</em></b><br><br>
+    Constructs intermediate reductions of <em>seq</em> by <em>f</em>.
+</div>
+<div name="sums">
+    <b>sums<em>(seq<span>[, </span>acc<span>]</span>)</em><br>
+      isums<em>(seq<span>[, </span>acc<span>]</span>)</em></b><br><br>
+    Returns a sequence of partial sums of <em>seq</em>.
+</div>
+<div name="all">
+    <b>all<em>(<span>[</span>pred<span>, ]</span>seq)</em></b><br><br>
+    Checks if all items in <em>seq</em> pass <em>pred</em>.
+</div>
+<div name="any">
+    <b>any<em>(<span>[</span>pred<span>, ]</span>seq)</em></b><br><br>
+    Checks if any item in <em>seq</em> pass <em>pred</em>.
+</div>
+<div name="none">
+    <b>none<em>(<span>[</span>pred<span>, ]</span>seq)</em></b><br><br>
+    Checks if none of the items in <em>seq</em> pass <em>pred</em>.
+</div>
+<div name="one">
+    <b>one<em>(<span>[</span>pred<span>, ]</span>seq)</em></b><br><br>
+    Checks if exactly one item in <em>seq</em> pass <em>pred</em>.
+</div>
+
+<!-- Seqs Iterate -->
+<div name="pairwise">
+    <b>pairwise<em>(seq)</em></b><br><br>
+    Yields all pairs of neighboring items in <em>seq</em>.
+</div>
+<div name="with_prev">
+    <b>with_prev<em>(seq, fill=None)</em></b><br><br>
+    Yields each item from <em>seq</em> with the one preceding it.
+</div>
+<div name="with_next">
+    <b>with_next<em>(seq, fill=None)</em></b><br><br>
+    Yields each item from <em>seq</em> with the next one.
+</div>
+<div name="izip_values">
+    <b>izip_values<em>(*dicts)</em></b><br><br>
+    Yields tuples of corresponding values of given <em>dicts</em>.
+</div>
+<div name="izip_dicts">
+    <b>izip_dicts<em>(*dicts)</em></b><br><br>
+    Yields tuples like <code>(key, val1, val2, ...)</code><br>
+    for each common key in all given <em>dicts</em>.
+</div>
+<div name="tree_leaves">
+    <b>tree_leaves<em>(root, follow=is_seqcont, children=iter)</em><br>
+      itree_leaves<em>(root, follow=is_seqcont, children=iter)</em></b><br><br>
+    Lists or iterates over all the tree leaves.
+</div>
+<div name="tree_nodes">
+    <b>tree_nodes<em>(root, follow=is_seqcont, children=iter)</em><br>
+      itree_nodes<em>(root, follow=is_seqcont, children=iter)</em></b><br><br>
+    Lists or iterates over all the tree nodes.
+</div>
+
+
+
+Colls
+-----
+
+merge(*colls)
+Merges several collections of same type into one: dicts, sets, lists, tuples, iterators or strings. For dicts values of later dicts override values of former ones with same keys.
+
+join(colls)
+Joins collections of same type into one. Same as :func:`merge`, but accepts iterable of collections.
+
+walk(f, coll)
+Returns collection of same type as ``coll`` consisting of its elements mapped with given function::
+
+walk_keys(f, coll)
+Walks keys of ``coll``, mapping them with given function. Works with mappings and collections of pairs::
+
+walk_values(f, coll)
+ Walks values of ``coll``, mapping them with given function. Works with mappings and collections of pairs.
+
+select(pred, coll)
+ Filters elements of ``coll`` by ``pred`` constructing collection of same type. When filtering a dict ``pred`` receives ``(key, value)`` pairs.
+
+select_keys(pred, coll)
+Select part of a dict or a collection of pairs with keys passing given predicate.
+
+select_values(pred, coll)
+Select part of a dict or a collection of pairs with values passing given predicate.
+
+compact(coll)
+ Removes falsy values from given collection. When compacting a dict all keys with falsy values are trashed.
+
+
+merge_with(f, *dicts) join_with(f, dicts)
+ Merge several dicts combining values for same key with given function::
+
+zipdict(keys, vals)
+ Returns a dict with the ``keys`` mapped to the corresponding ``vals``. Stops pairing on shorter sequence end
+
+flip(mapping)
+ Flip passed dict swapping its keys and values. Also works for sequences of pairs. Preserves collection type::
+
+project(mapping, keys)
+ Returns a dict containing only those entries in ``mapping`` whose key is in ``keys``.
+
+izip_values(*dicts)
+ Yields tuples of corresponding values of given dicts. Skips any keys not present in all of the dicts. Comes in handy when comparing two or more dicts::
+
+izip_dicts(*dicts)
+ Yields tuples like ``(key, value1, value2, ...)`` for each common key of all given dicts. A neat way to process several dicts at once::
+
+get_in(coll, path, default=None)
+Returns the value corresponding to the path in the dictionary::
+
+set_in(coll, path, value)
+Creates a dictionary with a ``value`` set at specified ``path``. Original collection is not changed::
+
+update_in(coll, path, update, default=None)
+ Creates a dictionary with a value at specified ``path`` updated::
+
+
+Data manipulation
+-----------------
+
+.. function:: where(mappings, **cond)
+              iwhere(mappings, **cond)
+
+    Looks through each value in given sequence of dicts, returning a list or an iterator of all the dicts that contain all of the key-value pairs in ``cond``::
+
+        where(plays, author="Shakespeare", year=1611)
+        # => [{"title": "Cymbeline", "author": "Shakespeare", "year": 1611},
+        #     {"title": "The Tempest", "author": "Shakespeare", "year": 1611}]
+
+    Iterator version could be used for efficiency or when you don't need the whole list.
+    E.g. you are looking for the first match:
+
+        first(iwhere(plays, author="Shakespeare"))
+        # => {"title": "The Two Gentlemen of Verona", ...}
+
+
+.. function:: pluck(key, mappings)
+              ipluck(key, mappings)
+
+    Returns a list or an iterator of values for ``key`` in each mapping in given sequence. Essentially a shortcut for::
+
+        map(operator.itemgetter(key), mappings)
+
+
+.. function:: pluck_attr(attr, objects)
+              ipluck_attr(attr, objects)
+
+    Returns a list or an iterator of values for ``attr`` in each object in given sequence. Essentially a shortcut for::
+
+        map(operator.attrgetter(attr), objects)
+
+    Useful when dealing with collections of ORM objects::
+
+        users = User.query.all()
+        ids = pluck_attr('id', users)
+
+
+.. function:: invoke(objects, name, *args, **kwargs)
+              iinvoke(objects, name, *args, **kwargs)
+
+    Calls named method with given arguments for each object in ``objects`` and returns a list or an iterator of results.
+
+
+Content tests
+-------------
+
+.. function:: is_distinct(coll, key=identity)
+
+    Checks if all elements in collection are different::
+
+        assert is_distinct(field_names), "All fields should be named differently"
+
+    Uses ``key`` to differentiate values. This way one can check if all first letters of ``words`` are different::
+
+        is_distinct(words, key=0)
+
+
+.. function:: all([pred], seq)
+
+    Checks if ``pred`` holds every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` is true (which is the same as in built-in :func:`~builtin.all`)::
+
+        they_are_ints = all(is_instance(n, int) for n in seq)
+        they_are_even = all(even, seq)
+
+    Note that, first example could be rewritten using :func:`isa` like this::
+
+        they_are_ints = all(isa(int), seq)
+
+
+
+
+Low-level helpers
+-----------------
+
+.. function:: empty(coll)
+
+    Returns an empty collection of the same type as ``coll``.
+
+
+.. function:: iteritems(coll)
+
+    Returns an iterator of items of a ``coll``. This means ``key, value`` pairs for any dictionaries::
+
+        list(iteritems({1, 2, 42}))
+        # -> [1, 42, 2]
+
+        list(iteritems({'a': 1}))
+        # -> [('a', 1)]
+
+
+.. function:: itervalues(coll)
+
+    Returns an iterator of values of a ``coll``. This means values for any dictionaries and just elements for other collections::
+
+        list(itervalues({1, 2, 42}))
+        # -> [1, 42, 2]
+
+        list(itervalues({'a': 1}))
+        # -> [1]
+
+
+
+
+<div name="constantly">
+<strong>constantly<em>(x)</em></strong><br><br>
+Creates function accepting any args, but always returning <em>x</em>.
+</div>
+
+</div>
