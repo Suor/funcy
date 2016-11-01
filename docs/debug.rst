@@ -33,8 +33,6 @@ Debugging
             # ...
             return result
 
-    :func:`print_calls` always prints everything, including error stack traces.
-
 
 .. decorator:: log_enters(print_func)
                print_enters
