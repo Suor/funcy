@@ -51,6 +51,7 @@
                 if (text.substr(-2) === '()') $(this).text(text.substr(0, text.length-2));
             })
 
+            $('a[href=#colls]').attr('title', 'dicts-more')
             nhpup.initialize()
             $('.descriptions div').each(function () {
                 var name = this.getAttribute('name');
@@ -85,16 +86,18 @@ Iterate    :func:`pairwise` :func:`with_prev` :func:`with_next` :func:`izip_valu
 ========== ==============================================================
 
 
+.. _colls:
+
 Collections
 -----------
 
-========== ==============================================================
-Join       :func:`merge` :func:`merge_with` :func:`join` :func:`join_with`
-Transform  :func:`walk` :func:`walk_keys` :func:`walk_values`
-Filter     :func:`select` :func:`select_keys` :func:`select_values` :func:`compact`
-Dict       :func:`flip` :func:`zipdict` :func:`pluck` :func:`where` :func:`itervalues` :func:`iteritems` :func:`izip_values` :func:`izip_dicts`
-Misc       :func:`empty` :func:`get_in` :func:`set_in` :func:`update_in`
-========== ==============================================================
+===================== ==============================================================
+Join                  :func:`merge` :func:`merge_with` :func:`join` :func:`join_with`
+Transform             :func:`walk` :func:`walk_keys` :func:`walk_values`
+Filter                :func:`select` :func:`select_keys` :func:`select_values` :func:`compact`
+Dicts :ref:`*<colls>` :func:`flip` :func:`zipdict` :func:`pluck` :func:`where` :func:`itervalues` :func:`iteritems` :func:`izip_values` :func:`izip_dicts` :func:`project`
+Misc                  :func:`empty` :func:`get_in` :func:`set_in` :func:`update_in`
+===================== ==============================================================
 
 
 Functions
@@ -116,7 +119,7 @@ Type tests         :func:`isa` :func:`is_iter` :func:`is_list` :func:`is_mapping
 Decorators         :func:`decorator<funcy.decorator>` :func:`wraps<funcy.wraps>` :func:`unwrap<funcy.unwrap>` :func:`autocurry`
 Control flow       :func:`once` :func:`once_per` :func:`once_per_args` :func:`collecting` :func:`joining` :func:`post_processing`
 Error handling     :func:`retry` :func:`silent` :func:`ignore` :func:`suppress` :func:`limit_error_rate` :func:`fallback` :func:`raiser`
-Debugging/Logging  :func:`tap` :func:`log_calls` :func:`log_durations` :func:`log_enters` :func:`log_enters` :func:`log_errors` :func:`log_iter_durations`
+Debugging/Logging  :func:`tap` :func:`log_calls` :func:`log_enters` :func:`log_exits` :func:`log_errors` :func:`log_durations` :func:`log_iter_durations`
 Caching            :func:`memoize` :func:`cache` :func:`cached_property` :func:`make_lookuper` :func:`silent_lookuper`
 Regexes            :func:`re_find` :func:`re_test` :func:`re_all` :func:`re_iter` :func:`re_finder` :func:`re_tester`
 Strings            :func:`cut_prefix` :func:`cut_suffix` :func:`str_join`

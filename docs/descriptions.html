@@ -289,170 +289,107 @@
 </div>
 
 
+<!-- Colls Join -->
+<div name="merge">
+    <b>merge<em>(*colls)</em></b><br><br>
+    Merges several collections of same type into one:<br>
+    dicts, sets, lists, tuples, iterators or strings<br>
+    For dicts later values take precedence.
+</div>
+<div name="merge_with">
+    <b>merge_with<em>(f, *dicts)</em></b><br><br>
+    Merges several <em>dicts</em> combining values with given function.
+</div>
+<div name="join">
+    <b>join<em>(colls)</em></b><br><br>
+    Joins several collections of same type into one.<br>
+    Same as <b>merge()</b> but accepts sequence of collections.
+</div>
+<div name="join_with">
+    <b>join_with<em>(f, *dicts)</em></b><br><br>
+    Joins several <em>dicts</em> combining values with given function.
+</div>
 
-Colls
------
+<!-- Colls Transform -->
+<div name="walk">
+    <b>walk<em>(f, coll)</em></b><br><br>
+    Maps <em>coll</em> with <em>f</em>, but preserves collection type.
+</div>
+<div name="walk_keys">
+    <b>walk_keys<em>(f, coll)</em></b><br><br>
+    Walks keys of <em>coll</em>, mapping them with <em>f</em>.<br>
+    Works with dicts and collections of pairs.
+</div>
+<div name="walk_values">
+    <b>walk_values<em>(f, coll)</em></b><br><br>
+    Walks values of <em>coll</em>, mapping them with <em>f</em>.<br>
+    Works with dicts and collections of pairs.
+</div>
 
-merge(*colls)
-Merges several collections of same type into one: dicts, sets, lists, tuples, iterators or strings. For dicts values of later dicts override values of former ones with same keys.
+<!-- Colls Filter -->
+<div name="select">
+    <b>select<em>(pred, coll)</em></b><br><br>
+    Filters elements of <em>coll</em> by <em>pred</em><br>
+    constructing a collection of same type.
+</div>
+<div name="select_keys">
+    <b>select_keys<em>(pred, coll)</em></b><br><br>
+    Select part of <em>coll</em> with keys passing <em>pred</em>.<br>
+    Works with dicts and collections of pairs.
+</div>
+<div name="select_values">
+    <b>select_values<em>(pred, coll)</em></b><br><br>
+    Select part of <em>coll</em> with values passing <em>pred</em>.<br>
+    Works with dicts and collections of pairs.
+</div>
+<div name="compact">
+    <b>compact<em>(coll)</em></b><br><br>
+    Removes falsy values from given collection.
+</div>
 
-join(colls)
-Joins collections of same type into one. Same as :func:`merge`, but accepts iterable of collections.
+<!-- Colls Dicts -->
+<div name="dicts-more">
+    All collections functions work with dicts
+</div>
+<div name="flip">
+    <b>flip<em>(mapping)</em></b><br><br>
+    Flip passed dict swapping its keys and values.
+</div>
+<div name="zipdict">
+    <b>zipdict<em>(keys, vals)</em></b><br><br>
+    Creates a dict with <em>keys</em> mapped to the corresponding <em>vals</em>.
+</div>
+<div name="itervalues">
+    <b>itervalues<em>(coll)</em></b><br><br>
+    Yields values of the given collection.
+</div>
+<div name="iteritems">
+    <b>iteritems<em>(coll)</em></b><br><br>
+    Yields <code>(key, value)</code> pairs of the given collection.
+</div>
+<div name="project">
+    <b>project<em>(mapping, keys)</em></b><br><br>
+    Leaves only given keys in <em>mapping</em>.
+</div>
 
-walk(f, coll)
-Returns collection of same type as ``coll`` consisting of its elements mapped with given function::
+<!-- Colls Misc -->
+<div name="empty">
+    <b>empty<em>(coll)</em></b><br><br>
+    Returns an empty collection of the same type as <em>coll</em>.
+</div>
+<div name="get_in">
+    <b>get_in<em>(coll, path, default=None)</em></b><br><br>
+    Returns a value at <em>path</em> in the given nested collection.
+</div>
+<div name="update_in">
+    <b>update_in<em>(coll, path, value)</em></b><br><br>
+    Creates a copy of <em>coll</em> with a value</em> updated at <em>path</em>.
+</div>
 
-walk_keys(f, coll)
-Walks keys of ``coll``, mapping them with given function. Works with mappings and collections of pairs::
-
-walk_values(f, coll)
- Walks values of ``coll``, mapping them with given function. Works with mappings and collections of pairs.
-
-select(pred, coll)
- Filters elements of ``coll`` by ``pred`` constructing collection of same type. When filtering a dict ``pred`` receives ``(key, value)`` pairs.
-
-select_keys(pred, coll)
-Select part of a dict or a collection of pairs with keys passing given predicate.
-
-select_values(pred, coll)
-Select part of a dict or a collection of pairs with values passing given predicate.
-
-compact(coll)
- Removes falsy values from given collection. When compacting a dict all keys with falsy values are trashed.
-
-
-merge_with(f, *dicts) join_with(f, dicts)
- Merge several dicts combining values for same key with given function::
-
-zipdict(keys, vals)
- Returns a dict with the ``keys`` mapped to the corresponding ``vals``. Stops pairing on shorter sequence end
-
-flip(mapping)
- Flip passed dict swapping its keys and values. Also works for sequences of pairs. Preserves collection type::
-
-project(mapping, keys)
- Returns a dict containing only those entries in ``mapping`` whose key is in ``keys``.
-
-izip_values(*dicts)
- Yields tuples of corresponding values of given dicts. Skips any keys not present in all of the dicts. Comes in handy when comparing two or more dicts::
-
-izip_dicts(*dicts)
- Yields tuples like ``(key, value1, value2, ...)`` for each common key of all given dicts. A neat way to process several dicts at once::
-
-get_in(coll, path, default=None)
-Returns the value corresponding to the path in the dictionary::
-
-set_in(coll, path, value)
-Creates a dictionary with a ``value`` set at specified ``path``. Original collection is not changed::
-
-update_in(coll, path, update, default=None)
- Creates a dictionary with a value at specified ``path`` updated::
-
-
-Data manipulation
------------------
-
-.. function:: where(mappings, **cond)
-              iwhere(mappings, **cond)
-
-    Looks through each value in given sequence of dicts, returning a list or an iterator of all the dicts that contain all of the key-value pairs in ``cond``::
-
-        where(plays, author="Shakespeare", year=1611)
-        # => [{"title": "Cymbeline", "author": "Shakespeare", "year": 1611},
-        #     {"title": "The Tempest", "author": "Shakespeare", "year": 1611}]
-
-    Iterator version could be used for efficiency or when you don't need the whole list.
-    E.g. you are looking for the first match:
-
-        first(iwhere(plays, author="Shakespeare"))
-        # => {"title": "The Two Gentlemen of Verona", ...}
-
-
-.. function:: pluck(key, mappings)
-              ipluck(key, mappings)
-
-    Returns a list or an iterator of values for ``key`` in each mapping in given sequence. Essentially a shortcut for::
-
-        map(operator.itemgetter(key), mappings)
-
-
-.. function:: pluck_attr(attr, objects)
-              ipluck_attr(attr, objects)
-
-    Returns a list or an iterator of values for ``attr`` in each object in given sequence. Essentially a shortcut for::
-
-        map(operator.attrgetter(attr), objects)
-
-    Useful when dealing with collections of ORM objects::
-
-        users = User.query.all()
-        ids = pluck_attr('id', users)
-
-
-.. function:: invoke(objects, name, *args, **kwargs)
-              iinvoke(objects, name, *args, **kwargs)
-
-    Calls named method with given arguments for each object in ``objects`` and returns a list or an iterator of results.
-
-
-Content tests
--------------
 
 .. function:: is_distinct(coll, key=identity)
 
     Checks if all elements in collection are different::
-
-        assert is_distinct(field_names), "All fields should be named differently"
-
-    Uses ``key`` to differentiate values. This way one can check if all first letters of ``words`` are different::
-
-        is_distinct(words, key=0)
-
-
-.. function:: all([pred], seq)
-
-    Checks if ``pred`` holds every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` is true (which is the same as in built-in :func:`~builtin.all`)::
-
-        they_are_ints = all(is_instance(n, int) for n in seq)
-        they_are_even = all(even, seq)
-
-    Note that, first example could be rewritten using :func:`isa` like this::
-
-        they_are_ints = all(isa(int), seq)
-
-
-
-
-Low-level helpers
------------------
-
-.. function:: empty(coll)
-
-    Returns an empty collection of the same type as ``coll``.
-
-
-.. function:: iteritems(coll)
-
-    Returns an iterator of items of a ``coll``. This means ``key, value`` pairs for any dictionaries::
-
-        list(iteritems({1, 2, 42}))
-        # -> [1, 42, 2]
-
-        list(iteritems({'a': 1}))
-        # -> [('a', 1)]
-
-
-.. function:: itervalues(coll)
-
-    Returns an iterator of values of a ``coll``. This means values for any dictionaries and just elements for other collections::
-
-        list(itervalues({1, 2, 42}))
-        # -> [1, 42, 2]
-
-        list(itervalues({'a': 1}))
-        # -> [1]
-
-
 
 
 <div name="constantly">

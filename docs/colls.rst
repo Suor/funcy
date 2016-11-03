@@ -32,7 +32,7 @@ All functions in this section support :ref:`extended_fns`.
 
 .. function:: walk(f, coll)
 
-    Returns collection of same type as ``coll`` consisting of its elements mapped with given function::
+    Returns a collection of same type as ``coll`` consisting of its elements mapped with the given function::
 
         walk(inc, {1, 2, 3}) # -> {2, 3, 4}
         walk(inc, (1, 2, 3)) # -> (2, 3, 4)
@@ -54,7 +54,7 @@ All functions in this section support :ref:`extended_fns`.
 
 .. function:: walk_keys(f, coll)
 
-    Walks keys of ``coll``, mapping them with given function. Works with mappings and collections of pairs::
+    Walks keys of ``coll``, mapping them with the given function. Works with mappings and collections of pairs::
 
         walk_keys(str.upper, {'a': 1, 'b': 2}) # {'A': 1, 'B': 2}
         walk_keys(int, json.loads(some_dict))  # restore key type lost in translation
@@ -64,7 +64,7 @@ All functions in this section support :ref:`extended_fns`.
 
 .. function:: walk_values(f, coll)
 
-    Walks values of ``coll``, mapping them with given function. Works with mappings and collections of pairs.
+    Walks values of ``coll``, mapping them with the given function. Works with mappings and collections of pairs.
 
     Common use is to process values somehow::
 
@@ -82,7 +82,7 @@ All functions in this section support :ref:`extended_fns`.
 
 .. function:: select(pred, coll)
 
-    Filters elements of ``coll`` by ``pred`` constructing collection of same type. When filtering a dict ``pred`` receives ``(key, value)`` pairs. See :func:`select_keys` and :func:`select_values` to filter it by keys or values respectively::
+    Filters elements of ``coll`` by ``pred`` constructing a collection of same type. When filtering a dict ``pred`` receives ``(key, value)`` pairs. See :func:`select_keys` and :func:`select_values` to filter it by keys or values respectively::
 
         select(even, {1, 2, 3, 10, 20})
         # -> {2, 10, 20}
@@ -93,7 +93,7 @@ All functions in this section support :ref:`extended_fns`.
 
 .. function:: select_keys(pred, coll)
 
-    Select part of a dict or a collection of pairs with keys passing given predicate.
+    Select part of a dict or a collection of pairs with keys passing the given predicate.
 
     This way a public part of instance attributes dictionary could be selected::
 
@@ -103,7 +103,7 @@ All functions in this section support :ref:`extended_fns`.
 
 .. function:: select_values(pred, coll)
 
-    Select part of a dict or a collection of pairs with values passing given predicate.
+    Select part of a dict or a collection of pairs with values passing the given predicate.
 
     Strip falsy values from dict::
 
@@ -186,7 +186,7 @@ Dict utils
 
 .. function:: get_in(coll, path, default=None)
 
-    Returns the value corresponding to the path in the dictionary::
+    Returns a value corresponding to ``path`` in nested collection::
 
         get_in({"a": {"b": 42}}, ["a", "b"])    # -> 42
         get_in({"a": {"b": 42}}, ["c"], "foo")  # -> "foo"
@@ -194,7 +194,7 @@ Dict utils
 
 .. function:: set_in(coll, path, value)
 
-    Creates a dictionary with a ``value`` set at specified ``path``. Original collection is not changed::
+    Creates a nested collection with the ``value`` set at specified ``path``. Original collection is not changed::
 
         set_in({"a": {"b": 42}}, ["a", "b"], 10)
         # -> {"a": {"b": 10}}
@@ -205,7 +205,7 @@ Dict utils
 
 .. function:: update_in(coll, path, update, default=None)
 
-    Creates a dictionary with a value at specified ``path`` updated::
+    Creates a nested collection with a value at specified ``path`` updated::
 
         update_in({"a": {}}, ["a", "cnt"], inc, default=0)
         # -> {"a": {"cnt": 1}}
