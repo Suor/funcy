@@ -30,7 +30,8 @@
     .rst-content code.xref {line-height: 20px}
 
     #pup strong, #pup b {color: #ddd}
-    #pup em {color: #3591CC; font-weight: bold; margin-right: 1px}
+    #pup em {color: #3591CC; font-weight: bold; margin-right: 2px}
+    #pup b em {margin-right: 0}
     #pup em span {color: #b3b3b3; opacity: 0.7; font-style: normal;
                   display:inline-block; padding:0 1px 0 3px}
     #pup code {background: transparent; border: none; font-size: 90%; padding: 0 3px;}
