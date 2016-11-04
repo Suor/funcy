@@ -3,7 +3,7 @@ String utils
 
 .. function:: re_find(regex, s, flags=0)
 
-    Finds ``regex`` in ``s``, returning the match in most simple form guessed by captures in given regular expression:
+    Finds ``regex`` in ``s``, returning the match in the simplest possible form guessed by captures in given regular expression:
 
     ================================= ==================================
     Captures                          Return value

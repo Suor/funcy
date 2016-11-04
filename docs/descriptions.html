@@ -392,14 +392,110 @@
 </div>
 
 
+<div name="extended-fns">
+    Most of functions in this section support extended semantics.
+</div>
+
+<!-- Funcs Create -->
+<div name="identity">
+    <b>identity<em>(x)</em></b><br><br>
+    Returns its argument.
+</div>
+<div name="constantly">
+    <b>constantly<em>(x)</em></b><br><br>
+    Creates a function accepting any args, but always returning <em>x</em>.
+</div>
+<div name="func_partial">
+    <b>func_partial<em>(func, *args, **kwargs)</em></b><br><br>
+    Like <b>partial()</b> but returns a real function.
+</div>
+<div name="partial">
+    <b>partial<em>(func, *args, **kwargs)</em></b><br><br>
+    Returns partial application of <em>func</em>.
+</div>
+<div name="rpartial">
+    <b>rpartial<em>(func, *args)</em></b><br><br>
+    Partially applies last arguments to <em>func</em>.
+</div>
+<div name="iffy">
+    <b>iffy<em>(<span>[</span>pred<span>, ]</span>action<span>[, </span>default=identity<span>]</span>)</em></b><br><br>
+    Creates a function, which conditionally applies <em>action</em> or <em>default</em>.
+</div>
+<div name="caller">
+    <b>caller<em>(*args, **kwargs)</em></b><br><br>
+    Creates a function calling its argument with passed arguments.
+</div>
+<div name="re_finder">
+    <b>re_finder<em>(regex, flags=0)</em></b><br><br>
+    Creates a function finding <em>regex</em> in passed strings.
+</div>
+<div name="re_tester">
+    <b>re_tester<em>(regex, flags=0)</em></b><br><br>
+    Creates a predicate testing passed strings with <em>regex</em>.
+</div>
+
+<!-- Funcs Transform -->
+<div name="complement">
+    <b>complement<em>(pred)</em></b><br><br>
+    Constructs a complementary predicate.
+</div>
+<div name="autocurry">
+    <b>autocurry<em>(func)</em></b><br><br>
+    Creates a version of <em>func</em> returning its partial applications<br>
+    until sufficient arguments are passed.
+</div>
+<div name="curry">
+    <b>curry<em>(func<span>[, </span>n<span>]</span>)</em></b><br><br>
+    Curries <em>func</em> into a chain of one argument functions.<br>
+    Arguments are passed from left to right.
+</div>
+<div name="rcurry">
+    <b>rcurry<em>(func<span>[, </span>n<span>]</span>)</em></b><br><br>
+    Curries <em>func</em> from right to left.
+</div>
+
+<!-- Funcs Join -->
+<div name="compose">
+    <b>compose<em>(*fs)</em></b><br><br>
+    Composes passed functions.
+</div>
+<div name="rcompose">
+    <b>rcompose<em>(*fs)</em></b><br><br>
+    Composes <em>fs</em>, calling them from left to right.
+</div>
+<div name="juxt">
+    <b>juxt<em>(*fs)</em><br>ijuxt<em>(*fs)</em></b><br><br>
+    Constructs a juxtaposition of the given functions.<br>
+    Result returns a list or an iterator of results of <em>fs</em>.
+</div>
+<div name="all_fn">
+    <b>all_fn<em>(*fs)</em></b><br><br>
+    Constructs a predicate,<br> which holds when all <em>fs</em> hold.
+</div>
+<div name="any_fn">
+    <b>any_fn<em>(*fs)</em></b><br><br>
+    Constructs a predicate,<br> which holds when any of <em>fs</em> holds.
+</div>
+<div name="none_fn">
+    <b>none_fn<em>(*fs)</em></b><br><br>
+    Constructs a predicate,<br> which holds when none of <em>fs</em> hold.
+</div>
+<div name="one_fn">
+    <b>one_fn<em>(*fs)</em></b><br><br>
+    Constructs a predicate,<br> which holds when exactly one of <em>fs</em> holds.
+</div>
+<div name="some_fn">
+    <b>some_fn<em>(*fs)</em></b><br><br>
+    Constructs function calling <em>fs</em> one by one<br>
+    and returning first truthy result.
+</div>
+
+
+
 .. function:: is_distinct(coll, key=identity)
 
     Checks if all elements in collection are different::
 
 
-<div name="constantly">
-<strong>constantly<em>(x)</em></strong><br><br>
-Creates function accepting any args, but always returning <em>x</em>.
-</div>
 
 </div>

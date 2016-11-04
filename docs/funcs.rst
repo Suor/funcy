@@ -77,7 +77,7 @@ Functions
 
 .. function:: autocurry(func[, n])
 
-    Constructs a version of ``func`` returning it's partial application if insufficient arguments passed::
+    Constructs a version of ``func`` returning its partial applications until sufficient arguments are passed::
 
         def remainder(what, by):
             return what % by
@@ -143,7 +143,7 @@ This family of functions supports creating predicates from other predicates and 
 
 .. function:: complement(pred)
 
-    Constructs a predicate of passed function, i.e. a function returning a boolean opposite of original function::
+    Constructs a negation of ``pred``, i.e. a function returning a boolean opposite of original function::
 
         is_private = re_tester(r'^_')
         is_public = complement(is_private)
