@@ -18,9 +18,9 @@ Installation
 
 
 Overview
---------
+--------------
 
-Just import stuff from funcy to make things happen:
+Import stuff from funcy to make things happen:
 
 .. code:: python
 

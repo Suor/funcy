@@ -3,6 +3,13 @@
 Overview
 ========
 
+Start with:
+
+::
+
+    pip install funcy
+
+
 .. include:: ../README.rst
-    :start-after: Overview
+    :start-after: --------------
     :end-before: And `much more <http://funcy.readthedocs.org/>`_.
