@@ -255,6 +255,7 @@ def wraps(wrapped,
                 return func(*args, **kwargs)
 
     But see also :func:`@decorator<decorator>` for that.
+    This is extended version of :func:`functools.wraps`.
     """
     return partial(update_wrapper, wrapped=wrapped,
                    assigned=assigned, updated=updated)
@@ -272,6 +273,8 @@ except ImportError:
 
         Follows the chain of :attr:`__wrapped__` attributes returning the last
         object in the chain.
+
+        This is a backport from python 3.4.
         """
         f = func  # remember the original func for error reporting
         memo = set([id(f)]) # Memoise by id to tolerate non-hashable objects

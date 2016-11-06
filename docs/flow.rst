@@ -53,7 +53,7 @@ Flow
         # Setup each class once
         class SomeManager(Manager):
             @once_per('cls')
-            def contribute_to_class(self, cls):
+            def _initialize_class(self, cls):
                 pre_save.connect(self._pre_save, sender=cls)
                 # ... set up signals, no dups
 

@@ -17,6 +17,7 @@
     .descriptions {display: none}
     .rst-content table.docutils td {vertical-align: top; padding: 6px 16px; line-height: 20px}
     .wy-table-responsive table td {white-space: normal}
+    .wy-table-responsive table td:first-child {white-space: nowrap}
 
     .rst-content code.xref {color: #2E7FB3; font-size: 90%;
         padding: 0px 2px; border: none; background: none; line-height: 20px}
@@ -52,10 +53,11 @@
             })
 
             $('a[href=#colls]').attr('title', 'dicts-more')
+            $('h2 a[href*=extended_fns]').attr('title', 'extended-fns')
             nhpup.initialize()
             $('.descriptions div').each(function () {
                 var name = this.getAttribute('name');
-                $('a[title='+name+']').on('mouseover', nhpup.popup(this.innerHTML, {width: ''})).removeAttr('title');
+                $('a[title="'+name+'"]').on('mouseover', nhpup.popup(this.innerHTML, {width: ''})).removeAttr('title');
             })
         })
     </script>
@@ -66,7 +68,7 @@
 Cheatsheet
 ==========
 
-Hover over function to get description.
+Hover over function to get its description.
 
 
 Sequences
@@ -103,6 +105,8 @@ Misc                  :func:`empty` :func:`get_in` :func:`set_in` :func:`update_
 Functions
 ---------
 
+.. :ref:`*<extended_fns>`
+
 ========== ==============================================================
 Create     :func:`identity` :func:`constantly` :func:`func_partial` :func:`partial` :func:`rpartial` :func:`iffy` :func:`caller` :func:`re_finder` :func:`re_tester`
 Transform  :func:`complement` :func:`iffy` :func:`autocurry` :func:`curry` :func:`rcurry`
@@ -115,11 +119,11 @@ Other topics
 
 ================== ==============================================================
 Content tests      :func:`all` :func:`any` :func:`none` :func:`one` :func:`is_distinct`
-Type tests         :func:`isa` :func:`is_iter` :func:`is_list` :func:`is_mapping` :func:`is_seq` :func:`is_seqcoll` :func:`is_seqcont` :func:`iterable` :func:`is_set` :func:`is_tuple`
+Type tests         :func:`isa` :func:`is_iter` :func:`is_list` :func:`is_tuple` :func:`is_set` :func:`is_mapping` :func:`is_seq` :func:`is_seqcoll` :func:`is_seqcont` :func:`iterable`
 Decorators         :func:`decorator<funcy.decorator>` :func:`wraps<funcy.wraps>` :func:`unwrap<funcy.unwrap>` :func:`autocurry`
 Control flow       :func:`once` :func:`once_per` :func:`once_per_args` :func:`collecting` :func:`joining` :func:`post_processing`
 Error handling     :func:`retry` :func:`silent` :func:`ignore` :func:`suppress` :func:`limit_error_rate` :func:`fallback` :func:`raiser`
-Debugging/Logging  :func:`tap` :func:`log_calls` :func:`log_enters` :func:`log_exits` :func:`log_errors` :func:`log_durations` :func:`log_iter_durations`
+Debugging          :func:`tap` :func:`log_calls` :func:`log_enters` :func:`log_exits` :func:`log_errors` :func:`log_durations` :func:`log_iter_durations`
 Caching            :func:`memoize` :func:`cache` :func:`cached_property` :func:`make_lookuper` :func:`silent_lookuper`
 Regexes            :func:`re_find` :func:`re_test` :func:`re_all` :func:`re_iter` :func:`re_finder` :func:`re_tester`
 Strings            :func:`cut_prefix` :func:`cut_suffix` :func:`str_join`

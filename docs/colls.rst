@@ -262,7 +262,7 @@ Content tests
 
 .. function:: is_distinct(coll, key=identity)
 
-    Checks if all elements in collection are different::
+    Checks if all elements in the collection are different::
 
         assert is_distinct(field_names), "All fields should be named differently"
 

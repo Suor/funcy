@@ -491,11 +491,255 @@
 </div>
 
 
+<!-- Content tests -->
+<div name="is_distinct">
+    <b>is_distinct<em>(*fs)</em></b><br><br>
+    Checks if all elements in the collection are different.
+</div>
 
-.. function:: is_distinct(coll, key=identity)
+<!-- Type test -->
+<div name="isa">
+    <b>isa<em>(*types)</em></b><br><br>
+    Returns function checking if its argument<br> is of any of given <em>types</em>.
+</div>
+<div name="is_iter">
+    <b>is_iter<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is an iterator.
+</div>
+<div name="is_mapping">
+    <b>is_mapping<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is a mapping.
+</div>
+<div name="is_set">
+    <b>is_set<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is a set.
+</div>
+<div name="is_list">
+    <b>is_list<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is a list.
+</div>
+<div name="is_tuple">
+    <b>is_tuple<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is a tuple.
+</div>
+<div name="is_seq">
+    <b>is_seq<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is a <code>Sequence</code>.
+</div>
+<div name="is_mapping">
+    <b>is_mapping<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is a mapping.
+</div>
+<div name="is_seqcoll">
+    <b>is_seqcoll<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is a list or a tuple,<br>
+    which are both sequences and collections.
+</div>
+<div name="is_seqcont">
+    <b>is_seqcont<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is a list, a tuple or an iterator,<br>
+    which are both sequences and containers.
+</div>
+<div name="iterable">
+    <b>iterable<em>(value)</em></b><br><br>
+    Checks whether <em>value</em> is iterable.
+</div>
 
-    Checks if all elements in collection are different::
+<!-- Decorators -->
+<div name="funcy.decorator">
+    <b>@decorator</b><br><br>
+    Transforms a flat wrapper into a decorator.
+</div>
+<div name="funcy.wraps">
+    <b>@wraps</b><br><br>
+    An utility to pass function metadata<br>
+    from wrapped function to a wrapper.
+</div>
+<div name="funcy.unwrap">
+    <b>unwrap<em>(func)</em></b><br><br>
+    Get the object wrapped by <em>func</em>.
+</div>
 
+<!-- Control flow -->
+<div name="once">
+    <b>@once</b><br><br>
+    Let function execute only once.<br>
+    Noop all subsequent calls.
+</div>
+<div name="once_per">
+    <b>@once_per<em>(*argnames)</em></b><br><br>
+    Call function only once for every combination<br>
+    of the given arguments.
+</div>
+<div name="once_per_args">
+    <b>@once_per_args</b><br><br>
+    Call function only once for every combination<br>
+    of values of its arguments.
+</div>
+<div name="collecting">
+    <b>@collecting</b><br><br>
+    Transforms a generator into list returning function.
+</div>
+<div name="joining">
+    <b>@joining<em>(sep)</em></b><br><br>
+    Joins decorated function results with <em>sep</em>.
+</div>
+<div name="post_processing">
+    <b>@post_processing<em>(func)</em></b><br><br>
+    Post processes decorated function result with <em>func</em>.
+</div>
 
+<!-- Error handling -->
+<div name="retry">
+    <b>@retry<em>(tries, errors=Exception, timeout=0)</em></b><br><br>
+    Tries decorated function up to <em>tries</em> times.<br>
+    Retries only on specified <em>errors</em>.<br>
+</div>
+<div name="silent">
+    <b>@silent</b><br><br>
+    Alters function to ignore all exceptions.
+</div>
+<div name="ignore">
+    <b>@ignore<em>(errors, default=None)</em></b><br><br>
+    Alters function to ignore <em>errors</em>,<br>
+    returning <em>default</em> instead.
+</div>
+<div name="suppress">
+    <b>suppress<em>(*errors)</em></b><br><br>
+    The context manager suppressing <em>errors</em> in its block.
+</div>
+<div name="limit_error_rate">
+    <b>@limit_error_rate<em>(fails, timeout, ...)</em></b><br><br>
+    If function fails to complete <em>fails</em> times in a row,<br>
+    calls to it will be blocked for <em>timeout</em> seconds.
+</div>
+<div name="fallback">
+    <b>fallback<em>(*approaches)</em></b><br><br>
+    Tries several approaches until one works.<br>
+    Each approach has a form of <code>(callable, errors)</code>.
+</div>
+<div name="raiser">
+    <b>raiser<em>(exception=Exception, *args, **kwargs)</em></b><br><br>
+    Constructs function that raises the given exception<br>
+    with given arguments on any invocation.
+</div>
+
+<!-- Debugging -->
+<div name="tap">
+    <b>tap<em>(value, label=None)</em></b><br><br>
+    Prints <em>value</em> and then returns it.
+</div>
+<div name="log_calls">
+    <b>@log_calls<em>(print_func, errors=True, stack=True)</em><br>
+       @print_calls<em>(errors=True, stack=True)</em></b><br><br>
+    Logs or prints all function calls,<br>
+    including arguments, results and raised exceptions.
+</div>
+<div name="log_enters">
+    <b>@log_enters<em>(print_func)</em><br>
+       @print_enters</b><br><br>
+    Logs or prints on each enter to a function.
+</div>
+<div name="log_exits">
+    <b>@log_exits<em>(print_func, errors=True, stack=True)</em><br>
+       @print_exits<em>(errors=True, stack=True)</em></b><br><br>
+    Logs or prints on each exit from a function.
+</div>
+<div name="log_errors">
+    <b>@log_errors<em>(print_func, label=None, stack=True)</em><br>
+       @print_errors<em>(label=None, stack=True)</em></b><br><br>
+    Logs or prints all errors within function or block.
+</div>
+<div name="log_durations">
+    <b>@log_durations<em>(print_func, label=None)</em><br>
+       @print_durations<em>(label=None)</em></b><br><br>
+    Time each function call or block execution.
+</div>
+<div name="log_iter_durations">
+    <b>log_iter_durations<em>(seq, print_func, label=None)</em><br>
+       print_iter_durations<em>(seq, label=None)</em></b><br><br>
+    Time processing of each item in <em>seq</em>.
+</div>
+
+<!-- Caching -->
+<div name="memoize">
+    <b>@memoize</b><br><br>
+    Memoizes a decorated function results.
+</div>
+<div name="cache">
+    <b>@cache<em>(timeout)</em></b><br><br>
+    Caches a function results for <em>timeout</em> seconds.
+</div>
+<div name="cached_property">
+    <b>@cached_property</b><br><br>
+    Creates a property caching its result.
+</div>
+<div name="make_lookuper">
+    <b>@make_lookuper</b><br><br>
+    Creates a cached function with prefilled memory.
+</div>
+<div name="silent_lookuper">
+    <b>@silent_lookuper</b><br><br>
+    Creates a cached function with prefilled memory.<br>
+    Ignores memory misses, returning <code>None</code>.
+</div>
+
+<!-- Regexes -->
+<div name="re_find">
+    <b>re_find<em>(regex, s, flags=0)</em></b><br><br>
+    Matches <em>regex</em> against the given string,<br>
+    returns the match in the simplest possible form.
+</div>
+<div name="re_test">
+    <b>re_test<em>(regex, s, flags=0)</em></b><br><br>
+    Tests whether <em>regex</em> matches against <em>s</em>.
+</div>
+
+<!-- Strings -->
+<div name="cut_prefix">
+    <b>cut_prefix<em>(s, prefix)</em></b><br><br>
+    Cuts prefix from given string if it's present.
+</div>
+<div name="cut_suffix">
+    <b>cut_suffix<em>(s, suffix)</em></b><br><br>
+    Cuts suffix from given string if it's present.
+</div>
+<div name="str_join">
+    <b>str_join<em>(<span>[</span>sep=""<span>, ]</span>seq)</em></b><br><br>
+    Joins the given sequence with <em>sep</em>.<br>
+    Forces stringification of <em>seq</em> items.
+</div>
+
+<!-- Objects  -->
+<div name="monkey">
+    <b>@monkey<em>(cls_or_module, name=None)</em></b><br><br>
+    Monkey-patches class or module.
+</div>
+
+<!-- Primitives -->
+<div name="isnone">
+    <b>isnone<em>(x)</em></b><br><br>
+    Checks if <em>x</em> is <em>None</em>.
+</div>
+<div name="notnone">
+    <b>notnone<em>(x)</em></b><br><br>
+    Checks if <em>x</em> is not <em>None</em>.
+</div>
+<div name="inc">
+    <b>inc<em>(x)</em></b><br><br>
+    Increments its argument by 1.
+</div>
+<div name="dec">
+    <b>dec<em>(x)</em></b><br><br>
+    Decrements its argument by 1.
+</div>
+<div name="even">
+    <b>even<em>(x)</em></b><br><br>
+    Checks if <em>x</em> is even.
+</div>
+<div name="odd">
+    <b>odd<em>(x)</em></b><br><br>
+    Checks if <em>x</em> is odd.
+</div>
 
 </div>

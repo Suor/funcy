@@ -3,11 +3,11 @@ Type testing
 
 .. function:: isa(*types)
 
-    Returns function checking if it's argument is of any of given ``types``.
+    Returns function checking if its argument is of any of given ``types``.
 
     Split labels from ids::
 
-        labels, ids = split_by(isa(str), values)
+        labels, ids = split(isa(str), values)
 
 
 .. function:: is_mapping(value)
