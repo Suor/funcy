@@ -1,7 +1,7 @@
 TODO
 ====
 
-- count_by(identity, ...) shortcut (count_eq? count_items?)
+- count_by(identity, ...) shortcut (count_eq? count_items? frequencies?)
   Counter?
 
 - @reraise((Err1, Err2), like=OtherErr)
@@ -16,12 +16,6 @@ TODO
 - decorators with optional arguments?
 - (log|print)_errors to optionally hide causing call?
 - log_* and print_* to optionally hide args?
-
-
-Docs
-----
-
-- cheatsheet
 
 
 Or not TODO
