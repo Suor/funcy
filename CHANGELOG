@@ -1,3 +1,9 @@
+1.7.2
+- added cheatsheet
+- many fixes in docs
+- documented @post_processing()
+- fixed (print|log)_* on non-function callables
+
 1.7.1
 - fixed 3+ argument map() in Python 3
 
