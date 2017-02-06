@@ -221,7 +221,10 @@ def isplit(pred, seq):
         while True:
             while q:
                 yield q.popleft()
-            next(splitter)
+            try:
+                next(splitter)
+            except StopIteration:
+                return
 
     return _isplit(yes), _isplit(no)
 
@@ -353,7 +356,10 @@ def pairwise(seq):
 def ireductions(f, seq, acc=EMPTY):
     it = iter(seq)
     if acc is EMPTY:
-        last = next(it)
+        try:
+            last = next(it)
+        except StopIteration:
+            return
         yield last
     else:
         last = acc
