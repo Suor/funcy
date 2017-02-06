@@ -15,7 +15,8 @@ env:
   - TOXENV=py34
   - TOXENV=py35
   - TOXENV=pypy
-  - TOXENV=pypy3
+  # Don't test this until fixed by travis
+  # - TOXENV=pypy3
   - TOXENV=docs
   - TOXENV=lint
 install:
