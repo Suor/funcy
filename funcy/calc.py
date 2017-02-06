@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import inspect
 
 from .decorators import wraps
+from .cross import PY2
 
 __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 
@@ -38,11 +39,11 @@ memoize.skip = SkipMemoization
 
 def _make_lookuper(silent):
     def make_lookuper(func):
-        spec = inspect.getargspec(func)
-        assert not spec.keywords, \
+        has_args, has_keys = has_arg_types(func)
+        assert not has_keys, \
             'Lookup table building function should not have keyword arguments'
 
-        if spec.args or spec.varargs:
+        if has_args:
             @memoize
             def wrapper(*args):
                 f = lambda: func(*args)
@@ -100,3 +101,16 @@ def cache(timeout):
 
         return wrapper
     return decorator
+
+
+if PY2:
+    def has_arg_types(func):
+        spec = inspect.getargspec(func)
+        return bool(spec.args or spec.varargs), bool(spec.keywords)
+else:
+    def has_arg_types(func):
+        params = inspect.signature(func).parameters.values()
+        return any(p.kind in {p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD, p.VAR_POSITIONAL}
+                   for p in params), \
+               any(p.kind in {p.KEYWORD_ONLY, p.VAR_KEYWORD} for p in params)
+

@@ -1,22 +1,21 @@
 import sys
 import inspect
 from functools import partial
+from .cross import PY2
 
 
 __all__ = ['decorator', 'wraps', 'unwrap', 'ContextDecorator', 'contextmanager']
 
 
 def decorator(deco):
-    # Any arguments after first become decorator arguments
-    has_args = get_argcounts(deco) != (1, False, False)
-
-    if has_args:
-        # A decorator with arguments is essentialy a decorator fab
+    if has_single_arg(deco):
+        return wraps(deco)(make_decorator(deco))
+    else:
+        # Any arguments after first become decorator arguments
+        # And a decorator with arguments is essentialy a decorator fab
         def decorator_fab(*dargs, **dkwargs):
             return make_decorator(deco, dargs, dkwargs)
         return wraps(deco)(decorator_fab)
-    else:
-        return wraps(deco)(make_decorator(deco))
 
 
 def make_decorator(deco, dargs=(), dkwargs={}):
@@ -52,9 +51,18 @@ class Call(object):
             raise AttributeError(*e.args)
 
 
-def get_argcounts(func):
-    spec = inspect.getargspec(func)
-    return (len(spec.args), bool(spec.varargs), bool(spec.keywords))
+if PY2:
+    def has_single_arg(func):
+        spec = inspect.getargspec(func)
+        return len(spec.args) == 1 and not spec.varargs and not spec.keywords
+else:
+    def has_single_arg(func):
+        spec = inspect.signature(func)
+        if len(spec.parameters) != 1:
+            return False
+        arg = next(iter(spec.parameters.values()))
+        return arg.kind not in (arg.VAR_POSITIONAL, arg.VAR_KEYWORD)
+
 
 def get_argnames(func):
     func = getattr(func, '__original__', None) or unwrap(func)
