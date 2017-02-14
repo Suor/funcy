@@ -1,20 +1,17 @@
 language: python
-python: 2.7
 sudo: false
 cache: pip
-env:
-  - TOXENV=py26
-  - TOXENV=py27
-  - TOXENV=py33
-  - TOXENV=py34
-  - TOXENV=py35
-  - TOXENV=py36
-  - TOXENV=pypy
+python:
+  - "2.6"
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "pypy"
   # Don't test this until fixed by travis
-  # - TOXENV=pypy3
-  - TOXENV=docs
-  - TOXENV=lint
+  # "pypy3"
 install:
-  - pip install tox
+  - pip install tox-travis
 script:
   - tox
