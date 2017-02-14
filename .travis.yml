@@ -1,10 +1,4 @@
 language: python
-addons:
-  apt:
-    sources:
-      - deadsnakes
-    packages:
-      - python3.5
 python: 2.7
 sudo: false
 cache: pip
@@ -14,6 +8,7 @@ env:
   - TOXENV=py33
   - TOXENV=py34
   - TOXENV=py35
+  - TOXENV=py36
   - TOXENV=pypy
   # Don't test this until fixed by travis
   # - TOXENV=pypy3
