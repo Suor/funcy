@@ -169,7 +169,7 @@ To run the tests using your default python:
     py.test
 
 To fully run ``tox`` you need all the supported pythons to be installed. These are
-2.6, 2.7, 3.3, 3.4, 3.5, PyPy and PyPy3. You can run it for particular environment even in absense
+2.6+, 3.3+, PyPy and PyPy3. You can run it for particular environment even in absense
 of all of the above::
 
     tox -e py27
