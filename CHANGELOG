@@ -1,3 +1,7 @@
+1.7.3
+- support Python 3.6 officially
+- fix deprecation warnings in Python 3.5 and 3.6
+
 1.7.2
 - added cheatsheet
 - many fixes in docs
