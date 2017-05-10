@@ -69,7 +69,6 @@ def test_decorator_with_method():
 
     assert inc(A().ten)() == 11
     assert inc(A.ten_cls)() == 11
-    assert inc(A.ten_cls)() == 11
     assert inc(A.ten_static)() == 11
 
 
