@@ -50,6 +50,18 @@ def test_decorator_access_nonexistent_arg():
     with pytest.raises(AttributeError): f()
 
 
+def test_decorator_required_arg():
+    @decorator
+    def deco(call):
+        call.x
+
+    @deco
+    def f(x, y=42):
+        pass
+
+    with pytest.raises(AttributeError): f()
+
+
 def test_decorator_with_method():
     @decorator
     def inc(call):

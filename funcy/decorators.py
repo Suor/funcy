@@ -75,6 +75,10 @@ def arggetter(func, _cache={}):
     argnames = get_argnames(func)
     argcount = len(argnames)
     indexes = dict((name, i) for i, name in enumerate(argnames))
+    if func.__defaults__:
+        defaults = dict((argnames[-1-i], v) for i, v in enumerate(func.__defaults__))
+    else:
+        defaults = {}
 
     def get_arg(name, args, kwargs):
         if name not in indexes:
@@ -85,8 +89,10 @@ def arggetter(func, _cache={}):
                 return args[index]
             elif name in kwargs:
                 return kwargs[name]
+            elif name in defaults:
+                return defaults[name]
             else:
-                return func.__defaults__[index - argcount]
+                raise TypeError("%s() missing required argument: '%s'" % (func.__name__, name))
 
     _cache[func] = get_arg
     return get_arg
