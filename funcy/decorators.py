@@ -74,19 +74,19 @@ def arggetter(func, _cache={}):
 
     argnames = get_argnames(func)
     argcount = len(argnames)
+    indexes = dict((name, i) for i, name in enumerate(argnames))
 
     def get_arg(name, args, kwargs):
-        if name not in argnames:
+        if name not in indexes:
             raise TypeError("%s() doesn't have argument named %s" % (func.__name__, name))
         else:
-            if name in kwargs:
+            index = indexes[name]
+            if index < len(args):
+                return args[index]
+            elif name in kwargs:
                 return kwargs[name]
             else:
-                index = argnames.index(name)
-                if index < len(args):
-                    return args[index]
-                else:
-                    return func.__defaults__[index - argcount]
+                return func.__defaults__[index - argcount]
 
     _cache[func] = get_arg
     return get_arg
