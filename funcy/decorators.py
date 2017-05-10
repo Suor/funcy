@@ -81,7 +81,7 @@ def arggetter(func, _cache={}):
         else:
             if name in kwargs:
                 return kwargs[name]
-            elif name in argnames:
+            else:
                 index = argnames.index(name)
                 if index < len(args):
                     return args[index]
