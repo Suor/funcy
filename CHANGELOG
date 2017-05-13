@@ -1,3 +1,7 @@
+1.7.4
+- better error message on call.missed_arg access
+- optimized call.arg access in @decorator
+
 1.7.3
 - support Python 3.6 officially
 - fix deprecation warnings in Python 3.5 and 3.6
