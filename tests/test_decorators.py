@@ -62,6 +62,18 @@ def test_decorator_required_arg():
     with pytest.raises(AttributeError): f()
 
 
+def test_decorator_defaults():
+    @decorator
+    def deco(call):
+        return call.y, call.z
+
+    @deco
+    def f(x, y=1, z=2):
+        pass
+
+    assert f(42) == (1, 2)
+
+
 def test_decorator_with_method():
     @decorator
     def inc(call):
