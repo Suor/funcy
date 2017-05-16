@@ -72,10 +72,12 @@ def arggetter(func, _cache={}):
     if func in _cache:
         return _cache[func]
 
-    argnames = get_argnames(func)
+    original = getattr(func, '__original__', None) or unwrap(func)
+    argnames = get_argnames(original)
     indexes = dict((name, i) for i, name in enumerate(argnames))
-    if func.__defaults__:
-        defaults = dict(zip(argnames[-len(func.__defaults__):], func.__defaults__))
+    defaults_tuple = original.__defaults__
+    if defaults_tuple:
+        defaults = dict(zip(argnames[-len(defaults_tuple):], defaults_tuple))
     else:
         defaults = {}
 
