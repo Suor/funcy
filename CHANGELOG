@@ -1,3 +1,7 @@
+1.7.5
+- fixed defaults in double @decorated function
+- fixed @decorator with more than one default
+
 1.7.4
 - better error message on call.missed_arg access
 - optimized call.arg access in @decorator
