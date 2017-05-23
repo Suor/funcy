@@ -123,6 +123,13 @@ def test_interleave():
 def test_iterpose():
     assert list(interpose('.', 'abc')) == list('a.b.c')
 
+def test_accumulate_with_remainder():
+    assert list(accumulate_with_remainder([1, 2])) == [
+        ([], [1, 2]),
+        ([1], [2]),
+        ([1, 2], [])
+    ]
+
 
 def test_takewhile():
     assert list(takewhile([1, 2, None, 3])) == [1, 2]
