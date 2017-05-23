@@ -22,7 +22,7 @@ def memoize(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if kwargs:
-            key = args + tuple(sorted(kwargs.items()))
+            key = args + tuple(sorted(kwargs.iteritems()))
         else:
             key = args
         try:
