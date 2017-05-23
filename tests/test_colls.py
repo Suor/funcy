@@ -231,6 +231,11 @@ def test_get_in_list():
     assert get_in({'x': [1, 2]}, ['x', 1]) == 2
 
 
+def test_get_in_with_None():
+    d = {'foo': None}
+    assert get_in(d, ['foo', 'bar']) is None
+
+
 def test_set_in():
     d = {
         'a': {
