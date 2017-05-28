@@ -161,7 +161,7 @@ And `much more <http://funcy.readthedocs.org/>`_.
 Dive in
 -------
 
-Funcy is basically an embodiment of ideas I explain in several essays:
+Funcy is an embodiment of ideas I explain in several essays:
 
 - `Why Every Language Needs Its Underscore <http://hackflow.com/blog/2014/06/22/why-every-language-needs-its-underscore/>`_
 - `Functional Python Made Easy <http://hackflow.com/blog/2013/10/13/functional-python-made-easy/>`_
