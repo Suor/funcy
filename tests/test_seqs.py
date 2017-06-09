@@ -174,15 +174,15 @@ def test_count_items():
     assert count_items([0, 1, 0]) == {0: 2, 1: 1}
 
 def test_partition():
-    assert partition(2, range(5)) == [[0, 1], [2, 3]]
-    assert partition(2, 1, range(4)) == [[0, 1], [1, 2], [2, 3]]
+    assert partition(2, [0, 1, 2, 3, 4]) == [[0, 1], [2, 3]]
+    assert partition(2, 1, [0, 1, 2, 3]) == [[0, 1], [1, 2], [2, 3]]
     # test iters
     assert partition(2, iter(range(5))) == [[0, 1], [2, 3]]
-    assert partition(2, xrange(5)) == [[0, 1], [2, 3]]
+    assert map(list, partition(2, xrange(5))) == [[0, 1], [2, 3]]
 
 def test_chunks():
-    assert chunks(2, range(5)) == [[0, 1], [2, 3], [4]]
-    assert chunks(2, 1, range(4)) == [[0, 1], [1, 2], [2, 3], [3]]
+    assert chunks(2, [0, 1, 2, 3, 4]) == [[0, 1], [2, 3], [4]]
+    assert chunks(2, 1, [0, 1, 2, 3]) == [[0, 1], [1, 2], [2, 3], [3]]
     assert chunks(3, 1, iter(range(3))) == [[0, 1, 2], [1, 2], [2]]
 
 def test_partition_by():

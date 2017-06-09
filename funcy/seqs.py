@@ -4,7 +4,7 @@ from itertools import islice, chain, tee, groupby, \
 from collections import defaultdict, deque, Sequence
 
 from .cross import map as _map, filter as _filter, ifilter as _ifilter, imap as _imap, \
-                   izip, ifilterfalse, xrange, PY2
+                   izip, ifilterfalse, xrange, PY2, PY3
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcs import partial
@@ -316,8 +316,7 @@ def _icut(drop_tail, n, step, seq=EMPTY):
     if seq is EMPTY:
         step, seq = n, step
     # NOTE: range() is capable of slicing in python 3,
-    #       so this implementation could be updated
-    if isinstance(seq, Sequence) and not isinstance(seq, xrange):
+    if isinstance(seq, Sequence) and (PY3 or not isinstance(seq, xrange)):
         return _icut_seq(drop_tail, n, step, seq)
     else:
         return _icut_iter(drop_tail, n, step, seq)
