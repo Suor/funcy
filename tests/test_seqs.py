@@ -170,6 +170,9 @@ def test_count_by_is_defaultdict():
     cnts = count_by(len, [])
     assert cnts[1] == 0
 
+def test_count_items():
+    assert count_items([0, 1, 0]) == {0: 2, 1: 1}
+
 def test_partition():
     assert partition(2, range(5)) == [[0, 1], [2, 3]]
     assert partition(2, 1, range(4)) == [[0, 1], [1, 2], [2, 3]]

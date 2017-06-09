@@ -509,12 +509,17 @@ Data handling
 
 .. function:: count_by(f, seq)
 
-    Counts number of distinct values of ``f`` on elements of ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts.
+    Counts numbers of occurrences of values of ``f`` on elements of ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts.
 
     Calculating a histogram is one common use::
 
         # Get a length histogram of given words
         count_by(len, words)
+
+
+.. function:: count_items(seq)
+
+    Counts how many times each value appears in ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts. This is faster and shorter alternative to ``count_by(identity, ...)``
 
 
 .. function:: reductions(f, seq, [acc])

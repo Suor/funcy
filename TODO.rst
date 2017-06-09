@@ -1,9 +1,6 @@
 TODO
 ====
 
-- count_by(identity, ...) shortcut (count_eq? count_items? frequencies?)
-  Counter?
-
 - @reraise((Err1, Err2), like=OtherErr)
   with reraise(TypeError, ValueError) as MyError:
       ...

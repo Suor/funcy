@@ -18,7 +18,7 @@ __all__ = [
     'concat', 'iconcat', 'chain', 'cat', 'icat', 'flatten', 'iflatten', 'mapcat', 'imapcat',
     'izip', 'interleave', 'interpose', 'distinct', 'idistinct',
     'dropwhile', 'takewhile', 'split', 'isplit', 'split_at', 'isplit_at', 'split_by', 'isplit_by',
-    'group_by', 'group_by_keys', 'group_values', 'count_by',
+    'group_by', 'group_by_keys', 'group_values', 'count_by', 'count_items',
     'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
     'with_prev', 'with_next', 'pairwise',
     'ireductions', 'reductions', 'isums', 'sums',
@@ -284,6 +284,13 @@ def count_by(f, seq):
     result = defaultdict(int)
     for item in seq:
         result[f(item)] += 1
+    return result
+
+
+def count_items(seq):
+    result = defaultdict(int)
+    for item in seq:
+        result[item] += 1
     return result
 
 

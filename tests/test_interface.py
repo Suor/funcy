@@ -30,7 +30,7 @@ def test_full():
 
 
 def test_name_clashes():
-    counts = py2.count_by(py2.identity, py2.icat(m.__all__ for m in modules))
+    counts = py2.count_items(py2.icat(m.__all__ for m in modules))
     clashes = [name for name, c in counts.items() if c > 1]
     assert not clashes, 'names clash for ' + ', '.join(clashes)
 
