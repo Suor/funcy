@@ -23,6 +23,8 @@ __all__ = ['empty', 'iteritems', 'itervalues',
 
 
 ### Generic ops
+dictproxy = type(object.__dict__)
+
 def _factory(coll, mapper=None):
     # Hack for defaultdicts overriden constructor
     if isinstance(coll, defaultdict):
@@ -32,6 +34,8 @@ def _factory(coll, mapper=None):
         return identity
     elif isinstance(coll, basestring):
         return ''.join
+    elif isinstance(coll, dictproxy):
+        return dict
     else:
         return coll.__class__
 

@@ -133,6 +133,11 @@ def test_select_keys():
     assert select_keys(_[0] == 'a', {'a':1, 'b':2, 'ab':3}) == {'a': 1, 'ab':3}
     assert select_keys(r'^a', {'a':1, 'b':2, 'ab':3, 'ba': 4}) == {'a': 1, 'ab':3}
 
+def test_select_keys_class():
+    class A:
+        FLAG = 1
+    assert select_keys(str.isupper, A.__dict__) == {'FLAG': 1}
+
 def test_select_values():
     assert select_values(_ % 2, {'a': 1, 'b': 2}) == {'a': 1}
     assert select_values(r'a', {1: 'a', 2: 'b'}) == {1: 'a'}
