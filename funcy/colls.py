@@ -23,7 +23,12 @@ __all__ = ['empty', 'iteritems', 'itervalues',
 
 
 ### Generic ops
-dictproxy = type(object.__dict__)
+FACTORY_REPLACE = {
+    type(object.__dict__): dict,
+    type({}.keys()): list,
+    type({}.values()): list,
+    type({}.items()): list,
+}
 
 def _factory(coll, mapper=None):
     # Hack for defaultdicts overriden constructor
@@ -34,8 +39,8 @@ def _factory(coll, mapper=None):
         return iter
     elif isinstance(coll, basestring):
         return ''.join
-    elif isinstance(coll, dictproxy):
-        return dict
+    elif type(coll) in FACTORY_REPLACE:
+        return FACTORY_REPLACE[type(coll)]
     else:
         return coll.__class__
 
