@@ -40,6 +40,8 @@ def _factory(coll, mapper=None):
         return coll.__class__
 
 def empty(coll):
+    if isinstance(coll, Iterator):
+        return iter([])
     return _factory(coll)()
 
 if PY2:

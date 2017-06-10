@@ -27,6 +27,11 @@ def test_empty():
     assert eq(empty(defaultdict(int)), defaultdict(int))
     assert empty(defaultdict(int)).default_factory == defaultdict(int).default_factory
 
+def test_empty_iter():
+    it = empty(iter([]))
+    assert isinstance(it, Iterator)
+    assert list(it) == []
+
 def test_iteritems():
     assert list(iteritems([1,2])) == [1,2]
     assert list(iteritems((1,2))) == [1,2]
