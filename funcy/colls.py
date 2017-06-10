@@ -8,7 +8,7 @@ from itertools import chain, tee
 
 from .cross import basestring, xrange, izip, map, filter, imap, PY2
 from .primitives import EMPTY
-from .funcs import identity, partial, compose, complement
+from .funcs import partial, compose, complement
 from .funcmakers import make_func, make_pred
 from .seqs import take, ximap, ifilter
 
@@ -31,7 +31,7 @@ def _factory(coll, mapper=None):
         item_factory = compose(mapper, coll.default_factory) if mapper else coll.default_factory
         return partial(defaultdict, item_factory)
     elif isinstance(coll, Iterator):
-        return identity
+        return iter
     elif isinstance(coll, basestring):
         return ''.join
     elif isinstance(coll, dictproxy):
