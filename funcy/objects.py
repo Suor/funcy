@@ -1,9 +1,11 @@
 from inspect import isclass, ismodule
 
+from .colls import walk_values
+from .funcs import iffy
 from .strings import cut_prefix
 
 
-__all__ = ['cached_property', 'monkey']
+__all__ = ['cached_property', 'monkey', 'namespace']
 
 
 class cached_property(object):
@@ -42,3 +44,12 @@ def monkey(cls, name=None):
 
 
 # TODO: monkey_mix()?
+
+
+class namespace_meta(type):
+    def __new__(cls, name, bases, attrs):
+        attrs = walk_values(iffy(callable, staticmethod), attrs)
+        return super(namespace_meta, cls).__new__(cls, name, bases, attrs)
+
+class namespace(object):
+    __metaclass__ = namespace_meta

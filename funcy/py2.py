@@ -11,14 +11,13 @@ from .types import *
 from .strings import *
 from .flow import *
 from .objects import *
-from .namespaces import namespace
 from .debug import *
 from .primitives import *
 
 
 # Setup __all__
 modules = ('calc', 'colls', 'tree', 'decorators', 'funcolls', 'funcs', 'seqs', 'types',
-           'strings', 'flow', 'objects', 'namespaces', 'debug', 'primitives')
+           'strings', 'flow', 'objects', 'debug', 'primitives')
 __all__ = cat(sys.modules['funcy.' + m].__all__ for m in modules)
 
 
