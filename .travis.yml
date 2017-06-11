@@ -1,5 +1,6 @@
-language: python
+dist: trusty
 sudo: false
+language: python
 cache: pip
 python:
   - "2.6"
@@ -8,8 +9,8 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  - "pypy-5.3.1"
-  - "pypy3-5.6.0"
+  - "pypy-5.7.1"
+  - "pypy3.5-5.7.1-beta"
 install:
   - pip install tox-travis
 script:
