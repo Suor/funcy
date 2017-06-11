@@ -30,3 +30,15 @@ Objects
                 return result
             else:
                 return get.original(self, *args, **kwargs)
+
+
+.. class:: namespace
+
+    A base class that prevents its member functions turning into methods::
+
+        class Checks(namespace):
+            is_str = lambda value: isinstance(value, str)
+            max_len = lambda l: lambda value: len(value) <= l
+
+        field_checks = all_fn(Checks.is_str, Checks.max_len(30))
+
