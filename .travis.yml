@@ -8,8 +8,8 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  - "pypy"
-  - "pypy3"
+  - "pypy-5.7.1"
+  - "pypy3-5.7.1"
 install:
   - pip install tox-travis
 script:
