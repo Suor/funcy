@@ -1,5 +1,4 @@
 import re
-import time
 
 from funcy.debug import *
 from funcy.flow import silent
@@ -116,21 +115,22 @@ def test_print_errors_recursion():
     assert 'f(1)' in capture(f, 1)
 
 
-def test_log_durations():
+def test_log_durations(monkeypatch):
+    monkeypatch.setattr('time.time', iter([0, 0.01, 1, 1.01]).next)
     log = []
 
     @log_durations(log.append)
     def f():
-        time.sleep(0.010)
+        pass
 
     f()
     with log_durations(log.append, 'hello'):
-        time.sleep(0.010)
+        pass
 
     for line in log:
         m = re.search(r'^\s*(\d+\.\d+) ms in (f\(\)|hello)$', line)
         assert m
-        assert 10 <= float(m.group(1)) < 20
+        assert float(m.group(1)) == 10
 
 
 def test_log_iter_dirations():

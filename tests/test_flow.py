@@ -1,5 +1,3 @@
-from time import time
-
 import pytest
 from funcy.flow import *
 
@@ -69,20 +67,22 @@ def test_retry():
     with pytest.raises(MyError): retry(2, MyError)(failing)(2)
 
 
-def test_retry_timeout():
+def test_retry_timeout(monkeypatch):
+    timeouts = []
+    monkeypatch.setattr('time.sleep', timeouts.append)
+
     def failing():
         raise MyError
 
     # sleep only between tries, so retry is 11, but sleep summary is ~0.1 sec
-    start_time = time()
-    with pytest.raises(MyError): retry(11, MyError, timeout=0.01)(failing)()
-    assert 0.1 < time() - start_time < 0.11
+    del timeouts[:]
+    with pytest.raises(MyError): retry(11, MyError, timeout=1)(failing)()
+    assert timeouts == [1] * 10
 
     # exponential timeout
-    start_time = time()
-    with pytest.raises(MyError): retry(4, MyError, timeout=lambda a: 0.01 * 2 ** a)(failing)()
-    d = time() - start_time
-    assert 0.07 < d < 0.08
+    del timeouts[:]
+    with pytest.raises(MyError): retry(4, MyError, timeout=lambda a: 2 ** a)(failing)()
+    assert timeouts == [1, 2, 4]
 
 
 def test_retry_many_errors():
