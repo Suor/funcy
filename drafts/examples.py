@@ -26,15 +26,6 @@ def closure(func):
     return merge(_globals(func), _locals(func))
 
 
-class namespace_meta(type):
-    def __new__(cls, name, bases, attrs):
-        attrs = walk_values(iffy(callable, staticmethod), attrs)
-        return super(namespace_meta, cls).__new__(cls, name, bases, attrs)
-
-class namespace(object):
-    __metaclass__ = namespace_meta
-
-
 names = chain.from_iterable(get_all_names(color))
 try:
     return ifilter(None, imap(COLOR_BY_NAME.get, names)).next()
