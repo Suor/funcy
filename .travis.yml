@@ -9,8 +9,7 @@ python:
   - "3.5"
   - "3.6"
   - "pypy"
-  # Don't test this until fixed by travis
-  # "pypy3"
+  - "pypy3"
 install:
   - pip install tox-travis
 script:
