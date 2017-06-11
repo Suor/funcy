@@ -52,7 +52,7 @@
                 if (text.substr(-2) === '()') $(this).text(text.substr(0, text.length-2));
             })
 
-            $('a[href=#colls]').attr('title', 'dicts-more')
+            $('a[href="#colls"]').attr('title', 'dicts-more')
             $('h2 a[href*=extended_fns]').attr('title', 'extended-fns')
             nhpup.initialize()
             $('.descriptions div').each(function () {
