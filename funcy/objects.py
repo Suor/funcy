@@ -1,5 +1,6 @@
 from inspect import isclass, ismodule
 
+from .cross import PY2
 from .colls import walk_values
 from .funcs import iffy
 from .strings import cut_prefix
@@ -52,4 +53,5 @@ class namespace_meta(type):
         return super(namespace_meta, cls).__new__(cls, name, bases, attrs)
 
 class namespace(object):
-    __metaclass__ = namespace_meta
+    if PY2:
+        __metaclass__ = namespace_meta

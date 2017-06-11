@@ -84,3 +84,10 @@ def test_monkey_module():
         return f.original(x) * 2
 
     assert f(21) == 42
+
+
+def test_namespace():
+    class tests(namespace):
+        is_int = lambda x: isinstance(x, int)
+
+    tests.is_int(10)
