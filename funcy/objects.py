@@ -6,7 +6,7 @@ from .funcs import iffy
 from .strings import cut_prefix
 
 
-__all__ = ['cached_property', 'monkey', 'namespace']
+__all__ = ['cached_property', 'monkey', 'namespace', 'LazyObject']
 
 
 class cached_property(object):
@@ -55,3 +55,27 @@ class namespace_meta(type):
 class namespace(object):
     if PY2:
         __metaclass__ = namespace_meta
+
+
+class LazyObject(object):
+    """
+    A simplistic lazy init object.
+    Rewrites itself when any attribute is accesssed.
+    """
+    # NOTE: we can add lots of magic methods here to intercept on more events,
+    #       this is postponed. As well as metaclass to support isinstance() check.
+    def __init__(self, init):
+        self.__dict__['_init'] = init
+
+    def _setup(self):
+        obj = self._init()
+        object.__setattr__(self, '__class__', obj.__class__)
+        object.__setattr__(self, '__dict__', obj.__dict__)
+
+    def __getattr__(self, name):
+        self._setup()
+        return getattr(self, name)
+
+    def __setattr__(self, name, value):
+        self._setup()
+        return setattr(self, name, value)

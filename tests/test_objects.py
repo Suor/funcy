@@ -91,3 +91,15 @@ def test_namespace():
         is_int = lambda x: isinstance(x, int)
 
     tests.is_int(10)
+
+
+def test_lazy_object():
+    class A(object):
+        x = 42
+        def __init__(self):
+            log.append('init')
+
+    log = []
+    a = LazyObject(A)
+    assert not log
+    assert a.x == 42
