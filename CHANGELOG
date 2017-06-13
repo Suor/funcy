@@ -1,3 +1,11 @@
+- added count_items()
+- published namespace class
+- added LazyObject (simplistic, experimental and not documented)
+- fixed class dicts in walk*(), select*(), compact(), project() and empty()
+- fixed Python 3 dict.keys(), .values() and .items() in walk*() and friends
+- fixed empty() on iterators
+- optimized chunking range() in Python 3
+
 1.7.5
 - fixed defaults in double @decorated function
 - fixed @decorator with more than one default
