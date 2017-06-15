@@ -10,8 +10,7 @@ python:
   - "3.5"
   - "3.6"
   - "pypy-5.7.1"
-  # Give up for now, see https://github.com/travis-ci/travis-ci/issues/7891
-  # - "pypy3.5-5.7.1-beta"
+  - "pypy3.5-5.8.0"
 install:
   - pip install tox-travis
 script:
