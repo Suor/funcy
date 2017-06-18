@@ -1,4 +1,4 @@
-- added count_items()
+- added count_reps()
 - published namespace class
 - added LazyObject (simplistic, experimental and not documented)
 - support class dicts in walk*(), select*(), compact(), project() and empty()

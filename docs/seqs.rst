@@ -517,9 +517,9 @@ Data handling
         count_by(len, words)
 
 
-.. function:: count_items(seq)
+.. function:: count_reps(seq)
 
-    Counts how many times each value appears in ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts. This is faster and shorter alternative to ``count_by(identity, ...)``
+    Counts number of repetitions of each value in ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts. This is faster and shorter alternative to ``count_by(identity, ...)``
 
 
 .. function:: reductions(f, seq, [acc])

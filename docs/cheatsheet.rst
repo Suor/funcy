@@ -82,8 +82,8 @@ Transform  :func:`map` :func:`mapcat` :func:`keep` :func:`pluck` :func:`pluck_at
 Filter     :func:`filter` :func:`remove` :func:`keep` :func:`distinct` :func:`where` :func:`without`
 Join       :func:`cat` :func:`concat` :func:`flatten` :func:`mapcat` :func:`interleave` :func:`interpose`
 Partition  :func:`chunks` :func:`partition` :func:`partition_by` :func:`split_at` :func:`split_by`
-Group      :func:`split` :func:`count_by` :func:`count_items` :func:`group_by` :func:`group_by_keys` :func:`group_values`
-Aggregate  :func:`ilen` :func:`reductions` :func:`sums` :func:`all` :func:`any` :func:`none` :func:`one` :func:`count_by` :func:`count_items`
+Group      :func:`split` :func:`count_by` :func:`count_reps` :func:`group_by` :func:`group_by_keys` :func:`group_values`
+Aggregate  :func:`ilen` :func:`reductions` :func:`sums` :func:`all` :func:`any` :func:`none` :func:`one` :func:`count_by` :func:`count_reps`
 Iterate    :func:`pairwise` :func:`with_prev` :func:`with_next` :func:`izip_values` :func:`izip_dicts` :func:`tree_leaves` :func:`tree_nodes`
 ========== ==============================================================
 
