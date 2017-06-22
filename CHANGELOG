@@ -1,3 +1,4 @@
+1.8
 - added count_reps()
 - published namespace class
 - added LazyObject (simplistic, experimental and not documented)
