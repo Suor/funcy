@@ -165,6 +165,14 @@ Dict utils
         merge(project(__builtins__, names), project(globals(), names))
 
 
+.. function:: throw(mapping, keys)
+
+    Returns a dict containing only those entries in ``mapping`` whose key is **not** in ``keys``. Preserves collection type::
+
+        throw({'a': 1, 'b': 2, 'c': 3}, 'ac')
+        # -> {'b': 2}
+
+
 .. function:: izip_values(*dicts)
 
     Yields tuples of corresponding values of given dicts. Skips any keys not present in all of the dicts. Comes in handy when comparing two or more dicts::
@@ -339,5 +347,3 @@ Low-level helpers
 
         list(itervalues({'a': 1}))
         # -> [1]
-
-
