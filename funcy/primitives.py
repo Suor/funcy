@@ -1,7 +1,11 @@
 __all__ = ['isnone', 'notnone', 'inc', 'dec', 'even', 'odd']
 
 
-EMPTY = object() # Used as unique default for optional arguments
+class EmptyType:
+    def __repr__(self):
+        return 'EMPTY'
+
+EMPTY = EmptyType() # Used as unique default for optional arguments
 
 
 def isnone(x):
