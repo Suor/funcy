@@ -79,20 +79,25 @@ def cache(timeout):
         cache = {}
 
         @wraps(func)
-        def wrapper(*args):
-            if args in cache:
-                result, timestamp = cache[args]
+        def wrapper(*args, **kwargs):
+            if kwargs:
+                key = args + tuple(sorted(kwargs.items()))
+            else:
+                key = args
+
+            if key in cache:
+                result, timestamp = cache[key]
                 if datetime.now() - timestamp < timeout:
                     return result
                 else:
-                    del cache[args]
+                    del cache[key]
 
-            result = func(*args)
-            cache[args] = result, datetime.now()
+            result = func(*key, **kwargs)
+            cache[key] = result, datetime.now()
             return result
 
-        def invalidate(*args):
-            cache.pop(args)
+        def invalidate(*args, **kwargs):
+            cache.pop(args + tuple(sorted(kwargs.items())))
         wrapper.invalidate = invalidate
 
         def invalidate_all():
