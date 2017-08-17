@@ -9,6 +9,10 @@ __all__ = ('isa', 'is_mapping', 'is_set', 'is_seq', 'is_list', 'is_tuple',
 
 
 def isa(*types):
+    """
+    Creates a function checking if its argument
+    is of any of given types.
+    """
     return lambda x: isinstance(x, types)
 
 is_mapping = isa(Mapping)

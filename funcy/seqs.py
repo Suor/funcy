@@ -29,16 +29,27 @@ __all__ = [
 from itertools import count, cycle, repeat
 
 def repeatedly(f, n=EMPTY):
+    """
+    Takes a function of no args, presumably with side effects,
+    and returns an infinite (or length n) iterator of calls to it.
+    """
     _repeat = repeat(None) if n is EMPTY else repeat(None, n)
     return (f() for _ in _repeat)
 
 def iterate(f, x):
+    """
+    Returns an infinite iterator of `x, f(x), f(f(x)), ...`
+    """
     while True:
         yield x
         x = f(x)
 
 
 def take(n, seq):
+    """
+    Returns a list of first n items in the sequence,
+    or all items if there are fewer than n.
+    """
     return list(islice(seq, n))
 
 def drop(n, seq):
