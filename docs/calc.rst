@@ -11,11 +11,17 @@ Calculation
             try:
                 return request_city_from_slow_service(ip)
             except NotFound:
-                return None        # return None and memoize it
+                return None               # return None and memoize it
             except Timeout:
-                raise memoize.skip # return None, but don't memoize it
+                raise memoize.skip(CITY)  # return CITY, but don't memoize it
 
-    Use ``raise memoize.skip(some_value)`` to make function return ``some_value`` on fail instead of ``None``.
+    Additionally ``@memoize`` exposes its memory for you to manipulate::
+
+        # Prefill memory
+        ip_to_city.memory.update({...})
+
+        # Forget everything
+        ip_to_city.memory.clear()
 
 
 .. decorator:: make_lookuper
