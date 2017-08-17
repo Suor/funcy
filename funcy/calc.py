@@ -28,7 +28,10 @@ def memoize(func):
                 return value
             except SkipMemoization as e:
                 return e.args[0] if e.args else None
+
+    wrapper.memory = memory
     return wrapper
+
 memoize.skip = SkipMemoization
 
 

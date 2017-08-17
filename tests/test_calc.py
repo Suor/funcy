@@ -42,6 +42,19 @@ def test_memoize_args_kwargs():
     assert calls == [(0, 1), (1, 1), (0, 1), (1, 1)]
 
 
+def test_memoize_memory():
+    @memoize
+    def inc(x):
+        calls.append(x)
+        return x + 1
+
+    calls = []
+    inc(0)
+    inc.memory.clear()
+    inc(0)
+    assert calls == [0, 0]
+
+
 def test_make_lookuper():
     @make_lookuper
     def letter_index():
