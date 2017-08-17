@@ -7,11 +7,6 @@ from .cross import PY2
 __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 
 
-# TODO: guard from keyword arguments in memoize, cache and make_lookuper.
-#       For now it's complicated to do in python 2/3 compatible mode,
-#       thanks getargspec/getfullargspec/signature mess.
-
-
 class SkipMemoization(Exception):
     pass
 
