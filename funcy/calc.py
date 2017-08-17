@@ -16,10 +16,7 @@ def memoize(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if kwargs:
-            key = args + tuple(sorted(kwargs.items()))
-        else:
-            key = args
+        key = args + tuple(sorted(kwargs.items())) if kwargs else args
         try:
             return memory[key]
         except KeyError:
@@ -78,11 +75,7 @@ def cache(timeout):
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if kwargs:
-                key = args + tuple(sorted(kwargs.items()))
-            else:
-                key = args
-
+            key = args + tuple(sorted(kwargs.items())) if kwargs else args
             if key in cache:
                 result, timestamp = cache[key]
                 if datetime.now() - timestamp < timeout:
