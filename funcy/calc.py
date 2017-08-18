@@ -7,27 +7,40 @@ from .cross import PY2
 __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 
 
+
 class SkipMemoization(Exception):
     pass
 
+def memoize(*args, **kwargs):
+    if args:
+        assert len(args) == 1
+        assert not kwargs
+        return memoize()(args[0])
+    key_func = kwargs.pop('key_func', None)
+    if kwargs:
+        raise TypeError('memoize() got unexpected keyword arguments: %s', ', '.join(kwargs))
 
-def memoize(func):
-    memory = {}
+    def decorator(func):
+        memory = {}
 
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        key = args + tuple(sorted(kwargs.items())) if kwargs else args
-        try:
-            return memory[key]
-        except KeyError:
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # NOTE: we inline this here but not in @cache,
+            #       since @memoize also targets microoptimizations.
+            key = key_func(*args, **kwargs) if key_func else \
+                  args + tuple(sorted(kwargs.items())) if kwargs else args
             try:
-                value = memory[key] = func(*args, **kwargs)
-                return value
-            except SkipMemoization as e:
-                return e.args[0] if e.args else None
+                return memory[key]
+            except KeyError:
+                try:
+                    value = memory[key] = func(*args, **kwargs)
+                    return value
+                except SkipMemoization as e:
+                    return e.args[0] if e.args else None
 
-    wrapper.memory = memory
-    return wrapper
+        wrapper.memory = memory
+        return wrapper
+    return decorator
 
 memoize.skip = SkipMemoization
 
@@ -66,16 +79,19 @@ make_lookuper = _make_lookuper(False)
 silent_lookuper = _make_lookuper(True)
 
 
-def cache(timeout):
+def cache(timeout, key_func=None):
     if isinstance(timeout, int):
         timeout = timedelta(seconds=timeout)
+
+    if key_func is None:
+        key_func = lambda *a, **kw: a + tuple(sorted(kw.items())) if kw else a
 
     def decorator(func):
         cache = {}
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            key = args + tuple(sorted(kwargs.items())) if kwargs else args
+            key = key_func(*args, **kwargs)
             if key in cache:
                 result, timestamp = cache[key]
                 if datetime.now() - timestamp < timeout:
@@ -88,7 +104,7 @@ def cache(timeout):
             return result
 
         def invalidate(*args, **kwargs):
-            cache.pop(args + tuple(sorted(kwargs.items())))
+            cache.pop(key_func(*args, **kwargs))
         wrapper.invalidate = invalidate
 
         def invalidate_all():

@@ -55,6 +55,19 @@ def test_memoize_memory():
     assert calls == [0, 0]
 
 
+def test_memoize_key_func():
+    @memoize(key_func=len)
+    def inc(s):
+        calls.append(s)
+        return s * 2
+
+    calls = []
+    assert inc('a') == 'aa'
+    assert inc('b') == 'aa'
+    inc('ab')
+    assert calls == ['a', 'ab']
+
+
 def test_make_lookuper():
     @make_lookuper
     def letter_index():

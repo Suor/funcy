@@ -1,12 +1,12 @@
 Calculation
 ===========
 
-.. decorator:: memoize
+.. decorator:: memoize(key_func=None)
 
     Memoizes decorated function results, trading memory for performance. Can skip memoization
     for failed calculation attempts::
 
-        @memoize
+        @memoize                          # Omitting parentheses is ok
         def ip_to_city(ip):
             try:
                 return request_city_from_slow_service(ip)
@@ -55,6 +55,6 @@ Calculation
     Same as :func:`@make_lookuper<make_lookuper>`, but returns ``None`` on memory miss.
 
 
-.. decorator:: cache(timeout)
+.. decorator:: cache(timeout, key_func=None)
 
     Same as :func:`@memoize<memoize>`, but doesn't use cached results older than ``timeout``. It can be either number of seconds or :class:`py:datetime.timedelta`. Also, doesn't support skipping.
