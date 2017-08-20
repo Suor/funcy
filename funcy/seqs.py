@@ -21,7 +21,7 @@ __all__ = [
     'group_by', 'group_by_keys', 'group_values', 'count_by', 'count_reps',
     'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
     'with_prev', 'with_next', 'pairwise',
-    'ireductions', 'reductions', 'isums', 'sums',
+    'ireductions', 'reductions', 'isums', 'sums', 'accumulate',
 ]
 
 
@@ -400,6 +400,9 @@ except ImportError:
         for x in it:
             last = f(last, x)
             yield last
+
+    def accumulate(iterable, func=operator.add):
+        return ireductions(func, iterable)
 
 def reductions(f, seq, acc=EMPTY):
     return list(ireductions(f, seq, acc))
