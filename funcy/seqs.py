@@ -1,7 +1,7 @@
-from operator import add
 from itertools import islice, chain, tee, groupby, \
                       takewhile as _takewhile, dropwhile as _dropwhile
 from collections import defaultdict, deque, Sequence
+import operator
 
 from .cross import map as _map, filter as _filter, ifilter as _ifilter, imap as _imap, \
                    izip, ifilterfalse, xrange, PY2, PY3
@@ -371,22 +371,38 @@ def pairwise(seq):
     return izip(a, b)
 
 
-def ireductions(f, seq, acc=EMPTY):
-    it = iter(seq)
-    if acc is EMPTY:
-        try:
-            last = next(it)
-        except StopIteration:
-            return
-        yield last
-    else:
+# Use accumulate from itertools if available
+try:
+    from itertools import accumulate
+
+    def _ireductions(f, seq, acc):
         last = acc
-    for x in it:
-        last = f(last, x)
-        yield last
+        for x in seq:
+            last = f(last, x)
+            yield last
+
+    def ireductions(f, seq, acc=EMPTY):
+        if acc is EMPTY:
+            return accumulate(seq) if f is operator.add else accumulate(seq, f)
+        return _ireductions(f, seq, acc)
+
+except ImportError:
+    def ireductions(f, seq, acc=EMPTY):
+        it = iter(seq)
+        if acc is EMPTY:
+            try:
+                last = next(it)
+            except StopIteration:
+                return
+            yield last
+        else:
+            last = acc
+        for x in it:
+            last = f(last, x)
+            yield last
 
 def reductions(f, seq, acc=EMPTY):
     return list(ireductions(f, seq, acc))
 
-isums = partial(ireductions, add)
-sums = partial(reductions, add)
+isums = partial(ireductions, operator.add)
+sums = partial(reductions, operator.add)
