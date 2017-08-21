@@ -135,7 +135,6 @@ def remove(pred, seq):
 def iremove(pred, seq):
     return ifilterfalse(make_pred(pred, builtin=PY2), seq)
 
-# NOTE: how should I autocurry this?
 def keep(f, seq=EMPTY):
     if seq is EMPTY:
         return filter(bool, f)
@@ -176,7 +175,6 @@ def iflatten(seq, follow=is_seqcont):
 def flatten(seq, follow=is_seqcont):
     return list(iflatten(seq, follow))
 
-# autocurry??? curry?
 def mapcat(f, *seqs):
     return cat(ximap(f, *seqs))
 
@@ -189,7 +187,6 @@ def interleave(*seqs):
 def interpose(sep, seq):
     return drop(1, interleave(repeat(sep), seq))
 
-# autocurry??? curry???
 def takewhile(pred, seq=EMPTY):
     if seq is EMPTY:
         pred, seq = bool, pred

@@ -1,3 +1,4 @@
+from inspect import CO_VARARGS
 from .cross import PY2
 
 
@@ -9,13 +10,11 @@ from .cross import PY2
 #
 # Stars mean some positional argument which can't be passed by name.
 # Functions not mentioned here get one star "spec".
-REQUIRED_ARGS = {}
+ARGS = {}
 
 
-# These complex functions not really handled for now:
-#     format, iter, type
 builtins_name = '__builtin__' if PY2 else 'builtins'
-REQUIRED_ARGS[builtins_name] = {
+ARGS[builtins_name] = {
     'bool': 'x',
     'complex': ('real', 'imag'),
     'enumerate': ('sequence' if PY2 else 'iterable', 'start'),
@@ -30,17 +29,21 @@ REQUIRED_ARGS[builtins_name] = {
     'unicode': ('string',),
     '__import__': ('name',),
     '__buildclass__': '***',
+    # Complex functions with different set of arguments
+    'iter': '*-*',
+    'format': '*-*',
+    'type': '*-**',
 }
 # Add two argument functions
 two_arg_funcs = '''cmp coerce delattr divmod filter getattr hasattr isinstance issubclass
                    map pow reduce'''
-REQUIRED_ARGS[builtins_name].update(dict.fromkeys(two_arg_funcs.split(), '**'))
+ARGS[builtins_name].update(dict.fromkeys(two_arg_funcs.split(), '**'))
 
 
-REQUIRED_ARGS['functools'] = {'reduce': '**'}
+ARGS['functools'] = {'reduce': '**'}
 
 
-REQUIRED_ARGS['itertools'] = {
+ARGS['itertools'] = {
     'accumulate': ('iterable',),
     'combinations': ('iterable', 'r'),
     'combinations_with_replacement': ('iterable', 'r'),
@@ -50,10 +53,10 @@ REQUIRED_ARGS['itertools'] = {
     'repeat': ('object',),
 }
 two_arg_funcs = 'dropwhile filterfalse ifilter ifilterfalse starmap takewhile'
-REQUIRED_ARGS['itertools'].update(dict.fromkeys(two_arg_funcs.split(), '**'))
+ARGS['itertools'].update(dict.fromkeys(two_arg_funcs.split(), '**'))
 
 
-REQUIRED_ARGS['operator'] = {
+ARGS['operator'] = {
     'delslice': '***',
     'getslice': '***',
     'setitem': '***',
@@ -65,28 +68,36 @@ two_arg_funcs = """
     irshift is_ is_not isub itruediv ixor le lshift lt matmul mod mul ne or_ pow repeat rshift
     sequenceIncludes sub truediv xor
 """
-REQUIRED_ARGS['operator'].update(dict.fromkeys(two_arg_funcs.split(), '**'))
-REQUIRED_ARGS['operator'].update([
-    ('__%s__' % op.strip('_'), args) for op, args in REQUIRED_ARGS['operator'].items()])
-REQUIRED_ARGS['_operator'] = REQUIRED_ARGS['operator']
-
+ARGS['operator'].update(dict.fromkeys(two_arg_funcs.split(), '**'))
+ARGS['operator'].update([
+    ('__%s__' % op.strip('_'), args) for op, args in ARGS['operator'].items()])
+ARGS['_operator'] = ARGS['operator']
 
 from .decorators import unwrap
 
 
-def get_required_args(func):
+def get_spec(func):
     func = getattr(func, '__original__', None) or unwrap(func)
-    print(func.__call__)
     try:
-        defaults_len = len(func.__defaults__)
+        defaults_n = len(func.__defaults__)
     except (AttributeError, TypeError):
-        defaults_len = 0
+        defaults_n = 0
     try:
         names = func.__code__.co_varnames
-        count = func.__code__.co_argcount - defaults_len
-        return names[:count] if names else '*' * count
+        n = func.__code__.co_argcount
+        required_n = n - defaults_n
+        required_names = set(names[:required_n])
+        # If there is varargs they could be required, but all keywords args can't be
+        max_n = required_n + 1 if func.__code__.co_flags & CO_VARARGS else n
+        return required_names, required_n, max_n
     except AttributeError:
-        if func.__module__ in REQUIRED_ARGS:
-            return REQUIRED_ARGS[func.__module__].get(func.__name__, '*')
+        if func.__module__ in ARGS:
+            _spec = ARGS[func.__module__].get(func.__name__, '*')
+            if isinstance(_spec, str):
+                required_args, _, optional = _spec.partition('-')
+            else:
+                required_args = _spec
+                optional = ''
+            return set(required_args), len(required_args), len(required_args) + len(optional)
         else:
             raise ValueError('Unable to introspect function required arguments')

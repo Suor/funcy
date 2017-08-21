@@ -1,7 +1,7 @@
 from functools import partial
 
 from .primitives import EMPTY
-from ._inspect import get_required_args
+from ._inspect import get_spec
 
 
 __all__ = ['identity', 'constantly', 'caller',
@@ -34,7 +34,7 @@ def rpartial(func, *args):
 
 def curry(func, n=EMPTY):
     if n is EMPTY:
-        n = len(get_required_args(func))
+        _, n, _ = get_spec(func)
 
     if n <= 1:
         return func
@@ -46,7 +46,7 @@ def curry(func, n=EMPTY):
 
 def rcurry(func, n=EMPTY):
     if n is EMPTY:
-        n = len(get_required_args(func))
+        _, n, _ = get_spec(func)
 
     if n <= 1:
         return func
@@ -56,19 +56,25 @@ def rcurry(func, n=EMPTY):
         return lambda x: rcurry(rpartial(func, x), n - 1)
 
 
-def autocurry(func, n=EMPTY, required_args=EMPTY, _args=(), _kwargs={}):
-    if required_args is EMPTY:
-        required_args = get_required_args(func) if n is EMPTY else '*' * n
+# TODO: drop `n` in next major release
+def autocurry(func, n=EMPTY, _spec=None, _args=(), _kwargs={}):
+    spec = _spec or (get_spec(func) if n is EMPTY else (set(), n, n))
+    required_names, required_n, max_n = spec
 
     def autocurried(*a, **kw):
         args = _args + a
         kwargs = _kwargs.copy()
         kwargs.update(kw)
 
-        if len(args) + len(set(kwargs) & set(required_args)) >= len(required_args):
+        if len(args) + len(kwargs) >= max_n:
             return func(*args, **kwargs)
+        elif len(args) + len(set(kwargs) & required_names) >= required_n:
+            try:
+                return func(*args, **kwargs)
+            except TypeError:
+                return autocurry(func, _spec=spec, _args=args, _kwargs=kwargs)
         else:
-            return autocurry(func, required_args=required_args, _args=args, _kwargs=kwargs)
+            return autocurry(func, _spec=spec, _args=args, _kwargs=kwargs)
 
     return autocurried
 

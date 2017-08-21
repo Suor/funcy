@@ -4,6 +4,7 @@ from whatever import _
 
 from funcy.cross import map
 from funcy.funcs import *
+from funcy.seqs import keep
 
 
 def test_caller():
@@ -70,6 +71,21 @@ def test_autocurry_named():
 def test_autocurry_builtin():
     assert autocurry(complex)(imag=1)(0) == 1j
     assert autocurry(map)(_ + 1)([1, 2]) == [2, 3]
+
+def test_autocurry_hard():
+    def required_star(f, *seqs):
+        return map(f, *seqs)
+
+    assert autocurry(required_star)(__add__)('12', 'ab') == ['1a', '2b']
+
+    _iter = autocurry(iter)
+    assert list(_iter([1, 2])) == [1, 2]
+    assert list(_iter([0, 1, 2].pop)(0)) == [2, 1]
+
+    _keep = autocurry(keep)
+    assert _keep('01') == ['0', '1']
+    assert _keep(int)('01') == [1]
+    with pytest.raises(TypeError): _keep(1, 2, 3)
 
 
 def test_compose():
