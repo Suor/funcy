@@ -75,7 +75,7 @@ Functions
         to_cube = to_power(3)
 
 
-.. function:: autocurry(func[, n])
+.. function:: autocurry(func)
 
     Constructs a version of ``func`` returning its partial applications until sufficient arguments are passed::
 
