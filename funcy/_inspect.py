@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from inspect import CO_VARARGS
+import types
 import re
 
 from .cross import PY2
@@ -77,6 +79,9 @@ ARGS['operator'].update([
 ARGS['_operator'] = ARGS['operator']
 
 
+type_classes = (type, types.ClassType) if hasattr(types, 'ClassType') else type
+
+
 def get_spec(func, _cache={}):
     func = getattr(func, '__original__', None) or unwrap(func)
     if func in _cache:
@@ -89,6 +94,18 @@ def get_spec(func, _cache={}):
         spec = set(required_names), len(required_names), len(required_names) + len(optional)
         _cache[func] = spec
         return spec
+    elif isinstance(func, type_classes):
+        # Old style classes without base
+        if not hasattr(func, '__init__'):
+            return set(), 0, 0
+        # __init__ inherited from builtin classes
+        objclass = getattr(func.__init__, '__objclass__', None)
+        if objclass and objclass is not func:
+            return get_spec(objclass)
+        # Introspect constructor and remove self
+        _required_names, _required_n, _max_n = get_spec(func.__init__)
+        self_name = func.__init__.__code__.co_varnames[0]
+        return _required_names - set([self_name]), _required_n - 1, _max_n - 1
     else:
         try:
             defaults_n = len(func.__defaults__)
@@ -103,4 +120,5 @@ def get_spec(func, _cache={}):
             max_n = required_n + 1 if func.__code__.co_flags & CO_VARARGS else n
             return required_names, required_n, max_n
         except AttributeError:
-            raise ValueError('Unable to introspect function required arguments')
+            raise ValueError('Unable to introspect %s() arguments'
+                                % getattr(func, '__name__', func))

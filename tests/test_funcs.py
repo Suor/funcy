@@ -88,6 +88,19 @@ def test_autocurry_hard():
     assert _keep(int)('01') == [1]
     with pytest.raises(TypeError): _keep(1, 2, 3)
 
+def test_autocurry_class():
+    class A:
+        def __init__(self, x, y=0):
+            self.x, self.y = x, y
+
+    assert autocurry(A)(1).__dict__ == {'x': 1, 'y': 0}
+
+    class B: pass
+    autocurry(B)()
+
+    class I(int): pass
+    assert autocurry(int)(base=12)('100') == 144
+
 
 def test_compose():
     double = _ * 2
