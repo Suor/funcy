@@ -84,8 +84,10 @@ type_classes = (type, types.ClassType) if hasattr(types, 'ClassType') else type
 
 def get_spec(func, _cache={}):
     func = getattr(func, '__original__', None) or unwrap(func)
-    if func in _cache:
+    try:
         return _cache[func]
+    except:
+        pass
 
     if func.__module__ in ARGS:
         _spec = ARGS[func.__module__].get(func.__name__, '*')
