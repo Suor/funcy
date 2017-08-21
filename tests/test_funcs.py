@@ -83,7 +83,7 @@ def test_autocurry_hard():
     assert list(_iter([0, 1, 2].pop)(0)) == [2, 1]
 
     _keep = autocurry(keep)
-    assert _keep('01') == ['0', '1']
+    assert list(_keep('01')) == ['0', '1']
     assert _keep(int)('01') == [1]
     with pytest.raises(TypeError): _keep(1, 2, 3)
 
