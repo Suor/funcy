@@ -37,9 +37,10 @@ def test_curry():
     assert curry(_ * 2)(21) == 42
     assert curry(_ * _)(6)(7) == 42
     assert curry(__add__, 2)(10)(1) == 11
+    assert curry(__add__)(10)(1) == 11  # Introspect builtin
     assert curry(lambda x,y,z: x+y+z)('a')('b')('c') == 'abc'
 
-def test_backcurry():
+def test_rcurry():
     assert rcurry(__sub__, 2)(10)(1) == -9
     assert rcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
 
@@ -57,6 +58,18 @@ def test_autocurry():
     assert at(c=3)(1, 2) == (1, 2, 3)
     assert at(c=4)(c=3)(1, 2) == (1, 2, 3)
     with pytest.raises(TypeError): at(a=1)(1, 2, 3)
+
+def test_autocurry_named():
+    at = autocurry(lambda a, b, c=9: (a, b, c))
+
+    assert at(1)(2) == (1, 2, 9)
+    assert at(1)(2, 3) == (1, 2, 3)
+    assert at(a=1)(b=2) == (1, 2, 9)
+    assert at(c=3)(1)(2) == (1, 2, 3)
+
+def test_autocurry_builtin():
+    assert autocurry(complex)(imag=1)(0) == 1j
+    assert autocurry(map)(_ + 1)([1, 2]) == [2, 3]
 
 
 def test_compose():

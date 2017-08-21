@@ -12,8 +12,8 @@ except ImportError:
 
     from builtins import map as _map, filter as _filter
 
-    def map(f, *seqs):
-        return list(_map(f, *seqs))
+    def map(f, seq, *seqs):
+        return list(_map(f, seq, *seqs))
 
     def filter(f, seq):
         return list(_filter(f, seq))

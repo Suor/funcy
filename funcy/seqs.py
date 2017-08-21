@@ -106,6 +106,7 @@ def ilen(seq):
 
 # TODO: tree-seq equivalent
 
+# TODO: map/imap signatures???
 def map(f, *seqs):
     return _map(make_func(f, builtin=PY2), *seqs)
 
@@ -115,8 +116,8 @@ def filter(pred, seq):
 def imap(f, *seqs):
     return _imap(make_func(f, builtin=PY2), *seqs)
 
-def ifilter(f, *seqs):
-    return _ifilter(make_pred(f, builtin=PY2), *seqs)
+def ifilter(pred, seq):
+    return _ifilter(make_pred(pred, builtin=PY2), seq)
 
 if PY2:
     # NOTE: Default imap() behaves strange when passed None as function,
@@ -134,6 +135,7 @@ def remove(pred, seq):
 def iremove(pred, seq):
     return ifilterfalse(make_pred(pred, builtin=PY2), seq)
 
+# NOTE: how should I autocurry this?
 def keep(f, seq=EMPTY):
     if seq is EMPTY:
         return filter(bool, f)
@@ -174,6 +176,7 @@ def iflatten(seq, follow=is_seqcont):
 def flatten(seq, follow=is_seqcont):
     return list(iflatten(seq, follow))
 
+# autocurry??? curry?
 def mapcat(f, *seqs):
     return cat(ximap(f, *seqs))
 
@@ -186,7 +189,7 @@ def interleave(*seqs):
 def interpose(sep, seq):
     return drop(1, interleave(repeat(sep), seq))
 
-
+# autocurry??? curry???
 def takewhile(pred, seq=EMPTY):
     if seq is EMPTY:
         pred, seq = bool, pred

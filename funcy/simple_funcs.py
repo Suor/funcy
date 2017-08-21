@@ -1,6 +1,7 @@
 from functools import partial
 
 from .primitives import EMPTY
+from ._inspect import get_required_args
 
 
 __all__ = ['identity', 'constantly', 'caller',
@@ -33,7 +34,7 @@ def rpartial(func, *args):
 
 def curry(func, n=EMPTY):
     if n is EMPTY:
-        n = func.__code__.co_argcount
+        n = len(get_required_args(func))
 
     if n <= 1:
         return func
@@ -45,7 +46,7 @@ def curry(func, n=EMPTY):
 
 def rcurry(func, n=EMPTY):
     if n is EMPTY:
-        n = func.__code__.co_argcount
+        n = len(get_required_args(func))
 
     if n <= 1:
         return func
@@ -55,19 +56,19 @@ def rcurry(func, n=EMPTY):
         return lambda x: rcurry(rpartial(func, x), n - 1)
 
 
-def autocurry(func, n=EMPTY, _args=(), _kwargs={}):
-    if n is EMPTY:
-        n = func.__code__.co_argcount
+def autocurry(func, n=EMPTY, required_args=EMPTY, _args=(), _kwargs={}):
+    if required_args is EMPTY:
+        required_args = get_required_args(func) if n is EMPTY else '*' * n
 
     def autocurried(*a, **kw):
         args = _args + a
         kwargs = _kwargs.copy()
         kwargs.update(kw)
 
-        if len(args) + len(kwargs) >= n:
+        if len(args) + len(set(kwargs) & set(required_args)) >= len(required_args):
             return func(*args, **kwargs)
         else:
-            return autocurry(func, n, _args=args, _kwargs=kwargs)
+            return autocurry(func, required_args=required_args, _args=args, _kwargs=kwargs)
 
     return autocurried
 

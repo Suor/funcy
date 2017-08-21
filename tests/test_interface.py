@@ -10,7 +10,7 @@ py = py2 if PY2 else py3
 
 
 # Introspect all modules
-exclude = ('cross', 'py2', 'py3', 'simple_funcs', 'funcmakers')
+exclude = ('cross', '_inspect', 'py2', 'py3', 'simple_funcs', 'funcmakers')
 module_names = list(name for _, name, _ in pkgutil.iter_modules(funcy.__path__)
                     if name not in exclude)
 modules = [getattr(funcy, name) for name in module_names]
