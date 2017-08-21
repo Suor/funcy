@@ -212,6 +212,11 @@ def test_project():
     dd = defaultdict(int, {'a':1, 'b':2, 'c': 3})
     assert eq(project(dd, 'ac'), defaultdict(int, {'a':1, 'c': 3}))
 
+def test_throw():
+    assert throw({'a': 1, 'b': 2, 'c': 3}, 'ac') == {'b': 2}
+    dd = defaultdict(int, {'a': 1, 'b': 2, 'c': 3})
+    assert eq(throw(dd, 'ac'), defaultdict(int, {'b': 2}))
+
 def test_izip_values():
     assert list(izip_values({1: 10}, {1: 20, 2: 30})) == [(10, 20)]
     with pytest.raises(TypeError): list(izip_values())
