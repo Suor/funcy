@@ -1,4 +1,3 @@
-from collections import defaultdict
 from .cross import PY2
 
 
@@ -91,4 +90,3 @@ def get_required_args(func):
             return REQUIRED_ARGS[func.__module__].get(func.__name__, '*')
         else:
             raise ValueError('Unable to introspect function required arguments')
-
