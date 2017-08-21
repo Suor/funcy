@@ -82,25 +82,25 @@ def get_spec(func, _cache={}):
     if func in _cache:
         return _cache[func]
 
-    try:
-        defaults_n = len(func.__defaults__)
-    except (AttributeError, TypeError):
-        defaults_n = 0
-    try:
-        names = func.__code__.co_varnames
-        n = func.__code__.co_argcount
-        required_n = n - defaults_n
-        required_names = set(names[:required_n])
-        # If there is varargs they could be required, but all keywords args can't be
-        max_n = required_n + 1 if func.__code__.co_flags & CO_VARARGS else n
-        return required_names, required_n, max_n
-    except AttributeError:
-        if func.__module__ in ARGS:
-            _spec = ARGS[func.__module__].get(func.__name__, '*')
-            required, _, optional = _spec.partition('-')
-            required_names = re.findall(r'\w+|\*', required)
-            spec = set(required_names), len(required_names), len(required_names) + len(optional)
-            _cache[func] = spec
-            return spec
-        else:
+    if func.__module__ in ARGS:
+        _spec = ARGS[func.__module__].get(func.__name__, '*')
+        required, _, optional = _spec.partition('-')
+        required_names = re.findall(r'\w+|\*', required)
+        spec = set(required_names), len(required_names), len(required_names) + len(optional)
+        _cache[func] = spec
+        return spec
+    else:
+        try:
+            defaults_n = len(func.__defaults__)
+        except (AttributeError, TypeError):
+            defaults_n = 0
+        try:
+            names = func.__code__.co_varnames
+            n = func.__code__.co_argcount
+            required_n = n - defaults_n
+            required_names = set(names[:required_n])
+            # If there are varargs they could be required, but all keywords args can't be
+            max_n = required_n + 1 if func.__code__.co_flags & CO_VARARGS else n
+            return required_names, required_n, max_n
+        except AttributeError:
             raise ValueError('Unable to introspect function required arguments')
