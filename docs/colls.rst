@@ -165,11 +165,11 @@ Dict utils
         merge(project(__builtins__, names), project(globals(), names))
 
 
-.. function:: throw(mapping, keys)
+.. function:: omit(mapping, keys)
 
-    Returns a dict containing only those entries in ``mapping`` whose key is **not** in ``keys``. Preserves collection type::
+    Returns a copy of ``mapping`` with ``keys`` omitted. Preserves collection type::
 
-        throw({'a': 1, 'b': 2, 'c': 3}, 'ac')
+        omit({'a': 1, 'b': 2, 'c': 3}, 'ac')
         # -> {'b': 2}
 
 

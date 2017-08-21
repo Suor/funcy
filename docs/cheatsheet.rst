@@ -97,7 +97,7 @@ Collections
 Join                  :func:`merge` :func:`merge_with` :func:`join` :func:`join_with`
 Transform             :func:`walk` :func:`walk_keys` :func:`walk_values`
 Filter                :func:`select` :func:`select_keys` :func:`select_values` :func:`compact`
-Dicts :ref:`*<colls>` :func:`flip` :func:`zipdict` :func:`pluck` :func:`where` :func:`itervalues` :func:`iteritems` :func:`izip_values` :func:`izip_dicts` :func:`project` :func:`throw`
+Dicts :ref:`*<colls>` :func:`flip` :func:`zipdict` :func:`pluck` :func:`where` :func:`itervalues` :func:`iteritems` :func:`izip_values` :func:`izip_dicts` :func:`project` :func:`omit`
 Misc                  :func:`empty` :func:`get_in` :func:`set_in` :func:`update_in`
 ===================== ==============================================================
 
