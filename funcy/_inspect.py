@@ -1,5 +1,8 @@
 from inspect import CO_VARARGS
+import re
+
 from .cross import PY2
+from .decorators import unwrap
 
 
 # This provides sufficient introspection for *curry() functions.
@@ -16,18 +19,18 @@ ARGS = {}
 builtins_name = '__builtin__' if PY2 else 'builtins'
 ARGS[builtins_name] = {
     'bool': 'x',
-    'complex': ('real', 'imag'),
-    'enumerate': ('sequence' if PY2 else 'iterable', 'start'),
-    'file': ('file',),
+    'complex': 'real,imag',
+    'enumerate': 'sequence,start' if PY2 else 'iterable,start',
+    'file': 'file',
     'float': 'x',
     'int': 'x',
     'long': 'x',
-    'open': ('name' if PY2 else 'file',),
-    'round': ('number',),
+    'open': 'name' if PY2 else 'file',
+    'round': 'number',
     'setattr': '***',
-    'str': ('*' if PY2 else 'object',),
-    'unicode': ('string',),
-    '__import__': ('name',),
+    'str': '*' if PY2 else 'object',
+    'unicode': 'string',
+    '__import__': 'name',
     '__buildclass__': '***',
     # Complex functions with different set of arguments
     'iter': '*-*',
@@ -44,13 +47,13 @@ ARGS['functools'] = {'reduce': '**'}
 
 
 ARGS['itertools'] = {
-    'accumulate': ('iterable',),
-    'combinations': ('iterable', 'r'),
-    'combinations_with_replacement': ('iterable', 'r'),
-    'compress': ('data', 'selectors'),
-    'groupby': ('iterable',),
-    'permutations': ('iterable',),
-    'repeat': ('object',),
+    'accumulate': 'iterable',
+    'combinations': 'iterable,r',
+    'combinations_with_replacement': 'iterable,r',
+    'compress': 'data,selectors',
+    'groupby': 'iterable',
+    'permutations': 'iterable',
+    'repeat': 'object',
 }
 two_arg_funcs = 'dropwhile filterfalse ifilter ifilterfalse starmap takewhile'
 ARGS['itertools'].update(dict.fromkeys(two_arg_funcs.split(), '**'))
@@ -73,11 +76,12 @@ ARGS['operator'].update([
     ('__%s__' % op.strip('_'), args) for op, args in ARGS['operator'].items()])
 ARGS['_operator'] = ARGS['operator']
 
-from .decorators import unwrap
 
-
-def get_spec(func):
+def get_spec(func, _cache={}):
     func = getattr(func, '__original__', None) or unwrap(func)
+    if func in _cache:
+        return _cache[func]
+
     try:
         defaults_n = len(func.__defaults__)
     except (AttributeError, TypeError):
@@ -93,11 +97,10 @@ def get_spec(func):
     except AttributeError:
         if func.__module__ in ARGS:
             _spec = ARGS[func.__module__].get(func.__name__, '*')
-            if isinstance(_spec, str):
-                required_args, _, optional = _spec.partition('-')
-            else:
-                required_args = _spec
-                optional = ''
-            return set(required_args), len(required_args), len(required_args) + len(optional)
+            required, _, optional = _spec.partition('-')
+            required_names = re.findall(r'\w+|\*', required)
+            spec = set(required_names), len(required_names), len(required_names) + len(optional)
+            _cache[func] = spec
+            return spec
         else:
             raise ValueError('Unable to introspect function required arguments')
