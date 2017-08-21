@@ -21,16 +21,16 @@ ARGS[builtins_name] = {
     'bool': 'x',
     'complex': 'real,imag',
     'enumerate': 'sequence,start' if PY2 else 'iterable,start',
-    'file': 'file',
+    'file': 'file-**',
     'float': 'x',
-    'int': 'x',
-    'long': 'x',
-    'open': 'name' if PY2 else 'file',
-    'round': 'number',
+    'int': 'x-*',
+    'long': 'x-*',
+    'open': 'name-**' if PY2 else 'file-**',
+    'round': 'number-*',
     'setattr': '***',
-    'str': '*' if PY2 else 'object',
-    'unicode': 'string',
-    '__import__': 'name',
+    'str': '*-*' if PY2 else 'object-*',
+    'unicode': 'string-**',
+    '__import__': 'name-****',
     '__buildclass__': '***',
     # Complex functions with different set of arguments
     'iter': '*-*',
@@ -47,13 +47,13 @@ ARGS['functools'] = {'reduce': '**'}
 
 
 ARGS['itertools'] = {
-    'accumulate': 'iterable',
+    'accumulate': 'iterable-*',
     'combinations': 'iterable,r',
     'combinations_with_replacement': 'iterable,r',
     'compress': 'data,selectors',
-    'groupby': 'iterable',
-    'permutations': 'iterable',
-    'repeat': 'object',
+    'groupby': 'iterable-*',
+    'permutations': 'iterable-*',
+    'repeat': 'object-*',
 }
 two_arg_funcs = 'dropwhile filterfalse ifilter ifilterfalse starmap takewhile'
 ARGS['itertools'].update(dict.fromkeys(two_arg_funcs.split(), '**'))

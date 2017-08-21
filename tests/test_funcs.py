@@ -71,6 +71,7 @@ def test_autocurry_named():
 def test_autocurry_builtin():
     assert autocurry(complex)(imag=1)(0) == 1j
     assert autocurry(map)(_ + 1)([1, 2]) == [2, 3]
+    assert autocurry(int)(base=12)('100') == 144
 
 def test_autocurry_hard():
     def required_star(f, *seqs):
