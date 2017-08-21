@@ -1,12 +1,12 @@
 try:
     from itertools import ifilter, imap, izip, ifilterfalse
-    xrange = xrange
-    basestring = basestring
+    xrange = xrange  # noqa
+    basestring = basestring  # noqa
     map = map
     filter = filter
 except ImportError:
     ifilter, imap, izip = filter, map, zip
-    from itertools import filterfalse as ifilterfalse
+    from itertools import filterfalse as ifilterfalse  # noqa
     xrange = range
     basestring = (bytes, str)
 

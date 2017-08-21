@@ -5,7 +5,7 @@ List versions go with l prefix.
 import sys
 
 from . import py2
-from .py2 import *
+from .py2 import *  # noqa
 from .py2 import __all__
 
 

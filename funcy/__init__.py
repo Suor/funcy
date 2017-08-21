@@ -2,8 +2,8 @@ from .cross import PY2
 
 
 if PY2:
-    from .py2 import *
+    from .py2 import *  # noqa
     from .py2 import __all__
 else:
-    from .py3 import *
-    from .py3 import __all__
+    from .py3 import *  # noqa
+    from .py3 import __all__  # noqa
