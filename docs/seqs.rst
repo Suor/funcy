@@ -335,7 +335,8 @@ Most of functions in this section support :ref:`extended_fns`. Among other thing
 .. function:: without(seq, *items)
               iwithout(seq, *items)
 
-    Returns sequence without ``items`` specified, preserves order. Designed to work with a few ``items``, this allows removing unhashable objects::
+    Returns sequence with ``items`` removed, preserves order.
+    Designed to work with a few ``items``, this allows removing unhashable objects::
 
         no_empty_lists = without(lists, [])
 

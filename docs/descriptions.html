@@ -68,7 +68,7 @@
 <div name="drop">
     <b>drop<em>(n, seq)</em></b><br><br>
     Skips first <em>n</em> items in the sequence,<br>
-     yields the rest of it.
+    yields the rest.
 </div>
 <div name="rest">
     <b>rest<em>(seq)</em></b><br><br>
@@ -106,7 +106,7 @@
 </div>
 <div name="mapcat">
     <b>mapcat<em>(f, *seqs)</em><br>imapcat<em>(f, *seqs)</em></b><br><br>
-    Maps given sequence(s) and then concatenates results.
+    Maps given sequence(s) and concatenates the results.
 </div>
 <div name="keep">
     <b>keep<em>(<span>[</span>f<span>, ]</span>*seqs)</em><br>ikeep<em>(<span>[</span>f<span>, ]</span>*seqs)</em></b><br><br>
@@ -148,7 +148,7 @@
 </div>
 <div name="without">
     <b>without<em>(seq, *items)</em><br>iwithout<em>(seq, *items)</em></b><br><br>
-    Returns sequence without <em>items</em> specified,<br>
+    Returns sequence without <em>items</em>,<br>
      preserves order.
 </div>
 
@@ -165,7 +165,7 @@
     <b>flatten<em>(seq, follow=is_seqcont)</em><br>
        iflatten<em>(seq, follow=is_seqcont)</em></b><br><br>
     Flattens arbitrary nested sequence,<br>
-     <em>follow</em> determines whether to unpack each item.
+    dives into when <code>follow(item)</code> is truthy.
 </div>
 <div name="interleave">
     <b>interleave<em>(*seqs)</em></b><br><br>
