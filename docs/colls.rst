@@ -232,7 +232,7 @@ Data manipulation
         #     {"title": "The Tempest", "author": "Shakespeare", "year": 1611}]
 
     Iterator version could be used for efficiency or when you don't need the whole list.
-    E.g. you are looking for the first match:
+    E.g. you are looking for the first match::
 
         first(iwhere(plays, author="Shakespeare"))
         # => {"title": "The Two Gentlemen of Verona", ...}
