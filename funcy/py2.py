@@ -27,6 +27,6 @@ if PY3:
     _zip = zip
     def zip(*seqs):
         return list(_zip(*seqs))
-    __all__.append('zip')
+    __all__ += ['zip']  # HACK: using this instead of .append() to not trigger PyCharm
 else:
     zip = zip
