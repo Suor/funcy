@@ -62,3 +62,12 @@ def test_renames():
     assert set(py2.__all__) - set(py3.__all__) <= set(inames)
     # Only lnames a new, and zip_values/zip_dicts
     assert set(py3.__all__) - set(py2.__all__) <= set(lnames) | set(['zip_values', 'zip_dicts'])
+
+
+def test_docs():
+    exports = [(name, getattr(funcy, name)) for name in funcy.__all__
+                if name not in ('print_errors', 'print_durations') and
+                   getattr(funcy, name).__module__ != 'funcy.types']
+    # NOTE: we are testing this way and not with all() to immediately get a list of offenders
+    assert [name for name, f in exports if f.__name__ == '<lambda>'] == []
+    assert [name for name, f in exports if f.__doc__ is None] == []
