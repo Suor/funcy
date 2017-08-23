@@ -281,7 +281,7 @@ Content tests
 
 .. function:: all([pred], seq)
 
-    Checks if ``pred`` holds every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` is true (which is the same as in built-in :func:`~builtin.all`)::
+    Checks if ``pred`` holds every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` are truthy (which is the same as in built-in :func:`~builtin.all`)::
 
         they_are_ints = all(is_instance(n, int) for n in seq)
         they_are_even = all(even, seq)
@@ -293,7 +293,7 @@ Content tests
 
 .. function:: any([pred], seq)
 
-    Returns ``True`` if ``pred`` holds for any item in given sequence. If ``pred`` is omitted checks if any element of ``seq`` is true.
+    Returns ``True`` if ``pred`` holds for any item in given sequence. If ``pred`` is omitted checks if any element of ``seq`` is truthy.
 
     Check if there is a needle in haystack, using :ref:`extended predicate semantics <extended_fns>`::
 
@@ -302,7 +302,7 @@ Content tests
 
 .. function:: none([pred], seq)
 
-    Checks if none of items in given sequence pass ``pred`` or true if ``pred`` is omitted.
+    Checks if none of items in given sequence pass ``pred`` or is truthy if ``pred`` is omitted.
 
     Just a stylish way to write ``not any(...)``::
 
@@ -311,7 +311,7 @@ Content tests
 
 .. function:: one([pred], seq)
 
-    Returns true if exactly one of items in ``seq`` passes ``pred``. Cheks for boolean true if ``pred`` is omitted.
+    Returns true if exactly one of items in ``seq`` passes ``pred``. Cheks for truthiness if ``pred`` is omitted.
 
 
 .. function:: some([pred], seq)

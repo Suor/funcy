@@ -8,7 +8,7 @@ from itertools import chain, tee
 
 from .cross import basestring, xrange, izip, map, filter, imap, PY2
 from .primitives import EMPTY
-from .funcs import partial, compose, complement
+from .funcs import partial, compose
 from .funcmakers import make_func, make_pred
 from .seqs import take, ximap, ifilter
 
@@ -45,6 +45,7 @@ def _factory(coll, mapper=None):
         return coll.__class__
 
 def empty(coll):
+    """Creates an empty collection of the same type."""
     if isinstance(coll, Iterator):
         return iter([])
     return _factory(coll)()
@@ -62,8 +63,12 @@ else:
     def itervalues(coll):
         return coll.values() if hasattr(coll, 'values') else coll
 
+iteritems.__doc__ = "Yields (key, value) pairs of the given collection."
+itervalues.__doc__ = "Yields values of the given collection."
+
 
 def join(colls):
+    """Joins several collections of same type into one."""
     colls, colls_copy = tee(colls)
     it = iter(colls_copy)
     try:
@@ -91,10 +96,15 @@ def join(colls):
         raise TypeError("Don't know how to join %s" % cls.__name__)
 
 def merge(*colls):
+    """Merges several collections of same type into one.
+
+    Works with dicts, sets, lists, tuples, iterators and strings.
+    For dicts later values take precedence."""
     return join(colls)
 
 
 def join_with(f, dicts):
+    """Joins several dicts, combining values with given function."""
     dicts = list(dicts)
     if not dicts:
         return {}
@@ -117,17 +127,17 @@ def join_with(f, dicts):
     return lists
 
 def merge_with(f, *dicts):
+    """Merges several dicts, combining values with given function."""
     return join_with(f, dicts)
 
 
 def walk(f, coll):
-    """
-    Walk coll transforming it's elements with f.
-    Same as map, but preserves coll type.
-    """
+    """Walks the collection transforming its elements with f.
+       Same as map, but preserves coll type."""
     return _factory(coll)(ximap(f, iteritems(coll)))
 
 def walk_keys(f, coll):
+    """Walks keys of the collection, mapping them with f."""
     f = make_func(f)
     # NOTE: we use this awkward construct instead of lambda to be Python 3 compatible
     def pair_f(pair):
@@ -137,6 +147,7 @@ def walk_keys(f, coll):
     return walk(pair_f, coll)
 
 def walk_values(f, coll):
+    """Walks values of the collection, mapping them with f."""
     f = make_func(f)
     # NOTE: we use this awkward construct instead of lambda to be Python 3 compatible
     def pair_f(pair):
@@ -152,15 +163,18 @@ def select(pred, coll):
     return _factory(coll)(ifilter(pred, iteritems(coll)))
 
 def select_keys(pred, coll):
+    """Select part of the collection with keys passing pred."""
     pred = make_pred(pred)
     return select(lambda pair: pred(pair[0]), coll)
 
 def select_values(pred, coll):
+    """Select part of the collection with values passing pred."""
     pred = make_pred(pred)
     return select(lambda pair: pred(pair[1]), coll)
 
 
 def compact(coll):
+    """Removes falsy values from the collection."""
     if isinstance(coll, Mapping):
         return select_values(bool, coll)
     else:
@@ -170,6 +184,7 @@ def compact(coll):
 ### Content tests
 
 def is_distinct(coll, key=EMPTY):
+    """Checks if all elements in the collection are different."""
     if key is EMPTY:
         return len(coll) == len(set(coll))
     else:
@@ -177,24 +192,30 @@ def is_distinct(coll, key=EMPTY):
 
 
 def all(pred, seq=EMPTY):
+    """Checks if all items in seq pass pred (or are truthy)."""
     if seq is EMPTY:
         return _all(pred)
     return _all(ximap(pred, seq))
 
 def any(pred, seq=EMPTY):
+    """Checks if any item in seq passes pred (or is truthy)."""
     if seq is EMPTY:
         return _any(pred)
     return _any(ximap(pred, seq))
 
-none = complement(any)
+def none(pred, seq=EMPTY):
+    """"Checks if none of the items in seq pass pred (or are truthy)."""
+    return not any(pred, seq)
 
 def one(pred, seq=EMPTY):
+    """Checks whether exactly one item in seq passes pred (or is truthy)."""
     if seq is EMPTY:
         return one(bool, pred)
     return len(take(2, ifilter(pred, seq))) == 1
 
 # Not same as in clojure! returns value found not pred(value)
 def some(pred, seq=EMPTY):
+    """Finds first item in seq passing pred or first that is truthy."""
     if seq is EMPTY:
         return some(bool, pred)
     return next(ifilter(pred, seq), None)
@@ -207,21 +228,26 @@ def some(pred, seq=EMPTY):
 #     return all(compare, izip(seq, rest(seq))
 
 def zipdict(keys, vals):
+    """Creates a dict with keys mapped to the corresponding vals."""
     return dict(izip(keys, vals))
 
 def flip(mapping):
+    """Flip passed dict or collection of pairs swapping its keys and values."""
     def flip_pair(pair):
         k, v = pair
         return v, k
     return walk(flip_pair, mapping)
 
 def project(mapping, keys):
+    """Leaves only given keys in mapping."""
     return _factory(mapping)((k, mapping[k]) for k in keys if k in mapping)
 
 def omit(mapping, keys):
+    """Removes given keys from mapping."""
     return _factory(mapping)((k, v) for k, v in iteritems(mapping) if k not in keys)
 
 def izip_values(*dicts):
+    """Yields tuples of corresponding values of several dicts."""
     if len(dicts) < 1:
         raise TypeError('izip_values expects at least one argument')
     keys = set.intersection(*map(set, dicts))
@@ -229,6 +255,8 @@ def izip_values(*dicts):
         yield tuple(d[key] for d in dicts)
 
 def izip_dicts(*dicts):
+    """Yields tuples like (key, val1, val2, ...)
+       for each common key in all given dicts."""
     if len(dicts) < 1:
         raise TypeError('izip_dicts expects at least one argument')
     keys = set.intersection(*map(set, dicts))
@@ -237,6 +265,7 @@ def izip_dicts(*dicts):
 
 
 def get_in(coll, path, default=None):
+    """Returns a value at path in the given nested collection."""
     for key in path:
         try:
             coll = coll[key]
@@ -245,9 +274,11 @@ def get_in(coll, path, default=None):
     return coll
 
 def set_in(coll, path, value):
+    """Creates a copy of coll with the value set at path."""
     return update_in(coll, path, lambda _: value)
 
 def update_in(coll, path, update, default=None):
+    """Creates a copy of coll with a value updated at path."""
     if not path:
         return update(coll)
     elif isinstance(coll, list):
@@ -263,28 +294,38 @@ def update_in(coll, path, update, default=None):
 
 
 def where(mappings, **cond):
+    """Selects mappings containing all pairs in cond."""
     match = lambda m: all(m[k] == v for k, v in cond.items())
     return filter(match, mappings)
 
 def pluck(key, mappings):
+    """Lists values for key in each mapping."""
     return map(itemgetter(key), mappings)
 
 def pluck_attr(attr, objects):
+    """Lists values of given attribute of each object."""
     return map(attrgetter(attr), objects)
 
 def invoke(objects, name, *args, **kwargs):
+    """Makes a list of results of the obj.name(*args, **kwargs)
+       for each object in objects."""
     return map(methodcaller(name, *args, **kwargs), objects)
 
 # Iterator versions for python 3 interface
 def iwhere(mappings, **cond):
+    """Iterates over mappings containing all pairs in cond."""
     match = lambda m: all(m[k] == v for k, v in cond.items())
     return ifilter(match, mappings)
 
 def ipluck(key, mappings):
+    """Iterates over values for key in mappings."""
     return imap(itemgetter(key), mappings)
 
 def ipluck_attr(attr, objects):
+    """Iterates over values of given attribute of given objects."""
     return imap(attrgetter(attr), objects)
 
 def iinvoke(objects, name, *args, **kwargs):
+    """Yields results of the obj.name(*args, **kwargs)
+       for each object in objects."""
     return imap(methodcaller(name, *args, **kwargs), objects)
