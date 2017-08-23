@@ -3,7 +3,6 @@ from operator import methodcaller
 
 from .cross import imap
 from .primitives import EMPTY
-from .simple_funcs import identity, iffy
 
 
 __all__ = ['re_iter', 're_all', 're_find', 're_finder', 're_test', 're_tester',
@@ -21,7 +20,7 @@ def _make_getter(regex):
     elif regex.groups == len(regex.groupindex):
         return methodcaller('groupdict')
     else:
-        return identity
+        return lambda m: m
 
 _re_type = type(re.compile(r''))
 
@@ -46,8 +45,9 @@ def re_test(regex, s, flags=0):
 
 
 def re_finder(regex, flags=0):
-    regex, getter = _prepare(regex, flags)
-    return lambda s: iffy(getter)(regex.search(s))
+    regex, _getter = _prepare(regex, flags)
+    getter = lambda m: _getter(m) if m else None
+    return lambda s: getter(regex.search(s))
 
 def re_tester(regex, flags=0):
     if not isinstance(regex, _re_type):
