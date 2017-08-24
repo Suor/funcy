@@ -1,3 +1,15 @@
+- filled in docstrings and some names
+- better currying:
+    - all *curry() now work with builtins and classes
+    - autocurry() is robust in deciding when to call
+    - deprecated autocurry() n arg
+- @memoize now exposes its memory and accepts key_func arg
+- @cache also accepts key_func and supports funcs with **kwargs
+- added omit() (Petr Melnikov)
+- fixed/hacked PyCharm import introspection
+- optimized i?reductions() in Python 3
+- backported accumulate() to Python 2
+
 1.8
 - added count_reps()
 - published namespace class
