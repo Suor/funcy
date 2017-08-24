@@ -16,6 +16,8 @@ __all__ = ['raiser', 'ignore', 'silent', 'suppress', 'retry', 'fallback',
 ### Error handling utilities
 
 def raiser(exception_or_class=Exception, *args, **kwargs):
+    """Constructs function that raises the given exception
+       with given arguments on any invocation."""
     def _raiser(*a, **kw):
         if args or kwargs:
             raise exception_or_class(*args, **kwargs)
@@ -27,6 +29,7 @@ def raiser(exception_or_class=Exception, *args, **kwargs):
 # Not using @decorator here for speed,
 # since @ignore and @silent should be used for very simple and fast functions
 def ignore(errors, default=None):
+    """Alters function to ignore given errors, returning default instead."""
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -37,8 +40,9 @@ def ignore(errors, default=None):
         return wrapper
     return decorator
 
-silent = ignore(Exception) # Ignore all real exceptions
-
+def silent(func):
+    """Alters function to ignore all exceptions."""
+    return ignore(Exception)(func)
 
 ### Backport of Python 3.4 suppress
 try:
@@ -72,6 +76,9 @@ except ImportError:
 
 @decorator
 def retry(call, tries, errors=Exception, timeout=0):
+    """Makes decorated function retry up to tries times.
+       Retries only on specified errors.
+       Sleeps timeout or timeout(attempt) seconds between tries."""
     if isinstance(errors, list):
         # because `except` does not catch exceptions from list
         errors = tuple(errors)
@@ -90,6 +97,8 @@ def retry(call, tries, errors=Exception, timeout=0):
 
 
 def fallback(*approaches):
+    """Tries several approaches until one works.
+       Each approach has a form of (callable, expected_errors)."""
     for approach in approaches:
         func, catch = (approach, Exception) if callable(approach) else approach
         try:
@@ -102,10 +111,8 @@ class ErrorRateExceeded(Exception):
     pass
 
 def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
-    """
-    If function fails to complete `fails` times in a row,
-    calls to it will be intercepted for `timeout` with `exception` raised instead.
-    """
+    """If function fails to complete fails times in a row,
+       calls to it will be intercepted for timeout with exception raised instead."""
     if isinstance(timeout, int):
         timeout = timedelta(seconds=timeout)
 
@@ -139,18 +146,23 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
 
 @decorator
 def post_processing(call, func):
+    """Post processes decorated function result with func."""
     return func(call())
 
 collecting = post_processing(list)
+collecting.__name__ = 'collecting'
+collecting.__doc__ = "Transforms a generator into list returning function."
 
 @decorator
 def joining(call, sep):
+    """Joins decorated function results with sep."""
     return sep.join(imap(sep.__class__, call()))
 
 
 ### Initialization helpers
 
 def once_per(*argnames):
+    """Call function only once for every combination of the given arguments."""
     def once(func):
         lock = threading.Lock()
         done_set = set()
@@ -174,6 +186,8 @@ def once_per(*argnames):
     return once
 
 once = once_per()
+once.__doc__ = "Let function execute once, noop all subsequent calls."
 
 def once_per_args(func):
+    """Call function once for every combination of values of its arguments."""
     return once_per(*get_argnames(func))(func)

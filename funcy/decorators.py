@@ -8,6 +8,19 @@ __all__ = ['decorator', 'wraps', 'unwrap', 'ContextDecorator', 'contextmanager']
 
 
 def decorator(deco):
+    """
+    Transforms a flat wrapper into decorator::
+
+        @decorator
+        def func(call, methods, content_type=DEFAULT):  # These are decorator params
+            # Access call arg by name
+            if call.request.method not in methods:
+                # ...
+            # Decorated functions and all the arguments are accesible as:
+            print(call._func, call_args, call._kwargs)
+            # Finally make a call:
+            return call()
+    """
     if has_single_arg(deco):
         return wraps(deco)(make_decorator(deco))
     else:
