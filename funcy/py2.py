@@ -26,6 +26,7 @@ from .cross import PY3
 if PY3:
     _zip = zip
     def zip(*seqs):
+        """List zip() version."""
         return list(_zip(*seqs))
     __all__ += ['zip']  # HACK: using this instead of .append() to not trigger PyCharm
 else:
