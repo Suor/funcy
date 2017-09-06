@@ -284,12 +284,12 @@
 <div name="tree_leaves">
     <b>tree_leaves<em>(root, follow=is_seqcont, children=iter)</em><br>
       itree_leaves<em>(root, follow=is_seqcont, children=iter)</em></b><br><br>
-    Lists or iterates over all the tree leaves.
+    Lists or iterates over tree leaves.
 </div>
 <div name="tree_nodes">
     <b>tree_nodes<em>(root, follow=is_seqcont, children=iter)</em><br>
       itree_nodes<em>(root, follow=is_seqcont, children=iter)</em></b><br><br>
-    Lists or iterates over all the tree nodes.
+    Lists or iterates over tree nodes.
 </div>
 
 
@@ -494,8 +494,8 @@
 </div>
 <div name="some_fn">
     <b>some_fn<em>(*fs)</em></b><br><br>
-    Constructs function calling <em>fs</em> one by one<br>
-    and returning first truthy result.
+    Constructs a function, which calls <em>fs</em> one by one<br>
+    and returns first truthy result.
 </div>
 
 
@@ -635,8 +635,8 @@
 
 <!-- Debugging -->
 <div name="tap">
-    <b>tap<em>(value, label=None)</em></b><br><br>
-    Prints <em>value</em> and then returns it.
+    <b>tap<em>(x, label=None)</em></b><br><br>
+    Prints <em>x</em> and then returns it.
 </div>
 <div name="log_calls">
     <b>@log_calls<em>(print_func, errors=True, stack=True)</em><br>
@@ -657,17 +657,17 @@
 <div name="log_errors">
     <b>@log_errors<em>(print_func, label=None, stack=True)</em><br>
        @print_errors<em>(label=None, stack=True)</em></b><br><br>
-    Logs or prints all errors within function or block.
+    Logs or prints all errors within a function or block.
 </div>
 <div name="log_durations">
     <b>@log_durations<em>(print_func, label=None)</em><br>
        @print_durations<em>(label=None)</em></b><br><br>
-    Time each function call or block execution.
+    Times each function call or block execution.
 </div>
 <div name="log_iter_durations">
     <b>log_iter_durations<em>(seq, print_func, label=None)</em><br>
        print_iter_durations<em>(seq, label=None)</em></b><br><br>
-    Time processing of each item in <em>seq</em>.
+    Times processing of each item in <em>seq</em>.
 </div>
 
 <!-- Caching -->

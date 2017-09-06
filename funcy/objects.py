@@ -30,6 +30,11 @@ class cached_property(object):
 
 
 def monkey(cls, name=None):
+    """
+    Monkey patches class or module by adding to it decorated function.
+
+    Anything overwritten could be accessed via .original attribute of decorated object.
+    """
     assert isclass(cls) or ismodule(cls), "Attempting to monkey patch non-class and non-module"
 
     def decorator(value):
@@ -53,6 +58,7 @@ class namespace_meta(type):
         return super(namespace_meta, cls).__new__(cls, name, bases, attrs)
 
 class namespace(object):
+    """A base class that prevents its member functions turning into methods."""
     if PY2:
         __metaclass__ = namespace_meta
 

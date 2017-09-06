@@ -22,6 +22,7 @@ __all__ = [
 
 
 def tap(x, label=None):
+    """Prints x and then returns it."""
     if label:
         print('%s: %s' % (label, x))
     else:
@@ -31,6 +32,8 @@ def tap(x, label=None):
 
 @decorator
 def log_calls(call, print_func, errors=True, stack=True):
+    """Logs or prints all function calls,
+       including arguments, results and raised exceptions."""
     signature = signature_repr(call)
     try:
         print_func('Call %s' % signature)
@@ -47,18 +50,24 @@ def print_calls(errors=True, stack=True):
         return log_calls(print)(errors)
     else:
         return log_calls(print, errors, stack)
+print_calls.__doc__ = log_calls.__doc__
 
 
 @decorator
 def log_enters(call, print_func):
+    """Logs each entrance to a function."""
     print_func('Call %s' % signature_repr(call))
     return call()
 
-print_enters = log_enters(print)
+
+def print_enters(func):
+    """Prints on each entrance to a function."""
+    return log_enters(print)(func)
 
 
 @decorator
 def log_exits(call, print_func, errors=True, stack=True):
+    """Logs exits from a function."""
     signature = signature_repr(call)
     try:
         result = call()
@@ -70,6 +79,7 @@ def log_exits(call, print_func, errors=True, stack=True):
         raise
 
 def print_exits(errors=True, stack=True):
+    """Prints on exits from a function."""
     if callable(errors):
         return log_exits(print)(errors)
     else:
@@ -103,6 +113,7 @@ class LabeledContextDecorator(object):
 
 
 class log_errors(LabeledContextDecorator):
+    """Logs or prints all errors within a function or block."""
     def __init__(self, print_func, label=None, stack=True):
         LabeledContextDecorator.__init__(self, print_func, label=label)
         self.stack = stack
@@ -122,6 +133,7 @@ print_errors = log_errors(print)
 
 
 class log_durations(LabeledContextDecorator):
+    """Times each function call or block execution."""
     def __enter__(self):
         self.start = time.time()
         return self
@@ -134,6 +146,7 @@ print_durations = log_durations(print)
 
 
 def log_iter_durations(seq, print_func, label=None):
+    """Times processing of each item in seq."""
     suffix = " of %s" % label if label else ""
     it = iter(seq)
     for i, item in enumerate(it):
@@ -143,6 +156,7 @@ def log_iter_durations(seq, print_func, label=None):
         print_func("%s in iteration %d%s" % (duration, i, suffix))
 
 def print_iter_durations(seq, label=None):
+    """Times processing of each item in seq."""
     return log_iter_durations(seq, print, label)
 
 

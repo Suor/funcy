@@ -12,6 +12,13 @@ class SkipMemoization(Exception):
     pass
 
 def memoize(*args, **kwargs):
+    """@memoize(key_func=None). Makes decorated function memoize its results.
+
+    If key_func is specified uses key_func(*func_args, **func_kwargs) as memory key.
+    Otherwise uses args + tuple(sorted(kwargs.items()))
+
+    Exposes its memory via .memory attribute.
+    """
     if args:
         assert len(args) == 1
         assert not kwargs
@@ -47,6 +54,15 @@ memoize.skip = SkipMemoization
 
 def _make_lookuper(silent):
     def make_lookuper(func):
+        """
+        Creates a single argument function looking up result in a memory.
+
+        Decorated function is called once on first lookup and should return all available
+        arg-value pairs.
+
+        Resulting function will raise LookupError when using @make_lookuper
+        or simply return None when using @silent_lookuper.
+        """
         has_args, has_keys = has_arg_types(func)
         assert not has_keys, \
             'Lookup table building function should not have keyword arguments'
@@ -77,9 +93,11 @@ def _make_lookuper(silent):
 
 make_lookuper = _make_lookuper(False)
 silent_lookuper = _make_lookuper(True)
+silent_lookuper.__name__ = 'silent_lookuper'
 
 
 def cache(timeout, key_func=None):
+    """Caches a function results for timeout seconds."""
     if isinstance(timeout, int):
         timeout = timedelta(seconds=timeout)
 

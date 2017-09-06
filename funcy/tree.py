@@ -6,6 +6,7 @@ __all__ = ['itree_leaves', 'tree_leaves', 'itree_nodes', 'tree_nodes']
 
 
 def itree_leaves(root, follow=is_seqcont, children=iter):
+    """Iterates over tree leaves."""
     q = deque([[root]])
     while q:
         node_iter = iter(q.pop())
@@ -18,10 +19,12 @@ def itree_leaves(root, follow=is_seqcont, children=iter):
                 yield sub
 
 def tree_leaves(root, follow=is_seqcont, children=iter):
+    """Lists tree leaves."""
     return list(itree_leaves(root, follow, children))
 
 
 def itree_nodes(root, follow=is_seqcont, children=iter):
+    """Iterates over all tree nodes."""
     q = deque([[root]])
     while q:
         node_iter = iter(q.pop())
@@ -33,4 +36,5 @@ def itree_nodes(root, follow=is_seqcont, children=iter):
                 break
 
 def tree_nodes(root, follow=is_seqcont, children=iter):
+    """Lists all tree nodes."""
     return list(itree_nodes(root, follow, children))

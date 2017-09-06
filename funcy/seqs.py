@@ -69,6 +69,8 @@ def nth(n, seq):
         return next(islice(seq, n, None), None)
 
 def last(seq):
+    """Returns the last item in the sequence or iterator.
+       Returns None if the sequence is empty."""
     try:
         return seq[-1]
     except IndexError:
