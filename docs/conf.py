@@ -196,7 +196,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'funcy.tex', u'funcy Documentation',
+  ('index', 'funcy.tex', u'funcy documentation',
    u'Alexander Schepanovski', 'manual'),
 ]
 
@@ -226,7 +226,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'funcy', u'funcy Documentation',
+    ('index', 'funcy', u'funcy documentation',
      [u'Alexander Schepanovski'], 1)
 ]
 
@@ -240,8 +240,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'funcy', u'funcy Documentation',
-   u'Alexander Schepanovski', 'funcy', 'One line description of project.',
+  ('index', 'funcy', u'funcy documentation',
+   u'Alexander Schepanovski', 'funcy', 'A fancy and practical functional tools.',
    'Miscellaneous'),
 ]
 
@@ -264,7 +264,7 @@ from sphinx.ext.autodoc import FunctionDocumenter
 
 class DecoratorDocumenter(FunctionDocumenter):
     """
-    Specialized Documenter subclass for methods.
+    Specialized Documenter subclass for decorators.
     """
     objtype = 'decorator'
 
