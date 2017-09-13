@@ -1,3 +1,4 @@
+1.9
 - filled in docstrings and some names
 - better currying:
     - all *curry() now work with builtins and classes
