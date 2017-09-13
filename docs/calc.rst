@@ -25,7 +25,7 @@ Calculation
 
     Custom `key_func` could be used to work with unhashable objects, insignificant arguments, etc::
 
-        @memoize(lambda obj, verbose=None: obj.key)
+        @memoize(key_func=lambda obj, verbose=None: obj.key)
         def do_things(obj, verbose=False):
             # ...
 

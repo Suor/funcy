@@ -11,6 +11,7 @@ __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 class SkipMemoization(Exception):
     pass
 
+# TODO: use real kwonly once in Python 3 only
 def memoize(*args, **kwargs):
     """@memoize(key_func=None). Makes decorated function memoize its results.
 
