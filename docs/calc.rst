@@ -63,4 +63,21 @@ Calculation
 
 .. decorator:: cache(timeout, key_func=None)
 
-    Same as :func:`@memoize<memoize>`, but doesn't use cached results older than ``timeout``. It can be either number of seconds or :class:`py:datetime.timedelta`. Also, doesn't support skipping.
+    Caches decorated function results for ``timeout``.
+    It can be either number of seconds or :class:`py:datetime.timedelta`::
+
+        @cache(60 * 60)
+        def api_call(query):
+            # ...
+
+    Cache can be invalidated before timeout with::
+
+        api_call.invalidate(query)  # Forget cache for query
+        api_call.invalidate_all()   # Forget everything
+
+    Custom ``key_func`` could be used same way as in :func:`@memoize<memoize>`::
+
+        # Do not use token in cache key
+        @cache(60 * 60, key_func=lambda query, token=None: query)
+        def api_call(query, token=None):
+            # ...
