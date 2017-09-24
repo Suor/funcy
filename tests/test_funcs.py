@@ -2,7 +2,7 @@ from operator import __add__, __sub__
 import pytest
 from whatever import _
 
-from funcy.cross import map
+from funcy.py2 import map, merge_with
 from funcy.funcs import *
 from funcy.seqs import keep
 
@@ -40,6 +40,12 @@ def test_curry():
     assert curry(__add__, 2)(10)(1) == 11
     assert curry(__add__)(10)(1) == 11  # Introspect builtin
     assert curry(lambda x,y,z: x+y+z)('a')('b')('c') == 'abc'
+
+def test_curry_funcy():
+    # curry() doesn't handle required star args,
+    # but we can code inspection for funcy utils.
+    assert curry(map)(int)('123') == [1, 2, 3]
+    assert curry(merge_with)(sum)({1: 1}) == {1: 1}
 
 def test_rcurry():
     assert rcurry(__sub__, 2)(10)(1) == -9

@@ -79,6 +79,20 @@ ARGS['operator'].update([
 ARGS['_operator'] = ARGS['operator']
 
 
+# Fixate this
+STD_MODULES = set(ARGS)
+
+
+# Describe some funcy functions, mostly for r?curry()
+ARGS['funcy.seqs'] = {
+    'map': 'f*', 'imap': 'f*', 'ximap': 'f*',
+    'mapcat': 'f*', 'imapcat': 'f*',
+}
+ARGS['funcy.colls'] = {
+    'merge_with': 'f*',
+}
+
+
 type_classes = (type, types.ClassType) if hasattr(types, 'ClassType') else type
 
 
@@ -89,8 +103,9 @@ def get_spec(func, _cache={}):
     except:
         pass
 
-    if func.__module__ in ARGS:
-        _spec = ARGS[func.__module__].get(func.__name__, '*')
+    mod = func.__module__
+    if mod in STD_MODULES or mod in ARGS and func.__name__ in ARGS[mod]:
+        _spec = ARGS[mod].get(func.__name__, '*')
         required, _, optional = _spec.partition('-')
         required_names = re.findall(r'\w+|\*', required)
         spec = set(required_names), len(required_names), len(required_names) + len(optional)
