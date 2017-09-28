@@ -297,6 +297,11 @@ def test_where():
     assert where(data, a=1, b=2) == [{'a': 1, 'b': 2}]
     assert where(data, b=2) == data
 
+def test_where_nonexistent_key():
+    data = [{'a': 1}, {'b': 2}]
+    assert where(data, a=1) == [{'a': 1}]
+    assert where(data, b=2) == [{'b': 2}]
+
 def test_pluck():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
     assert pluck('a', data) == [1, 10]
@@ -308,8 +313,3 @@ def test_pluck_attr():
 
 def test_invoke():
     assert invoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
-
-def test_where_nonexistent_key():
-    data = [{'a': 1}, {'b': 2}]
-    assert where(data, a=1) == [{'a': 1}]
-    assert where(data, b=2) == [{'b': 2}]
