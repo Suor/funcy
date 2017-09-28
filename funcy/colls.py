@@ -295,7 +295,8 @@ def update_in(coll, path, update, default=None):
 
 def where(mappings, **cond):
     """Selects mappings containing all pairs in cond."""
-    match = lambda m: all(k in m and m[k] == v for k, v in cond.items())
+    items = cond.items()
+    match = lambda m: all(k in m and m[k] == v for k, v in items)
     return filter(match, mappings)
 
 def pluck(key, mappings):
@@ -311,10 +312,13 @@ def invoke(objects, name, *args, **kwargs):
        for each object in objects."""
     return map(methodcaller(name, *args, **kwargs), objects)
 
+
 # Iterator versions for python 3 interface
+
 def iwhere(mappings, **cond):
     """Iterates over mappings containing all pairs in cond."""
-    match = lambda m: all(k in m and m[k] == v for k, v in cond.items())
+    items = cond.items()
+    match = lambda m: all(k in m and m[k] == v for k, v in items)
     return ifilter(match, mappings)
 
 def ipluck(key, mappings):
