@@ -308,3 +308,8 @@ def test_pluck_attr():
 
 def test_invoke():
     assert invoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
+
+def test_where_nonexistent_key():
+    data = [{'a': 1}, {'b': 2}]
+    assert where(data, a=1) == [{'a': 1}]
+    assert where(data, b=2) == [{'b': 2}]
