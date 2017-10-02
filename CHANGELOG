@@ -1,3 +1,7 @@
+1.9.1
+- make where() skip nonexistent keys (Aleksei Voronov)
+- fixed r?curry() on funcy i?map(), i?mapcat() and merge_with()
+
 1.9
 - filled in docstrings and some names
 - better currying:
