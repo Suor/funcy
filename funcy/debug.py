@@ -132,32 +132,65 @@ class log_errors(LabeledContextDecorator):
 print_errors = log_errors(print)
 
 
+# Duration utils
+
+def format_time(sec):
+    if sec < 1e-6:
+        return '%8.2f ns' % (sec * 1e9)
+    elif sec < 1e-3:
+        return '%8.2f mks' % (sec * 1e6)
+    elif sec < 1:
+        return '%8.2f ms' % (sec * 1e3)
+    else:
+        return '%8.2f s' % sec
+
+time_formatters = {
+    'auto': format_time,
+    'ns': lambda sec: '%8.2f ns' % (sec * 1e9),
+    'mks': lambda sec: '%8.2f mks' % (sec * 1e6),
+    'ms': lambda sec: '%8.2f ms' % (sec * 1e3),
+    's': lambda sec: '%8.2f s' % sec,
+}
+
+
 class log_durations(LabeledContextDecorator):
     """Times each function call or block execution."""
+    def __init__(self, print_func, label=None, unit='auto', threshold=-1):
+        LabeledContextDecorator.__init__(self, print_func, label=label)
+        if unit not in time_formatters:
+            raise ValueError('Unknown time unit: %s. It should be ns, mks, ms, s or auto.' % unit)
+        self.format_time = time_formatters[unit]
+        self.threshold = threshold
+
     def __enter__(self):
         self.start = time.time()
         return self
 
     def __exit__(self, *exc):
-        duration = format_time(time.time() - self.start)
-        self.print_func("%s in %s" % (duration, self.label) if self.label else duration)
+        duration = time.time() - self.start
+        if duration >= self.threshold:
+            duration_str = self.format_time(duration)
+            self.print_func("%s in %s" % (duration_str, self.label) if self.label else duration_str)
 
 print_durations = log_durations(print)
 
 
-def log_iter_durations(seq, print_func, label=None):
+def log_iter_durations(seq, print_func, label=None, unit='auto'):
     """Times processing of each item in seq."""
+    if unit not in time_formatters:
+        raise ValueError('Unknown time unit: %s. It should be ns, mks, ms, s or auto.' % unit)
+    _format_time = time_formatters[unit]
     suffix = " of %s" % label if label else ""
     it = iter(seq)
     for i, item in enumerate(it):
         start = time.time()
         yield item
-        duration = format_time(time.time() - start)
+        duration = _format_time(time.time() - start)
         print_func("%s in iteration %d%s" % (duration, i, suffix))
 
-def print_iter_durations(seq, label=None):
+def print_iter_durations(seq, label=None, unit='auto'):
     """Times processing of each item in seq."""
-    return log_iter_durations(seq, print, label)
+    return log_iter_durations(seq, print, label, unit=unit)
 
 
 ### Formatting utils
@@ -176,16 +209,6 @@ def _format_error(label, e, stack=True):
         return template % (e_message, label)
     else:
         return e_message
-
-def format_time(sec):
-    if sec < 1e-6:
-        return '%6.2f ns' % (sec * 1e9)
-    elif sec < 1e-3:
-        return '%6.2f mks' % (sec * 1e6)
-    elif sec < 1:
-        return '%6.2f ms' % (sec * 1e3)
-    else:
-        return '%6.2f s' % sec
 
 
 ### Call signature stringification utils

@@ -2,6 +2,7 @@ import re
 
 from funcy.debug import *
 from funcy.flow import silent
+from funcy.py2 import map
 
 
 def test_tap():
@@ -116,22 +117,29 @@ def test_print_errors_recursion():
 
 
 def test_log_durations(monkeypatch):
-    timestamps = iter([0, 0.01, 1, 1.01])
+    timestamps = iter([0, 0.01, 1, 1.000025])
     monkeypatch.setattr('time.time', lambda: next(timestamps))
     log = []
 
-    @log_durations(log.append)
-    def f():
-        pass
-
+    f = log_durations(log.append)(lambda: None)
     f()
     with log_durations(log.append, 'hello'):
         pass
 
-    for line in log:
-        m = re.search(r'^\s*(\d+\.\d+) ms in (f\(\)|hello)$', line)
-        assert m
-        assert float(m.group(1)) == 10
+    assert map(r'^\s*(\d+\.\d+ mk?s) in (?:<lambda>\(\)|hello)$', log) == ['10.00 ms', '25.00 mks']
+
+
+def test_log_durations_ex(monkeypatch):
+    timestamps = [0, 0.01, 1, 1.001, 2, 2.02]
+    timestamps_iter = iter(timestamps)
+    monkeypatch.setattr('time.time', lambda: next(timestamps_iter))
+    log = []
+
+    f = log_durations(log.append, unit='ms', threshold=1.1e-3)(lambda: None)
+    f(); f(); f()
+
+    assert len(log) == 2
+    assert map(r'^\s*(\d+\.\d+) ms in', log) == ['10.00', '20.00']
 
 
 def test_log_iter_dirations():

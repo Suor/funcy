@@ -65,8 +65,8 @@ Debugging
         # SomeException: a bad thing raised in initialization
 
 
-.. decorator:: log_durations(print_func, label=None)
-               print_durations(label=None)
+.. decorator:: log_durations(print_func, label=None, unit='auto', threshold=None)
+               print_durations(label=None, unit='auto', threshold=None)
 
     Will time each function call and log or print its duration::
 
@@ -87,9 +87,15 @@ Debugging
 
         # 10.2 ms in Creating models
 
+    ``unit`` argument can be set to ``'ns'``, ``'mks'``, ``'ms'`` or ``'s'`` to use uniform time unit. If ``threshold`` is set then durations under this number of seconds are not logged. Handy to capture slow queries or API calls::
 
-.. function:: log_iter_durations(seq, print_func, label=None)
-              print_iter_durations(seq, label=None)
+        @log_durations(logging.warning, threshold=0.5)
+        def make_query(sql, params):
+            # ...
+
+
+.. function:: log_iter_durations(seq, print_func, label=None, unit='auto')
+              print_iter_durations(seq, label=None, unit='auto')
 
     Wraps iterable ``seq`` into generator logging duration of processing of each item::
 
@@ -100,3 +106,5 @@ Debugging
         # 121 ms in iteration 0 of hard work
         # 143 ms in iteration 1 of hard work
         # ...
+
+    ``unit`` can be set to ``'ns'``, ``'mks'``, ``'ms'`` or ``'s'``.
