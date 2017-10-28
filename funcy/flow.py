@@ -130,7 +130,7 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
 
             try:
                 result = func(*args, **kwargs)
-            except:
+            except:  # noqa
                 func.fails += 1
                 if func.fails >= fails:
                     func.blocked = datetime.now()

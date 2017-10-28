@@ -100,7 +100,7 @@ def get_spec(func, _cache={}):
     func = getattr(func, '__original__', None) or unwrap(func)
     try:
         return _cache[func]
-    except:
+    except (KeyError, TypeError):
         pass
 
     mod = func.__module__

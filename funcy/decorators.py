@@ -191,7 +191,7 @@ else:
                     # was passed to throw().  This prevents a StopIteration
                     # raised inside the "with" statement from being suppressed
                     return exc is not value
-                except:
+                except:  # noqa
                     # only re-raise if it's *not* the exception that was
                     # passed to throw(), because __exit__() must not raise
                     # an exception unless __exit__() itself failed.  But throw()
