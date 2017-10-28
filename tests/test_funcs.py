@@ -138,3 +138,4 @@ def test_iffy():
     assert map(iffy(_ % 2, _ * 2), [1,2,3,4]) == [2,2,6,4]
     assert map(iffy(_ * 2), [21, '', None]) == [42, '', None]
     assert map(iffy(_ % 2, _ * 2, None), [1,2,3,4]) == [2, None, 6, None]
+    assert map(iffy(_ + 1, default=1), [1, None, 2]) == [2, 1, 3]
