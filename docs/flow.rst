@@ -63,6 +63,15 @@ Flow
     Constructs function that raises given exception with given arguments on any invocation.
 
 
+.. decorator:: reraise(errors, into)
+
+    Intercepts any error of ``errors`` classes and reraises it as ``into`` error. Can be used as decorator or context manager::
+
+        @reraise(requests.RequestsError, MyAPIError)
+        def api_call(...):
+            # ...
+
+
 .. decorator:: retry(tries, errors=Exception, timeout=0)
 
     Every call of the decorated function is tried up to ``tries`` times. The first attempt counts as a try. Retries occur when any subclass of ``errors`` is raised (``errors`` can be an exception class or a list/tuple of exception classes). There will be a delay in ``timeout`` seconds between tries.

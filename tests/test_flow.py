@@ -51,6 +51,23 @@ def test_suppress():
         raise MyError
 
 
+def test_reraise():
+    @reraise((TypeError, ValueError), MyError)
+    def erry(e):
+        raise e
+
+    with pytest.raises(MyError): erry(TypeError)
+    with pytest.raises(MyError): erry(ValueError)
+
+    with pytest.raises(MyError):
+        with reraise(ValueError, MyError):
+            raise ValueError
+
+    with pytest.raises(TypeError):
+        with reraise(ValueError, MyError):
+            raise TypeError
+
+
 def test_retry():
     calls = []
 

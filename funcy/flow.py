@@ -4,10 +4,10 @@ import time
 import threading
 
 from .cross import imap, xrange
-from .decorators import decorator, wraps, get_argnames, arggetter
+from .decorators import decorator, wraps, get_argnames, arggetter, contextmanager
 
 
-__all__ = ['raiser', 'ignore', 'silent', 'suppress', 'retry', 'fallback',
+__all__ = ['raiser', 'ignore', 'silent', 'suppress', 'reraise', 'retry', 'fallback',
            'limit_error_rate', 'ErrorRateExceeded',
            'post_processing', 'collecting', 'joining',
            'once', 'once_per', 'once_per_args']
@@ -72,6 +72,19 @@ except ImportError:
             #
             # See http://bugs.python.org/issue12029 for more details
             return exctype is not None and issubclass(exctype, self._exceptions)
+
+
+@contextmanager
+def reraise(errors, into):
+    """Reraises errors as other exception."""
+    if isinstance(errors, list):
+        # because `except` does not catch exceptions from list
+        errors = tuple(errors)
+
+    try:
+        yield
+    except errors:
+        raise into
 
 
 @decorator
