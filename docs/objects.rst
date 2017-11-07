@@ -42,3 +42,17 @@ Objects
 
         field_checks = all_fn(Checks.is_str, Checks.max_len(30))
 
+
+.. class:: LazyObject(init)
+
+    Creates a object only really setting itself up on first attribute access. Since attribute access happens immediately before any method call, this permits delaying initialization until first call::
+
+        @LazyObject
+        def redis_client():
+            if isinstance(settings.REDIS, str):
+                return StrictRedis.from_url(settings.REDIS)
+            else:
+                return StrictRedis(**settings.REDIS)
+
+        # Will be only created on first use
+        redis_client.set(...)

@@ -68,7 +68,7 @@
 Cheatsheet
 ==========
 
-Hover over function to get its description.
+Hover over function to get its description. Click to jump to docs.
 
 
 Sequences
@@ -127,7 +127,7 @@ Debugging          :func:`tap` :func:`log_calls` :func:`log_enters` :func:`log_e
 Caching            :func:`memoize` :func:`cache` :func:`cached_property` :func:`make_lookuper` :func:`silent_lookuper`
 Regexes            :func:`re_find` :func:`re_test` :func:`re_all` :func:`re_iter` :func:`re_finder` :func:`re_tester`
 Strings            :func:`cut_prefix` :func:`cut_suffix` :func:`str_join`
-Objects            :func:`cached_property` :func:`monkey` :func:`invoke` :func:`pluck_attr` :class:`namespace`
+Objects            :func:`cached_property` :func:`monkey` :func:`invoke` :func:`pluck_attr` :class:`namespace` :class:`LazyObject`
 Primitives         :func:`isnone` :func:`notnone` :func:`inc` :func:`dec` :func:`even` :func:`odd`
 ================== ==============================================================
 
