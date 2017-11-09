@@ -1,3 +1,9 @@
+1.10
+- added @reraise()
+- added unit and threshold params to *_durations() utils
+- published and documented LazyObject
+- fixed iffy() default argument when action is not present (Dmytro Kabakchei)
+
 1.9.1
 - make where() skip nonexistent keys (Aleksei Voronov)
 - fixed r?curry() on funcy i?map(), i?mapcat() and merge_with()
