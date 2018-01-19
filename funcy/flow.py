@@ -3,7 +3,7 @@ from collections import Hashable
 import time
 import threading
 
-from .cross import imap, xrange
+from .cross import imap, xrange, raise_from
 from .decorators import decorator, wraps, get_argnames, arggetter, contextmanager
 
 
@@ -83,8 +83,8 @@ def reraise(errors, into):
 
     try:
         yield
-    except errors:
-        raise into
+    except errors as e:
+        raise_from(into, e)
 
 
 @decorator
