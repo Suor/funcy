@@ -1,9 +1,6 @@
 TODO
 ====
 
-- @reraise((Err1, Err2), like=OtherErr)
-  with reraise(TypeError, ValueError) as MyError:
-      ...
 - pre_walk, post_walk
 - tree-seq
 - where_not?
