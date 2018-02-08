@@ -1,3 +1,7 @@
+1.10.1
+- use raise from in reraise()
+- fix @cache with mixed positional and keywords args (thx to adrian-dankiv)
+
 1.10
 - added @reraise()
 - added unit and threshold params to *_durations() utils
