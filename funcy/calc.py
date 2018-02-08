@@ -118,7 +118,7 @@ def cache(timeout, key_func=None):
                 else:
                     del cache[key]
 
-            result = func(*key, **kwargs)
+            result = func(*args, **kwargs)
             cache[key] = result, datetime.now()
             return result
 
