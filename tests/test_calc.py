@@ -127,6 +127,14 @@ def test_cache():
     assert calls == [0, 1, 0]
 
 
+def test_cache_mixed_args():
+    @cache(timeout=60)
+    def add(x, y):
+        return x + y
+
+    assert add(1, y=2) == 3
+
+
 def test_cache_timedout():
     calls = []
 
