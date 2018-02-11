@@ -158,7 +158,7 @@ def test_meta_attribtes():
 
 def test_unpack():
     @unpack
-    def process(foo, bar, baz):
-        return foo + bar + baz
+    def process(foo, bar):
+        return foo + bar
 
-    assert process(('foo', 'bar'), {'baz': 'baz'}) == 'foobarbaz'
+    assert process(('foo', 'bar')) == 'foobar'

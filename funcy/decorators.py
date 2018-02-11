@@ -326,26 +326,10 @@ def unpack(func):
     >>> from itertools import product
     >>> list(map(unpack(process), product(['foo1', 'foo2'], ['bar1', 'bar2'])))
     ['foo1bar1', 'foo1bar2', 'foo2bar1', 'foo2bar2']
-
-    Keyword arguments also acceptable:
-    >>> @unpack
-    ... def process(foo, bar, baz):
-    ...     return foo + bar + baz
-    >>>
-    >>> process(('foo', 'bar'), {'baz': 'baz'})
-    'foobarbaz'
-    """
+`    """
 
     @wraps(func)
-    def wrapper(*args):
-        arguments = []
-        keyword_arguments = {}
-        for values in args:
-            if isinstance(values, dict):
-                keyword_arguments.update(values)
-            else:
-                arguments.extend(values)
-
-        return func(*arguments, **keyword_arguments)
+    def wrapper(arguments):
+        return func(*arguments)
 
     return wrapper
