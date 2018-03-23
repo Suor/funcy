@@ -141,3 +141,5 @@ def test_iffy():
     assert map(iffy(_ + 1, default=1), [1, None, 2]) == [2, 1, 3]
     assert map(iffy(set([1,4,5]), _ * 2), [1, 2, 3, 4]) == [2, 2, 3, 8]
     assert map(iffy(r'\d+', str.upper), ['a2', 'c']) == ['A2', 'c']
+    assert map(iffy(set([1,4,5])), [False, 2, 4]) == [False, False, True]
+    assert map(iffy(None), [False, 2, 3, 4]) == [False, 2, 3, 4]

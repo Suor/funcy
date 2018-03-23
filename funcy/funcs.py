@@ -94,6 +94,7 @@ def iffy(pred, action=EMPTY, default=identity):
         return iffy(bool, pred, default)
     else:
         pred = make_pred(pred)
+        action = make_func(action)
         return lambda v: action(v)  if pred(v) else           \
                          default(v) if callable(default) else \
                          default
