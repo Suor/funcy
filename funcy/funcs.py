@@ -4,8 +4,7 @@ from functools import partial, reduce
 from .cross import map, imap
 from ._inspect import get_spec
 from .primitives import EMPTY
-from .funcmakers import make_func
-
+from .funcmakers import make_func, make_pred
 
 __all__ = ['identity', 'constantly', 'caller',
            'partial', 'rpartial', 'func_partial',
@@ -94,6 +93,8 @@ def iffy(pred, action=EMPTY, default=identity):
     if action is EMPTY:
         return iffy(bool, pred, default)
     else:
+        pred = make_pred(pred)
+        action = make_func(action)
         return lambda v: action(v)  if pred(v) else           \
                          default(v) if callable(default) else \
                          default
