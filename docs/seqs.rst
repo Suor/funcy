@@ -476,7 +476,7 @@ Data handling
 .. function:: distinct(seq, key=identity)
               idistinct(seq, key=identity)
 
-    Returns the given sequence with duplicates removed. Preserves order. If ``key`` is supplied then distinguishes values by comparing their keys.
+    Returns unique items of the sequence with order preserved. If ``key`` is supplied then distinguishes values by comparing their keys.
 
     .. note:: Elements of a sequence or their keys should be hashable.
 
