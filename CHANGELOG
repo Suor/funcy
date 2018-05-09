@@ -1,3 +1,7 @@
+1.10.2
+- support extended function semantics in iffy (Eric Prykhodko)
+- distribute as a universal wheel.
+
 1.10.1
 - use raise from in reraise()
 - fix @cache with mixed positional and keywords args (thx to adrian-dankiv)
