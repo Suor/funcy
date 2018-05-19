@@ -6,7 +6,7 @@ import traceback
 from itertools import chain
 from functools import partial
 
-from .cross import imap, basestring
+from .cross import basestring
 from .decorators import decorator, wraps, Call
 
 
@@ -20,6 +20,8 @@ __all__ = [
     'log_iter_durations', 'print_iter_durations',
 ]
 
+REPR_LEN = 25
+
 
 def tap(x, label=None):
     """Prints x and then returns it."""
@@ -31,13 +33,14 @@ def tap(x, label=None):
 
 
 @decorator
-def log_calls(call, print_func, errors=True, stack=True):
+def log_calls(call, print_func, errors=True, stack=True, repr_len=REPR_LEN):
     """Logs or prints all function calls,
        including arguments, results and raised exceptions."""
-    signature = signature_repr(call)
+    signature = signature_repr(call, repr_len)
     try:
         print_func('Call %s' % signature)
         result = call()
+        # NOTE: using full repr of result
         print_func('-> %s from %s' % (smart_repr(result, max_len=None), signature))
         return result
     except BaseException as e:
@@ -45,32 +48,36 @@ def log_calls(call, print_func, errors=True, stack=True):
             print_func('-> ' + _format_error(signature, e, stack))
         raise
 
-def print_calls(errors=True, stack=True):
+def print_calls(errors=True, stack=True, repr_len=REPR_LEN):
     if callable(errors):
         return log_calls(print)(errors)
     else:
-        return log_calls(print, errors, stack)
+        return log_calls(print, errors, stack, repr_len)
 print_calls.__doc__ = log_calls.__doc__
 
 
 @decorator
-def log_enters(call, print_func):
+def log_enters(call, print_func, repr_len=REPR_LEN):
     """Logs each entrance to a function."""
-    print_func('Call %s' % signature_repr(call))
+    print_func('Call %s' % signature_repr(call, repr_len))
     return call()
 
 
-def print_enters(func):
+def print_enters(repr_len=REPR_LEN):
     """Prints on each entrance to a function."""
-    return log_enters(print)(func)
+    if callable(repr_len):
+        return log_enters(print)(repr_len)
+    else:
+        return log_enters(print, repr_len)
 
 
 @decorator
-def log_exits(call, print_func, errors=True, stack=True):
+def log_exits(call, print_func, errors=True, stack=True, repr_len=REPR_LEN):
     """Logs exits from a function."""
-    signature = signature_repr(call)
+    signature = signature_repr(call, repr_len)
     try:
         result = call()
+        # NOTE: using full repr of result
         print_func('-> %s from %s' % (smart_repr(result, max_len=None), signature))
         return result
     except BaseException as e:
@@ -78,21 +85,22 @@ def log_exits(call, print_func, errors=True, stack=True):
             print_func('-> ' + _format_error(signature, e, stack))
         raise
 
-def print_exits(errors=True, stack=True):
+def print_exits(errors=True, stack=True, repr_len=REPR_LEN):
     """Prints on exits from a function."""
     if callable(errors):
         return log_exits(print)(errors)
     else:
-        return log_exits(print, errors, stack)
+        return log_exits(print, errors, stack, repr_len)
 
 
 class LabeledContextDecorator(object):
     """
     A context manager which also works as decorator, passing call signature as its label.
     """
-    def __init__(self, print_func, label=None):
+    def __init__(self, print_func, label=None, repr_len=REPR_LEN):
         self.print_func = print_func
         self.label = label
+        self.repr_len = repr_len
 
     def __call__(self, label=None, **kwargs):
         if callable(label):
@@ -106,7 +114,7 @@ class LabeledContextDecorator(object):
             # Recreate self with a new label so that nested and recursive calls will work
             cm = self.__class__.__new__(self.__class__)
             cm.__dict__.update(self.__dict__)
-            cm.label = signature_repr(Call(func, args, kwargs))
+            cm.label = signature_repr(Call(func, args, kwargs), self.repr_len)
             with cm:
                 return func(*args, **kwargs)
         return inner
@@ -114,8 +122,8 @@ class LabeledContextDecorator(object):
 
 class log_errors(LabeledContextDecorator):
     """Logs or prints all errors within a function or block."""
-    def __init__(self, print_func, label=None, stack=True):
-        LabeledContextDecorator.__init__(self, print_func, label=label)
+    def __init__(self, print_func, label=None, stack=True, repr_len=REPR_LEN):
+        LabeledContextDecorator.__init__(self, print_func, label=label, repr_len=repr_len)
         self.stack = stack
 
     def __enter__(self):
@@ -155,8 +163,8 @@ time_formatters = {
 
 class log_durations(LabeledContextDecorator):
     """Times each function call or block execution."""
-    def __init__(self, print_func, label=None, unit='auto', threshold=-1):
-        LabeledContextDecorator.__init__(self, print_func, label=label)
+    def __init__(self, print_func, label=None, unit='auto', threshold=-1, repr_len=REPR_LEN):
+        LabeledContextDecorator.__init__(self, print_func, label=label, repr_len=repr_len)
         if unit not in time_formatters:
             raise ValueError('Unknown time unit: %s. It should be ns, mks, ms, s or auto.' % unit)
         self.format_time = time_formatters[unit]
@@ -213,9 +221,7 @@ def _format_error(label, e, stack=True):
 
 ### Call signature stringification utils
 
-MAX_REPR_LEN = 25
-
-def signature_repr(call):
+def signature_repr(call, repr_len=REPR_LEN):
     if isinstance(call._func, partial):
         if hasattr(call._func.func, '__name__'):
             name = '<%s partial>' % call._func.func.__name__
@@ -223,11 +229,12 @@ def signature_repr(call):
             name = '<unknown partial>'
     else:
         name = getattr(call._func, '__name__', '<unknown>')
-    args_repr = imap(smart_repr, call._args)
-    kwargs_repr = ('%s=%s' % (key, smart_repr(value)) for key, value in call._kwargs.items())
+    args_repr = (smart_repr(arg, repr_len) for arg in call._args)
+    kwargs_repr = ('%s=%s' % (key, smart_repr(value, repr_len))
+                   for key, value in call._kwargs.items())
     return '%s(%s)' % (name, ', '.join(chain(args_repr, kwargs_repr)))
 
-def smart_repr(value, max_len=MAX_REPR_LEN):
+def smart_repr(value, max_len=REPR_LEN):
     if isinstance(value, basestring):
         res = repr(value)
     else:

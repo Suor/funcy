@@ -18,8 +18,8 @@ Debugging
         # => {3: 9, 4: 16}
 
 
-.. decorator:: log_calls(print_func, errors=True, stack=True)
-               print_calls(errors=True, stack=True)
+.. decorator:: log_calls(print_func, errors=True, stack=True, repr_len=25)
+               print_calls(errors=True, stack=True, repr_len=25)
 
     Will log or print all function calls, including arguments, results and raised exceptions. Can be used as decorator or tapped into call expression::
 
@@ -34,16 +34,16 @@ Debugging
             return result
 
 
-.. decorator:: log_enters(print_func)
-               print_enters
-               log_exits(print_func, errors=True, stack=True)
-               print_exits(errors=True, stack=True)
+.. decorator:: log_enters(print_func, repr_len=25)
+               print_enters[(repr_len=25)]
+               log_exits(print_func, errors=True, stack=True, repr_len=25)
+               print_exits(errors=True, stack=True, repr_len=25)
 
     Will log or print every time execution enters or exits the function. Should be used same way as :func:`@log_calls()<log_calls>` and :func:`@print_calls()<print_calls>` when you need to track only one event per function call.
 
 
-.. decorator:: log_errors(print_func, label=None, stack=True)
-               print_errors(label=None, stack=True)
+.. decorator:: log_errors(print_func, label=None, stack=True, repr_len=25)
+               print_errors(label=None, stack=True, repr_len=25)
 
     Will log or print all function errors providing function arguments causing them. If ``stack``
     is set to ``False`` then each error is reported with simple one line message.
@@ -65,8 +65,8 @@ Debugging
         # SomeException: a bad thing raised in initialization
 
 
-.. decorator:: log_durations(print_func, label=None, unit='auto', threshold=None)
-               print_durations(label=None, unit='auto', threshold=None)
+.. decorator:: log_durations(print_func, label=None, unit='auto', threshold=None, repr_len=25)
+               print_durations(label=None, unit='auto', threshold=None, repr_len=25)
 
     Will time each function call and log or print its duration::
 
