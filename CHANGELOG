@@ -1,3 +1,7 @@
+1.10.3
+- added repr_len param to various debug utils
+- dropped testing in Python 3.3
+
 1.10.2
 - support extended function semantics in iffy (Eric Prykhodko)
 - distribute as a universal wheel.
