@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import inspect
 
 from .decorators import wraps
-from .cross import PY2
+from .compat import PY2
 
 __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 

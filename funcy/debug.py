@@ -6,7 +6,7 @@ import traceback
 from itertools import chain
 from functools import partial
 
-from .cross import basestring
+from .compat import basestring
 from .decorators import decorator, wraps, Call
 
 

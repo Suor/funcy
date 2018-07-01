@@ -1,7 +1,7 @@
 import sys
 import inspect
 from functools import partial
-from .cross import PY2
+from .compat import PY2
 
 
 __all__ = ['decorator', 'wraps', 'unwrap', 'ContextDecorator', 'contextmanager']

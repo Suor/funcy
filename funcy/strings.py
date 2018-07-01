@@ -1,7 +1,7 @@
 import re
 from operator import methodcaller
 
-from .cross import imap
+from .compat import map
 from .primitives import EMPTY
 
 
@@ -33,7 +33,7 @@ def _prepare(regex, flags):
 def re_iter(regex, s, flags=0):
     """Iterates over matches of regex in s, presents them in simplest possible form"""
     regex, getter = _prepare(regex, flags)
-    return imap(getter, regex.finditer(s))
+    return map(getter, regex.finditer(s))
 
 def re_all(regex, s, flags=0):
     """Lists all matches of regex in s, presents them in simplest possible form"""
@@ -68,7 +68,7 @@ def str_join(sep, seq=EMPTY):
     if seq is EMPTY:
         return str_join('', sep)
     else:
-        return sep.join(imap(sep.__class__, seq))
+        return sep.join(map(sep.__class__, seq))
 
 def cut_prefix(s, prefix):
     """Cuts prefix from given string if it's present."""

@@ -3,7 +3,7 @@ from collections import Hashable
 import time
 import threading
 
-from .cross import imap, xrange, raise_from
+from .compat import map, range, raise_from
 from .decorators import decorator, wraps, get_argnames, arggetter, contextmanager
 
 
@@ -96,7 +96,7 @@ def retry(call, tries, errors=Exception, timeout=0):
         # because `except` does not catch exceptions from list
         errors = tuple(errors)
 
-    for attempt in xrange(tries):
+    for attempt in range(tries):
         try:
             return call()
         except errors:
@@ -169,7 +169,7 @@ collecting.__doc__ = "Transforms a generator into list returning function."
 @decorator
 def joining(call, sep):
     """Joins decorated function results with sep."""
-    return sep.join(imap(sep.__class__, call()))
+    return sep.join(map(sep.__class__, call()))
 
 
 ### Initialization helpers

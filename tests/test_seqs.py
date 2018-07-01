@@ -3,7 +3,7 @@ from operator import add
 import pytest
 from whatever import _
 
-from funcy.cross import xrange, PY3
+from funcy.compat import range, PY3
 from funcy import is_list
 from funcy.seqs import *
 
@@ -40,7 +40,7 @@ def test_second():
 
 def test_last():
     assert last('xyz') == 'z'
-    assert last(xrange(1, 10)) == 9
+    assert last(range(1, 10)) == 9
     assert last([]) is None
     assert last(x for x in 'xyz') == 'z'
 
@@ -56,7 +56,7 @@ def test_butlast():
 
 def test_ilen():
     assert ilen('xyz') == 3
-    assert ilen(xrange(10)) == 10
+    assert ilen(range(10)) == 10
 
 
 def test_lmap():
@@ -174,7 +174,7 @@ def test_partition():
     assert lpartition(2, 1, [0, 1, 2, 3]) == [[0, 1], [1, 2], [2, 3]]
     # test iters
     assert lpartition(2, iter(range(5))) == [[0, 1], [2, 3]]
-    assert lmap(list, lpartition(2, xrange(5))) == [[0, 1], [2, 3]]
+    assert lmap(list, lpartition(2, range(5))) == [[0, 1], [2, 3]]
 
 def test_chunks():
     assert lchunks(2, [0, 1, 2, 3, 4]) == [[0, 1], [2, 3], [4]]

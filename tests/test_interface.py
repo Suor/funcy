@@ -1,28 +1,26 @@
 import pkgutil
 import pytest
 
+from funcy.compat import PY2, PY3
 import funcy
-from funcy.cross import PY2, PY3
-from funcy.py2 import cat
-
 from funcy import py2, py3
-py = py2 if PY2 else py3
+from funcy.py3 import cat, lcat, count_reps, is_iter, is_list
 
 
 # Introspect all modules
-exclude = ('cross', '_inspect', 'py2', 'py3', 'simple_funcs', 'funcmakers')
+exclude = ('compat', 'cross', '_inspect', 'py2', 'py3', 'simple_funcs', 'funcmakers')
 module_names = list(name for _, name, _ in pkgutil.iter_modules(funcy.__path__)
                     if name not in exclude)
 modules = [getattr(funcy, name) for name in module_names]
 
 
 def test_match():
-    assert funcy.__all__ == py.__all__
+    assert funcy.__all__ == (py2 if PY2 else py3).__all__
 
 
 @pytest.mark.skipif(PY2, reason="modules use python 3 internally")
 def test_full_py3():
-    assert sorted(funcy.__all__) == sorted(cat(m.__all__ for m in modules) + ['lzip'])
+    assert sorted(funcy.__all__) == sorted(lcat(m.__all__ for m in modules) + ['lzip'])
 
 
 def test_full():
@@ -30,7 +28,7 @@ def test_full():
 
 
 def test_name_clashes():
-    counts = py2.count_reps(py2.icat(m.__all__ for m in modules))
+    counts = count_reps(cat(m.__all__ for m in modules))
     clashes = [name for name, c in counts.items() if c > 1]
     assert not clashes, 'names clash for ' + ', '.join(clashes)
 
@@ -71,3 +69,10 @@ def test_docs():
     # NOTE: we are testing this way and not with all() to immediately get a list of offenders
     assert [name for name, f in exports if f.__name__ in ('<lambda>', '_decorator')] == []
     assert [name for name, f in exports if f.__doc__ is None] == []
+
+
+def test_list_iter():
+    assert is_list(py2.map(None, []))
+    assert is_iter(py3.map(None, []))
+    assert is_list(funcy.map(None, [])) == PY2
+    assert is_iter(funcy.map(None, [])) == PY3

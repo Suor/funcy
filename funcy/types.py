@@ -1,6 +1,6 @@
 from collections import Mapping, Set, Sequence, Iterator, Iterable
 
-from .cross import xrange
+from .compat import range
 
 
 __all__ = ('isa', 'is_mapping', 'is_set', 'is_seq', 'is_list', 'is_tuple',
@@ -22,7 +22,7 @@ is_list = isa(list)
 is_tuple = isa(tuple)
 
 is_seqcoll = isa(list, tuple)
-is_seqcont = isa(list, tuple, Iterator, xrange)
+is_seqcont = isa(list, tuple, Iterator, range)
 
 iterable = isa(Iterable)
 is_iter = isa(Iterator)

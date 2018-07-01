@@ -3,8 +3,8 @@ from itertools import islice, chain, tee, groupby, \
 from collections import defaultdict, deque, Sequence
 import operator
 
-from .cross import map as _map, filter as _filter, ifilter as _ifilter, imap as _imap, \
-                   izip, ifilterfalse, xrange, PY2, PY3
+from .compat import map as _map, filter as _filter, lmap as _lmap, lfilter as _lfilter, \
+                    zip, filterfalse, range, PY2, PY3
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcmakers import make_func, make_pred
@@ -102,7 +102,7 @@ def ilen(seq):
        and returns the number of items."""
     # NOTE: implementation borrowed from http://stackoverflow.com/a/15112059/753382
     counter = count()
-    deque(izip(seq, counter), maxlen=0)  # (consume at C speed)
+    deque(zip(seq, counter), maxlen=0)  # (consume at C speed)
     return next(counter)
 
 
@@ -112,31 +112,31 @@ def ilen(seq):
 def lmap(f, *seqs):
     """An extended version of builtin map().
        Derives a mapper from string, int, slice, dict or set."""
-    return _map(make_func(f, builtin=PY2), *seqs)
+    return _lmap(make_func(f, builtin=PY2), *seqs)
 
 def lfilter(pred, seq):
     """An extended version of builtin filter().
        Derives a predicate from string, int, slice, dict or set."""
-    return _filter(make_pred(pred, builtin=PY2), seq)
+    return _lfilter(make_pred(pred, builtin=PY2), seq)
 
 def map(f, *seqs):
     """An extended version of builtin imap().
        Derives a mapper from string, int, slice, dict or set."""
-    return _imap(make_func(f, builtin=PY2), *seqs)
+    return _map(make_func(f, builtin=PY2), *seqs)
 
 def filter(pred, seq):
     """An extended version of builtin ifilter().
        Derives a predicate from string, int, slice, dict or set."""
-    return _ifilter(make_pred(pred, builtin=PY2), seq)
+    return _filter(make_pred(pred, builtin=PY2), seq)
 
 if PY2:
     # NOTE: Default imap() behaves strange when passed None as function,
     #       returns 1-length tuples, which is inconvinient and incompatible with map().
     #       This version is more sane: map() compatible and suitable for our internal use.
-    def ximap(f, *seqs):
-        return _imap(make_func(f), *seqs)
+    def xmap(f, *seqs):
+        return _map(make_func(f), *seqs)
 else:
-    ximap = map  # This is already extended version from above
+    xmap = map  # This is already extended version from above
 
 
 def lremove(pred, seq):
@@ -145,7 +145,7 @@ def lremove(pred, seq):
 
 def remove(pred, seq):
     """Iterates items passing given predicate."""
-    return ifilterfalse(make_pred(pred, builtin=PY2), seq)
+    return filterfalse(make_pred(pred, builtin=PY2), seq)
 
 def lkeep(f, seq=EMPTY):
     """Maps seq with f and keeps only truthy results.
@@ -156,9 +156,9 @@ def keep(f, seq=EMPTY):
     """Maps seq with f and iterates truthy results.
        Simply iterates truthy values in one argument version."""
     if seq is EMPTY:
-        return _ifilter(bool, f)
+        return _filter(bool, f)
     else:
-        return _ifilter(bool, ximap(f, seq))
+        return _filter(bool, xmap(f, seq))
 
 def without(seq, *items):
     """Iterates over sequence skipping items."""
@@ -199,15 +199,15 @@ def lflatten(seq, follow=is_seqcont):
 
 def lmapcat(f, *seqs):
     """Maps given sequence(s) and concatenates the results."""
-    return lcat(ximap(f, *seqs))
+    return lcat(xmap(f, *seqs))
 
 def mapcat(f, *seqs):
     """Maps given sequence(s) and chains the results."""
-    return cat(ximap(f, *seqs))
+    return cat(xmap(f, *seqs))
 
 def interleave(*seqs):
     """Yields first item of each sequence, then second one and so on."""
-    return cat(izip(*seqs))
+    return cat(zip(*seqs))
 
 def interpose(sep, seq):
     """Yields items of the sequence alternating with sep."""
@@ -359,7 +359,7 @@ def count_reps(seq):
 # For efficiency we use separate implementation for cutting sequences (those capable of slicing)
 def _cut_seq(drop_tail, n, step, seq):
     limit = len(seq)-n+1 if drop_tail else len(seq)
-    return (seq[i:i+n] for i in xrange(0, limit, step))
+    return (seq[i:i+n] for i in range(0, limit, step))
 
 def _cut_iter(drop_tail, n, step, seq):
     it = iter(seq)
@@ -378,7 +378,7 @@ def _cut(drop_tail, n, step, seq=EMPTY):
     if seq is EMPTY:
         step, seq = n, step
     # NOTE: range() is capable of slicing in python 3,
-    if isinstance(seq, Sequence) and (PY3 or not isinstance(seq, xrange)):
+    if isinstance(seq, Sequence) and (PY3 or not isinstance(seq, range)):
         return _cut_seq(drop_tail, n, step, seq)
     else:
         return _cut_iter(drop_tail, n, step, seq)
@@ -411,19 +411,19 @@ def partition_by(f, seq):
 
 def lpartition_by(f, seq):
     """Partition seq into continuous chunks with constant value of f."""
-    return _map(list, partition_by(f, seq))
+    return _lmap(list, partition_by(f, seq))
 
 
 def with_prev(seq, fill=None):
     """Yields each item paired with its preceding: (item, prev)."""
     a, b = tee(seq)
-    return izip(a, chain([fill], b))
+    return zip(a, chain([fill], b))
 
 def with_next(seq, fill=None):
     """Yields each item paired with its following: (item, next)."""
     a, b = tee(seq)
     next(b, None)
-    return izip(a, chain(b, [fill]))
+    return zip(a, chain(b, [fill]))
 
 # An itertools recipe
 # NOTE: this is the same as ipartition(2, 1, seq) only faster and with distinct name
@@ -431,7 +431,7 @@ def pairwise(seq):
     """Yields all pairs of neighboring items in seq."""
     a, b = tee(seq)
     next(b, None)
-    return izip(a, b)
+    return zip(a, b)
 
 
 # Use accumulate from itertools if available

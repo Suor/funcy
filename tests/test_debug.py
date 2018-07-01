@@ -2,7 +2,7 @@ import re
 
 from funcy.debug import *
 from funcy.flow import silent
-from funcy.py2 import map
+from funcy.py3 import lmap
 
 
 def test_tap():
@@ -126,7 +126,7 @@ def test_log_durations(monkeypatch):
     with log_durations(log.append, 'hello'):
         pass
 
-    assert map(r'^\s*(\d+\.\d+ mk?s) in (?:<lambda>\(\)|hello)$', log) == ['10.00 ms', '25.00 mks']
+    assert lmap(r'^\s*(\d+\.\d+ mk?s) in (?:<lambda>\(\)|hello)$', log) == ['10.00 ms', '25.00 mks']
 
 
 def test_log_durations_ex(monkeypatch):
@@ -139,7 +139,7 @@ def test_log_durations_ex(monkeypatch):
     f(); f(); f()
 
     assert len(log) == 2
-    assert map(r'^\s*(\d+\.\d+) ms in', log) == ['10.00', '20.00']
+    assert lmap(r'^\s*(\d+\.\d+) ms in', log) == ['10.00', '20.00']
 
 
 def test_log_iter_dirations():

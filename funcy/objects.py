@@ -1,6 +1,6 @@
 from inspect import isclass, ismodule
 
-from .cross import PY2
+from .compat import PY2
 from .colls import walk_values
 from .funcs import iffy
 from .strings import cut_prefix

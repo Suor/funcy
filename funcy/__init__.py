@@ -1,4 +1,4 @@
-from .cross import PY2
+from .compat import PY2
 
 
 if PY2:

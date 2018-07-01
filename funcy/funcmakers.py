@@ -1,7 +1,7 @@
 from operator import itemgetter
 from collections import Mapping, Set
 
-from .cross import basestring
+from .compat import basestring
 from .strings import re_tester, re_finder, _re_type
 
 

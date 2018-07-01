@@ -1,7 +1,7 @@
 from operator import __not__
 from functools import partial, reduce
 
-from .cross import map, imap
+from .compat import map
 from ._inspect import get_spec
 from .primitives import EMPTY
 from .funcmakers import make_func, make_pred
@@ -104,7 +104,7 @@ def compose(*fs):
     """Composes passed functions."""
     if fs:
         pair = lambda f, g: lambda *a, **kw: f(g(*a, **kw))
-        return reduce(pair, imap(make_func, fs))
+        return reduce(pair, map(make_func, fs))
     else:
         return identity
 
@@ -123,11 +123,11 @@ def complement(pred):
 def ljuxt(*fs):
     """Constructs a juxtaposition of the given functions.
        Result returns a list of results of fs."""
-    extended_fs = map(make_func, fs)
+    extended_fs = list(map(make_func, fs))
     return lambda *a, **kw: [f(*a, **kw) for f in extended_fs]
 
 def juxt(*fs):
     """Constructs a lazy juxtaposition of the given functions.
        Result returns an iterator of results of fs."""
-    extended_fs = map(make_func, fs)
+    extended_fs = list(map(make_func, fs))
     return lambda *a, **kw: (f(*a, **kw) for f in extended_fs)

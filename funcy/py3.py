@@ -22,7 +22,7 @@ __all__ = lcat(sys.modules['funcy.' + m].__all__ for m in modules)
 
 
 # Python 2 style zip() for Python 3
-from .cross import PY3
+from .compat import PY3
 if PY3:
     def lzip(*seqs):
         """List zip() version."""

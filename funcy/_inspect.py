@@ -3,7 +3,7 @@ from inspect import CO_VARARGS
 import types
 import re
 
-from .cross import PY2
+from .compat import PY2
 from .decorators import unwrap
 
 

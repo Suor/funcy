@@ -7,7 +7,7 @@ import sys
 from . import py3
 from .py3 import *  # noqa
 from .py3 import __all__
-from .cross import izip  # noqa, reexport
+from .compat import zip as izip  # noqa, reexport
 
 # NOTE: manually renaming these to make PyCharm happy.
 #       Not renaming lversions manually to not shade original definition.

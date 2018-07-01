@@ -6,11 +6,11 @@ from operator import itemgetter, methodcaller, attrgetter
 from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import chain, tee
 
-from .cross import basestring, xrange, izip, map, filter, imap, PY2
+from .compat import basestring, range, zip, map, filter, PY2
 from .primitives import EMPTY
 from .funcs import partial, compose
 from .funcmakers import make_func, make_pred
-from .seqs import take, ximap, filter as xfilter
+from .seqs import take, xmap, filter as xfilter
 
 
 __all__ = ['empty', 'iteritems', 'itervalues',
@@ -31,6 +31,7 @@ FACTORY_REPLACE = {
 }
 
 def _factory(coll, mapper=None):
+    coll_type = type(coll)
     # Hack for defaultdicts overriden constructor
     if isinstance(coll, defaultdict):
         item_factory = compose(mapper, coll.default_factory) if mapper else coll.default_factory
@@ -38,11 +39,11 @@ def _factory(coll, mapper=None):
     elif isinstance(coll, Iterator):
         return iter
     elif isinstance(coll, basestring):
-        return ''.join
-    elif type(coll) in FACTORY_REPLACE:
-        return FACTORY_REPLACE[type(coll)]
+        return coll_type().join
+    elif coll_type in FACTORY_REPLACE:
+        return FACTORY_REPLACE[coll_type]
     else:
-        return coll.__class__
+        return coll_type
 
 def empty(coll):
     """Creates an empty collection of the same type."""
@@ -86,7 +87,7 @@ def join(colls):
         return result
     elif isinstance(dest, Set):
         return dest.union(*it)
-    elif isinstance(dest, (Iterator, xrange)):
+    elif isinstance(dest, (Iterator, range)):
         return chain.from_iterable(colls)
     elif isinstance(dest, Iterable):
         # NOTE: this could be reduce(concat, ...),
@@ -134,7 +135,7 @@ def merge_with(f, *dicts):
 def walk(f, coll):
     """Walks the collection transforming its elements with f.
        Same as map, but preserves coll type."""
-    return _factory(coll)(ximap(f, iteritems(coll)))
+    return _factory(coll)(xmap(f, iteritems(coll)))
 
 def walk_keys(f, coll):
     """Walks keys of the collection, mapping them with f."""
@@ -154,7 +155,7 @@ def walk_values(f, coll):
         k, v = pair
         return k, f(v)
 
-    return _factory(coll, mapper=f)(ximap(pair_f, iteritems(coll)))
+    return _factory(coll, mapper=f)(xmap(pair_f, iteritems(coll)))
 
 # TODO: prewalk, postwalk and friends
 
@@ -188,20 +189,20 @@ def is_distinct(coll, key=EMPTY):
     if key is EMPTY:
         return len(coll) == len(set(coll))
     else:
-        return len(coll) == len(set(ximap(key, coll)))
+        return len(coll) == len(set(xmap(key, coll)))
 
 
 def all(pred, seq=EMPTY):
     """Checks if all items in seq pass pred (or are truthy)."""
     if seq is EMPTY:
         return _all(pred)
-    return _all(ximap(pred, seq))
+    return _all(xmap(pred, seq))
 
 def any(pred, seq=EMPTY):
     """Checks if any item in seq passes pred (or is truthy)."""
     if seq is EMPTY:
         return _any(pred)
-    return _any(ximap(pred, seq))
+    return _any(xmap(pred, seq))
 
 def none(pred, seq=EMPTY):
     """"Checks if none of the items in seq pass pred (or are truthy)."""
@@ -221,15 +222,15 @@ def some(pred, seq=EMPTY):
     return next(xfilter(pred, seq), None)
 
 # TODO: a variant of some that returns mapped value,
-#       one can use some(imap(f, seq)) or first(ikeep(f, seq)) for now.
+#       one can use some(map(f, seq)) or first(keep(f, seq)) for now.
 
 # TODO: vector comparison tests - ascending, descending and such
 # def chain_test(compare, seq):
-#     return all(compare, izip(seq, rest(seq))
+#     return all(compare, zip(seq, rest(seq))
 
 def zipdict(keys, vals):
     """Creates a dict with keys mapped to the corresponding vals."""
-    return dict(izip(keys, vals))
+    return dict(zip(keys, vals))
 
 def flip(mapping):
     """Flip passed dict or collection of pairs swapping its keys and values."""
@@ -295,22 +296,20 @@ def update_in(coll, path, update, default=None):
 
 def lwhere(mappings, **cond):
     """Selects mappings containing all pairs in cond."""
-    items = cond.items()
-    match = lambda m: all(k in m and m[k] == v for k, v in items)
-    return filter(match, mappings)
+    return list(where(mappings, **cond))
 
 def lpluck(key, mappings):
     """Lists values for key in each mapping."""
-    return map(itemgetter(key), mappings)
+    return list(pluck(key, mappings))
 
 def lpluck_attr(attr, objects):
     """Lists values of given attribute of each object."""
-    return map(attrgetter(attr), objects)
+    return list(pluck_attr(attr, objects))
 
 def linvoke(objects, name, *args, **kwargs):
     """Makes a list of results of the obj.name(*args, **kwargs)
        for each object in objects."""
-    return map(methodcaller(name, *args, **kwargs), objects)
+    return list(invoke(objects, name, *args, **kwargs))
 
 
 # Iterator versions for python 3 interface
@@ -319,17 +318,17 @@ def where(mappings, **cond):
     """Iterates over mappings containing all pairs in cond."""
     items = cond.items()
     match = lambda m: all(k in m and m[k] == v for k, v in items)
-    return xfilter(match, mappings)  # TODO: switch to ordinary python 3 filter
+    return filter(match, mappings)
 
 def pluck(key, mappings):
     """Iterates over values for key in mappings."""
-    return imap(itemgetter(key), mappings)
+    return map(itemgetter(key), mappings)
 
 def pluck_attr(attr, objects):
     """Iterates over values of given attribute of given objects."""
-    return imap(attrgetter(attr), objects)
+    return map(attrgetter(attr), objects)
 
 def invoke(objects, name, *args, **kwargs):
     """Yields results of the obj.name(*args, **kwargs)
        for each object in objects."""
-    return imap(methodcaller(name, *args, **kwargs), objects)
+    return map(methodcaller(name, *args, **kwargs), objects)
