@@ -9,16 +9,16 @@ from .py3 import *  # noqa
 from .py3 import __all__
 from .cross import izip  # noqa, reexport
 
-# # NOTE: manually renaming these to make PyCharm happy.
-# #       Not renaming iversions manually to not shade original definition.
-# #       Why it's shaded by rename? PyCharm only knows...
-# from .py3 import (lmap as map, lfilter as filter, lremove as remove, lkeep as keep,  # noqa
-#     lwithout as without, lconcat as concat, lcat as cat, lflatten as flatten, lmapcat as mapcat,
-#     ldistinct as distinct, lsplit as split, split_at as lsplit_at, split_by as lsplit_by,
-#     partition as lpartition, chunks as lchunks, partition_by as lpartition_by,
-#     reductions as lreductions, sums as lsums, juxt as ljuxt,
-#     tree_leaves as ltree_leaves, tree_nodes as ltree_nodes,
-#     where as lwhere, pluck as lpluck, pluck_attr as lpluck_attr, invoke as linvoke)
+# NOTE: manually renaming these to make PyCharm happy.
+#       Not renaming lversions manually to not shade original definition.
+#       Why it's shaded by rename? PyCharm only knows...
+from .py3 import (map as imap, filter as ifilter, remove as iremove, keep as ikeep,  # noqa
+    without as iwithout, concat as iconcat, cat as icat, flatten as iflatten, mapcat as imapcat,
+    distinct as idistinct, split as isplit, split_at as isplit_at, split_by as isplit_by,
+    partition as ipartition, chunks as ichunks, partition_by as ipartition_by,
+    reductions as ireductions, sums as isums, juxt as ijuxt,
+    tree_leaves as itree_leaves, tree_nodes as itree_nodes,
+    where as iwhere, pluck as ipluck, pluck_attr as ipluck_attr, linvoke as invoke)
 
 
 RENAMES = {}
