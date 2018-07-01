@@ -217,13 +217,13 @@ def test_omit():
     dd = defaultdict(int, {'a': 1, 'b': 2, 'c': 3})
     assert eq(omit(dd, 'ac'), defaultdict(int, {'b': 2}))
 
-def test_izip_values():
-    assert list(izip_values({1: 10}, {1: 20, 2: 30})) == [(10, 20)]
-    with pytest.raises(TypeError): list(izip_values())
+def test_zip_values():
+    assert list(zip_values({1: 10}, {1: 20, 2: 30})) == [(10, 20)]
+    with pytest.raises(TypeError): list(zip_values())
 
-def test_izip_dicts():
-    assert list(izip_dicts({1: 10}, {1: 20, 2: 30})) == [(1, (10, 20))]
-    with pytest.raises(TypeError): list(izip_dicts())
+def test_zip_dicts():
+    assert list(zip_dicts({1: 10}, {1: 20, 2: 30})) == [(1, (10, 20))]
+    with pytest.raises(TypeError): list(zip_dicts())
 
 
 def test_get_in():
@@ -285,31 +285,27 @@ def test_update_in():
     assert d2['c'] is d['c']
 
 
-# These things are named differently in python 3
-try:
-    from funcy.colls import lwhere as where, lpluck as pluck, linvoke as invoke
-except ImportError:
-    pass
-
 def test_where():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
-    assert where(data, a=1) == [{'a': 1, 'b': 2}]
-    assert where(data, a=1, b=2) == [{'a': 1, 'b': 2}]
-    assert where(data, b=2) == data
+    assert isinstance(where(data, a=1), Iterator)
+    assert list(where(data, a=1)) == [{'a': 1, 'b': 2}]
 
-def test_where_nonexistent_key():
-    data = [{'a': 1}, {'b': 2}]
-    assert where(data, a=1) == [{'a': 1}]
-    assert where(data, b=2) == [{'b': 2}]
+def test_lwhere():
+    data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
+    assert lwhere(data, a=1, b=2) == [{'a': 1, 'b': 2}]
+    assert lwhere(data, b=2) == data
+
+    # Test non-existent key
+    assert lwhere(data, c=1) == []
 
 def test_pluck():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
-    assert pluck('a', data) == [1, 10]
+    assert lpluck('a', data) == [1, 10]
 
 def test_pluck_attr():
     TestObj = namedtuple('TestObj', ('id', 'name'))
     objs = [TestObj(1, 'test1'), TestObj(5, 'test2'), TestObj(10, 'test3')]
-    assert pluck_attr('id', objs) == [1, 5, 10]
+    assert lpluck_attr('id', objs) == [1, 5, 10]
 
 def test_invoke():
-    assert invoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
+    assert linvoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]

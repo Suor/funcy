@@ -85,8 +85,8 @@ STD_MODULES = set(ARGS)
 
 # Describe some funcy functions, mostly for r?curry()
 ARGS['funcy.seqs'] = {
-    'map': 'f*', 'imap': 'f*', 'ximap': 'f*',
-    'mapcat': 'f*', 'imapcat': 'f*',
+    'map': 'f*', 'lmap': 'f*', 'ximap': 'f*',
+    'mapcat': 'f*', 'lmapcat': 'f*',
 }
 ARGS['funcy.colls'] = {
     'merge_with': 'f*',

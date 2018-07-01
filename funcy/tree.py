@@ -2,10 +2,10 @@ from collections import deque
 from .types import is_seqcont
 
 
-__all__ = ['itree_leaves', 'tree_leaves', 'itree_nodes', 'tree_nodes']
+__all__ = ['tree_leaves', 'ltree_leaves', 'tree_nodes', 'ltree_nodes']
 
 
-def itree_leaves(root, follow=is_seqcont, children=iter):
+def tree_leaves(root, follow=is_seqcont, children=iter):
     """Iterates over tree leaves."""
     q = deque([[root]])
     while q:
@@ -18,12 +18,12 @@ def itree_leaves(root, follow=is_seqcont, children=iter):
             else:
                 yield sub
 
-def tree_leaves(root, follow=is_seqcont, children=iter):
+def ltree_leaves(root, follow=is_seqcont, children=iter):
     """Lists tree leaves."""
-    return list(itree_leaves(root, follow, children))
+    return list(tree_leaves(root, follow, children))
 
 
-def itree_nodes(root, follow=is_seqcont, children=iter):
+def tree_nodes(root, follow=is_seqcont, children=iter):
     """Iterates over all tree nodes."""
     q = deque([[root]])
     while q:
@@ -35,6 +35,6 @@ def itree_nodes(root, follow=is_seqcont, children=iter):
                 q.append(children(sub))
                 break
 
-def tree_nodes(root, follow=is_seqcont, children=iter):
+def ltree_nodes(root, follow=is_seqcont, children=iter):
     """Lists all tree nodes."""
-    return list(itree_nodes(root, follow, children))
+    return list(tree_nodes(root, follow, children))

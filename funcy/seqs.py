@@ -13,14 +13,14 @@ from .funcmakers import make_func, make_pred
 __all__ = [
     'count', 'cycle', 'repeat', 'repeatedly', 'iterate',
     'take', 'drop', 'first', 'second', 'nth', 'last', 'rest', 'butlast', 'ilen',
-    'map', 'filter', 'imap', 'ifilter', 'remove', 'iremove', 'keep', 'ikeep', 'without', 'iwithout',
-    'concat', 'iconcat', 'chain', 'cat', 'icat', 'flatten', 'iflatten', 'mapcat', 'imapcat',
-    'izip', 'interleave', 'interpose', 'distinct', 'idistinct',
-    'dropwhile', 'takewhile', 'split', 'isplit', 'split_at', 'isplit_at', 'split_by', 'isplit_by',
+    'map', 'filter', 'lmap', 'lfilter', 'remove', 'lremove', 'keep', 'lkeep', 'without', 'lwithout',
+    'concat', 'lconcat', 'chain', 'cat', 'lcat', 'flatten', 'lflatten', 'mapcat', 'lmapcat',
+    'interleave', 'interpose', 'distinct', 'ldistinct',
+    'dropwhile', 'takewhile', 'split', 'lsplit', 'split_at', 'lsplit_at', 'split_by', 'lsplit_by',
     'group_by', 'group_by_keys', 'group_values', 'count_by', 'count_reps',
-    'partition', 'ipartition', 'chunks', 'ichunks', 'ipartition_by', 'partition_by',
+    'partition', 'lpartition', 'chunks', 'lchunks', 'partition_by', 'lpartition_by',
     'with_prev', 'with_next', 'pairwise',
-    'ireductions', 'reductions', 'isums', 'sums', 'accumulate',
+    'reductions', 'lreductions', 'sums', 'lsums', 'accumulate',
 ]
 
 
@@ -109,22 +109,22 @@ def ilen(seq):
 # TODO: tree-seq equivalent
 
 # TODO: map/imap signatures???
-def map(f, *seqs):
+def lmap(f, *seqs):
     """An extended version of builtin map().
        Derives a mapper from string, int, slice, dict or set."""
     return _map(make_func(f, builtin=PY2), *seqs)
 
-def filter(pred, seq):
+def lfilter(pred, seq):
     """An extended version of builtin filter().
        Derives a predicate from string, int, slice, dict or set."""
     return _filter(make_pred(pred, builtin=PY2), seq)
 
-def imap(f, *seqs):
+def map(f, *seqs):
     """An extended version of builtin imap().
        Derives a mapper from string, int, slice, dict or set."""
     return _imap(make_func(f, builtin=PY2), *seqs)
 
-def ifilter(pred, seq):
+def filter(pred, seq):
     """An extended version of builtin ifilter().
        Derives a predicate from string, int, slice, dict or set."""
     return _ifilter(make_pred(pred, builtin=PY2), seq)
@@ -136,81 +136,78 @@ if PY2:
     def ximap(f, *seqs):
         return _imap(make_func(f), *seqs)
 else:
-    ximap = imap
+    ximap = map  # This is already extended version from above
 
+
+def lremove(pred, seq):
+    """Creates a list if items passing given predicate."""
+    return list(remove(pred, seq))
 
 def remove(pred, seq):
-    """Creates a list if items passing given predicate."""
-    return list(iremove(pred, seq))
-
-def iremove(pred, seq):
     """Iterates items passing given predicate."""
     return ifilterfalse(make_pred(pred, builtin=PY2), seq)
 
-def keep(f, seq=EMPTY):
+def lkeep(f, seq=EMPTY):
     """Maps seq with f and keeps only truthy results.
        Simply lists truthy values in one argument version."""
-    if seq is EMPTY:
-        return filter(bool, f)
-    else:
-        return filter(bool, ximap(f, seq))
+    return list(keep(f, seq))
 
-def ikeep(f, seq=EMPTY):
+def keep(f, seq=EMPTY):
     """Maps seq with f and iterates truthy results.
        Simply iterates truthy values in one argument version."""
     if seq is EMPTY:
-        return ifilter(bool, f)
+        return _ifilter(bool, f)
     else:
-        return ifilter(bool, ximap(f, seq))
+        return _ifilter(bool, ximap(f, seq))
 
-def iwithout(seq, *items):
+def without(seq, *items):
     """Iterates over sequence skipping items."""
     for value in seq:
         if value not in items:
             yield value
 
-def without(seq, *items):
+def lwithout(seq, *items):
     """Removes items from sequence, preserves order."""
-    return list(iwithout(seq, *items))
+    return list(without(seq, *items))
 
 
-def concat(*seqs):
+def lconcat(*seqs):
     """Concatenates several sequences."""
     return list(chain(*seqs))
-iconcat = chain
+concat = chain
 
-def cat(seqs):
+def lcat(seqs):
     """Concatenates the sequence of sequences."""
-    return list(icat(seqs))
-icat = chain.from_iterable
+    return list(cat(seqs))
+cat = chain.from_iterable
 
-def iflatten(seq, follow=is_seqcont):
+def flatten(seq, follow=is_seqcont):
     """Flattens arbitrary nested sequence.
        Unpacks an item if follow(item) is truthy."""
     for item in seq:
         if follow(item):
             # TODO: use `yield from` when Python 2 is dropped ;)
-            for sub in iflatten(item, follow):
+            for sub in flatten(item, follow):
                 yield sub
         else:
             yield item
 
-def flatten(seq, follow=is_seqcont):
+def lflatten(seq, follow=is_seqcont):
     """Iterates over arbitrary nested sequence.
        Dives into when follow(item) is truthy."""
-    return list(iflatten(seq, follow))
+    return list(flatten(seq, follow))
+
+def lmapcat(f, *seqs):
+    """Maps given sequence(s) and concatenates the results."""
+    return lcat(ximap(f, *seqs))
 
 def mapcat(f, *seqs):
-    """Maps given sequence(s) and concatenates the results."""
-    return cat(ximap(f, *seqs))
-
-def imapcat(f, *seqs):
     """Maps given sequence(s) and chains the results."""
-    return icat(ximap(f, *seqs))
+    return cat(ximap(f, *seqs))
 
 def interleave(*seqs):
     """Yields first item of each sequence, then second one and so on."""
-    return icat(izip(*seqs))
+    return cat(izip(*seqs))
 
 def interpose(sep, seq):
     """Yields items of the sequence alternating with sep."""
@@ -235,11 +232,11 @@ def dropwhile(pred, seq=EMPTY):
     return _dropwhile(pred, seq)
 
 
-def distinct(seq, key=EMPTY):
+def ldistinct(seq, key=EMPTY):
     """Removes duplicates from sequences, preserves order."""
-    return list(idistinct(seq, key))
+    return list(distinct(seq, key))
 
-def idistinct(seq, key=EMPTY):
+def distinct(seq, key=EMPTY):
     """Iterates over sequence skipping duplicates"""
     seen = set()
     # check if key is supplied out of loop for efficiency
@@ -257,14 +254,14 @@ def idistinct(seq, key=EMPTY):
                 yield item
 
 
-def isplit(pred, seq):
+def split(pred, seq):
     """Lazily splits items which pass the predicate from the ones that don't.
        Returns a pair (passed, failed) of respective iterators."""
     pred = make_pred(pred)
     yes, no = deque(), deque()
     splitter = (yes.append(item) if pred(item) else no.append(item) for item in seq)
 
-    def _isplit(q):
+    def _split(q):
         while True:
             while q:
                 yield q.popleft()
@@ -273,9 +270,9 @@ def isplit(pred, seq):
             except StopIteration:
                 return
 
-    return _isplit(yes), _isplit(no)
+    return _split(yes), _split(no)
 
-def split(pred, seq):
+def lsplit(pred, seq):
     """Splits items which pass the predicate from the ones that don't.
        Returns a pair (passed, failed) of respective lists."""
     pred = make_pred(pred)
@@ -288,28 +285,28 @@ def split(pred, seq):
     return yes, no
 
 
-def isplit_at(n, seq):
+def split_at(n, seq):
     """Lazily splits the sequence at given position,
        returning a pair of iterators over its start and tail."""
     a, b = tee(seq)
     return islice(a, n), islice(b, n, None)
 
-def split_at(n, seq):
+def lsplit_at(n, seq):
     """Splits the sequence at given position,
        returning a tuple of its start and tail."""
-    a, b = isplit_at(n, seq)
+    a, b = split_at(n, seq)
     return list(a), list(b)
 
-def isplit_by(pred, seq):
+def split_by(pred, seq):
     """Lazily splits the start of the sequence,
        consisting of items passing pred, from the rest of it."""
     a, b = tee(seq)
     return takewhile(pred, a), dropwhile(pred, b)
 
-def split_by(pred, seq):
+def lsplit_by(pred, seq):
     """Splits the start of the sequence,
        consisting of items passing pred, from the rest of it."""
-    a, b = isplit_by(pred, seq)
+    a, b = split_by(pred, seq)
     return list(a), list(b)
 
 
@@ -320,6 +317,7 @@ def group_by(f, seq):
     for item in seq:
         result[f(item)].append(item)
     return result
+
 
 def group_by_keys(get_keys, seq):
     """Groups items having multiple keys into a mapping key -> [item, ...].
@@ -359,11 +357,11 @@ def count_reps(seq):
 
 
 # For efficiency we use separate implementation for cutting sequences (those capable of slicing)
-def _icut_seq(drop_tail, n, step, seq):
+def _cut_seq(drop_tail, n, step, seq):
     limit = len(seq)-n+1 if drop_tail else len(seq)
     return (seq[i:i+n] for i in xrange(0, limit, step))
 
-def _icut_iter(drop_tail, n, step, seq):
+def _cut_iter(drop_tail, n, step, seq):
     it = iter(seq)
     pool = take(n, it)
     while True:
@@ -373,47 +371,47 @@ def _icut_iter(drop_tail, n, step, seq):
         pool = pool[step:]
         pool.extend(islice(it, step))
     if not drop_tail:
-        for item in _icut_seq(drop_tail, n, step, pool):
+        for item in _cut_seq(drop_tail, n, step, pool):
             yield item
 
-def _icut(drop_tail, n, step, seq=EMPTY):
+def _cut(drop_tail, n, step, seq=EMPTY):
     if seq is EMPTY:
         step, seq = n, step
     # NOTE: range() is capable of slicing in python 3,
     if isinstance(seq, Sequence) and (PY3 or not isinstance(seq, xrange)):
-        return _icut_seq(drop_tail, n, step, seq)
+        return _cut_seq(drop_tail, n, step, seq)
     else:
-        return _icut_iter(drop_tail, n, step, seq)
-
-def ipartition(n, step, seq=EMPTY):
-    """Lazily partitions seq into parts of length n.
-       Skips step items between parts if passed. Non-fitting tail is ignored."""
-    return _icut(True, n, step, seq)
+        return _cut_iter(drop_tail, n, step, seq)
 
 def partition(n, step, seq=EMPTY):
+    """Lazily partitions seq into parts of length n.
+       Skips step items between parts if passed. Non-fitting tail is ignored."""
+    return _cut(True, n, step, seq)
+
+def lpartition(n, step, seq=EMPTY):
     """Partitions seq into parts of length n.
        Skips step items between parts if passed. Non-fitting tail is ignored."""
-    return list(ipartition(n, step, seq))
-
-def ichunks(n, step, seq=EMPTY):
-    """Lazily chunks seq into parts of length n or less.
-       Skips step items between parts if passed."""
-    return _icut(False, n, step, seq)
+    return list(partition(n, step, seq))
 
 def chunks(n, step, seq=EMPTY):
+    """Lazily chunks seq into parts of length n or less.
+       Skips step items between parts if passed."""
+    return _cut(False, n, step, seq)
+
+def lchunks(n, step, seq=EMPTY):
     """Chunks seq into parts of length n or less.
        Skips step items between parts if passed."""
-    return list(ichunks(n, step, seq))
+    return list(chunks(n, step, seq))
 
-def ipartition_by(f, seq):
+def partition_by(f, seq):
     """Lazily partition seq into continuous chunks with constant value of f."""
     f = make_func(f)
     for _, items in groupby(seq, f):
         yield items
 
-def partition_by(f, seq):
+def lpartition_by(f, seq):
     """Partition seq into continuous chunks with constant value of f."""
-    return map(list, ipartition_by(f, seq))
+    return _map(list, partition_by(f, seq))
 
 
 def with_prev(seq, fill=None):
@@ -440,19 +438,19 @@ def pairwise(seq):
 try:
     from itertools import accumulate
 
-    def _ireductions(f, seq, acc):
+    def _reductions(f, seq, acc):
         last = acc
         for x in seq:
             last = f(last, x)
             yield last
 
-    def ireductions(f, seq, acc=EMPTY):
+    def reductions(f, seq, acc=EMPTY):
         if acc is EMPTY:
             return accumulate(seq) if f is operator.add else accumulate(seq, f)
-        return _ireductions(f, seq, acc)
+        return _reductions(f, seq, acc)
 
 except ImportError:
-    def ireductions(f, seq, acc=EMPTY):
+    def reductions(f, seq, acc=EMPTY):
         it = iter(seq)
         if acc is EMPTY:
             try:
@@ -468,18 +466,18 @@ except ImportError:
 
     def accumulate(iterable, func=operator.add):
         """Return series of accumulated sums (or other binary function results)."""
-        return ireductions(func, iterable)
+        return reductions(func, iterable)
 
-ireductions.__doc__ = """Yields intermediate reductions of seq by f."""
+reductions.__doc__ = """Yields intermediate reductions of seq by f."""
 
-def reductions(f, seq, acc=EMPTY):
+def lreductions(f, seq, acc=EMPTY):
     """Lists intermediate reductions of seq by f."""
-    return list(ireductions(f, seq, acc))
-
-def isums(seq, acc=EMPTY):
-    """Yields partial sums of seq."""
-    return ireductions(operator.add, seq, acc)
+    return list(reductions(f, seq, acc))
 
 def sums(seq, acc=EMPTY):
-    """Lists partial sums of seq."""
+    """Yields partial sums of seq."""
     return reductions(operator.add, seq, acc)
+
+def lsums(seq, acc=EMPTY):
+    """Lists partial sums of seq."""
+    return lreductions(operator.add, seq, acc)

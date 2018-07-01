@@ -10,7 +10,7 @@ __all__ = ['identity', 'constantly', 'caller',
            'partial', 'rpartial', 'func_partial',
            'curry', 'rcurry', 'autocurry',
            'iffy',
-           'compose', 'rcompose', 'complement', 'juxt', 'ijuxt']
+           'compose', 'rcompose', 'complement', 'juxt', 'ljuxt']
 
 
 def identity(x):
@@ -120,13 +120,13 @@ def complement(pred):
 # NOTE: using lazy map in these two will result in empty list/iterator
 #       from all calls to i?juxt result since map iterator will be depleted
 
-def juxt(*fs):
+def ljuxt(*fs):
     """Constructs a juxtaposition of the given functions.
        Result returns a list of results of fs."""
     extended_fs = map(make_func, fs)
     return lambda *a, **kw: [f(*a, **kw) for f in extended_fs]
 
-def ijuxt(*fs):
+def juxt(*fs):
     """Constructs a lazy juxtaposition of the given functions.
        Result returns an iterator of results of fs."""
     extended_fs = map(make_func, fs)

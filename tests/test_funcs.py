@@ -91,7 +91,7 @@ def test_autocurry_hard():
 
     _keep = autocurry(keep)
     assert list(_keep('01')) == ['0', '1']
-    assert _keep(int)('01') == [1]
+    assert list(_keep(int)('01')) == [1]
     with pytest.raises(TypeError): _keep(1, 2, 3)
 
 def test_autocurry_class():
@@ -130,8 +130,8 @@ def test_complement():
     assert complement(identity)([1, 2]) is False
 
 def test_juxt():
-    assert juxt(__add__, __sub__)(10, 2) == [12, 8]
-    assert map(juxt(_ + 1, _ - 1), [2, 3]) == [[3, 1], [4, 2]]
+    assert ljuxt(__add__, __sub__)(10, 2) == [12, 8]
+    assert map(ljuxt(_ + 1, _ - 1), [2, 3]) == [[3, 1], [4, 2]]
 
 def test_iffy():
     assert map(iffy(_ % 2, _ * 2, _ / 2), [1,2,3,4]) == [2,1,6,2]

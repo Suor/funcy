@@ -10,15 +10,15 @@ from .cross import basestring, xrange, izip, map, filter, imap, PY2
 from .primitives import EMPTY
 from .funcs import partial, compose
 from .funcmakers import make_func, make_pred
-from .seqs import take, ximap, ifilter
+from .seqs import take, ximap, filter as xfilter
 
 
 __all__ = ['empty', 'iteritems', 'itervalues',
            'join', 'merge', 'join_with', 'merge_with',
            'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
-           'zipdict', 'flip', 'project', 'omit', 'izip_values', 'izip_dicts',
-           'where', 'pluck', 'pluck_attr', 'invoke', 'iwhere', 'ipluck', 'ipluck_attr', 'iinvoke',
+           'zipdict', 'flip', 'project', 'omit', 'zip_values', 'zip_dicts',
+           'where', 'pluck', 'pluck_attr', 'invoke', 'lwhere', 'lpluck', 'lpluck_attr', 'linvoke',
            'get_in', 'set_in', 'update_in']
 
 
@@ -160,7 +160,7 @@ def walk_values(f, coll):
 
 def select(pred, coll):
     """Same as filter but preserves coll type."""
-    return _factory(coll)(ifilter(pred, iteritems(coll)))
+    return _factory(coll)(xfilter(pred, iteritems(coll)))
 
 def select_keys(pred, coll):
     """Select part of the collection with keys passing pred."""
@@ -211,14 +211,14 @@ def one(pred, seq=EMPTY):
     """Checks whether exactly one item in seq passes pred (or is truthy)."""
     if seq is EMPTY:
         return one(bool, pred)
-    return len(take(2, ifilter(pred, seq))) == 1
+    return len(take(2, xfilter(pred, seq))) == 1
 
 # Not same as in clojure! returns value found not pred(value)
 def some(pred, seq=EMPTY):
     """Finds first item in seq passing pred or first that is truthy."""
     if seq is EMPTY:
         return some(bool, pred)
-    return next(ifilter(pred, seq), None)
+    return next(xfilter(pred, seq), None)
 
 # TODO: a variant of some that returns mapped value,
 #       one can use some(imap(f, seq)) or first(ikeep(f, seq)) for now.
@@ -246,7 +246,7 @@ def omit(mapping, keys):
     """Removes given keys from mapping."""
     return _factory(mapping)((k, v) for k, v in iteritems(mapping) if k not in keys)
 
-def izip_values(*dicts):
+def zip_values(*dicts):
     """Yields tuples of corresponding values of several dicts."""
     if len(dicts) < 1:
         raise TypeError('izip_values expects at least one argument')
@@ -254,7 +254,7 @@ def izip_values(*dicts):
     for key in keys:
         yield tuple(d[key] for d in dicts)
 
-def izip_dicts(*dicts):
+def zip_dicts(*dicts):
     """Yields tuples like (key, val1, val2, ...)
        for each common key in all given dicts."""
     if len(dicts) < 1:
@@ -293,21 +293,21 @@ def update_in(coll, path, update, default=None):
         return copy
 
 
-def where(mappings, **cond):
+def lwhere(mappings, **cond):
     """Selects mappings containing all pairs in cond."""
     items = cond.items()
     match = lambda m: all(k in m and m[k] == v for k, v in items)
     return filter(match, mappings)
 
-def pluck(key, mappings):
+def lpluck(key, mappings):
     """Lists values for key in each mapping."""
     return map(itemgetter(key), mappings)
 
-def pluck_attr(attr, objects):
+def lpluck_attr(attr, objects):
     """Lists values of given attribute of each object."""
     return map(attrgetter(attr), objects)
 
-def invoke(objects, name, *args, **kwargs):
+def linvoke(objects, name, *args, **kwargs):
     """Makes a list of results of the obj.name(*args, **kwargs)
        for each object in objects."""
     return map(methodcaller(name, *args, **kwargs), objects)
@@ -315,21 +315,21 @@ def invoke(objects, name, *args, **kwargs):
 
 # Iterator versions for python 3 interface
 
-def iwhere(mappings, **cond):
+def where(mappings, **cond):
     """Iterates over mappings containing all pairs in cond."""
     items = cond.items()
     match = lambda m: all(k in m and m[k] == v for k, v in items)
-    return ifilter(match, mappings)
+    return xfilter(match, mappings)  # TODO: switch to ordinary python 3 filter
 
-def ipluck(key, mappings):
+def pluck(key, mappings):
     """Iterates over values for key in mappings."""
     return imap(itemgetter(key), mappings)
 
-def ipluck_attr(attr, objects):
+def pluck_attr(attr, objects):
     """Iterates over values of given attribute of given objects."""
     return imap(attrgetter(attr), objects)
 
-def iinvoke(objects, name, *args, **kwargs):
+def invoke(objects, name, *args, **kwargs):
     """Yields results of the obj.name(*args, **kwargs)
        for each object in objects."""
     return imap(methodcaller(name, *args, **kwargs), objects)

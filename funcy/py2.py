@@ -1,33 +1,41 @@
+"""
+Rewrite function names to represent Python 2 list-by-default interface.
+Iterator versions go with i prefix.
+"""
 import sys
 
-from .calc import *
-from .colls import *
-from .tree import *
-from .decorators import *
-from .funcolls import *
-from .funcs import *
-from .seqs import *
-from .types import *
-from .strings import *
-from .flow import *
-from .objects import *
-from .debug import *
-from .primitives import *
+from . import py3
+from .py3 import *  # noqa
+from .py3 import __all__
+from .cross import izip  # noqa, reexport
+
+# # NOTE: manually renaming these to make PyCharm happy.
+# #       Not renaming iversions manually to not shade original definition.
+# #       Why it's shaded by rename? PyCharm only knows...
+# from .py3 import (lmap as map, lfilter as filter, lremove as remove, lkeep as keep,  # noqa
+#     lwithout as without, lconcat as concat, lcat as cat, lflatten as flatten, lmapcat as mapcat,
+#     ldistinct as distinct, lsplit as split, split_at as lsplit_at, split_by as lsplit_by,
+#     partition as lpartition, chunks as lchunks, partition_by as lpartition_by,
+#     reductions as lreductions, sums as lsums, juxt as ljuxt,
+#     tree_leaves as ltree_leaves, tree_nodes as ltree_nodes,
+#     where as lwhere, pluck as lpluck, pluck_attr as lpluck_attr, invoke as linvoke)
 
 
-# Setup __all__
-modules = ('calc', 'colls', 'tree', 'decorators', 'funcolls', 'funcs', 'seqs', 'types',
-           'strings', 'flow', 'objects', 'debug', 'primitives')
-__all__ = cat(sys.modules['funcy.' + m].__all__ for m in modules)
+RENAMES = {}
+for name in ('map', 'filter', 'remove', 'keep', 'without', 'concat', 'cat', 'flatten',
+             'mapcat', 'distinct', 'split', 'split_at', 'split_by', 'partition', 'chunks',
+             'partition_by', 'reductions', 'sums', 'juxt',
+             'tree_leaves', 'tree_nodes',
+             'where', 'pluck', 'pluck_attr', 'invoke'):
+    RENAMES['l' + name] = name
+    RENAMES[name] = 'i' + name
+RENAMES['zip_values'] = 'izip_values'
+RENAMES['zip_dicts'] = 'izip_dicts'
 
 
-# Python 2 style zip() for Python 3
-from .cross import PY3
-if PY3:
-    _zip = zip
-    def zip(*seqs):
-        """List zip() version."""
-        return list(_zip(*seqs))
-    __all__ += ['zip']  # HACK: using this instead of .append() to not trigger PyCharm
-else:
-    zip = zip
+# HACK: list concat instead of .append() to not trigger PyCharm
+__all__ = [RENAMES.get(name, name) for name in __all__ if name != 'lzip'] + ['izip']
+
+py2 = sys.modules[__name__]
+for old, new in RENAMES.items():
+    setattr(py2, new, getattr(py3, old))

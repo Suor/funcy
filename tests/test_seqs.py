@@ -59,16 +59,16 @@ def test_ilen():
     assert ilen(xrange(10)) == 10
 
 
-def test_map():
-    assert map(_ * 2, [2, 3]) == [4, 6]
-    assert map(None, [2, 3]) == [2, 3]
-    assert map(_ + _, [1, 2], [4, 5]) == [5, 7]
+def test_lmap():
+    assert lmap(_ * 2, [2, 3]) == [4, 6]
+    assert lmap(None, [2, 3]) == [2, 3]
+    assert lmap(_ + _, [1, 2], [4, 5]) == [5, 7]
 
-    assert map(r'\d+', ['a2', '13b']) == ['2', '13']
-    assert map({'a': 1, 'b': 2}, 'ab') == [1, 2]
-    assert map(set([1,2,3]), [0, 1, 2]) == [False, True, True]
-    assert map(1, ['abc', '123']) == ['b', '2']
-    assert map(slice(2), ['abc', '123']) == ['ab', '12']
+    assert lmap(r'\d+', ['a2', '13b']) == ['2', '13']
+    assert lmap({'a': 1, 'b': 2}, 'ab') == [1, 2]
+    assert lmap(set([1,2,3]), [0, 1, 2]) == [False, True, True]
+    assert lmap(1, ['abc', '123']) == ['b', '2']
+    assert lmap(slice(2), ['abc', '123']) == ['ab', '12']
 
 @pytest.mark.skipif(PY3, reason="map(None, ...) doesn't work in python 3")
 def test_map_multi():
@@ -82,39 +82,39 @@ def test_imap_strange():
     assert list(imap(None, 'abc')) == [('a',), ('b',), ('c',)]
 
 def test_filter():
-    assert filter(None, [2, 3, 0]) == [2, 3]
-    assert filter(r'\d+', ['a2', '13b', 'c']) == ['a2', '13b']
-    assert filter(set([1,2,3]), [0, 1, 2, 4, 1]) == [1, 2, 1]
+    assert lfilter(None, [2, 3, 0]) == [2, 3]
+    assert lfilter(r'\d+', ['a2', '13b', 'c']) == ['a2', '13b']
+    assert lfilter(set([1,2,3]), [0, 1, 2, 4, 1]) == [1, 2, 1]
 
 def test_remove():
-    assert remove(_ > 3, range(10)) == [0, 1, 2, 3]
-    assert remove('^a', ['a', 'b', 'ba']) == ['b', 'ba']
+    assert lremove(_ > 3, range(10)) == [0, 1, 2, 3]
+    assert lremove('^a', ['a', 'b', 'ba']) == ['b', 'ba']
 
 def test_keep():
-    assert keep(_ % 3, range(5)) == [1, 2, 1]
-    assert keep(range(5)) == [1, 2, 3, 4]
-    assert keep(mapcat(range, range(4))) == [1, 1, 2]
+    assert lkeep(_ % 3, range(5)) == [1, 2, 1]
+    assert lkeep(range(5)) == [1, 2, 3, 4]
+    assert lkeep(mapcat(range, range(4))) == [1, 1, 2]
 
 def test_concat():
-    assert concat('ab', 'cd') == list('abcd')
-    assert concat() == []
+    assert lconcat('ab', 'cd') == list('abcd')
+    assert lconcat() == []
 
 def test_cat():
-    assert cat('abcd') == list('abcd')
-    assert cat(range(x) for x in range(3)) == [0, 0, 1]
+    assert lcat('abcd') == list('abcd')
+    assert lcat(range(x) for x in range(3)) == [0, 0, 1]
 
 def test_flatten():
-    assert flatten([1, [2, 3]]) == [1, 2, 3]
-    assert flatten([[1, 2], 3]) == [1, 2, 3]
-    assert flatten([(2, 3)]) == [2, 3]
-    assert flatten([iter([2, 3])]) == [2, 3]
+    assert lflatten([1, [2, 3]]) == [1, 2, 3]
+    assert lflatten([[1, 2], 3]) == [1, 2, 3]
+    assert lflatten([(2, 3)]) == [2, 3]
+    assert lflatten([iter([2, 3])]) == [2, 3]
 
 def test_flatten_follow():
-    assert flatten([1, [2, 3]], follow=is_list) == [1, 2, 3]
-    assert flatten([1, [(2, 3)]], follow=is_list) == [1, (2, 3)]
+    assert lflatten([1, [2, 3]], follow=is_list) == [1, 2, 3]
+    assert lflatten([1, [(2, 3)]], follow=is_list) == [1, (2, 3)]
 
 def test_mapcat():
-    assert mapcat(lambda x: [x, x], 'abc') == list('aabbcc')
+    assert lmapcat(lambda x: [x, x], 'abc') == list('aabbcc')
 
 def test_interleave():
     assert list(interleave('ab', 'cd')) == list('acbd')
@@ -129,28 +129,24 @@ def test_takewhile():
 
 
 def test_distinct():
-    assert distinct('abcbad') == list('abcd')
-    assert distinct([{}, {}, {'a': 1}, {'b': 2}], key=len) == [{}, {'a': 1}]
-    assert distinct(['ab', 'cb', 'ad'], key=0) == ['ab', 'cb']
+    assert ldistinct('abcbad') == list('abcd')
+    assert ldistinct([{}, {}, {'a': 1}, {'b': 2}], key=len) == [{}, {'a': 1}]
+    assert ldistinct(['ab', 'cb', 'ad'], key=0) == ['ab', 'cb']
 
-# Separate test as split() is not implemented via it.
-def test_isplit():
-    assert map(list, isplit(_ % 2, range(5))) == [[1, 3], [0, 2, 4]]
-
+# Separate test as lsplit() is not implemented via it.
 def test_split():
-    assert split(_ % 2, range(5)) == ([1, 3], [0, 2, 4])
+    assert lmap(list, split(_ % 2, range(5))) == [[1, 3], [0, 2, 4]]
+
+def test_lsplit():
+    assert lsplit(_ % 2, range(5)) == ([1, 3], [0, 2, 4])
     # This behaviour moved to split_at()
-    with pytest.raises(TypeError): split(2, range(5))
+    with pytest.raises(TypeError): lsplit(2, range(5))
 
 def test_split_at():
-    assert split_at(2, range(5)) == ([0, 1], [2, 3, 4])
-
-def test_split_at_pred():
-    # This behaviour moved to split_by()
-    with pytest.raises(ValueError): split_at(_ % 2, range(5))
+    assert lsplit_at(2, range(5)) == ([0, 1], [2, 3, 4])
 
 def test_split_by():
-    assert split_by(_ % 2, [1, 2, 3]) == ([1], [2, 3])
+    assert lsplit_by(_ % 2, [1, 2, 3]) == ([1], [2, 3])
 
 def test_group_by():
     assert group_by(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}
@@ -174,21 +170,21 @@ def test_count_reps():
     assert count_reps([0, 1, 0]) == {0: 2, 1: 1}
 
 def test_partition():
-    assert partition(2, [0, 1, 2, 3, 4]) == [[0, 1], [2, 3]]
-    assert partition(2, 1, [0, 1, 2, 3]) == [[0, 1], [1, 2], [2, 3]]
+    assert lpartition(2, [0, 1, 2, 3, 4]) == [[0, 1], [2, 3]]
+    assert lpartition(2, 1, [0, 1, 2, 3]) == [[0, 1], [1, 2], [2, 3]]
     # test iters
-    assert partition(2, iter(range(5))) == [[0, 1], [2, 3]]
-    assert map(list, partition(2, xrange(5))) == [[0, 1], [2, 3]]
+    assert lpartition(2, iter(range(5))) == [[0, 1], [2, 3]]
+    assert lmap(list, lpartition(2, xrange(5))) == [[0, 1], [2, 3]]
 
 def test_chunks():
-    assert chunks(2, [0, 1, 2, 3, 4]) == [[0, 1], [2, 3], [4]]
-    assert chunks(2, 1, [0, 1, 2, 3]) == [[0, 1], [1, 2], [2, 3], [3]]
-    assert chunks(3, 1, iter(range(3))) == [[0, 1, 2], [1, 2], [2]]
+    assert lchunks(2, [0, 1, 2, 3, 4]) == [[0, 1], [2, 3], [4]]
+    assert lchunks(2, 1, [0, 1, 2, 3]) == [[0, 1], [1, 2], [2, 3], [3]]
+    assert lchunks(3, 1, iter(range(3))) == [[0, 1, 2], [1, 2], [2]]
 
 def test_partition_by():
-    assert partition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
-    assert partition_by('x', 'abxcd') == [['a', 'b'], ['x'], ['c', 'd']]
-    assert partition_by('\d', '1211') == [['1'], ['2'], ['1','1']]
+    assert lpartition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
+    assert lpartition_by('x', 'abxcd') == [['a', 'b'], ['x'], ['c', 'd']]
+    assert lpartition_by('\d', '1211') == [['1'], ['2'], ['1','1']]
 
 
 def test_with_prev():
@@ -202,17 +198,17 @@ def test_pairwise():
 
 
 def test_reductions():
-    assert reductions(add, []) == []
-    assert reductions(add, [None]) == [None]
-    assert reductions(add, [1, 2, 3, 4]) == [1, 3, 6, 10]
-    assert reductions(lambda x, y: x + [y], [1,2,3], []) == [[1], [1, 2], [1, 2, 3]]
+    assert lreductions(add, []) == []
+    assert lreductions(add, [None]) == [None]
+    assert lreductions(add, [1, 2, 3, 4]) == [1, 3, 6, 10]
+    assert lreductions(lambda x, y: x + [y], [1,2,3], []) == [[1], [1, 2], [1, 2, 3]]
 
 def test_sums():
-    assert sums([]) == []
-    assert sums([1, 2, 3, 4]) == [1, 3, 6, 10]
-    assert sums([[1],[2],[3]]) == [[1], [1, 2], [1, 2, 3]]
+    assert lsums([]) == []
+    assert lsums([1, 2, 3, 4]) == [1, 3, 6, 10]
+    assert lsums([[1],[2],[3]]) == [[1], [1, 2], [1, 2, 3]]
 
 def test_without():
-    assert without([]) == []
-    assert without([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert without([1, 2, 1, 0, 3, 1, 4], 0, 1) == [2, 3, 4]
+    assert lwithout([]) == []
+    assert lwithout([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert lwithout([1, 2, 1, 0, 3, 1, 4], 0, 1) == [2, 3, 4]

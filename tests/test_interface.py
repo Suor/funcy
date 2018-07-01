@@ -20,9 +20,9 @@ def test_match():
     assert funcy.__all__ == py.__all__
 
 
-@pytest.mark.skipif(PY3, reason="modules use python 2 internally")
-def test_full_py2():
-    assert sorted(funcy.__all__) == sorted(cat(m.__all__ for m in modules))
+@pytest.mark.skipif(PY2, reason="modules use python 3 internally")
+def test_full_py3():
+    assert sorted(funcy.__all__) == sorted(cat(m.__all__ for m in modules) + ['lzip'])
 
 
 def test_full():
