@@ -2,8 +2,7 @@
 
 .rst-content dl:not(.docutils) dt {
     float: left;
-    clear: left;
-    margin: 2px 0 1px 0;
+    margin: 2px 2px 1px 0px !important;
 }
 
 .rst-content dl:not(.docutils) dt + dd {
@@ -12,4 +11,19 @@
 
 .rst-content dl dd {
     clear: both;
+}
+
+
+.rst-content div[class^='highlight'] pre {
+    padding: 7px 7px 4px 7px;
+    font-size: 14px;
+    line-height: 135%;
+}
+
+code.literal .pre {
+    font-size: 13px;
+}
+
+.rst-content .external code {
+    color: #404040;
 }
