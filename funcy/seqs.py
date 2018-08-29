@@ -108,7 +108,6 @@ def ilen(seq):
 
 # TODO: tree-seq equivalent
 
-# TODO: map/imap signatures???
 def lmap(f, *seqs):
     """An extended version of builtin map().
        Derives a mapper from string, int, slice, dict or set."""
