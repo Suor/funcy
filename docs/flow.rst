@@ -97,8 +97,8 @@ Flow
 
         fallback(
             (partial(send_mail, ADMIN_EMAIL, message), SMTPException),
-            partial(log.error, message),
-            raiser(FeedbackError, "Unable to notify admin")
+            partial(log.error, message),          # Handle any Exception
+            (raiser(FeedbackError, "Failed"), ()) # Handle nothing
         )
 
 

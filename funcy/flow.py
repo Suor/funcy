@@ -30,6 +30,8 @@ def raiser(exception_or_class=Exception, *args, **kwargs):
 # since @ignore and @silent should be used for very simple and fast functions
 def ignore(errors, default=None):
     """Alters function to ignore given errors, returning default instead."""
+    errors = _ensure_exceptable(errors)
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -77,10 +79,7 @@ except ImportError:
 @contextmanager
 def reraise(errors, into):
     """Reraises errors as other exception."""
-    if isinstance(errors, list):
-        # because `except` does not catch exceptions from list
-        errors = tuple(errors)
-
+    errors = _ensure_exceptable(errors)
     try:
         yield
     except errors as e:
@@ -92,10 +91,7 @@ def retry(call, tries, errors=Exception, timeout=0):
     """Makes decorated function retry up to tries times.
        Retries only on specified errors.
        Sleeps timeout or timeout(attempt) seconds between tries."""
-    if isinstance(errors, list):
-        # because `except` does not catch exceptions from list
-        errors = tuple(errors)
-
+    errors = _ensure_exceptable(errors)
     for attempt in range(tries):
         try:
             return call()
@@ -114,10 +110,17 @@ def fallback(*approaches):
        Each approach has a form of (callable, expected_errors)."""
     for approach in approaches:
         func, catch = (approach, Exception) if callable(approach) else approach
+        catch = _ensure_exceptable(catch)
         try:
             return func()
         except catch:
             pass
+
+def _ensure_exceptable(errors):
+    """Ensures that errors are passable to except clause.
+       I.e. should be BaseException subclass or a tuple."""
+    is_exception = isinstance(errors, type) and issubclass(errors, BaseException)
+    return errors if is_exception else tuple(errors)
 
 
 class ErrorRateExceeded(Exception):
