@@ -1,66 +1,5 @@
 .. raw:: html
-
-    <script src="_static/nhpup_1.1.js"></script>
-    <style>
-    #pup {
-      position:absolute;
-      z-index:200; /* aaaalways on top*/
-      padding: 3px 7px 5px;
-      margin-left: 5px;
-      margin-top: 15px;
-      border-radius: 3px;
-      background-color: #343131;
-      color: #b3b3b3;
-      font-size: 0.95em;
-      white-space: nowrap;
-    }
-    .descriptions {display: none}
-    .rst-content table.docutils td {vertical-align: top; padding: 6px 16px; line-height: 20px}
-    .wy-table-responsive table td {white-space: normal}
-    .wy-table-responsive table td:first-child {white-space: nowrap}
-
-    .rst-content code.xref {color: #2E7FB3; font-size: 90%;
-        padding: 0px 2px; border: none; background: none; line-height: 20px}
-    .--rst-content code.xref {color: #2E7FB3; font-size: 95%; font-weight: normal;
-        padding: 0px 2px; border: none; background: none; line-height: 20px}
-
-    .--rst-content code.xref {color: #E74C3C; font-size: 90%;
-        padding: 0px 2px; border: none; background: none; line-height: 20px}
-
-
-    .rst-content code.xref {line-height: 20px}
-
-    #pup strong, #pup b {color: #ddd}
-    #pup em {color: #3591CC; font-weight: bold; margin-right: 2px}
-    #pup b em {margin-right: 0}
-    #pup em span {color: #b3b3b3; opacity: 0.7; font-style: normal;
-                  display:inline-block; padding:0 1px 0 3px}
-    #pup code {background: transparent; border: none; font-size: 90%; padding: 0 3px;}
-    </style>
-
-    <script>
-        function defer(method) {
-            if (window.jQuery)
-                method();
-            else
-                setTimeout(function() { defer(method) }, 50);
-        }
-        defer(function () {
-            // Strip parentheses
-            $('.py-func .pre').each(function () {
-                var text = $(this).text();
-                if (text.substr(-2) === '()') $(this).text(text.substr(0, text.length-2));
-            })
-
-            $('a[href="#colls"]').attr('title', 'dicts-more')
-            $('h2 a[href*=extended_fns]').attr('title', 'extended-fns')
-            nhpup.initialize()
-            $('.descriptions div').each(function () {
-                var name = this.getAttribute('name');
-                $('a[title="'+name+'"]').on('mouseover', nhpup.popup(this.innerHTML, {width: ''})).removeAttr('title');
-            })
-        })
-    </script>
+    :file: _popups.html
 
 
 .. _cheatsheet:
@@ -84,7 +23,7 @@ Join       :func:`cat` :func:`concat` :func:`flatten` :func:`mapcat` :func:`inte
 Partition  :func:`chunks` :func:`partition` :func:`partition_by` :func:`split_at` :func:`split_by`
 Group      :func:`split` :func:`count_by` :func:`count_reps` :func:`group_by` :func:`group_by_keys` :func:`group_values`
 Aggregate  :func:`ilen` :func:`reductions` :func:`sums` :func:`all` :func:`any` :func:`none` :func:`one` :func:`count_by` :func:`count_reps`
-Iterate    :func:`pairwise` :func:`with_prev` :func:`with_next` :func:`izip_values` :func:`izip_dicts` :func:`tree_leaves` :func:`tree_nodes`
+Iterate    :func:`pairwise` :func:`with_prev` :func:`with_next` :func:`zip_values` :func:`zip_dicts` :func:`tree_leaves` :func:`tree_nodes`
 ========== ==============================================================
 
 
@@ -97,7 +36,7 @@ Collections
 Join                  :func:`merge` :func:`merge_with` :func:`join` :func:`join_with`
 Transform             :func:`walk` :func:`walk_keys` :func:`walk_values`
 Filter                :func:`select` :func:`select_keys` :func:`select_values` :func:`compact`
-Dicts :ref:`*<colls>` :func:`flip` :func:`zipdict` :func:`pluck` :func:`where` :func:`itervalues` :func:`iteritems` :func:`izip_values` :func:`izip_dicts` :func:`project` :func:`omit`
+Dicts :ref:`*<colls>` :func:`flip` :func:`zipdict` :func:`pluck` :func:`where` :func:`itervalues` :func:`iteritems` :func:`zip_values` :func:`zip_dicts` :func:`project` :func:`omit`
 Misc                  :func:`empty` :func:`get_in` :func:`set_in` :func:`update_in`
 ===================== ==============================================================
 

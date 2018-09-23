@@ -37,10 +37,12 @@ Objects
     A base class that prevents its member functions turning into methods::
 
         class Checks(namespace):
-            is_str = lambda value: isinstance(value, str)
+            is_str = isa(str)
             max_len = lambda l: lambda value: len(value) <= l
 
         field_checks = all_fn(Checks.is_str, Checks.max_len(30))
+
+    This is noop in Python 3 as it doesn't have unbound methods anyway.
 
 
 .. class:: LazyObject(init)

@@ -1,7 +1,7 @@
-Python 3 support
-================
+Python 2/3 support
+==================
 
-Funcy works with python 3 as of version 0.9. However, it has slightly different interface. It follows python 3 convention of "iterator by default" for utilities like :func:`map`, :func:`filter` and such. When funcy has two versions of utility (list and iterator) they are named like :func:`keep` and :func:`ikeep` in python 2 and :func:`lkeep` and :func:`keep` in python 3. You can look up a full table of differently named functions below.
+Funcy works with both python 2 and 3. However, it has slightly different interface. It follows python 3 convention of "iterator by default" for utilities like :func:`map`, :func:`filter` and such. When funcy has two versions of utility (list and iterator) they are named like :func:`keep` and :func:`ikeep` in python 2 and :func:`lkeep` and :func:`keep` in python 3. You can look up a full table of differently named functions below.
 
 
 Writing cross-python code
@@ -19,18 +19,21 @@ You can do that two ways: writing python 2 code that works in python 3 or vice v
 
     # write python 3 style code here
 
-You can even import :func:`map`, :func:`imap`, :func:`filter`, :func:`ifilter`, :func:`py:zip` and :func:`~itertools.izip`.
+You can even import :func:`map`, :func:`filter`, :func:`py3:zip` and their list and iterator versions.
 
 
 Full table of python dependent function names
 ---------------------------------------------
+
+.. raw:: html
+    :file: _popups.html
 
 ======================  ======================= ===================== ==========================
 Python 2 / list         Python 2 / iterator     Python 3 / list       Python 3 / iterator
 ======================  ======================= ===================== ==========================
 :func:`map`             :func:`imap`            :func:`lmap`          :func:`map`
 :func:`filter`          :func:`ifilter`         :func:`lfilter`       :func:`filter`
-:func:`py:zip`          :func:`~itertools.izip` :func:`lzip`          :func:`py3:zip`
+:func:`py2:zip`         :func:`~itertools.izip` :func:`lzip`          :func:`py3:zip`
 :func:`remove`          :func:`iremove`         :func:`lremove`       :func:`remove`
 :func:`keep`            :func:`ikeep`           :func:`lkeep`         :func:`keep`
 :func:`without`         :func:`iwithout`        :func:`lwithout`      :func:`without`
@@ -55,9 +58,13 @@ Python 2 / list         Python 2 / iterator     Python 3 / list       Python 3 /
 
 :func:`where`           :func:`iwhere`          :func:`lwhere`        :func:`where`
 :func:`pluck`           :func:`ipluck`          :func:`lpluck`        :func:`pluck`
-:func:`pluck_attr`      :func:`ipluck_attr`     :func:`lpuck_attr`    :func:`pluck_attr`
+:func:`pluck_attr`      :func:`ipluck_attr`     :func:`lpluck_attr`   :func:`pluck_attr`
 :func:`invoke`          :func:`iinvoke`         :func:`linvoke`       :func:`invoke`
 
 *-*                     :func:`izip_values`     *-*                   :func:`zip_values`
 *-*                     :func:`izip_dicts`      *-*                   :func:`zip_dicts`
 ======================  ======================= ===================== ==========================
+
+
+.. raw:: html
+    :file: descriptions.html

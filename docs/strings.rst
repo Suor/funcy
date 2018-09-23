@@ -1,6 +1,15 @@
 String utils
 ============
 
+.. Prevent text wrap in captures table
+
+.. raw:: html
+
+    <style>
+    .wy-table-responsive table td {white-space: nowrap}
+    </style>
+
+
 .. function:: re_find(regex, s, flags=0)
 
     Finds ``regex`` in ``s``, returning the match in the simplest possible form guessed by captures in given regular expression:
@@ -37,7 +46,7 @@ String utils
 .. function:: re_all(regex, s, flags=0)
               re_iter(regex, s, flags=0)
 
-    Returns a list or iterator of all matches of ``regex`` in ``s``. Matches are presented in most simple form possible, see table in :func:`re_find` docs.
+    Returns a list or an iterator of all matches of ``regex`` in ``s``. Matches are presented in most simple form possible, see table in :func:`re_find` docs.
 
     ::
 
@@ -47,7 +56,7 @@ String utils
 
 .. function:: re_finder(regex, flags=0)
 
-    Returns a function that calls :func:`re_find` for it's sole argument. It's main purpose is quickly constructing mapper functions for :func:`map` and friends.
+    Returns a function that calls :func:`re_find` for its sole argument. Its main purpose is quickly constructing mapper functions for :func:`map` and friends.
 
     See also :ref:`extended_fns`.
 

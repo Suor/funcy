@@ -88,12 +88,12 @@
      and then yields the rest.
 </div>
 <div name="split_at">
-    <b>split_at<em>(n, seq)</em><br>isplit_at<em>(n, seq)</em></b><br><br>
+    <b>split_at<em>(n, seq)</em><br>lsplit_at<em>(n, seq)</em></b><br><br>
     Splits the sequence at given position,<br>
      returning a tuple of its start and tail.
 </div>
 <div name="split_by">
-    <b>split_by<em>(pred, seq)</em><br>isplit_by<em>(pred, seq)</em></b><br><br>
+    <b>split_by<em>(pred, seq)</em><br>lsplit_by<em>(pred, seq)</em></b><br><br>
     Splits the start of the sequence,<br>
      consisting of items passing <em>pred</em>,<br>
      from the rest of it.
@@ -101,69 +101,69 @@
 
 <!-- Seqs Transform -->
 <div name="map">
-    <b>map<em>(f, *seqs)</em><br>imap<em>(f, *seqs)</em></b><br><br>
-    Extended versions of <b>map()</b> and <b>imap()</b>
+    <b>map<em>(f, *seqs)</em><br>lmap<em>(f, *seqs)</em></b><br><br>
+    Extended versions of <b>map()</b> and <b>list(map())</b>
 </div>
 <div name="mapcat">
-    <b>mapcat<em>(f, *seqs)</em><br>imapcat<em>(f, *seqs)</em></b><br><br>
+    <b>mapcat<em>(f, *seqs)</em><br>lmapcat<em>(f, *seqs)</em></b><br><br>
     Maps given sequence(s) and concatenates the results.
 </div>
 <div name="keep">
-    <b>keep<em>(<span>[</span>f<span>, ]</span>*seqs)</em><br>ikeep<em>(<span>[</span>f<span>, ]</span>*seqs)</em></b><br><br>
+    <b>keep<em>(<span>[</span>f<span>, ]</span>*seqs)</em><br>lkeep<em>(<span>[</span>f<span>, ]</span>*seqs)</em></b><br><br>
     Maps <em>seq</em> with <em>f</em> and filters out falsy results.<br>
     Simply removes falsy values in one argument version.
 </div>
 <div name="pluck" width="300">
-    <b>pluck<em>(key, mappings)</em><br>ipluck<em>(key, mappings)</em></b><br><br>
-    Lists or yields values for <em>key</em> in each mapping.
+    <b>pluck<em>(key, mappings)</em><br>lpluck<em>(key, mappings)</em></b><br><br>
+    Yields or lists values for <em>key</em> in each mapping.
 </div>
 <div name="pluck_attr">
-    <b>pluck_attr<em>(attr, objects)</em><br>ipluck_attr<em>(attr, objects)</em></b><br><br>
-    List or yields values of <em>attr</em> of each object.
+    <b>pluck_attr<em>(attr, objects)</em><br>lpluck_attr<em>(attr, objects)</em></b><br><br>
+    Yields or lists values of <em>attr</em> of each object.
 </div>
 <div name="invoke">
     <b>invoke<em>(objects, name, *args, **kwargs)</em><br>
-       iinvoke<em>(objects, name, *args, **kwargs)</em></b><br><br>
-    Lists or yields results of the given method call<br>
+       linvoke<em>(objects, name, *args, **kwargs)</em></b><br><br>
+    Yields or lists results of the given method call<br>
      for each object in <em>objects</em>.
 </div>
 
 <!-- Seqs Filter -->
 <div name="filter">
-    <b>filter<em>(pred, seq)</em><br>ifilter<em>(pred, seq)</em></b><br><br>
-    Extended versions of <b>filter()</b> and <b>ifilter()</b>.
+    <b>filter<em>(pred, seq)</em><br>lfilter<em>(pred, seq)</em></b><br><br>
+    Extended versions of <b>filter()</b> and <b>list(filter())</b>.
 </div>
 <div name="remove">
-    <b>remove<em>(pred, seq)</em><br>iremove<em>(pred, seq)</em></b><br><br>
+    <b>remove<em>(pred, seq)</em><br>lremove<em>(pred, seq)</em></b><br><br>
     Removes items from <em>seq</em> passing given predicate.
 </div>
 <div name="distinct">
-    <b>distinct<em>(pred, key=identity)</em><br>idistinct<em>(pred, key=identity)</em></b><br><br>
+    <b>distinct<em>(pred, key=identity)</em><br>ldistinct<em>(pred, key=identity)</em></b><br><br>
     Removes items having same <em>key</em> from <em>seq</em>.<br>
      Preserves order.
 </div>
 <div name="where">
-    <b>where<em>(mappings, **cond)</em><br>iwhere<em>(mappings, **cond)</em></b><br><br>
+    <b>where<em>(mappings, **cond)</em><br>lwhere<em>(mappings, **cond)</em></b><br><br>
     Selects <em>mappings</em> containing all pairs in <em>cond</em>.
 </div>
 <div name="without">
-    <b>without<em>(seq, *items)</em><br>iwithout<em>(seq, *items)</em></b><br><br>
+    <b>without<em>(seq, *items)</em><br>lwithout<em>(seq, *items)</em></b><br><br>
     Returns sequence without <em>items</em>,<br>
      preserves order.
 </div>
 
 <!-- Seqs Join -->
 <div name="cat">
-    <b>cat<em>(seqs)</em><br>icat<em>(seqs)</em></b><br><br>
+    <b>cat<em>(seqs)</em><br>lcat<em>(seqs)</em></b><br><br>
     Concatenates passed sequences.
 </div>
 <div name="concat">
-    <b>concat<em>(*seqs)</em><br>iconcat<em>(*seqs)</em></b><br><br>
+    <b>concat<em>(*seqs)</em><br>lconcat<em>(*seqs)</em></b><br><br>
     Concatenates several sequences.
 </div>
 <div name="flatten">
     <b>flatten<em>(seq, follow=is_seqcont)</em><br>
-       iflatten<em>(seq, follow=is_seqcont)</em></b><br><br>
+       lflatten<em>(seq, follow=is_seqcont)</em></b><br><br>
     Flattens arbitrary nested sequence,<br>
     dives into when <code>follow(item)</code> is truthy.
 </div>
@@ -176,24 +176,28 @@
     <b>interpose<em>(sep, seq)</em></b><br><br>
     Yields items of <em>seq</em> separated by <em>sep</em>.
 </div>
+<div name="zip">
+    <b>lzip<em>(*seqs)</em></b><br><br>
+       List version of <b>zip()</b>
+</div>
 
 <!-- Seqs Partition -->
 <div name="chunks">
     <b>chunks<em>(n, <span>[</span>step<span>, ]</span>seq)</em><br>
-      ichunks<em>(n, <span>[</span>step<span>, ]</span>seq)</em></b><br><br>
+      lchunks<em>(n, <span>[</span>step<span>, ]</span>seq)</em></b><br><br>
     Chunks <em>seq</em> into parts of length <em>n</em> or less.<br>
     Skips <em>step</em> items between chunks.
 </div>
 <div name="partition">
     <b>partition<em>(n, <span>[</span>step<span>, ]</span>seq)</em><br>
-      ipartition<em>(n, <span>[</span>step<span>, ]</span>seq)</em></b><br><br>
+      lpartition<em>(n, <span>[</span>step<span>, ]</span>seq)</em></b><br><br>
     Partitions <em>seq</em> into parts of length <em>n</em>. <br>
     Skips <em>step</em> items between parts.<br>
     Non-fitting tail is ignored.
 </div>
 <div name="partition_by">
     <b>partition_by<em>(f, seq)</em><br>
-      ipartition_by<em>(f, seq)</em></b><br><br>
+      lpartition_by<em>(f, seq)</em></b><br><br>
     Partition <em>seq</em> into continuous chunks<br>
      with constant value of <em>f</em>.
 </div>
@@ -201,7 +205,7 @@
 <!-- Seqs Group -->
 <div name="split">
     <b>split<em>(pred, seq)</em><br>
-      isplit<em>(pred, seq)</em></b><br><br>
+      lsplit<em>(pred, seq)</em></b><br><br>
      Splits <em>seq</em> items which pass <em>pred</em><br>
       from the ones that don't.
 </div>
@@ -234,12 +238,12 @@
 </div>
 <div name="reductions">
     <b>reductions<em>(f, seq<span>[, </span>acc<span>]</span>)</em><br>
-      ireductions<em>(f, seq<span>[, </span>acc<span>]</span>)</em></b><br><br>
+      lreductions<em>(f, seq<span>[, </span>acc<span>]</span>)</em></b><br><br>
     Constructs intermediate reductions of <em>seq</em> by <em>f</em>.
 </div>
 <div name="sums">
     <b>sums<em>(seq<span>[, </span>acc<span>]</span>)</em><br>
-      isums<em>(seq<span>[, </span>acc<span>]</span>)</em></b><br><br>
+      lsums<em>(seq<span>[, </span>acc<span>]</span>)</em></b><br><br>
     Returns a sequence of partial sums of <em>seq</em>.
 </div>
 <div name="all">
@@ -272,23 +276,23 @@
     <b>with_next<em>(seq, fill=None)</em></b><br><br>
     Yields each item from <em>seq</em> with the next one.
 </div>
-<div name="izip_values">
-    <b>izip_values<em>(*dicts)</em></b><br><br>
+<div name="zip_values">
+    <b>zip_values<em>(*dicts)</em></b><br><br>
     Yields tuples of corresponding values of given <em>dicts</em>.
 </div>
-<div name="izip_dicts">
-    <b>izip_dicts<em>(*dicts)</em></b><br><br>
+<div name="zip_dicts">
+    <b>zip_dicts<em>(*dicts)</em></b><br><br>
     Yields tuples like <code>(key, val1, val2, ...)</code><br>
     for each common key in all given <em>dicts</em>.
 </div>
 <div name="tree_leaves">
     <b>tree_leaves<em>(root, follow=is_seqcont, children=iter)</em><br>
-      itree_leaves<em>(root, follow=is_seqcont, children=iter)</em></b><br><br>
+      ltree_leaves<em>(root, follow=is_seqcont, children=iter)</em></b><br><br>
     Lists or iterates over tree leaves.
 </div>
 <div name="tree_nodes">
     <b>tree_nodes<em>(root, follow=is_seqcont, children=iter)</em><br>
-      itree_nodes<em>(root, follow=is_seqcont, children=iter)</em></b><br><br>
+      ltree_nodes<em>(root, follow=is_seqcont, children=iter)</em></b><br><br>
     Lists or iterates over tree nodes.
 </div>
 
@@ -472,7 +476,7 @@
     Composes <em>fs</em>, calling them from left to right.
 </div>
 <div name="juxt">
-    <b>juxt<em>(*fs)</em><br>ijuxt<em>(*fs)</em></b><br><br>
+    <b>juxt<em>(*fs)</em><br>ljuxt<em>(*fs)</em></b><br><br>
     Constructs a juxtaposition of the given functions.<br>
     Result returns a list or an iterator of results of <em>fs</em>.
 </div>

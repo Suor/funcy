@@ -65,19 +65,19 @@ Manipulate sequences:
     take(4, iterate(double, 1)) # [1, 2, 4, 8]
     first(drop(3, count(10)))   # 13
 
-    remove(even, [1, 2, 3])     # [1, 3]
-    concat([1, 2], [5, 6])      # [1, 2, 5, 6]
-    cat(map(range, range(4)))   # [0, 0, 1, 0, 1, 2]
-    mapcat(range, range(4))     # same
-    flatten(nested_structure)   # flat_list
-    distinct('abacbdd')         # list('abcd')
+    lremove(even, [1, 2, 3])    # [1, 3]
+    lconcat([1, 2], [5, 6])     # [1, 2, 5, 6]
+    lcat(map(range, range(4)))  # [0, 0, 1, 0, 1, 2]
+    lmapcat(range, range(4))    # same
+    flatten(nested_structure)   # flat iter
+    distinct('abacbdd')         # iter('abcd')
 
-    split(odd, range(5))        # ([1, 3], [0, 2, 4])
-    split_at(2, range(5))       # ([0, 1], [2, 3, 4])
+    lsplit(odd, range(5))       # ([1, 3], [0, 2, 4])
+    lsplit_at(2, range(5))      # ([0, 1], [2, 3, 4])
     group_by(mod3, range(5))    # {0: [0, 3], 1: [1, 4], 2: [2]}
 
-    partition(2, range(5))      # [[0, 1], [2, 3]]
-    chunks(2, range(5))         # [[0, 1], [2, 3], [4]]
+    lpartition(2, range(5))     # [[0, 1], [2, 3]]
+    chunks(2, range(5))         # iter: [0, 1], [2, 3], [4]
     pairwise(range(5))          # iter: [0, 1], [1, 2], ...
 
 
@@ -184,7 +184,7 @@ To fully run ``tox`` you need all the supported pythons to be installed. These a
 of all of the above::
 
     tox -e py27
-    tox -e py34
+    tox -e py36
     tox -e lint
 
 

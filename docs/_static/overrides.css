@@ -17,7 +17,7 @@
 .rst-content div[class^='highlight'] pre {
     padding: 7px 7px 4px 7px;
     font-size: 14px;
-    line-height: 135%;
+    line-height: 140%;
 }
 
 code.literal .pre {
@@ -27,3 +27,10 @@ code.literal .pre {
 .rst-content .external code {
     color: #404040;
 }
+
+/* Tables with functions */
+.rst-content table.docutils td {vertical-align: top; padding: 6px 16px; line-height: 20px}
+.wy-table-responsive table td {white-space: normal}
+.wy-table-responsive table td:first-child {white-space: nowrap}
+.rst-content code.xref {color: #2E7FB3; font-size: 90%;
+    padding: 0px 2px; border: none; background: none; line-height: 20px}

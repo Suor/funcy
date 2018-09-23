@@ -7,7 +7,7 @@ Type testing
 
     Split labels from ids::
 
-        labels, ids = split(isa(str), values)
+        labels, ids = lsplit(isa(str), values)
 
 
 .. function:: is_mapping(value)

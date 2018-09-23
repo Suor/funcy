@@ -3,7 +3,7 @@ Flow
 
 .. decorator:: silent
 
-    Ignore all real exceptions (descendants of :exc:`~py:exceptions.Exception`). Handy for cleaning data such as user input::
+    Ignore all real exceptions (descendants of :exc:`~py3:exceptions.Exception`). Handy for cleaning data such as user input::
 
 
         brand_id = silent(int)(request.GET['brand_id'])
@@ -20,7 +20,7 @@ Flow
 
 .. decorator:: ignore(errors, default=None)
 
-    Same as :func:`@silent<silent>`, but able to specify ``errors`` to catch and ``default`` to return in case of error caught. ``errors`` can either be exception class or tuple of them.
+    Same as :func:`@silent<silent>`, but able to specify ``errors`` to catch and ``default`` to return in case of error caught. ``errors`` can either be exception class or a tuple of them.
 
 
 .. function:: suppress(*errors)
@@ -65,7 +65,7 @@ Flow
 
 .. decorator:: reraise(errors, into)
 
-    Intercepts any error of ``errors`` classes and reraises it as ``into`` error. Can be used as decorator or context manager::
+    Intercepts any error of ``errors`` classes and reraises it as ``into`` error. Can be used as decorator or a context manager::
 
         @reraise(requests.RequestsError, MyAPIError)
         def api_call(...):
@@ -93,7 +93,7 @@ Flow
 
 .. function:: fallback(*approaches)
 
-    Tries several approaches until one works. Each approach is either callable or a tuple ``(callable, errors)``, where errors is an exception class or a tuple of classes, which signal to fall back to next approach. If ``errors`` is not supplied then fall back is done for any :exc:`~py:exceptions.Exception`::
+    Tries several approaches until one works. Each approach is either callable or a tuple ``(callable, errors)``, where errors is an exception class or a tuple of classes, which signal to fall back to next approach. If ``errors`` is not supplied then fall back is done for any :exc:`~py3:exceptions.Exception`::
 
         fallback(
             (partial(send_mail, ADMIN_EMAIL, message), SMTPException),
@@ -106,7 +106,8 @@ Flow
 
     If function fails to complete ``fails`` times in a row, calls to it will be intercepted for ``timeout`` with ``exception`` raised instead. A clean way to short-circuit function taking too long to fail::
 
-        @limit_error_rate(fails=5, timeout=60, exception=RequestError('Temporary unavailable'))
+        @limit_error_rate(fails=5, timeout=60,
+                          exception=RequestError('Temporary unavailable'))
         def do_request(query):
             # ... make a http request
             return data
@@ -158,9 +159,9 @@ Flow
             if self.gear:          yield self.get_gear_display()
             # ...
 
-    Use ``unicode`` separator to get unicode result::
+    Use ``bytes`` separator to get bytes result::
 
-        @joining(u', ')
+        @joining(b' ')
         def car_desc(self):
             yield self.year_made
             # ...
@@ -170,7 +171,7 @@ Flow
 
 .. decorator:: post_processing(func)
 
-    Passes decorated function result through ``func``. This is the generalization of :func:`@collecting<collecting>` and :func:`@joining()<joining>`. Could save you writing a decorator or serve as extended comprehensions:
+    Passes decorated function result through ``func``. This is the generalization of :func:`@collecting<collecting>` and :func:`@joining()<joining>`. Could save you writing a decorator or serve as an extended comprehension:
 
     ::
 

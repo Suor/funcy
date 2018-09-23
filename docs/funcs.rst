@@ -18,7 +18,7 @@ Functions
 
 .. function:: partial(func, *args, **kwargs)
 
-    Returns partial application of ``func``. A re-export of :func:`py:functools.partial`. Can be used in a variety of ways. DSLs is one of them::
+    Returns partial application of ``func``. A re-export of :func:`py3:functools.partial`. Can be used in a variety of ways. DSLs is one of them::
 
         field = dict
         json_field = partial(field, json=True)
@@ -40,9 +40,10 @@ Functions
 
     Like :func:`partial` but returns a real function. Which is useful when, for example, you want to create a method of it::
 
-        setattr(self, 'get_%s_display' % field.name, func_partial(_get_FIELD_display, field))
+        setattr(self, 'get_%s_display' % field.name,
+                func_partial(_get_FIELD_display, field))
 
-    Note: use :func:`partial` if you are ok to get callable object instead of function as it's faster.
+    Use :func:`partial` if you are ok to get callable object instead of function as it's faster.
 
 
 .. function:: curry(func[, n])
@@ -57,7 +58,7 @@ Functions
         is_word = make_tester(r'^\w+$')
         is_int = make_tester(r'^[1-9]\d*$')
 
-    But see :func:`re_tester` if you really need this.
+    But see :func:`re_tester` if you need this particular one.
 
 
 .. function:: rcurry(func[, n])
@@ -65,7 +66,7 @@ Functions
     Curries function from last argument to first::
 
         has_suffix = rcurry(str.endswith)
-        filter(has_suffix("ce"), ["nice", "cold", "ice"])
+        lfilter(has_suffix("ce"), ["nice", "cold", "ice"])
         # -> ["nice", "ice"]
 
     Can fix number of arguments when it's ambiguous::
@@ -104,9 +105,9 @@ Functions
 
         # Note the use of iterator function variants everywhere
         process = rcompose(
-            partial(iremove, is_useless),
-            partial(imap, process_row),
-            partial(ichunks, 100)
+            partial(remove, is_useless),
+            partial(map, process_row),
+            partial(chunks, 100)
         )
 
         for chunk in process(data):
@@ -116,9 +117,9 @@ Functions
 
 
 .. function:: juxt(*fs)
-              ijuxt(*fs)
+              ljuxt(*fs)
 
-    Takes several functions and returns a new function that is the juxtaposition of those. The resulting function takes a variable number of arguments, and returns a list or iterator containing the result of applying each function to the arguments.
+    Takes several functions and returns a new function that is the juxtaposition of those. The resulting function takes a variable number of arguments, and returns an iterator or a list containing the result of applying each function to the arguments.
 
 
 .. function:: iffy([pred], action, [default=identity])
@@ -130,9 +131,10 @@ Functions
     Common use it to deal with messy data::
 
         dirty_data = ['hello', None, 'bye']
-        map(iffy(len), dirty_data)              # => [5, None, 3]
-        map(iffy(isa(str), len, 0), dirty_data) # => [5, 0, 3], also safer
+        lmap(iffy(len), dirty_data)              # => [5, None, 3]
+        lmap(iffy(isa(str), len, 0), dirty_data) # => [5, 0, 3], also safer
 
+    See also :func:`silent` for easier use cases.
 
 
 Function logic

@@ -30,7 +30,7 @@ on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 extensions = ['sphinx.ext.coverage', 'sphinx.ext.intersphinx', 'sphinx.ext.autodoc']
 
 intersphinx_mapping = {
-    'py': ('http://docs.python.org/2', None),
+    'py2': ('http://docs.python.org/2', None),
     'py3': ('http://docs.python.org/3', None),
 }
 

@@ -5,11 +5,11 @@ Primitives
 
     Checks if ``x`` is ``None``. Handy with filtering functions::
 
-        remove(isnone, list_of_dirty_data)
+        _, data = lsplit_by(isnone, dirty_data) # Skip leading nones
 
     Plays nice with :func:`silent`, which returns ``None`` on fail::
 
-        remove(isnone, imap(silent(int), strings_with_numbers))
+        remove(isnone, map(silent(int), strings_with_numbers))
 
     Note that it's usually simpler to use :func:`keep` or :func:`compact` if you don't need to distinguish between ``None`` and other falsy values.
 

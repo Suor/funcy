@@ -3,7 +3,7 @@ Debugging
 
 .. function:: tap(value, label=None)
 
-    Prints value and then returns it. Useful to tap into some functional pipeline for debugging::
+    Prints a value and then returns it. Useful to tap into some functional pipeline for debugging::
 
         fields = (f for f in fields_for(category) if section in tap(tap(f).sections))
         # ... do something with fields
@@ -21,7 +21,7 @@ Debugging
 .. decorator:: log_calls(print_func, errors=True, stack=True, repr_len=25)
                print_calls(errors=True, stack=True, repr_len=25)
 
-    Will log or print all function calls, including arguments, results and raised exceptions. Can be used as decorator or tapped into call expression::
+    Will log or print all function calls, including arguments, results and raised exceptions. Can be used as a decorator or tapped into call expression::
 
         sorted_fields = sorted(fields, key=print_calls(lambda f: f.order))
 
@@ -35,7 +35,7 @@ Debugging
 
 
 .. decorator:: log_enters(print_func, repr_len=25)
-               print_enters[(repr_len=25)]
+               print_enters(repr_len=25)
                log_exits(print_func, errors=True, stack=True, repr_len=25)
                print_exits(errors=True, stack=True, repr_len=25)
 
@@ -50,7 +50,7 @@ Debugging
 
     Can be combined with :func:`@silent<silent>` or :func:`@ignore()<ignore>` to trace occasionally misbehaving function::
 
-        @silent
+        @ignore(...)
         @log_errors(logging.warning)
         def guess_user_id(username):
             initial = first_guess(username)

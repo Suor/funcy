@@ -53,7 +53,7 @@ Calculation
         def translate(lang):
             return make_list_of_pairs(load_translation_file(lang))
 
-        russian_phrases = map(translate('ru'), english_phrases)
+        russian_phrases = lmap(translate('ru'), english_phrases)
 
 
 .. decorator:: silent_lookuper
@@ -64,7 +64,7 @@ Calculation
 .. decorator:: cache(timeout, key_func=None)
 
     Caches decorated function results for ``timeout``.
-    It can be either number of seconds or :class:`py:datetime.timedelta`::
+    It can be either number of seconds or :class:`py3:datetime.timedelta`::
 
         @cache(60 * 60)
         def api_call(query):

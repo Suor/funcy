@@ -3,7 +3,7 @@ Sequences
 
 This functions are aimed at manipulating finite and infinite sequences of values. Some functions have two flavors: one returning list and other returning possibly infinite iterator, the latter ones follow convention of prepending ``i`` before list-returning function name.
 
-When working with sequences, see also :mod:`py:itertools` standard module. Funcy reexports and aliases some functions from it.
+When working with sequences, see also :mod:`py3:itertools` standard module. Funcy reexports and aliases some functions from it.
 
 
 Generate
@@ -11,7 +11,7 @@ Generate
 
 .. function:: repeat(item, [n])
 
-    Makes an iterator yielding ``item`` for ``n`` times or indefinitely if ``n`` is omitted. :func:`repeat` simply repeat given value, when you need to reevaluate something repeatedly use :func:`repeatedly` instead.
+    Makes an iterator yielding ``item`` for ``n`` times or indefinitely if ``n`` is omitted. ``repeat`` simply repeats given value, when you need to reevaluate something repeatedly use :func:`repeatedly` instead.
 
     When you just need a length ``n`` list or tuple of ``item`` you can use::
 
@@ -28,19 +28,19 @@ Generate
 
     Could be used to generate sequence::
 
-        imap(lambda x: x ** 2, count(1))
+        map(lambda x: x ** 2, count(1))
         # -> 1, 4, 9, 16, ...
 
-    Or annotate sequence using :func:`py:zip` or :func:`~itertools.izip`::
+    Or annotate sequence using :func:`py3:zip`::
 
         zip(count(), 'abcd')
-        # -> [(0, 'a'), (1, 'b'), (2, 'c'), (3, 'd')]
+        # -> (0, 'a'), (1, 'b'), (2, 'c'), (3, 'd')
 
         # print code with BASIC-style numbered lines
-        for line in izip(count(10, 10), code.splitlines()):
+        for line in zip(count(10, 10), code.splitlines()):
             print '%d %s' % line
 
-    See also :func:`py:enumerate` and original :func:`py:itertools.count` documentation.
+    See also :func:`py3:enumerate` and original :func:`py3:itertools.count` documentation.
 
 
 .. function:: cycle(seq)
@@ -49,7 +49,7 @@ Generate
 
     Useful when you need to cyclically decorate some sequence::
 
-        for n, parity in izip(count(), cycle(['even', 'odd'])):
+        for n, parity in zip(count(), cycle(['even', 'odd'])):
             print '%d is %s' % (n, parity)
 
     .. Is a reexport of :func:`itertools.cycle`.
@@ -82,15 +82,15 @@ Generate
         iterate(lambda x: x * 2, 1)
         # -> 1, 2, 4, 8, 16, ...
 
-        step = lambda ((a, b)): (b, a + b)
-        imap(first, iterate(step, (0, 1)))
+        step = lambda p: (p[0], sum(p))
+        map(first, iterate(step, (0, 1)))
         # -> 0, 1, 1, 2, 3, 5, 8, ... (Fibonacci sequence)
 
 
 Manipulate
 ----------
 
-This section provides some robust tools for sequence slicing. Consider :ref:`py:slicings` or :func:`py:itertools.islice` for more generic cases.
+This section provides some robust tools for sequence slicing. Consider :ref:`py3:slicings` or :func:`py3:itertools.islice` for more generic cases.
 
 
 .. function:: take(n, seq)
@@ -132,14 +132,14 @@ This section provides some robust tools for sequence slicing. Consider :ref:`py:
         )
         return first(do(field) for cond, do in TYPE_TO_WIDGET if cond(field))
 
-    Other common use case is passing to :func:`map` or :func:`~itertools.imap`. See last example in :func:`iterate` for such example.
+    Other common use case is passing to :func:`map` or :func:`lmap`. See last example in :func:`iterate` for such example.
 
 
 .. function:: second(seq)
 
     Returns the second item in given sequence. Returns ``None`` if there are less than two items in it.
 
-    Could come in handy with sequences of pairs, e.g. :meth:`py:dict.items`. Following code extract values of a dict sorted by keys::
+    Could come in handy with sequences of pairs, e.g. :meth:`py3:dict.items`. Following code extract values of a dict sorted by keys::
 
         map(second, sorted(some_dict.items()))
 
@@ -183,57 +183,57 @@ Unite
 -----
 
 .. function:: concat(*seqs)
-              iconcat(*seqs)
+              lconcat(*seqs)
 
-    Concats several sequences into one. :func:`iconcat` returns an iterator yielding concatenation.
+    Concats several sequences into single iterator or list.
 
-    :func:`iconcat` is an alias for :func:`py:itertools.chain`.
+    :func:`concat` is an alias for :func:`py3:itertools.chain`.
 
 
 .. function:: cat(seqs)
-              icat(seqs)
+              lcat(seqs)
 
-    Concatenates passed sequences. Useful when dealing with sequence of sequences, see :func:`concat` or :func:`iconcat` to join just a few sequences.
+    Concatenates passed sequences. Useful when dealing with sequence of sequences, see :func:`concat` or :func:`lconcat` to join just a few sequences.
 
     Flattening of various nested sequences is most common use::
 
         # Flatten two level deep list
-        cat(list_of_lists)
+        lcat(list_of_lists)
 
         # Get a flat html of errors of a form
-        errors = icat(inline.errors() for inline in form)
+        errors = cat(inline.errors() for inline in form)
         error_text = '<br>'.join(errors)
 
         # Brace expansion on product of sums
         # (a + b)(t + pq)x == atx + apqx + btx + bpqx
         terms = [['a', 'b'], ['t', 'pq'], ['x']]
-        map(cat, product(*terms))
+        lmap(lcat, product(*terms))
         # [list('atx'), list('apqx'), list('btx'), list('bpqx')]
 
 
-    :func:`icat` is an alias for :meth:`py:itertools.chain.from_iterable`.
+    :func:`cat` is an alias for :meth:`py3:itertools.chain.from_iterable`.
 
 
 .. function:: flatten(seq, follow=is_seqcont)
-              iflatten(seq, follow=is_seqcont)
+              lflatten(seq, follow=is_seqcont)
 
     Flattens arbitrary nested sequence of values and other sequences. ``follow`` argument determines whether to unpack each item. By default it dives into lists, tuples and iterators, see :func:`is_seqcont` for further explanation.
 
-    See also :func:`cat` or :func:`icat` if you need to flatten strictly two-level sequence of sequences.
+    See also :func:`cat` or :func:`lcat` if you need to flatten strictly two-level sequence of sequences.
 
 
 .. function:: tree_leaves(root, follow=is_seqcont, children=iter)
-              itree_leaves(root, follow=is_seqcont, children=iter)
+              ltree_leaves(root, follow=is_seqcont, children=iter)
 
-    A way to list or iterate over all the tree leaves. E.g. this is how you can list all descendants of a class::
+    A way to iterate or list over all the tree leaves. E.g. this is how you can list all descendants of a class::
 
-        tree_leaves(Base, children=type.__subclasses__, follow=type.__subclasses__)
+        ltree_leaves(Base, children=type.__subclasses__, follow=type.__subclasses__)
 
 
 .. function:: tree_nodes(root, follow=is_seqcont, children=iter)
-              itree_nodes(root, follow=is_seqcont, children=iter)
+              ltree_nodes(root, follow=is_seqcont, children=iter)
 
-    A way to list or iterate over all the tree nodes. E.g. this is how you can list all classes in hierarchy::
+    A way to iterate or list over all the tree nodes. E.g. this is how you can iterate over all classes in hierarchy::
 
         tree_nodes(Base, children=type.__subclasses__, follow=type.__subclasses__)
 
@@ -247,11 +247,16 @@ Unite
 
     Returns an iterator yielding elements of ``seq`` separated by ``sep``.
 
-    Helpful when :meth:`py:str.join` is not good enough. This code is a part of translator working with operation node::
+    This is like :meth:`py3:str.join` for lists. This code is a part of a translator working with operation node::
 
         def visit_BoolOp(self, node):
             # ... do generic visit
-            node.code = mapcat(translate, interpose(node.op, node.values))
+            node.code = lmapcat(translate, interpose(node.op, node.values))
+
+
+.. function:: lzip(*seqs)
+
+    Joins given sequences into a list of tuples of corresponding first, second and later values. Essentially a list version of :func:`py3:zip` for Python 3.
 
 
 Transform and filter
@@ -260,21 +265,21 @@ Transform and filter
 Most of functions in this section support :ref:`extended_fns`. Among other things it allows to rewrite examples using :func:`re_tester` and :func:`re_finder` tighter.
 
 .. function:: map(f, seq)
-              imap(f, seq)
+              lmap(f, seq)
 
-    Extended versions of :func:`py:map` and :func:`~itertools.imap`.
+    Extended versions of :func:`py3:map` and its list version.
 
 
 .. function:: filter(pred, seq)
-              ifilter(pred, seq)
+              lfilter(pred, seq)
 
-    Extended versions of :func:`py:filter` and :func:`~itertools.ifilter`.
+    Extended versions of :func:`py3:filter` and its list version.
 
 
 .. function:: remove(pred, seq)
-              iremove(pred, seq)
+              lremove(pred, seq)
 
-    Return a list or an iterator of items of ``seq`` that result in false when passed to ``pred``. The results of this functions complement results of standard :func:`filter` and :func:`~itertools.ifilter`.
+    Returns an iterator or a list of items of ``seq`` that result in false when passed to ``pred``. The results of this functions complement results of :func:`filter` and :func:`lfilter`.
 
     A handy use is passing :func:`re_tester` result as ``pred``. For example, this code removes any whitespace-only lines from list::
 
@@ -286,29 +291,29 @@ Most of functions in this section support :ref:`extended_fns`. Among other thing
 
 
 .. function:: keep([f], seq)
-              ikeep([f], seq)
+              lkeep([f], seq)
 
-    Maps ``seq`` with given function and then filters out falsy elements. Simply filters ``seq`` when ``f`` is absent. In fact these functions are just handy shortcuts::
+    Maps ``seq`` with given function and then filters out falsy elements. Simply removes falsy items when ``f`` is absent. In fact these functions are just handy shortcuts::
 
         keep(f, seq)  == filter(bool, map(f, seq))
         keep(seq)     == filter(bool, seq)
 
-        ikeep(f, seq) == ifilter(bool, imap(f, seq))
-        ikeep(seq)    == ifilter(bool, seq)
+        lkeep(f, seq) == lfilter(bool, map(f, seq))
+        lkeep(seq)    == lfilter(bool, seq)
 
     Natural use case for :func:`keep` is data extraction or recognition that could eventually fail::
 
         # Extract numbers from words
-        keep(re_finder(r'\d+'), words)
+        lkeep(re_finder(r'\d+'), words)
 
         # Recognize as many colors by name as possible
-        keep(COLOR_BY_NAME.get, color_names)
+        lkeep(COLOR_BY_NAME.get, color_names)
 
-    An iterator version can be useful when you don't need or not sure you need the whole sequence. For example, you can use :func:`first` - :func:`ikeep` combo to find out first match::
+    An iterator version can be useful when you don't need or not sure you need the whole sequence. For example, you can use :func:`first` - :func:`keep` combo to find out first match::
 
-        first(ikeep(COLOR_BY_NAME.get, color_name_candidates))
+        first(keep(COLOR_BY_NAME.get, color_name_candidates))
 
-    Alternatively, you can do the same with :func:`some` and :func:`~itertools.imap`.
+    Alternatively, you can do the same with :func:`some` and :func:`map`.
 
     One argument variant is a simple tool to keep your data free of falsy junk. This one returns non-empty description lines::
 
@@ -321,7 +326,7 @@ Most of functions in this section support :ref:`extended_fns`. Among other thing
 
 
 .. function:: mapcat(f, *seqs)
-              imapcat(f, *seqs)
+              lmapcat(f, *seqs)
 
     Maps given sequence(s) and then concatenates results, essentially a shortcut for ``cat(map(f, *seqs))``. Come in handy when extracting multiple values from every sequence item or transforming nested sequences::
 
@@ -333,12 +338,12 @@ Most of functions in this section support :ref:`extended_fns`. Among other thing
 
 
 .. function:: without(seq, *items)
-              iwithout(seq, *items)
+              lwithout(seq, *items)
 
     Returns sequence with ``items`` removed, preserves order.
     Designed to work with a few ``items``, this allows removing unhashable objects::
 
-        no_empty_lists = without(lists, [])
+        non_empty_lists = without(lists, [])
 
     In case of large amount of unwanted elements one can use :func:`remove`::
 
@@ -351,31 +356,31 @@ Split and chunk
 ---------------
 
 .. function:: split(pred, seq)
-              isplit(pred, seq)
+              lsplit(pred, seq)
 
     Splits sequence items which pass predicate from the ones that don't, essentially returning a tuple ``filter(pred, seq), remove(pred, seq)``.
 
     For example, this way one can separate private attributes of an instance from public ones::
 
-        private, public = split(re_tester('^_'), dir(instance))
+        private, public = lsplit(re_tester('^_'), dir(instance))
 
     Split absolute and relative urls using extended predicate semantics::
 
-        absolute, relative = split(r'^http://', urls)
+        absolute, relative = lsplit(r'^http://', urls)
 
 
 .. function:: split_at(n, seq)
-              isplit_at(n, seq)
+              lsplit_at(n, seq)
 
     Splits sequence at given position, returning a tuple of its start and tail.
 
 
 .. function:: split_by(pred, seq)
-              isplit_by(pred, seq)
+              lsplit_by(pred, seq)
 
-    Splits start of sequence, consisting of items passing predicate, from the rest of it. Works similar to ``takewhile(pred, seq), dropwhile(pred, seq)``, but returns lists and works with iterator ``seq`` correctly::
+    Splits start of sequence, consisting of items passing predicate, from the rest of it. Works similar to ``takewhile(pred, seq), dropwhile(pred, seq)``, but works with iterator ``seq`` correctly::
 
-        split_by(bool, iter([-2, -1, 0, 1, 2]))
+        lsplit_by(bool, iter([-2, -1, 0, 1, 2]))
         # [-2, -1], [0, 1, 2]
 
 
@@ -400,7 +405,7 @@ Split and chunk
 
 .. function:: group_by(f, seq)
 
-    Groups elements of ``seq`` keyed by the result of ``f``. The value at each key will be a list of the corresponding elements, in the order they appear in ``seq``. Returns :class:`defaultdict(list) <py:collections.defaultdict>`.
+    Groups elements of ``seq`` keyed by the result of ``f``. The value at each key will be a list of the corresponding elements, in the order they appear in ``seq``. Returns :class:`defaultdict(list) <py3:collections.defaultdict>`.
 
     ::
 
@@ -409,14 +414,14 @@ Split and chunk
         stats[2] # -> ['ab']
         stats[3] # -> [], since stats is defaultdict
 
-    One can use :func:`split` when grouping by boolean predicate. See also :func:`py:itertools.groupby`.
+    One can use :func:`split` when grouping by boolean predicate. See also :func:`py3:itertools.groupby`.
 
 
 .. function:: group_by_keys(get_keys, seq)
 
-    Groups elements of ``seq`` having multiple keys each into :class:`defaultdict(list) <py:collections.defaultdict>`. Can be used to reverse grouping::
+    Groups elements of ``seq`` having multiple keys each into :class:`defaultdict(list) <py3:collections.defaultdict>`. Can be used to reverse grouping::
 
-        posts_by_tag = group_by_keys(attrgetter(tags), posts)
+        posts_by_tag = group_by_keys(attrgetter('tags'), posts)
         sentences_with_word = group_by_keys(str.split, sentences)
 
 
@@ -430,42 +435,42 @@ Split and chunk
 
 
 .. function:: partition(n, [step], seq)
-              ipartition(n, [step], seq)
+              lpartition(n, [step], seq)
 
-    Returns a list of lists of ``n`` items each, at offsets ``step`` apart. If ``step`` is not supplied, defaults to ``n``, i.e. the partitions do not overlap. Returns only full length-``n`` partitions, in case there are not enough elements for last partition they are ignored.
+    Iterates or lists over partitions of ``n`` items, at offsets ``step`` apart. If ``step`` is not supplied, defaults to ``n``, i.e. the partitions do not overlap. Returns only full length-``n`` partitions, in case there are not enough elements for last partition they are ignored.
 
     Most common use is deflattening data::
 
         # Make a dict from flat list of pairs
-        dict(ipartition(2, flat_list_of_pairs))
+        dict(partition(2, flat_list_of_pairs))
 
         # Structure user credentials
-        {id: (name, password) for id, name, password in ipartition(3, users)}
+        {id: (name, password) for id, name, password in partition(3, users)}
 
     A three argument variant of :func:`partition` can be used to process sequence items in context of their neighbors::
 
         # Smooth data by averaging out with a sliding window
-        [sum(window) / n for window in ipartition(n, 1, data_points)]
+        [sum(window) / n for window in partition(n, 1, data_points)]
 
     Also look at :func:`pairwise` for similar use. Other use of :func:`partition` is processing sequence of data elements or jobs in chunks, but take a look at :func:`chunks` for that.
 
 
 
 .. function:: chunks(n, [step], seq)
-              ichunks(n, [step], seq)
+              lchunks(n, [step], seq)
 
-    Returns a list of lists like :func:`partition`, but may include partitions with fewer than ``n`` items at the end::
+    Like :func:`partition`, but may include partitions with fewer than ``n`` items at the end::
 
         chunks(2, 'abcde')
-        # -> ['ab', 'cd', 'e'])
+        # -> 'ab', 'cd', 'e'
 
         chunks(2, 4, 'abcde')
-        # -> ['ab', 'e'])
+        # -> 'ab', 'e'
 
     Handy for batch processing.
 
 .. function:: partition_by(f, seq)
-              ipartition_by(f, seq)
+              lpartition_by(f, seq)
 
     Partition ``seq`` into list of lists or iterator of iterators splitting at ``f(item)`` change.
 
@@ -474,7 +479,7 @@ Data handling
 -------------
 
 .. function:: distinct(seq, key=identity)
-              idistinct(seq, key=identity)
+              ldistinct(seq, key=identity)
 
     Returns unique items of the sequence with order preserved. If ``key`` is supplied then distinguishes values by comparing their keys.
 
@@ -510,7 +515,7 @@ Data handling
 
 .. function:: count_by(f, seq)
 
-    Counts numbers of occurrences of values of ``f`` on elements of ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts.
+    Counts numbers of occurrences of values of ``f`` on elements of ``seq``. Returns :class:`defaultdict(int) <py3:collections.defaultdict>` of counts.
 
     Calculating a histogram is one common use::
 
@@ -520,25 +525,25 @@ Data handling
 
 .. function:: count_reps(seq)
 
-    Counts number of repetitions of each value in ``seq``. Returns :class:`defaultdict(int) <py:collections.defaultdict>` of counts. This is faster and shorter alternative to ``count_by(identity, ...)``
+    Counts number of repetitions of each value in ``seq``. Returns :class:`defaultdict(int) <py3:collections.defaultdict>` of counts. This is faster and shorter alternative to ``count_by(identity, ...)``
 
 
 .. function:: reductions(f, seq, [acc])
-              ireductions(f, seq, [acc])
+              lreductions(f, seq, [acc])
 
     Returns a sequence of the intermediate values of the reduction of ``seq`` by ``f``. In other words it yields a sequence like::
 
         reduce(f, seq[:1], [acc]), reduce(f, seq[:2], [acc]), ...
 
-    You can use :func:`sums` or :func:`isums` for a common use of getting list of partial sums.
+    You can use :func:`sums` or :func:`lsums` for a common use of getting list of partial sums.
 
 
 .. function:: sums(seq, [acc])
-              isums(seq, [acc])
+              lsums(seq, [acc])
 
-    Same as :func:`reductions` or :func:`ireductions` with reduce function fixed to addition.
+    Same as :func:`reductions` or :func:`lreductions` with reduce function fixed to addition.
 
     Find out which straw will break camels back::
 
-        first(i for i, total in enumerate(isums(straw_weights))
+        first(i for i, total in enumerate(sums(straw_weights))
                 if total > camel_toughness)

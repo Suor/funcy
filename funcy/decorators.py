@@ -212,9 +212,9 @@ else:
 
             @contextmanager
             def tag(name):
-                print "<%s>" % name,
+                print("<%s>" % name)
                 yield
-                print "</%s>" % name
+                print("</%s>" % name)
 
             with tag("h1"):
                 print "foo",
@@ -224,7 +224,7 @@ else:
 
             @tag('strong')
             def shout(text):
-                print text.upper()
+                print(text.upper())
 
             shout('hooray')
             # -> <strong> HOORAY </strong>
@@ -281,6 +281,7 @@ def wraps(wrapped,
             def wrapper(*args, **kwargs):
                 do_something(*args, **kwargs)
                 return func(*args, **kwargs)
+            return wrapper
 
     But see also :func:`@decorator<decorator>` for that.
     This is extended version of :func:`functools.wraps`.

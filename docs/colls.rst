@@ -15,14 +15,14 @@ Unite
             options = merge(defaults, options)
             ...
 
-    If you merge sequences and don't need to preserve collection type, then use :func:`concat` or :func:`iconcat` instead.
+    If you merge sequences and don't need to preserve collection type, then use :func:`concat` or :func:`lconcat` instead.
 
 
 .. function:: join(colls)
 
     Joins collections of same type into one. Same as :func:`merge`, but accepts iterable of collections.
 
-    Use :func:`cat` and :func:`icat` for non-type preserving sequence join.
+    Use :func:`cat` and :func:`lcat` for non-type preserving sequence join.
 
 
 Transform and select
@@ -47,7 +47,7 @@ All functions in this section support :ref:`extended_fns`.
         walk(lambda x: x * 2, 'ABC')   # -> 'AABBCC'
         walk(compose(str, ord), 'ABC') # -> '656667'
 
-    One should probably use :func:`map` or :func:`~itertools.imap` when doesn't need to preserve collection type.
+    One should use :func:`map` when there is no need to preserve collection type.
 
     .. note about constructor interface?
 
@@ -59,7 +59,7 @@ All functions in this section support :ref:`extended_fns`.
         walk_keys(str.upper, {'a': 1, 'b': 2}) # {'A': 1, 'B': 2}
         walk_keys(int, json.loads(some_dict))  # restore key type lost in translation
 
-    Important to note that it preserves collection type whenever this is simple :class:`py:dict`, :class:`~py:collections.defaultdict`, :class:`~py:collections.OrderedDict` or any other mapping class or a collection of pairs.
+    Important to note that it preserves collection type whenever this is simple :class:`py3:dict`, :class:`~py3:collections.defaultdict`, :class:`~py3:collections.OrderedDict` or any other mapping class or a collection of pairs.
 
 
 .. function:: walk_values(f, coll)
@@ -71,9 +71,9 @@ All functions in this section support :ref:`extended_fns`.
         clean_values = walk_values(int, form_values)
         sorted_groups = walk_values(sorted, groups)
 
-    Hint: you can use :func:`partial(sorted, key=...) <partial>` instead of :func:`py:sorted` to sort in non-default way.
+    Hint: you can use :func:`partial(sorted, key=...) <partial>` instead of :func:`py3:sorted` to sort in non-default way.
 
-    Note that ``walk_values()`` has special handling for :class:`defaultdicts <py:collections.defaultdict>`. It constructs new one with values mapped the same as for ordinary dict, but a default factory of new ``defaultdict`` would be a composition of ``f`` and old default factory::
+    Note that ``walk_values()`` has special handling for :class:`defaultdicts <py3:collections.defaultdict>`. It constructs new one with values mapped the same as for ordinary dict, but a default factory of new ``defaultdict`` would be a composition of ``f`` and old default factory::
 
         d = defaultdict(lambda: 'default', a='hi', b='bye')
         walk_values(str.upper, d)
@@ -103,16 +103,17 @@ All functions in this section support :ref:`extended_fns`.
 
 .. function:: select_values(pred, coll)
 
-    Select part of a dict or a collection of pairs with values passing the given predicate.
+    Select part of a dict or a collection of pairs with values passing the given predicate::
 
-    Strip falsy values from dict::
+        # Leave only str values
+        select_values(isa(str), values)
 
-        select_values(bool, some_dict)
-
+        # Construct a dict of methods
+        select_values(inspect.isfunction, cls.__dict__)
 
 .. function:: compact(coll)
 
-    Removes falsy values from given collection. When compacting a dict all keys with falsy values are trashed.
+    Removes falsy values from given collection. When compacting a dict all keys with falsy values are removed.
 
     Extract integer data from request::
 
@@ -173,23 +174,23 @@ Dict utils
         # -> {'b': 2}
 
 
-.. function:: izip_values(*dicts)
+.. function:: zip_values(*dicts)
 
     Yields tuples of corresponding values of given dicts. Skips any keys not present in all of the dicts. Comes in handy when comparing two or more dicts::
 
-        max_change = max(abs(x - y) for x, y in izip_values(items, old_items))
+        error = sum((x - y) ** 2 for x, y in zip_values(result, reference))
 
 
-.. function:: izip_dicts(*dicts)
+.. function:: zip_dicts(*dicts)
 
-    Yields tuples like ``(key, value1, value2, ...)`` for each common key of all given dicts. A neat way to process several dicts at once::
+    Yields tuples like ``key, (value1, value2, ...)`` for each common key of all given dicts. A neat way to process several dicts at once::
 
-        changed_items = [id for id, (new, old) in izip_dicts(items, old_items)
+        changed_items = [id for id, (new, old) in zip_dicts(items, old_items)
                          if abs(new - old) >= PRECISION]
 
-        lines = {id: cnt * price for id, (cnt, price) in izip_dicts(amounts, prices)}
+        lines = {id: cnt * price for id, (cnt, price) in zip_dicts(amounts, prices)}
 
-    See also :func:`izip_values`.
+    See also :func:`zip_values`.
 
 
 .. function:: get_in(coll, path, default=None)
@@ -223,46 +224,46 @@ Data manipulation
 -----------------
 
 .. function:: where(mappings, **cond)
-              iwhere(mappings, **cond)
+              lwhere(mappings, **cond)
 
-    Looks through each value in given sequence of dicts, returning a list or an iterator of all the dicts that contain all key-value pairs in ``cond``::
+    Looks through each value in given sequence of dicts and returns an iterator or a list of all the dicts that contain all key-value pairs in ``cond``::
 
-        where(plays, author="Shakespeare", year=1611)
+        lwhere(plays, author="Shakespeare", year=1611)
         # => [{"title": "Cymbeline", "author": "Shakespeare", "year": 1611},
         #     {"title": "The Tempest", "author": "Shakespeare", "year": 1611}]
 
     Iterator version could be used for efficiency or when you don't need the whole list.
     E.g. you are looking for the first match::
 
-        first(iwhere(plays, author="Shakespeare"))
+        first(where(plays, author="Shakespeare"))
         # => {"title": "The Two Gentlemen of Verona", ...}
 
 
 .. function:: pluck(key, mappings)
-              ipluck(key, mappings)
+              lpluck(key, mappings)
 
-    Returns a list or an iterator of values for ``key`` in each mapping in the given sequence. Essentially a shortcut for::
+    Returns an iterator or a list of values for ``key`` in each mapping in the given sequence. Essentially a shortcut for::
 
         map(operator.itemgetter(key), mappings)
 
 
 .. function:: pluck_attr(attr, objects)
-              ipluck_attr(attr, objects)
+              lpluck_attr(attr, objects)
 
-    Returns a list or an iterator of values for ``attr`` in each object in the given sequence. Essentially a shortcut for::
+    Returns an iterator or a list of values for ``attr`` in each object in the given sequence. Essentially a shortcut for::
 
         map(operator.attrgetter(attr), objects)
 
     Useful when dealing with collections of ORM objects::
 
         users = User.query.all()
-        ids = pluck_attr('id', users)
+        ids = lpluck_attr('id', users)
 
 
 .. function:: invoke(objects, name, *args, **kwargs)
-              iinvoke(objects, name, *args, **kwargs)
+              linvoke(objects, name, *args, **kwargs)
 
-    Calls named method with given arguments for each object in ``objects`` and returns a list or an iterator of results.
+    Calls named method with given arguments for each object in ``objects`` and returns an iterator or a list of results.
 
 
 Content tests
@@ -281,7 +282,7 @@ Content tests
 
 .. function:: all([pred], seq)
 
-    Checks if ``pred`` holds every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` are truthy (which is the same as in built-in :func:`~builtin.all`)::
+    Checks if ``pred`` holds for every element in a ``seq``. If ``pred`` is omitted checks if all elements of ``seq`` are truthy -- same as in built-in :func:`py3:all`::
 
         they_are_ints = all(is_instance(n, int) for n in seq)
         they_are_even = all(even, seq)
@@ -308,6 +309,8 @@ Content tests
 
         assert none(' ' in name for name in names), "Spaces in names not allowed"
 
+        # Or same using extended predicate semantics
+        assert none(' ', names), "..."
 
 .. function:: one([pred], seq)
 

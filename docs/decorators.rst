@@ -15,7 +15,7 @@ Decorators
 
         @decorator
         def log(call):
-            print call._func.__name__, call._args, call._kwargs
+            print(call._func.__name__, call._args, call._kwargs)
             return call()
 
     ``call`` object also supports by name arg introspection and passing additional arguments to decorated function::
@@ -61,7 +61,11 @@ Decorators
     You can see more examples in :mod:`flow` and :mod:`debug` submodules source code.
 
 
-.. autodecorator:: contextmanager
+.. decorator:: contextmanager
+
+    A decorator helping to create context managers. Resulting functions also
+    behave as decorators. This is a reexport or backport of :func:`py3:contextlib.contextmanager`.
+
 
 .. autodecorator:: wraps(wrapped, [assigned], [updated])
 

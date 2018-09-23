@@ -1,3 +1,10 @@
+TODO: xfunc/xfn, xpred
+TODO: popups everywhere
+
+- switched docs and internals to Python 3
+- improved docs: better texts and examples here and there
+- documented lzip()
+
 1.10.3
 - added repr_len param to various debug utils
 - dropped testing in Python 3.3

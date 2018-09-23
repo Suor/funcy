@@ -1,0 +1,66 @@
+<script src="_static/nhpup_1.1.js"></script>
+<style>
+#pup {
+  position:absolute;
+  z-index:200; /* aaaalways on top*/
+  padding: 3px 7px 5px;
+  margin-left: 5px;
+  margin-top: 15px;
+  border-radius: 3px;
+  background-color: #343131;
+  color: #b3b3b3;
+  font-size: 0.95em;
+  white-space: nowrap;
+}
+.descriptions {display: none}
+.rst-content code.xref {line-height: 20px}
+
+#pup strong, #pup b {color: #ddd}
+#pup em {color: #3591CC; font-weight: bold; margin-right: 2px}
+#pup b em {margin-right: 0}
+#pup em span {color: #b3b3b3; opacity: 0.7; font-style: normal;
+              display:inline-block; padding:0 1px 0 3px}
+#pup code {background: transparent; border: none; font-size: 90%; padding: 0 3px;}
+</style>
+
+<script>
+    function defer(method) {
+        if (window.jQuery)
+            method();
+        else
+            setTimeout(function() { defer(method) }, 50);
+    }
+    defer(function () {
+        // Strip parentheses
+        $('table .py-func .pre').each(function () {
+            var text = $(this).text();
+            if (text.substr(-2) === '()') $(this).text(text.substr(0, text.length-2));
+        })
+
+        $('a[href="#colls"]').attr('title', 'dicts-more')
+        $('h2 a[href*=extended_fns]').attr('title', 'extended-fns')
+        nhpup.initialize()
+        $('.descriptions div').each(function () {
+            var name = this.getAttribute('name');
+            getFuncRefs(name).on('mouseover', nhpup.popup(this.innerHTML, {width: ''}))
+                             .removeAttr('title');
+        })
+    })
+
+    function getFuncRefs(name) {
+        var linkEls = $('a[title="#"], a[title="i#"], a[title="l#"]'.replace(/#/g, name));
+
+        var texts = {};
+        ['', 'i', 'l'].forEach(function (prefix) {
+            texts[prefix + name] = true;
+            texts[prefix + name + '()'] = true;
+        })
+
+        var nonLinkEls = $('.py-func .pre:contains("' + name + '")')
+                            .filter(function (){return texts[this.innerText]})
+                            .parent()
+                            .filter(function (){return this.parentNode.tagName != 'A'})
+
+        return linkEls.add(nonLinkEls)
+    }
+</script>
