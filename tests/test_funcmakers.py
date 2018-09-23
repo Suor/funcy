@@ -21,10 +21,10 @@ def test_slice():
 
 
 def test_str():
-    assert make_func('\d+')('ab42c') == '42'
-    assert make_func('\d+')('abc') is None
-    assert make_pred('\d+')('ab42c') is True
-    assert make_pred('\d+')('abc') is False
+    assert make_func(r'\d+')('ab42c') == '42'
+    assert make_func(r'\d+')('abc') is None
+    assert make_pred(r'\d+')('ab42c') is True
+    assert make_pred(r'\d+')('abc') is False
 
 
 def test_dict():
