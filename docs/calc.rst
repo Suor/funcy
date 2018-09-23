@@ -81,3 +81,7 @@ Calculation
         @cache(60 * 60, key_func=lambda query, token=None: query)
         def api_call(query, token=None):
             # ...
+
+
+.. raw:: html
+    :file: descriptions.html

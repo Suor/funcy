@@ -83,3 +83,7 @@ String utils
 .. function:: cut_suffix(s, suffix)
 
     Cuts suffix from given string if it's present.
+
+
+.. raw:: html
+    :file: descriptions.html

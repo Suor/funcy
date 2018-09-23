@@ -350,3 +350,7 @@ Low-level helpers
 
         list(itervalues({'a': 1}))
         # -> [1]
+
+
+.. raw:: html
+    :file: descriptions.html

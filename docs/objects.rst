@@ -58,3 +58,7 @@ Objects
 
         # Will be only created on first use
         redis_client.set(...)
+
+
+.. raw:: html
+    :file: descriptions.html

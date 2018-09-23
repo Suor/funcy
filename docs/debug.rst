@@ -108,3 +108,7 @@ Debugging
         # ...
 
     ``unit`` can be set to ``'ns'``, ``'mks'``, ``'ms'`` or ``'s'``.
+
+
+.. raw:: html
+    :file: descriptions.html

@@ -73,3 +73,6 @@ Decorators
 
 .. autoclass:: ContextDecorator
 
+
+.. raw:: html
+    :file: descriptions.html

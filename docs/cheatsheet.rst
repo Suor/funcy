@@ -1,7 +1,3 @@
-.. raw:: html
-    :file: _popups.html
-
-
 .. _cheatsheet:
 
 Cheatsheet

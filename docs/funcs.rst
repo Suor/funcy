@@ -180,3 +180,7 @@ This family of functions supports creating predicates from other predicates and 
         )
 
     If you wonder how on Earth one can :func:`compose` dict and string see :ref:`extended_fns`.
+
+
+.. raw:: html
+    :file: descriptions.html

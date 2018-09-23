@@ -547,3 +547,7 @@ Data handling
 
         first(i for i, total in enumerate(sums(straw_weights))
                 if total > camel_toughness)
+
+
+.. raw:: html
+    :file: descriptions.html

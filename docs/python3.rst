@@ -25,9 +25,6 @@ You can even import :func:`map`, :func:`filter`, :func:`py3:zip` and their list 
 Full table of python dependent function names
 ---------------------------------------------
 
-.. raw:: html
-    :file: _popups.html
-
 ======================  ======================= ===================== ==========================
 Python 2 / list         Python 2 / iterator     Python 3 / list       Python 3 / iterator
 ======================  ======================= ===================== ==========================

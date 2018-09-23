@@ -40,3 +40,7 @@ Type testing
 .. function:: iterable(value)
 
     Tests if ``value`` is iterable.
+
+
+.. raw:: html
+    :file: descriptions.html

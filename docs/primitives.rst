@@ -41,3 +41,6 @@ Primitives
 
     Checks if ``x`` is odd.
 
+
+.. raw:: html
+    :file: descriptions.html
