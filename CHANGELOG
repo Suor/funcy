@@ -1,8 +1,9 @@
-TODO: xfunc/xfn, xpred
-TODO: popups everywhere
-
 - switched docs and internals to Python 3
 - improved docs: better texts and examples here and there
+- added popups over functions everywhere in docs
+- accept any iterables of errors in flow utils
+- fixed walk_values() for defaultdicts with empty factory
+- fixed xmap() signature introspection
 - documented lzip()
 
 1.10.3
