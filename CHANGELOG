@@ -1,5 +1,7 @@
+1.11
 - switched docs and internals to Python 3
 - improved docs: better texts and examples here and there
+- support Python 3.7 officially
 - added popups over functions everywhere in docs
 - accept any iterables of errors in flow utils
 - fixed walk_values() for defaultdicts with empty factory
