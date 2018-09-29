@@ -1,7 +1,6 @@
 from operator import itemgetter
-from collections import Mapping, Set
 
-from .compat import basestring
+from .compat import basestring, Mapping, Set
 from .strings import re_tester, re_finder, _re_type
 
 

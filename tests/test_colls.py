@@ -1,8 +1,9 @@
 import pytest
 from itertools import chain, count
-from collections import Iterator, defaultdict, namedtuple
+from collections import defaultdict, namedtuple
 from whatever import _
 
+from funcy.compat import Iterator
 from funcy.colls import *
 
 

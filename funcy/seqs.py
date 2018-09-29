@@ -1,10 +1,10 @@
 from itertools import islice, chain, tee, groupby, \
                       takewhile as _takewhile, dropwhile as _dropwhile
-from collections import defaultdict, deque, Sequence
+from collections import defaultdict, deque
 import operator
 
 from .compat import map as _map, filter as _filter, lmap as _lmap, lfilter as _lfilter, \
-                    zip, filterfalse, range, PY2, PY3
+                    zip, filterfalse, range, Sequence, PY2, PY3
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcmakers import make_func, make_pred

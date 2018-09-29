@@ -1,9 +1,8 @@
-from collections import Iterator
 from operator import add
 import pytest
 from whatever import _
 
-from funcy.compat import range, PY3
+from funcy.compat import range, Iterator, PY3
 from funcy import is_list
 from funcy.seqs import *
 

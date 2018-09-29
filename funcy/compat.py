@@ -18,6 +18,13 @@ except ImportError:
     basestring = basestring  # noqa
 
 
+# collections.abc was added in Python 3.3
+try:
+    from collections.abc import Mapping, Set, Sequence, Iterable, Iterator, Hashable  # noqa
+except ImportError:
+    from collections import Mapping, Set, Sequence, Iterable, Iterator, Hashable  # noqa
+
+
 import sys
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3

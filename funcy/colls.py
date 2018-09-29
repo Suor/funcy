@@ -3,10 +3,10 @@ try:
 except ImportError:
     from builtins import all as _all, any as _any
 from operator import itemgetter, methodcaller, attrgetter
-from collections import Mapping, Set, Iterable, Iterator, defaultdict
 from itertools import chain, tee
+from collections import defaultdict
 
-from .compat import basestring, range, zip, map, filter, PY2
+from .compat import basestring, range, zip, map, filter, PY2, Mapping, Set, Iterable, Iterator
 from .primitives import EMPTY
 from .funcs import partial, compose
 from .funcmakers import make_func, make_pred

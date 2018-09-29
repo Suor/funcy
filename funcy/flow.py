@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
-from collections import Hashable
 import time
 import threading
 
-from .compat import map, range, raise_from
+from .compat import map, range, raise_from, Hashable
 from .decorators import decorator, wraps, get_argnames, arggetter, contextmanager
 
 
