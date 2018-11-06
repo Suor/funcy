@@ -4,6 +4,7 @@ from .calc import *
 from .colls import *
 from .tree import *
 from .decorators import *
+from .files import *
 from .funcolls import *
 from .funcs import *
 from .seqs import *
@@ -16,8 +17,8 @@ from .primitives import *
 
 
 # Setup __all__
-modules = ('calc', 'colls', 'tree', 'decorators', 'funcolls', 'funcs', 'seqs', 'types',
-           'strings', 'flow', 'objects', 'debug', 'primitives')
+modules = ('calc', 'colls', 'tree', 'decorators', 'files', 'funcolls', 'funcs',
+           'seqs', 'types', 'strings', 'flow', 'objects', 'debug', 'primitives')
 __all__ = lcat(sys.modules['funcy.' + m].__all__ for m in modules)
 
 
