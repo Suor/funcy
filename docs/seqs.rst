@@ -549,5 +549,9 @@ Data handling
                 if total > camel_toughness)
 
 
+.. function:: fixpoint(f, x)
+
+   Finds the fixed point of ``x`` under ``f``, i.e. the ``y`` such that ``y = f^n(x) = f^(n+1)(x)``.  NB: it will not terminate if no fixed point exists.
+
 .. raw:: html
     :file: descriptions.html

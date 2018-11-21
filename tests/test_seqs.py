@@ -211,3 +211,25 @@ def test_without():
     assert lwithout([]) == []
     assert lwithout([1, 2, 3, 4]) == [1, 2, 3, 4]
     assert lwithout([1, 2, 1, 0, 3, 1, 4], 0, 1) == [2, 3, 4]
+
+def test_fixpoint():
+    def f1(x):
+        return x**2
+    fp1_a = fixpoint(f1, 0.99)
+    fp1_b = fixpoint(f1, 0)
+    assert(pytest.approx(fp1_a) == 0)
+    assert(pytest.approx(fp1_b) == 0)
+
+    def f2(x):
+        return x.upper()
+    fp2_a = fixpoint(f2, "foo")
+    fp2_b = fixpoint(f2, "FOO")
+    assert(fp2_a == "FOO")
+    assert(fp2_b == "FOO")
+
+    def f3(x):
+        return abs(x)
+    fp3_a = fixpoint(f3, -3)
+    fp3_b = fixpoint(f3, 3)
+    assert(fp3_a == 3)
+    assert(fp3_b == 3)

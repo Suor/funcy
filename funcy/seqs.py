@@ -20,7 +20,7 @@ __all__ = [
     'group_by', 'group_by_keys', 'group_values', 'count_by', 'count_reps',
     'partition', 'lpartition', 'chunks', 'lchunks', 'partition_by', 'lpartition_by',
     'with_prev', 'with_next', 'pairwise',
-    'reductions', 'lreductions', 'sums', 'lsums', 'accumulate',
+    'reductions', 'lreductions', 'sums', 'lsums', 'accumulate', 'fixpoint'
 ]
 
 
@@ -480,3 +480,21 @@ def sums(seq, acc=EMPTY):
 def lsums(seq, acc=EMPTY):
     """Lists partial sums of seq."""
     return lreductions(operator.add, seq, acc)
+
+def fixpoint(f, x):
+    """return the fixpoint of x under f, namely the y such that:
+
+    y = f^n(x) = f^(n+1)(x), for some n."""
+    return first(  # take the least fixed point
+        map(  # grab one element from the tuple
+            lambda xy: xy[0],
+            filter(  # find the fixed point,
+                     # i.e. where iterate equals
+                     # previous iterate
+                lambda xy: xy[0] == xy[1],
+                pairwise(  # take successive pairs
+                    iterate(f, x)  # iterate f over sources
+                )
+            )
+        )
+    )
