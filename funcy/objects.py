@@ -6,7 +6,7 @@ from .funcs import iffy
 from .strings import cut_prefix
 
 
-__all__ = ['cached_property', 'monkey', 'namespace', 'LazyObject']
+__all__ = ['cached_property', 'monkey', 'namespace', 'LazyObject', 'SingletonMeta']
 
 
 class cached_property(object):
@@ -85,3 +85,23 @@ class LazyObject(object):
     def __setattr__(self, name, value):
         self._setup()
         return setattr(self, name, value)
+
+
+class SingletonMeta(type):
+    """Metaclass for creating Singleton"""
+
+    @staticmethod
+    def __new__(mcs, cls_name, bases, attrs):
+        cls = super(SingletonMeta, mcs).__new__(mcs, cls_name, bases, attrs)
+        original_new = cls.__new__
+
+        def new(cls, *args, **kwargs):
+            if cls.__instance is None:
+                instance = original_new(cls, *args, **kwargs)
+                cls.__instance = instance
+            return cls.__instance
+
+        cls.__instance = None
+        cls.__new__ = staticmethod(new)
+
+        return cls

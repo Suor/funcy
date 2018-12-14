@@ -1,4 +1,6 @@
 import sys
+import six
+
 from funcy.objects import *
 
 
@@ -103,3 +105,18 @@ def test_lazy_object():
     a = LazyObject(A)
     assert not log
     assert a.x == 42
+
+
+def test_singleton_meta():
+    @six.add_metaclass(SingletonMeta)
+    class A:
+        pass
+
+    @six.add_metaclass(SingletonMeta)
+    class B:
+        pass
+
+    assert A() is A()
+    assert A() == A()
+    assert A() is not B()
+    assert A() != B()
