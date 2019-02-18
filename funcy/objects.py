@@ -6,7 +6,7 @@ from .funcs import iffy
 from .strings import cut_prefix
 
 
-__all__ = ['cached_property', 'monkey', 'namespace', 'LazyObject']
+__all__ = ['cached_property', 'cached_readonly', 'monkey', 'namespace', 'LazyObject']
 
 
 class cached_property(object):
@@ -27,6 +27,12 @@ class cached_property(object):
             return self
         res = instance.__dict__[self.fget.__name__] = self.fget(instance)
         return res
+
+
+class cached_readonly(cached_property):
+    """Same as @cached_property, but protected against rewrites."""
+    def __set__(self, instance, value):
+        raise AttributeError("property is read-only")
 
 
 def monkey(cls, name=None):

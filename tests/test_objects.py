@@ -1,4 +1,5 @@
 import sys
+import pytest
 from funcy.objects import *
 
 
@@ -33,6 +34,18 @@ def test_cached_property_doc():
             return 7
 
     assert A.prop.__doc__ == "prop doc"
+
+
+def test_cached_readonly():
+    class A(object):
+        @cached_readonly
+        def prop(self):
+            return 7
+
+    a = A()
+    assert a.prop == 7
+    with pytest.raises(AttributeError):
+        a.prop = 8
 
 
 ### Monkey tests

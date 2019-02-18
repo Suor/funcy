@@ -13,6 +13,11 @@ Objects
                 return list(self.phones.filter(confirmed=True, public=True))
 
 
+.. decorator:: cached_readonly
+
+    Creates a read-only property caching its result. Same as :func:`cached_property` but protected against rewrites.
+
+
 .. decorator:: monkey(cls_or_module, name=None)
 
     Monkey-patches class or module by adding decorated function or property to it named ``name`` or the same as decorated function. Saves overwritten method to ``original`` attribute of decorated function for a kind of inheritance::
