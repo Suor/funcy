@@ -2,3 +2,4 @@ include LICENSE
 include CHANGELOG
 include README.rst
 include VERSION
+recursive-include tests *
