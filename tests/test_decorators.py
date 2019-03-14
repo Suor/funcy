@@ -154,3 +154,11 @@ def test_meta_attribtes():
 
     assert double_decorated.__wrapped__ is decorated
     assert double_decorated.__original__ is func
+
+
+def test_unpack():
+    @unpack
+    def process(foo, bar):
+        return foo + bar
+
+    assert process(('foo', 'bar')) == 'foobar'

@@ -4,7 +4,7 @@ from functools import partial
 from .compat import PY2
 
 
-__all__ = ['decorator', 'wraps', 'unwrap', 'ContextDecorator', 'contextmanager']
+__all__ = ['decorator', 'wraps', 'unwrap', 'ContextDecorator', 'contextmanager', 'unpack']
 
 
 def decorator(deco):
@@ -314,3 +314,23 @@ except ImportError:
                 raise ValueError('wrapper loop when unwrapping {!r}'.format(f))
             memo.add(id_func)
         return func
+
+
+def unpack(func):
+    """
+    The decorator can be used for unpack received arguments.
+
+    It can be helpful with :map: function:
+    >>> def process(foo, bar):
+    ...     return foo + bar
+    >>>
+    >>> from itertools import product
+    >>> list(map(unpack(process), product(['foo1', 'foo2'], ['bar1', 'bar2'])))
+    ['foo1bar1', 'foo1bar2', 'foo2bar1', 'foo2bar2']
+`    """
+
+    @wraps(func)
+    def wrapper(arguments):
+        return func(*arguments)
+
+    return wrapper
