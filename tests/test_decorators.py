@@ -154,3 +154,17 @@ def test_meta_attribtes():
 
     assert double_decorated.__wrapped__ is decorated
     assert double_decorated.__original__ is func
+
+
+def test_decorator_introspection():
+    @decorator
+    def decor(call, x):
+        return call()
+
+    assert decor.__name__ == 'decor'
+
+    decor_x = decor(42)
+    assert decor_x.__name__ == 'decor'
+    assert decor_x._func is decor.__wrapped__
+    assert decor_x._args == (42,)
+    assert decor_x._kwargs == {}

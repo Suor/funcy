@@ -22,7 +22,7 @@ def decorator(deco):
             return call()
     """
     if has_single_arg(deco):
-        return wraps(deco)(make_decorator(deco))
+        return make_decorator(deco)
     else:
         # Any arguments after first become decorator arguments
         # And a decorator with arguments is essentialy a decorator fab
@@ -32,11 +32,16 @@ def decorator(deco):
 
 
 def make_decorator(deco, dargs=(), dkwargs={}):
+    @wraps(deco)
     def _decorator(func):
         def wrapper(*args, **kwargs):
             call = Call(func, args, kwargs)
             return deco(call, *dargs, **dkwargs)
         return wraps(func)(wrapper)
+
+    # NOTE: should I update name to show args?
+    # Save these for introspection
+    _decorator._func, _decorator._args, _decorator._kwargs = deco, dargs, dkwargs
     return _decorator
 
 
