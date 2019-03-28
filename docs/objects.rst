@@ -12,6 +12,8 @@ Objects
             def public_phones(self):
                 return list(self.phones.filter(confirmed=True, public=True))
 
+    **CAVEAT:** only one cached value is stored for each property, so if you call ancestors cached property from outside of corresponding child property it will save ancestors value, which will prevent future evaluations from ever calling child function.
+
 
 .. decorator:: cached_readonly
 
