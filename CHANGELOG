@@ -1,3 +1,9 @@
+1.12
+- added @cached_readonly
+- more introspection in @decorator decorators
+- documented @cached_property inheritance limitations
+- included tests in pypi sdist tarball (Tomáš Chvátal)
+
 1.11
 - switched docs and internals to Python 3
 - improved docs: better texts and examples here and there
