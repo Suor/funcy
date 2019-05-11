@@ -13,6 +13,7 @@ from .flow import *
 from .objects import *
 from .debug import *
 from .primitives import *
+from .compat import nullcontext  # noqa
 
 
 # Setup __all__
