@@ -185,5 +185,13 @@ Flow
                 # ...
 
 
+.. decorator:: wrap_with(manager)
+
+    Turns a context manager into a decorator::
+
+        @wrap_with(threading.Lock())
+        def protected_func(...):
+            # ...
+
 .. raw:: html
     :file: descriptions.html

@@ -194,3 +194,22 @@ def test_once_per_args():
     assert calls == [1, 2, 1]
     call(1)
     assert calls == [1, 2, 1]
+
+
+def test_wrap_with():
+    calls = []
+
+    class Manager:
+        def __enter__(self):
+            calls.append(1)
+            return self
+
+        def __exit__(self, *args):
+            pass
+
+    @wrap_with(Manager())
+    def calc():
+        pass
+
+    calc()
+    assert calls == [1]

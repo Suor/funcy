@@ -9,7 +9,8 @@ from .decorators import decorator, wraps, get_argnames, arggetter, contextmanage
 __all__ = ['raiser', 'ignore', 'silent', 'suppress', 'reraise', 'retry', 'fallback',
            'limit_error_rate', 'ErrorRateExceeded',
            'post_processing', 'collecting', 'joining',
-           'once', 'once_per', 'once_per_args']
+           'once', 'once_per', 'once_per_args',
+           'wrap_with']
 
 
 ### Error handling utilities
@@ -206,3 +207,10 @@ once.__doc__ = "Let function execute once, noop all subsequent calls."
 def once_per_args(func):
     """Call function once for every combination of values of its arguments."""
     return once_per(*get_argnames(func))(func)
+
+
+@decorator
+def wrap_with(call, manager):
+    """Turn context manager into a decorator"""
+    with manager:
+        return call()
