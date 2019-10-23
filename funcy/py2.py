@@ -25,7 +25,7 @@ RENAMES = {}
 for name in ('map', 'filter', 'remove', 'keep', 'without', 'concat', 'cat', 'flatten',
              'mapcat', 'distinct', 'split', 'split_at', 'split_by', 'partition', 'chunks',
              'partition_by', 'reductions', 'sums', 'juxt',
-             'tree_leaves', 'tree_nodes',
+             'tree_leaves', 'tree_nodes', 'tree_keys',
              'where', 'pluck', 'pluck_attr', 'invoke'):
     RENAMES['l' + name] = name
     RENAMES[name] = 'i' + name

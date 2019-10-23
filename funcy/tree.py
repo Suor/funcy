@@ -1,8 +1,9 @@
 from collections import deque
 from .types import is_seqcont
+from .seqs import lflatten
 
 
-__all__ = ['tree_leaves', 'ltree_leaves', 'tree_nodes', 'ltree_nodes']
+__all__ = ['tree_leaves', 'ltree_leaves', 'tree_nodes', 'ltree_nodes', 'tree_keys', 'ltree_keys']
 
 
 def tree_leaves(root, follow=is_seqcont, children=iter):
@@ -49,12 +50,12 @@ def tree_keys(payload, parent=None):
         if parent:
             trail.append(parent)
         trail.append(node)
-        yield fn.lflatten(trail)
+        yield lflatten(trail)
         child = payload.get(node)
         if isinstance(child, dict):
             yield from tree_keys(child, parent=trail)
 
 
-def ltree_keys(payload: Dict) -> List:
+def ltree_keys(payload):
     """List version of tree_keys"""
     return list(tree_keys(payload))

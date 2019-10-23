@@ -21,3 +21,10 @@ def test_tree_nodes():
     ]
     assert ltree_nodes(1) == [1]
     assert ltree_nodes(3, follow=_ > 1, children=range) == [3, 0, 1, 2, 0, 1]
+
+
+def test_tree_keys():
+    assert ltree_keys({"a": 1}) == [["a"]]
+    assert ltree_keys({"a": 1, "b": 2}) == [['b'], ['a']]
+    assert ltree_keys({"a": {"a1": 3}, "b": 2}) == [['b'], ['a'], ['a', 'a1']]
+    assert ltree_keys({}) == []
