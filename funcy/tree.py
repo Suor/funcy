@@ -38,3 +38,23 @@ def tree_nodes(root, follow=is_seqcont, children=iter):
 def ltree_nodes(root, follow=is_seqcont, children=iter):
     """Lists all tree nodes."""
     return list(tree_nodes(root, follow, children))
+
+
+def tree_keys(payload, parent=None):
+    """Iterates of all keys within a dict and returns a list of nested keys"""
+    q = deque(payload.keys())
+    while q:
+        node = q.pop()
+        trail = []
+        if parent:
+            trail.append(parent)
+        trail.append(node)
+        yield fn.lflatten(trail)
+        child = payload.get(node)
+        if isinstance(child, dict):
+            yield from tree_keys(child, parent=trail)
+
+
+def ltree_keys(payload: Dict) -> List:
+    """List version of tree_keys"""
+    return list(tree_keys(payload))
