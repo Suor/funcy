@@ -64,7 +64,7 @@ def test_wrap_prop():
         def __exit__(self, *args):
             pass
 
-    class A:
+    class A(object):
         @wrap_prop(Manager('p'))
         @property
         def prop(self):
