@@ -56,7 +56,7 @@ Other topics
 Content tests      :func:`all` :func:`any` :func:`none` :func:`one` :func:`is_distinct`
 Type tests         :func:`isa` :func:`is_iter` :func:`is_list` :func:`is_tuple` :func:`is_set` :func:`is_mapping` :func:`is_seq` :func:`is_seqcoll` :func:`is_seqcont` :func:`iterable`
 Decorators         :func:`decorator<funcy.decorator>` :func:`wraps<funcy.wraps>` :func:`unwrap<funcy.unwrap>` :func:`autocurry`
-Control flow       :func:`once` :func:`once_per` :func:`once_per_args` :func:`collecting` :func:`joining` :func:`post_processing`
+Control flow       :func:`once` :func:`once_per` :func:`once_per_args` :func:`collecting` :func:`joining` :func:`post_processing` :func:`wrap_with`
 Error handling     :func:`retry` :func:`silent` :func:`ignore` :func:`suppress` :func:`limit_error_rate` :func:`fallback` :func:`raiser` :func:`reraise`
 Debugging          :func:`tap` :func:`log_calls` :func:`log_enters` :func:`log_exits` :func:`log_errors` :func:`log_durations` :func:`log_iter_durations`
 Caching            :func:`memoize` :func:`cache` :func:`cached_property` :func:`make_lookuper` :func:`silent_lookuper`
