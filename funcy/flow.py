@@ -6,7 +6,7 @@ from .compat import map, range, raise_from, Hashable
 from .decorators import decorator, wraps, get_argnames, arggetter, contextmanager
 
 
-__all__ = ['raiser', 'ignore', 'silent', 'suppress', 'reraise', 'retry', 'fallback',
+__all__ = ['raiser', 'ignore', 'silent', 'suppress', 'nullcontext', 'reraise', 'retry', 'fallback',
            'limit_error_rate', 'ErrorRateExceeded',
            'post_processing', 'collecting', 'joining',
            'once', 'once_per', 'once_per_args',
@@ -76,6 +76,31 @@ except ImportError:
             return exctype is not None and issubclass(exctype, self._exceptions)
 
 
+### Backport of Python 3.7 nullcontext
+try:
+    from contextlib import nullcontext
+except ImportError:
+    class nullcontext(object):
+        """Context manager that does no additional processing.
+
+        Used as a stand-in for a normal context manager, when a particular
+        block of code is only sometimes used with a normal context manager:
+
+        cm = optional_cm if condition else nullcontext()
+        with cm:
+            # Perform operation, using optional_cm if condition is True
+        """
+
+        def __init__(self, enter_result=None):
+            self.enter_result = enter_result
+
+        def __enter__(self):
+            return self.enter_result
+
+        def __exit__(self, *excinfo):
+            pass
+
+
 @contextmanager
 def reraise(errors, into):
     """Reraises errors as other exception."""
@@ -87,7 +112,7 @@ def reraise(errors, into):
 
 
 @decorator
-def retry(call, tries, errors=Exception, timeout=0):
+def retry(call, tries, errors=Exception, filter_errors=None, timeout=0):
     """Makes decorated function retry up to tries times.
        Retries only on specified errors.
        Sleeps timeout or timeout(attempt) seconds between tries."""
@@ -95,7 +120,10 @@ def retry(call, tries, errors=Exception, timeout=0):
     for attempt in range(tries):
         try:
             return call()
-        except errors:
+        except errors as e:
+            if filter_errors and not filter_errors(e):
+                raise
+
             # Reraise error on last attempt
             if attempt + 1 == tries:
                 raise

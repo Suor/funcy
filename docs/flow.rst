@@ -32,6 +32,18 @@ Flow
             make_http_request()
 
 
+.. function:: nullcontext(enter_result=None)
+
+    A noop context manager that returns ``enter_result`` from ``__enter__``::
+
+        ctx = nullcontext()
+        if threads:
+            ctx = op_thread_lock
+
+        with ctx:
+            # ... do stuff
+
+
 .. decorator:: once
                once_per_args
                once_per(*argnames)
