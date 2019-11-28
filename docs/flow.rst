@@ -84,9 +84,9 @@ Flow
             # ...
 
 
-.. decorator:: retry(tries, errors=Exception, timeout=0)
+.. decorator:: retry(tries, errors=Exception, timeout=0, filter_errors=None)
 
-    Every call of the decorated function is tried up to ``tries`` times. The first attempt counts as a try. Retries occur when any subclass of ``errors`` is raised (``errors`` can be an exception class or a list/tuple of exception classes). There will be a delay in ``timeout`` seconds between tries.
+    Every call of the decorated function is tried up to ``tries`` times. The first attempt counts as a try. Retries occur when any subclass of ``errors`` is raised, where``errors`` is an exception class or a list/tuple of exception classes. There will be a delay in ``timeout`` seconds between tries.
 
     A common use is to wrap some unreliable action::
 
@@ -95,7 +95,13 @@ Flow
             # ... make http request
             return image
 
-    You can pass callable as ``timeout`` to achieve exponential delays or other complex behavior::
+    Errors to retry may addtionally be filtered with ``filter_errors`` when classes are not specific enough::
+
+        @retry(3, errors=HttpError, filter_errors=lambda e: e.status_code >= 500)
+        def download_image(url):
+            # ...
+
+    You can pass a callable as ``timeout`` to achieve exponential delays or other complex behavior::
 
         @retry(3, errors=HttpError, timeout=lambda a: 2 ** a)
         def download_image(url):

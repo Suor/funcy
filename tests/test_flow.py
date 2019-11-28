@@ -69,19 +69,12 @@ def test_reraise():
 
 
 def test_retry():
-    calls = []
+    with pytest.raises(MyError):
+        _make_failing()()
+    assert retry(2, MyError)(_make_failing())() == 1
 
-    def failing(n=1):
-        if len(calls) < n:
-            calls.append(1)
-            raise MyError
-        return 1
-
-    with pytest.raises(MyError): failing()
-    calls = []
-    assert retry(2, MyError)(failing)() == 1
-    calls = []
-    with pytest.raises(MyError): retry(2, MyError)(failing)(2)
+    with pytest.raises(MyError):
+        retry(2, MyError)(_make_failing(n=2))()
 
 
 def test_retry_timeout(monkeypatch):
@@ -93,27 +86,41 @@ def test_retry_timeout(monkeypatch):
 
     # sleep only between tries, so retry is 11, but sleep summary is ~0.1 sec
     del timeouts[:]
-    with pytest.raises(MyError): retry(11, MyError, timeout=1)(failing)()
+    with pytest.raises(MyError):
+        retry(11, MyError, timeout=1)(failing)()
     assert timeouts == [1] * 10
 
     # exponential timeout
     del timeouts[:]
-    with pytest.raises(MyError): retry(4, MyError, timeout=lambda a: 2 ** a)(failing)()
+    with pytest.raises(MyError):
+        retry(4, MyError, timeout=lambda a: 2 ** a)(failing)()
     assert timeouts == [1, 2, 4]
 
 
 def test_retry_many_errors():
+    assert retry(2, (MyError, RuntimeError))(_make_failing())() == 1
+    assert retry(2, [MyError, RuntimeError])(_make_failing())() == 1
+
+
+def test_retry_filter():
+    error_pred = lambda e: 'x' in str(e)
+    retry_deco = retry(2, MyError, filter_errors=error_pred)
+
+    assert retry_deco(_make_failing(e=MyError('x')))() == 1
+    with pytest.raises(MyError):
+        retry_deco(_make_failing())()
+
+
+def _make_failing(n=1, e=MyError):
     calls = []
 
-    def failing(n=1):
+    def failing():
         if len(calls) < n:
             calls.append(1)
-            raise MyError
+            raise e
         return 1
 
-    assert retry(2, (MyError, RuntimeError))(failing)() == 1
-    calls = []
-    assert retry(2, [MyError, RuntimeError])(failing)() == 1
+    return failing
 
 
 def test_fallback():

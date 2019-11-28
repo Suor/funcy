@@ -112,7 +112,7 @@ def reraise(errors, into):
 
 
 @decorator
-def retry(call, tries, errors=Exception, filter_errors=None, timeout=0):
+def retry(call, tries, errors=Exception, timeout=0, filter_errors=None):
     """Makes decorated function retry up to tries times.
        Retries only on specified errors.
        Sleeps timeout or timeout(attempt) seconds between tries."""
@@ -121,7 +121,7 @@ def retry(call, tries, errors=Exception, filter_errors=None, timeout=0):
         try:
             return call()
         except errors as e:
-            if filter_errors and not filter_errors(e):
+            if not (filter_errors is None or filter_errors(e)):
                 raise
 
             # Reraise error on last attempt
