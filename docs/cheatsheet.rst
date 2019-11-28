@@ -59,7 +59,7 @@ Decorators         :func:`decorator<funcy.decorator>` :func:`wraps<funcy.wraps>`
 Control flow       :func:`once` :func:`once_per` :func:`once_per_args` :func:`collecting` :func:`joining` :func:`post_processing` :func:`wrap_with`
 Error handling     :func:`retry` :func:`silent` :func:`ignore` :func:`suppress` :func:`limit_error_rate` :func:`fallback` :func:`raiser` :func:`reraise`
 Debugging          :func:`tap` :func:`log_calls` :func:`log_enters` :func:`log_exits` :func:`log_errors` :func:`log_durations` :func:`log_iter_durations`
-Caching            :func:`memoize` :func:`cache` :func:`cached_property` :func:`make_lookuper` :func:`silent_lookuper`
+Caching            :func:`memoize` :func:`cache` :func:`cached_property` :func:`cached_readonly` :func:`make_lookuper` :func:`silent_lookuper`
 Regexes            :func:`re_find` :func:`re_test` :func:`re_all` :func:`re_iter` :func:`re_finder` :func:`re_tester`
 Strings            :func:`cut_prefix` :func:`cut_suffix` :func:`str_join`
 Objects            :func:`cached_property` :func:`cached_readonly` :func:`monkey` :func:`invoke` :func:`pluck_attr` :class:`namespace` :class:`LazyObject`
