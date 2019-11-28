@@ -7,7 +7,7 @@ Inspired by clojure, underscore and my own abstractions. Keep reading to get an 
 or `read the docs <http://funcy.readthedocs.org/>`_.
 Or jump directly to `cheatsheet <http://funcy.readthedocs.io/en/stable/cheatsheet.html>`_.
 
-Works with Python 2.6+, 3.3+ and pypy.
+Works with Python 2.7, 3.4+ and pypy.
 
 
 Installation
