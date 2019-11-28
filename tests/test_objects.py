@@ -1,6 +1,7 @@
 import sys
 import pytest
 from funcy.objects import *
+from funcy import suppress
 
 
 ### @cached_property
@@ -46,6 +47,50 @@ def test_cached_readonly():
     assert a.prop == 7
     with pytest.raises(AttributeError):
         a.prop = 8
+
+
+def test_wrap_prop():
+    calls = []
+
+    # Not using @contextmanager to not make this a decorator
+    class Manager:
+        def __init__(self, name):
+            self.name = name
+
+        def __enter__(self):
+            calls.append(self.name)
+            return self
+
+        def __exit__(self, *args):
+            pass
+
+    class A:
+        @wrap_prop(Manager('p'))
+        @property
+        def prop(self):
+            return 1
+
+        @wrap_prop(Manager('cp'))
+        @cached_property
+        def cached_prop(self):
+            return 1
+
+    a = A()
+    assert a.prop and calls == ['p']
+    assert a.prop and calls == ['p', 'p']
+    assert a.cached_prop and calls == ['p', 'p', 'cp']
+    assert a.cached_prop and calls == ['p', 'p', 'cp']
+
+    # Wrap __set__ for data props
+    a = A()
+    calls[:] = []
+    with suppress(AttributeError):
+        a.prop = 2
+    assert calls == ['p']
+
+    # Do not wrap __set__ for non-data props
+    a.cached_property = 2
+    assert calls == ['p']
 
 
 ### Monkey tests

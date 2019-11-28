@@ -199,6 +199,7 @@ def test_once_per_args():
 def test_wrap_with():
     calls = []
 
+    # Not using @contextmanager to not make this a decorator
     class Manager:
         def __enter__(self):
             calls.append(1)

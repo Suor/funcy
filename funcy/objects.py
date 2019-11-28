@@ -6,7 +6,7 @@ from .funcs import iffy
 from .strings import cut_prefix
 
 
-__all__ = ['cached_property', 'cached_readonly', 'monkey', 'namespace', 'LazyObject']
+__all__ = ['cached_property', 'cached_readonly', 'wrap_prop', 'monkey', 'namespace', 'LazyObject']
 
 
 class cached_property(object):
@@ -33,6 +33,34 @@ class cached_readonly(cached_property):
     """Same as @cached_property, but protected against rewrites."""
     def __set__(self, instance, value):
         raise AttributeError("property is read-only")
+
+
+def wrap_prop(ctx):
+    """Wrap a property accessors with a context manager"""
+    def decorator(prop):
+        class WrapperProp(object):
+            def __repr__(self):
+                return repr(prop)
+
+            def __get__(self, instance, type=None):
+                if instance is None:
+                    return self
+
+                with ctx:
+                    return prop.__get__(instance, type)
+
+            if hasattr(prop, '__set__'):
+                def __set__(self, name, value):
+                    with ctx:
+                        return prop.__set__(name, value)
+
+            if hasattr(prop, '__del__'):
+                def __del__(self, name):
+                    with ctx:
+                        return prop.__del__(name)
+
+        return WrapperProp()
+    return decorator
 
 
 def monkey(cls, name=None):

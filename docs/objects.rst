@@ -3,14 +3,21 @@ Objects
 
 .. decorator:: cached_property
 
-    Creates a property caching its result. One can rewrite cached value simply by assigning property. And clear cache by deleting it.
-
-    A great way to lazily attach some data to an object::
+    Creates a property caching its result. This is a great way to lazily attach some data to an object::
 
         class MyUser(AbstractBaseUser):
             @cached_property
             def public_phones(self):
                 return list(self.phones.filter(confirmed=True, public=True))
+
+    One can rewrite cached value simply by assigning and clear cache by deleting it::
+
+        user.public_phones = [...]
+        del user.public_phones  # will be populated on next access
+
+    Note that the last line will raise ``AttributeError`` if cache is not set, to clear cache safely one might use::
+
+        user.__dict__.pop('public_phones')
 
     **CAVEAT:** only one cached value is stored for each property, so if you call ancestors cached property from outside of corresponding child property it will save ancestors value, which will prevent future evaluations from ever calling child function.
 
@@ -18,6 +25,21 @@ Objects
 .. decorator:: cached_readonly
 
     Creates a read-only property caching its result. Same as :func:`cached_property` but protected against rewrites.
+
+
+.. decorator:: wrap_prop(ctx)
+
+    Wraps a property accessors with a context manager::
+
+        class SomeConnector:
+            # We want several threads share this session,
+            # but only one of them initialize it.
+            @wrap_prop(threading.Lock())
+            @cached_property
+            def session(self):
+                # ... build a session
+
+    Note that ``@wrap_prop()`` preserves descriptor type, i.e. wrapped cached property may still be rewritten and cleared the same way.
 
 
 .. decorator:: monkey(cls_or_module, name=None)

@@ -238,7 +238,7 @@ def once_per_args(func):
 
 
 @decorator
-def wrap_with(call, manager):
+def wrap_with(call, ctx):
     """Turn context manager into a decorator"""
-    with manager:
+    with ctx:
         return call()

@@ -197,7 +197,7 @@ Flow
                 # ...
 
 
-.. decorator:: wrap_with(manager)
+.. decorator:: wrap_with(ctx)
 
     Turns a context manager into a decorator::
 
