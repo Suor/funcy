@@ -1,3 +1,10 @@
+1.14
+- stated Python 3.7 and 3.8 support
+- dropped Python 2.6
+- added @wrap_prop()
+- added filter_errors param to @retry()
+- published nullcontext properly
+
 1.13
 - added @wrap_with()
 - added nullcontext
