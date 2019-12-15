@@ -3,7 +3,7 @@ import pytest
 from whatever import _
 
 from funcy.compat import range, Iterator, PY3
-from funcy import is_list
+from funcy import is_list, even
 from funcy.seqs import *
 
 
@@ -211,3 +211,18 @@ def test_without():
     assert lwithout([]) == []
     assert lwithout([1, 2, 3, 4]) == [1, 2, 3, 4]
     assert lwithout([1, 2, 1, 0, 3, 1, 4], 0, 1) == [2, 3, 4]
+
+
+def test_lunfold():
+    assert take(5, lunfold(lambda n: (n, n+1), 0)) == [0, 1, 2, 3, 4]
+
+def test_unfold():
+    # by default 1 is omitted, as above function returns results only if n > 1
+    assert unfold(collatz, 10) == [10, 5, 16, 8, 4, 2]
+
+def test_unfold_including_last():
+    assert unfold(collatz, 10, include_last=True) == [10, 5, 16, 8, 4, 2, 1]
+
+def collatz(n):
+    if n > 1:
+        return (n, n // 2 if even(n) else 3 * n + 1)

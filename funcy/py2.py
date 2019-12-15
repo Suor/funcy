@@ -26,7 +26,7 @@ for name in ('map', 'filter', 'remove', 'keep', 'without', 'concat', 'cat', 'fla
              'mapcat', 'distinct', 'split', 'split_at', 'split_by', 'partition', 'chunks',
              'partition_by', 'reductions', 'sums', 'juxt',
              'tree_leaves', 'tree_nodes',
-             'where', 'pluck', 'pluck_attr', 'invoke'):
+             'where', 'pluck', 'pluck_attr', 'invoke', 'unfold'):
     RENAMES['l' + name] = name
     RENAMES[name] = 'i' + name
 RENAMES['zip_values'] = 'izip_values'

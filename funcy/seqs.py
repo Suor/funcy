@@ -5,7 +5,8 @@ import operator
 
 from .compat import map as _map, filter as _filter, lmap as _lmap, lfilter as _lfilter, \
                     zip, filterfalse, range, Sequence, PY2, PY3
-from .primitives import EMPTY
+from .primitives import EMPTY, isnone
+
 from .types import is_seqcont
 from .funcmakers import make_func, make_pred
 
@@ -21,7 +22,7 @@ __all__ = [
     'partition', 'lpartition', 'chunks', 'lchunks', 'partition_by', 'lpartition_by',
     'with_prev', 'with_next', 'pairwise',
     'reductions', 'lreductions', 'sums', 'lsums', 'accumulate',
-]
+    'lunfold', 'unfold']
 
 
 # Re-export
@@ -480,3 +481,39 @@ def sums(seq, acc=EMPTY):
 def lsums(seq, acc=EMPTY):
     """Lists partial sums of seq."""
     return lreductions(operator.add, seq, acc)
+
+def lunfold(fun, init, include_last=False):
+    """Opposite / dual of fold().
+
+    Given function f, generate sequence of values
+    using iterated applications of f starting at init
+    as long as fun does not return None.
+
+    fun() is supposed to return pair (state, next_state),
+    or None when iteration should be finished.
+
+    By default last value evaluated when hitting the finish condition (None) is
+    not returned. Set include_last to True if you wish to include it, eg.
+
+    def collatz(n):
+        if n > 1:
+            return (n, n // 2 if even(n) else 3 * n + 1)
+
+    unfold(collatz, 10) == [10, 5, 16, 8, 4, 2]  # because None is returned when n=1
+    unfold(collatz, 10, include_last=True) == [10, 5, 16, 8, 4, 2, 1]
+    """
+
+    next_state = init
+    while True:
+        pair = fun(next_state)
+        if isnone(pair):
+            if include_last:
+                yield next_state
+            return
+        current_state, next_state = pair
+        yield current_state
+
+def unfold(*args, **kwargs):
+    """Like unfold(), but non-lazy."""
+
+    return list(lunfold(*args, **kwargs))

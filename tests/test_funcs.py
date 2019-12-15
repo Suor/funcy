@@ -143,3 +143,7 @@ def test_iffy():
     assert map(iffy(r'\d+', str.upper), ['a2', 'c']) == ['A2', 'c']
     assert map(iffy(set([1,4,5])), [False, 2, 4]) == [False, False, True]
     assert map(iffy(None), [False, 2, 3, 4]) == [False, 2, 3, 4]
+
+def test_fold():
+    assert fold(lambda a, b: a+b, [2, 3, 4]) == 9
+    assert fold(lambda a, b: a+b, [3, 4], 2) == 9

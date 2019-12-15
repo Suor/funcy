@@ -10,7 +10,7 @@ __all__ = ['identity', 'constantly', 'caller',
            'partial', 'rpartial', 'func_partial',
            'curry', 'rcurry', 'autocurry',
            'iffy',
-           'compose', 'rcompose', 'complement', 'juxt', 'ljuxt']
+           'compose', 'rcompose', 'complement', 'juxt', 'ljuxt', 'fold']
 
 
 def identity(x):
@@ -131,3 +131,7 @@ def juxt(*fs):
        Result returns an iterator of results of fs."""
     extended_fs = list(map(make_func, fs))
     return lambda *a, **kw: (f(*a, **kw) for f in extended_fs)
+
+def fold(*args):
+    """Just reduce() aliased as fold() as natural dual for unfold()."""
+    return reduce(*args)
