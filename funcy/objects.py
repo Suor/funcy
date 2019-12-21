@@ -100,7 +100,7 @@ class namespace(object):
 class LazyObject(object):
     """
     A simplistic lazy init object.
-    Rewrites itself when any attribute is accesssed.
+    Rewrites itself when any attribute is accessed.
     """
     # NOTE: we can add lots of magic methods here to intercept on more events,
     #       this is postponed. As well as metaclass to support isinstance() check.
