@@ -32,7 +32,7 @@ FACTORY_REPLACE = {
 
 def _factory(coll, mapper=None):
     coll_type = type(coll)
-    # Hack for defaultdicts overriden constructor
+    # Hack for defaultdicts overridden constructor
     if isinstance(coll, defaultdict):
         item_factory = compose(mapper, coll.default_factory) if mapper and coll.default_factory \
                        else coll.default_factory
