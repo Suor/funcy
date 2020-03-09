@@ -109,22 +109,22 @@ def ilen(seq):
 # TODO: tree-seq equivalent
 
 def lmap(f, *seqs):
-    """An extended version of builtin map().
+    """An extended version of builtin map() returning a list.
        Derives a mapper from string, int, slice, dict or set."""
     return _lmap(make_func(f, builtin=PY2), *seqs)
 
 def lfilter(pred, seq):
-    """An extended version of builtin filter().
+    """An extended version of builtin filter() returning a list.
        Derives a predicate from string, int, slice, dict or set."""
     return _lfilter(make_pred(pred, builtin=PY2), seq)
 
 def map(f, *seqs):
-    """An extended version of builtin imap().
+    """An extended version of builtin map().
        Derives a mapper from string, int, slice, dict or set."""
     return _map(make_func(f, builtin=PY2), *seqs)
 
 def filter(pred, seq):
-    """An extended version of builtin ifilter().
+    """An extended version of builtin filter().
        Derives a predicate from string, int, slice, dict or set."""
     return _filter(make_pred(pred, builtin=PY2), seq)
 
