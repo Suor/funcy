@@ -18,6 +18,9 @@ __all__ = ['raiser', 'ignore', 'silent', 'suppress', 'nullcontext', 'reraise', '
 def raiser(exception_or_class=Exception, *args, **kwargs):
     """Constructs function that raises the given exception
        with given arguments on any invocation."""
+    if isinstance(exception_or_class, str):
+        exception_or_class = Exception(exception_or_class)
+
     def _raiser(*a, **kw):
         if args or kwargs:
             raise exception_or_class(*args, **kwargs)

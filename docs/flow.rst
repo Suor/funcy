@@ -72,7 +72,11 @@ Flow
 
 .. function:: raiser(exception_or_class=Exception, *args, **kwargs)
 
-    Constructs function that raises given exception with given arguments on any invocation.
+    Constructs function that raises given exception with given arguments on any invocation. You may pass a string instead of exception as a shortcut::
+
+        mocker.patch('mod.Class.propname', property(raiser("Shouldn't be called")))
+
+    This will raise an ``Exception`` with a corresponding message.
 
 
 .. decorator:: reraise(errors, into)
