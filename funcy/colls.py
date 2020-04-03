@@ -271,7 +271,7 @@ def get_in(coll, path, default=None):
     for key in path:
         try:
             coll = coll[key]
-        except (KeyError, IndexError):
+        except (KeyError, IndexError, TypeError):
             return default
     return coll
 

@@ -244,6 +244,8 @@ def test_get_in():
 def test_get_in_list():
     assert get_in([1, 2], [0]) == 1
     assert get_in([1, 2], [3]) is None
+    assert get_in([], ['x']) is None
+    assert get_in([], ['x'], 1) == 1
     assert get_in({'x': [1, 2]}, ['x', 1]) == 2
 
 
