@@ -122,9 +122,7 @@ def test_cache():
     assert inc(0) == 1
     assert inc(1) == 2
     assert inc(0) == 1
-    inc.invalidate(0)
-    assert inc(0) == 1
-    assert calls == [0, 1, 0]
+    assert calls == [0, 1]
 
 
 def test_cache_mixed_args():
@@ -146,3 +144,33 @@ def test_cache_timedout():
     assert inc(0) == 1
     assert inc(0) == 1
     assert calls == [0, 0]
+
+
+def test_cache_invalidate():
+    calls = []
+
+    @cache(timeout=60)
+    def inc(x):
+        calls.append(x)
+        return x + 1
+
+    assert inc(0) == 1
+    assert inc(1) == 2
+    assert inc(0) == 1
+    assert calls == [0, 1]
+
+    inc.invalidate_all()
+    assert inc(0) == 1
+    assert inc(1) == 2
+    assert inc(0) == 1
+    assert calls == [0, 1, 0, 1]
+
+    inc.invalidate(1)
+    assert inc(0) == 1
+    assert inc(1) == 2
+    assert inc(0) == 1
+    assert calls == [0, 1, 0, 1, 1]
+
+    # ensure invalidate() is idempotent (doesn't raise KeyError on the 2nd call)
+    inc.invalidate(0)
+    inc.invalidate(0)

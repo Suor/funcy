@@ -123,7 +123,7 @@ def cache(timeout, key_func=None):
             return result
 
         def invalidate(*args, **kwargs):
-            cache.pop(key_func(*args, **kwargs))
+            cache.pop(key_func(*args, **kwargs), None)
         wrapper.invalidate = invalidate
 
         def invalidate_all():
