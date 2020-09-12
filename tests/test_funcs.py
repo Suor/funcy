@@ -32,6 +32,9 @@ def test_back_partial():
     assert rpartial(__sub__, 10)(1) == -9
     assert rpartial(pow, 2, 85)(10) == 15
 
+    merge = lambda a, b, c='bra': a + b + c
+    assert rpartial(merge, a='abra')(b='cada') == 'abracadabra'
+    assert rpartial(merge, 'cada', c='fancy')('abra', c='funcy') == 'abracadafuncy'
 
 def test_curry():
     assert curry(lambda: 42)() == 42
