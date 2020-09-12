@@ -31,9 +31,10 @@ def func_partial(func, *args, **kwargs):
        Can be used to construct methods."""
     return lambda *a, **kw: func(*(args + a), **dict(kwargs, **kw))
 
-def rpartial(func, *args):
-    """Partially applies last arguments."""
-    return lambda *a: func(*(a + args))
+def rpartial(func, *args, **kwargs):
+    """Partially applies last arguments.
+       New keyworded arguments extend and override kwargs."""
+    return lambda *a, **kw: func(*(a + args), **dict(kwargs, **kw))
 
 
 def curry(func, n=EMPTY):
