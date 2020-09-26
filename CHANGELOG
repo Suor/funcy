@@ -1,3 +1,11 @@
+1.15
+- made rpartial accept keyworded arguments (Ruan Comelli)
+- made `@cache.invalidate()` idempotent (Dmitry Vasilyanov)
+- made raiser() accept a string as a shortcut
+- fixed cheatsheat description for 'distinct' helper (tsouvarev)
+- fixed some seqs docstrings
+- fixed some typos (Tim Gates)
+
 1.14
 - stated Python 3.7 and 3.8 support
 - dropped Python 2.6
