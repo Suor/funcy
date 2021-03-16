@@ -220,6 +220,15 @@ Dict utils
         # -> {"a": {"cnt": 1}}
 
 
+.. function:: has_path(coll, path)
+
+    Checks if path exists in the given nested collection::
+
+        has_path({"a": {"b": 42}}, ["a", "b"]) # -> True
+        has_path({"a": {"b": 42}}, ["c"])  # -> False
+        has_path({"a": [1, 2]}, ["a", 0])  # -> True
+
+
 Data manipulation
 -----------------
 
