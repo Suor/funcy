@@ -19,7 +19,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'omit', 'zip_values', 'zip_dicts',
            'where', 'pluck', 'pluck_attr', 'invoke', 'lwhere', 'lpluck', 'lpluck_attr', 'linvoke',
-           'get_in', 'set_in', 'update_in']
+           'get_in', 'set_in', 'update_in', 'has_path']
 
 
 ### Generic ops
@@ -265,7 +265,6 @@ def zip_dicts(*dicts):
     for key in keys:
         yield key, tuple(d[key] for d in dicts)
 
-
 def get_in(coll, path, default=None):
     """Returns a value at path in the given nested collection."""
     for key in path:
@@ -294,6 +293,15 @@ def update_in(coll, path, update, default=None):
         copy[path[0]] = update_in(copy.get(path[0], current_default), path[1:], update, default)
         return copy
 
+def has_path(coll, path):
+    """Checks if path exists in the given nested collection."""
+    head = None
+    for p in path:
+        try:
+            head = head[p] if head else coll[p]
+        except (KeyError, IndexError):
+            return False
+    return True
 
 def lwhere(mappings, **cond):
     """Selects mappings containing all pairs in cond."""

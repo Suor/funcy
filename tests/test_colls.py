@@ -246,7 +246,6 @@ def test_get_in_list():
     assert get_in([1, 2], [3]) is None
     assert get_in({'x': [1, 2]}, ['x', 1]) == 2
 
-
 def test_set_in():
     d = {
         'a': {
@@ -281,6 +280,27 @@ def test_update_in():
     assert d2['a']['b'] == 1
     assert d2['c'] is d['c']
 
+def test_has_path():
+    d = {
+        "a": {
+            "b": "c",
+            "d": "e",
+            "f": {
+                "g": "h"
+            }
+        },
+        "i": "j"
+    }
+    assert not has_path(d, ["m"])
+    assert not has_path(d, ["m", "n"])
+    assert has_path(d, ("i", ))
+    assert has_path(d, ("a", "b"))
+    assert has_path(d, ["a", "f", "g"])
+
+def test_has_path_list():
+    assert has_path([1, 2], [0])
+    assert not has_path([1, 2], [3])
+    assert has_path({'x': [1, 2]}, ['x', 1])
 
 def test_where():
     data = [{'a': 1, 'b': 2}, {'a': 10, 'b': 2}]
