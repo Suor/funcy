@@ -295,10 +295,9 @@ def update_in(coll, path, update, default=None):
 
 def has_path(coll, path):
     """Checks if path exists in the given nested collection."""
-    head = None
     for p in path:
         try:
-            head = head[p] if head else coll[p]
+            coll = coll[p]
         except (KeyError, IndexError):
             return False
     return True

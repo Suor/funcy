@@ -291,9 +291,11 @@ def test_has_path():
         },
         "i": "j"
     }
+
+    assert has_path(d, [])
     assert not has_path(d, ["m"])
     assert not has_path(d, ["m", "n"])
-    assert has_path(d, ("i", ))
+    assert has_path(d, ("i",))
     assert has_path(d, ("a", "b"))
     assert has_path(d, ["a", "f", "g"])
 
