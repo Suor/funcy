@@ -82,7 +82,7 @@ Generate
         iterate(lambda x: x * 2, 1)
         # -> 1, 2, 4, 8, 16, ...
 
-        step = lambda p: (p[0], sum(p))
+        step = lambda p: (p[1], p[0] + p[1])
         map(first, iterate(step, (0, 1)))
         # -> 0, 1, 1, 2, 3, 5, 8, ... (Fibonacci sequence)
 
