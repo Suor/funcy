@@ -145,6 +145,23 @@ def test_limit_error_rate():
     assert calls == [1, 2]
 
 
+def test_throttle(monkeypatch):
+    timestamps = iter([0, 0.01, 1, 1.000025])
+    monkeypatch.setattr('time.time', lambda: next(timestamps))
+
+    calls = []
+
+    @throttle(1)
+    def throttled(x):
+        calls.append(x)
+
+    throttled(1)
+    throttled(2)
+    throttled(3)
+    throttled(4)
+    assert calls == [1, 3]
+
+
 def test_post_processing():
     @post_processing(max)
     def my_max(l):

@@ -7,7 +7,7 @@ from .decorators import decorator, wraps, get_argnames, arggetter, contextmanage
 
 
 __all__ = ['raiser', 'ignore', 'silent', 'suppress', 'nullcontext', 'reraise', 'retry', 'fallback',
-           'limit_error_rate', 'ErrorRateExceeded',
+           'limit_error_rate', 'ErrorRateExceeded', 'throttle',
            'post_processing', 'collecting', 'joining',
            'once', 'once_per', 'once_per_args',
            'wrap_with']
@@ -186,6 +186,30 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
                 func.fails = 0
                 return result
         return wrapper
+    return decorator
+
+
+def throttle(period):
+    """Allows only one run in a period, the rest is skipped"""
+    if isinstance(period, timedelta):
+        period = timedelta.total_seconds()
+
+    def decorator(func):
+        blocked_until = None
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            nonlocal blocked_until
+
+            now = time.time()
+            if blocked_until and blocked_until > now:
+                return
+            blocked_until = now + period
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
     return decorator
 
 

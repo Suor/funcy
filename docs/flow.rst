@@ -143,6 +143,20 @@ Flow
             return data
 
 
+.. function:: throttle(period)
+
+    Only runs a decorated function once in a ``period``::
+
+        @throttle(60)
+        def process_beat(pk, progress):
+            Model.objects.filter(pk=pk).update(beat=timezone.now(), progress=progress)
+
+        # Processing something, update progress info no more often then once a minute
+        for i in ...:
+            process_beat(pk, i / n)
+            # ... do actual processing
+
+
 .. decorator:: collecting
 
     Transforms generator or other iterator returning function into list returning one.
