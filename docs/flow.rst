@@ -87,6 +87,12 @@ Flow
         def api_call(...):
             # ...
 
+    ``into`` can also be a callable to transform the error before reraising::
+
+        @reraise(requests.RequestsError, lambda e: MyAPIError(error_desc(e)))
+        def api_call(...):
+            # ...
+
 
 .. decorator:: retry(tries, errors=Exception, timeout=0, filter_errors=None)
 

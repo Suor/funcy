@@ -69,6 +69,10 @@ def test_reraise():
         with reraise(ValueError, MyError):
             raise TypeError
 
+    with pytest.raises(MyError):
+        with reraise(ValueError, lambda _: MyError):
+            raise ValueError
+
 
 def test_retry():
     with pytest.raises(MyError):
