@@ -111,7 +111,10 @@ def reraise(errors, into):
     try:
         yield
     except errors as e:
-        raise_from(into, e)
+        if callable(into) and not _is_exception(into):
+            raise_from(into(e), e)
+        else:
+            raise_from(into, e)
 
 
 @decorator
@@ -150,8 +153,12 @@ def fallback(*approaches):
 def _ensure_exceptable(errors):
     """Ensures that errors are passable to except clause.
        I.e. should be BaseException subclass or a tuple."""
-    is_exception = isinstance(errors, type) and issubclass(errors, BaseException)
-    return errors if is_exception else tuple(errors)
+    return errors if _is_exception(errors) else tuple(errors)
+
+
+def _is_exception(value):
+    """Is the given value an exception?"""
+    return isinstance(value, type) and issubclass(value, BaseException)
 
 
 class ErrorRateExceeded(Exception):
