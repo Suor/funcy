@@ -142,8 +142,10 @@ def test_cache_timedout():
         return x + 1
 
     assert inc(0) == 1
+    assert inc(1) == 2
     assert inc(0) == 1
-    assert calls == [0, 0]
+    assert calls == [0, 1, 0]
+    assert len(inc.memory) == 1  # Both call should be erased then one added
 
 
 def test_cache_invalidate():
