@@ -118,7 +118,7 @@ def get_spec(func, _cache={}):
     elif isinstance(func, type_classes):
         # Old style classes without base
         if not hasattr(func, '__init__'):
-            return set(), 0, 0
+            return Spec(max_n=0, names=set(), req_n=0, req_names=set(), kw=False)
         # __init__ inherited from builtin classes
         objclass = getattr(func.__init__, '__objclass__', None)
         if objclass and objclass is not func:
