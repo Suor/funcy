@@ -23,12 +23,18 @@ def decorator(deco):
     """
     if has_single_arg(deco):
         return make_decorator(deco)
-    else:
+    elif has_1pos_and_kwonly(deco):
         # Any arguments after first become decorator arguments
         # And a decorator with arguments is essentialy a decorator fab
+        def decorator_fab(_func=None, **dkwargs):  # TODO: make _func pos only in Python 3
+            if _func is not None:
+                return make_decorator(deco, (), dkwargs)(_func)
+            return make_decorator(deco, (), dkwargs)
+    else:
         def decorator_fab(*dargs, **dkwargs):
             return make_decorator(deco, dargs, dkwargs)
-        return wraps(deco)(decorator_fab)
+
+    return wraps(deco)(decorator_fab)
 
 
 def make_decorator(deco, dargs=(), dkwargs={}):
@@ -73,13 +79,26 @@ if PY2:
     def has_single_arg(func):
         spec = inspect.getargspec(func)
         return len(spec.args) == 1 and not spec.varargs and not spec.keywords
+
+    def has_1pos_and_kwonly(func):
+        spec = inspect.getargspec(func)
+        return len(spec.args) == 1 and not spec.varargs
 else:
+    from collections import Counter
+    from inspect import Parameter as P
+
     def has_single_arg(func):
-        spec = inspect.signature(func)
-        if len(spec.parameters) != 1:
+        sig = inspect.signature(func)
+        if len(sig.parameters) != 1:
             return False
-        arg = next(iter(spec.parameters.values()))
+        arg = next(iter(sig.parameters.values()))
         return arg.kind not in (arg.VAR_POSITIONAL, arg.VAR_KEYWORD)
+
+    def has_1pos_and_kwonly(func):
+        sig = inspect.signature(func)
+        kinds = Counter(p.kind for p in sig.parameters.values())
+        return kinds[P.POSITIONAL_ONLY] + kinds[P.POSITIONAL_OR_KEYWORD] == 1 \
+            and kinds[P.VAR_POSITIONAL] == 0
 
 
 def get_argnames(func):

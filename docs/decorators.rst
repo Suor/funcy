@@ -58,6 +58,20 @@ Decorators
         def joining(call, sep):
             return sep.join(call())
 
+    Generally a decorator with arguments is required to be called with ``()`` when applied to function. However, if you use only keyword only parameters aside from ``call`` then you can omit them::
+
+        @decorator
+        def rate_limit(call, *, extra_labels=None):
+            # ...
+
+        @rate_limit  # no extra labels, parentheses are optional
+        def func(request, ...):
+            # ...
+
+        @rate_limit(extra_labels=lambda r: [f"user:{r.user.pk}"])
+        def func(request, ...):
+            # ...
+
     You can see more examples in :mod:`flow` and :mod:`debug` submodules source code.
 
 

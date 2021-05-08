@@ -26,6 +26,20 @@ def test_decorator_with_args():
     assert ten() == 12
 
 
+def test_decorator_kw_only_args():
+    @decorator
+    def add(call, **kwargs):  # TODO: use real kw-only args in Python 3
+        return call() + kwargs.get("n", 1)
+
+    def ten():
+        return 10
+
+    # Should work with or without parentheses
+    assert add(n=2)(ten)() == 12
+    assert add()(ten)() == 11
+    assert add(ten)() == 11
+
+
 def test_decorator_access_arg():
     @decorator
     def multiply(call):
