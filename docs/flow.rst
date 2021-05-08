@@ -83,9 +83,8 @@ Flow
 
     Intercepts any error of ``errors`` classes and reraises it as ``into`` error. Can be used as decorator or a context manager::
 
-        @reraise(requests.RequestsError, MyAPIError)
-        def api_call(...):
-            # ...
+        with reraise(json.JSONDecodeError, SuspiciousOperation('Invalid JSON')):
+            return json.loads(text)
 
     ``into`` can also be a callable to transform the error before reraising::
 

@@ -69,9 +69,9 @@ def test_reraise():
         with reraise(ValueError, MyError):
             raise TypeError
 
-    with pytest.raises(MyError):
-        with reraise(ValueError, lambda _: MyError):
-            raise ValueError
+    with pytest.raises(MyError, match="heyhey"):
+        with reraise(ValueError, lambda e: MyError(str(e) * 2)):
+            raise ValueError("hey")
 
 
 def test_retry():
