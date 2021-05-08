@@ -76,6 +76,22 @@ def test_autocurry_named():
     assert at(1)(2, 3) == (1, 2, 3)
     assert at(a=1)(b=2) == (1, 2, 9)
     assert at(c=3)(1)(2) == (1, 2, 3)
+    assert at(c=3, a=1, b=2) == (1, 2, 3)
+
+    with pytest.raises(TypeError): at(b=2, c=9, d=42)(1)
+
+def test_autocurry_kwargs():
+    at = autocurry(lambda a, b, **kw: (a, b, kw))
+    assert at(1, 2) == (1, 2, {})
+    assert at(1)(c=9)(2) == (1, 2, {'c': 9})
+    assert at(c=9, d=5)(e=7)(1, 2) == (1, 2, {'c': 9, 'd': 5, 'e': 7})
+
+    at = autocurry(lambda a, b=2, c=3: (a, b, c))
+    assert at(1) == (1, 2, 3)
+    assert at(a=1) == (1, 2, 3)
+    assert at(c=9)(1) == (1, 2, 9)
+    assert at(b=3, c=9)(1) == (1, 3, 9)
+    with pytest.raises(TypeError): at(b=2, d=3, e=4)(a=1, c=1)
 
 def test_autocurry_builtin():
     assert autocurry(complex)(imag=1)(0) == 1j

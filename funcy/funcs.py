@@ -2,7 +2,7 @@ from operator import __not__
 from functools import partial, reduce
 
 from .compat import map
-from ._inspect import get_spec
+from ._inspect import get_spec, Spec
 from .primitives import EMPTY
 from .funcmakers import make_func, make_pred
 
@@ -40,7 +40,7 @@ def rpartial(func, *args, **kwargs):
 def curry(func, n=EMPTY):
     """Curries func into a chain of one argument functions."""
     if n is EMPTY:
-        _, n, _ = get_spec(func)
+        n = get_spec(func).max_n
 
     if n <= 1:
         return func
@@ -54,7 +54,7 @@ def rcurry(func, n=EMPTY):
     """Curries func into a chain of one argument functions.
        Arguments are passed from right to left."""
     if n is EMPTY:
-        _, n, _ = get_spec(func)
+        n = get_spec(func).max_n
 
     if n <= 1:
         return func
@@ -68,17 +68,18 @@ def rcurry(func, n=EMPTY):
 def autocurry(func, n=EMPTY, _spec=None, _args=(), _kwargs={}):
     """Creates a version of func returning its partial applications
        until sufficient arguments are passed."""
-    spec = _spec or (get_spec(func) if n is EMPTY else (set(), n, n))
-    required_names, required_n, max_n = spec
+    spec = _spec or (get_spec(func) if n is EMPTY else Spec(n, set(), n, set(), False))
 
     def autocurried(*a, **kw):
         args = _args + a
         kwargs = _kwargs.copy()
         kwargs.update(kw)
 
-        if len(args) + len(kwargs) >= max_n:
+        if not spec.kw and len(args) + len(kwargs) >= spec.max_n:
             return func(*args, **kwargs)
-        elif len(args) + len(set(kwargs) & required_names) >= required_n:
+        elif len(args) + len(set(kwargs) & spec.names) >= spec.max_n:
+            return func(*args, **kwargs)
+        elif len(args) + len(set(kwargs) & spec.req_names) >= spec.req_n:
             try:
                 return func(*args, **kwargs)
             except TypeError:

@@ -1,5 +1,6 @@
 from __future__ import absolute_import
-from inspect import CO_VARARGS
+from inspect import CO_VARARGS, CO_VARKEYWORDS
+from collections import namedtuple
 import types
 import re
 
@@ -94,6 +95,7 @@ ARGS['funcy.colls'] = {
 
 
 type_classes = (type, types.ClassType) if hasattr(types, 'ClassType') else type
+Spec = namedtuple("Spec", "max_n names req_n req_names kw")
 
 
 def get_spec(func, _cache={}):
@@ -107,8 +109,10 @@ def get_spec(func, _cache={}):
     if mod in STD_MODULES or mod in ARGS and func.__name__ in ARGS[mod]:
         _spec = ARGS[mod].get(func.__name__, '*')
         required, _, optional = _spec.partition('-')
-        required_names = re.findall(r'\w+|\*', required)
-        spec = set(required_names), len(required_names), len(required_names) + len(optional)
+        req_names = re.findall(r'\w+|\*', required)  # a list with dups of *
+        max_n = len(req_names) + len(optional)
+        req_n = len(req_names)
+        spec = Spec(max_n=max_n, names=set(), req_n=req_n, req_names=set(req_names), kw=False)
         _cache[func] = spec
         return spec
     elif isinstance(func, type_classes):
@@ -120,22 +124,25 @@ def get_spec(func, _cache={}):
         if objclass and objclass is not func:
             return get_spec(objclass)
         # Introspect constructor and remove self
-        _required_names, _required_n, _max_n = get_spec(func.__init__)
-        self_name = func.__init__.__code__.co_varnames[0]
-        return _required_names - set([self_name]), _required_n - 1, _max_n - 1
+        spec = get_spec(func.__init__)
+        self_set = set([func.__init__.__code__.co_varnames[0]])
+        return spec._replace(max_n=spec.max_n - 1, names=spec.names - self_set,
+                             req_n=spec.req_n - 1, req_names=spec.req_names - self_set)
     else:
         try:
             defaults_n = len(func.__defaults__)
         except (AttributeError, TypeError):
             defaults_n = 0
         try:
-            names = func.__code__.co_varnames
+            varnames = func.__code__.co_varnames
             n = func.__code__.co_argcount
-            required_n = n - defaults_n
-            required_names = set(names[:required_n])
+            names = set(varnames[:n])
+            req_n = n - defaults_n
+            req_names = set(varnames[:req_n])
+            kw = bool(func.__code__.co_flags & CO_VARKEYWORDS)
             # If there are varargs they could be required, but all keywords args can't be
-            max_n = required_n + 1 if func.__code__.co_flags & CO_VARARGS else n
-            return required_names, required_n, max_n
+            max_n = req_n + 1 if func.__code__.co_flags & CO_VARARGS else n
+            return Spec(max_n=max_n, names=names, req_n=req_n, req_names=req_names, kw=kw)
         except AttributeError:
             raise ValueError('Unable to introspect %s() arguments'
                                 % getattr(func, '__name__', func))
