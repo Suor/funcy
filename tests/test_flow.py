@@ -29,13 +29,16 @@ def test_raiser():
     with pytest.raises(Exception) as e: raiser()()
     assert e.type is Exception
 
-    with pytest.raises(Exception, match="text"): raiser("text")()
+    with pytest.raises(Exception, match="text") as e: raiser("text")()
+    assert e.type is Exception
 
-    with pytest.raises(MyError): raiser(MyError)()
-    with pytest.raises(MyError) as e: raiser(MyError, 'some message')()
-    assert e.value.args == ('some message',)
+    with pytest.raises(MyError):
+        raiser(MyError)()
+    with pytest.raises(MyError, match="some message"):
+        raiser(MyError('some message'))()
+    with pytest.raises(MyError, match="some message") as e:
+        raiser(MyError, 'some message')()
 
-    with pytest.raises(MyError): raiser(MyError('some message'))()
     with pytest.raises(MyError): raiser(MyError)('junk', keyword='junk')
 
 
