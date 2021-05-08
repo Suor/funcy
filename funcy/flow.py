@@ -200,16 +200,14 @@ def throttle(period):
         period = timedelta.total_seconds()
 
     def decorator(func):
-        blocked_until = None
+        func.blocked_until = None
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            nonlocal blocked_until
-
             now = time.time()
-            if blocked_until and blocked_until > now:
+            if func.blocked_until and func.blocked_until > now:
                 return
-            blocked_until = now + period
+            func.blocked_until = now + period
 
             return func(*args, **kwargs)
 
