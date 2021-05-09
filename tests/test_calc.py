@@ -1,4 +1,5 @@
 from math import sin, cos
+from datetime import timedelta
 import pytest
 
 from funcy.calc import *
@@ -111,10 +112,12 @@ def test_silnent_lookuper_nested():
     assert function_table(cos)(-1) is None
 
 
-def test_cache():
+@pytest.mark.parametrize('typ',
+    [pytest.param(int, id='int'), pytest.param(lambda s: timedelta(seconds=s), id='timedelta')])
+def test_cache(typ):
     calls = []
 
-    @cache(timeout=60)
+    @cache(timeout=typ(60))
     def inc(x):
         calls.append(x)
         return x + 1

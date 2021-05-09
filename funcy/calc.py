@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
+import time
 import inspect
 from collections import deque
 from bisect import bisect
@@ -39,8 +40,8 @@ memoize.skip = SkipMemory
 
 def cache(timeout, key_func=None):
     """Caches a function results for timeout seconds."""
-    if isinstance(timeout, int):
-        timeout = timedelta(seconds=timeout)
+    if isinstance(timeout, timedelta):
+        timeout = timeout.total_seconds()
 
     return _memory_decorator(CacheMemory(timeout), key_func)
 
@@ -83,21 +84,20 @@ class CacheMemory(dict):
         self.clear()
 
     def __setitem__(self, key, value):
-        expires_at = datetime.now() + self.timeout
+        expires_at = time.time() + self.timeout
         dict.__setitem__(self, key, (value, expires_at))
         self._keys.append(key)
         self._expires.append(expires_at)
 
     def __getitem__(self, key):
         value, expires_at = dict.__getitem__(self, key)
-        if expires_at <= datetime.now():
+        if expires_at <= time.time():
             self.expire()
             raise KeyError(key)
         return value
 
     def expire(self):
-        i = bisect(self._expires, datetime.now())
-        print("clear", i)
+        i = bisect(self._expires, time.time())
         for _ in range(i):
             self._expires.popleft()
             self.pop(self._keys.popleft(), None)
