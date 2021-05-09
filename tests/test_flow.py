@@ -1,3 +1,4 @@
+from datetime import timedelta
 import pytest
 from funcy.flow import *
 
@@ -152,13 +153,15 @@ def test_limit_error_rate():
     assert calls == [1, 2]
 
 
-def test_throttle(monkeypatch):
+@pytest.mark.parametrize('typ',
+    [pytest.param(int, id='int'), pytest.param(lambda s: timedelta(seconds=s), id='timedelta')])
+def test_throttle(monkeypatch, typ):
     timestamps = iter([0, 0.01, 1, 1.000025])
     monkeypatch.setattr('time.time', lambda: next(timestamps))
 
     calls = []
 
-    @throttle(1)
+    @throttle(typ(1))
     def throttled(x):
         calls.append(x)
 

@@ -197,7 +197,7 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
 def throttle(period):
     """Allows only one run in a period, the rest is skipped"""
     if isinstance(period, timedelta):
-        period = timedelta.total_seconds()
+        period = period.total_seconds()
 
     def decorator(func):
         func.blocked_until = None
