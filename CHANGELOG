@@ -1,3 +1,12 @@
+1.16
+- support Python 3.9 officially
+- unify @memoize() and @cache(): both have .skip/.memory/.invalidate/.invalidate_all now
+- support dynamic resulting exception in @reraise() (Laurens Duijvesteijn)
+- made () optional for @decorator-made decorators with kw-only args
+- added @throttle()
+- added has_path() (Denys Zorinets)
+- fixed autocurry kwargs handling
+
 1.15
 - made rpartial accept keyworded arguments (Ruan Comelli)
 - made `@cache.invalidate()` idempotent (Dmitry Vasilyanov)
