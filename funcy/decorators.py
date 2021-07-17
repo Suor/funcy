@@ -74,6 +74,14 @@ class Call(object):
         except TypeError as e:
             raise AttributeError(*e.args)
 
+    def __str__(self):
+        func = getattr(self._func, '__qualname__', str(self._func))
+        args = ", ".join(list(map(str, self._args)) + ["%s=%s" % t for t in self._kwargs.items()])
+        return "%s(%s)" % (func, args)
+
+    def __repr__(self):
+        return "<Call %s>" % self
+
 
 if PY2:
     def has_single_arg(func):
