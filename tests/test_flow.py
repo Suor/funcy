@@ -172,6 +172,15 @@ def test_throttle(monkeypatch, typ):
     assert calls == [1, 3]
 
 
+def test_throttle_class():
+    class A:
+        def foo(self):
+            return 42
+
+    a = A()
+    assert throttle(1)(a.foo)() == 42
+
+
 def test_post_processing():
     @post_processing(max)
     def my_max(l):

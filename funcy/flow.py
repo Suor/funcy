@@ -169,27 +169,27 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
         timeout = timedelta(seconds=timeout)
 
     def decorator(func):
-        func.fails = 0
-        func.blocked = None
-
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if func.blocked:
-                if datetime.now() - func.blocked < timeout:
+            if wrapper.blocked:
+                if datetime.now() - wrapper.blocked < timeout:
                     raise exception
                 else:
-                    func.blocked = None
+                    wrapper.blocked = None
 
             try:
                 result = func(*args, **kwargs)
             except:  # noqa
-                func.fails += 1
-                if func.fails >= fails:
-                    func.blocked = datetime.now()
+                wrapper.fails += 1
+                if wrapper.fails >= fails:
+                    wrapper.blocked = datetime.now()
                 raise
             else:
-                func.fails = 0
+                wrapper.fails = 0
                 return result
+
+        wrapper.fails = 0
+        wrapper.blocked = None
         return wrapper
     return decorator
 
@@ -200,17 +200,17 @@ def throttle(period):
         period = period.total_seconds()
 
     def decorator(func):
-        func.blocked_until = None
 
         @wraps(func)
         def wrapper(*args, **kwargs):
             now = time.time()
-            if func.blocked_until and func.blocked_until > now:
+            if wrapper.blocked_until and wrapper.blocked_until > now:
                 return
-            func.blocked_until = now + period
+            wrapper.blocked_until = now + period
 
             return func(*args, **kwargs)
 
+        wrapper.blocked_until = None
         return wrapper
 
     return decorator
