@@ -31,13 +31,13 @@ def test_decorator_kw_only_args():
     def add(call, **kwargs):  # TODO: use real kw-only args in Python 3
         return call() + kwargs.get("n", 1)
 
-    def ten():
+    def ten(a, b):
         return 10
 
     # Should work with or without parentheses
-    assert add(n=2)(ten)() == 12
-    assert add()(ten)() == 11
-    assert add(ten)() == 11
+    assert add(n=2)(ten)(1, 2) == 12
+    assert add()(ten)(1, 2) == 11
+    assert add(ten)(1, 2) == 11
 
 
 def test_decorator_access_arg():
