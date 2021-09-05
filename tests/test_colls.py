@@ -240,7 +240,6 @@ def test_get_in():
     assert get_in(d, ["a", "b"]) == "c"
     assert get_in(d, ["a", "f", "g"]) == "h"
 
-
 def test_get_in_list():
     assert get_in([1, 2], [0]) == 1
     assert get_in([1, 2], [3]) is None
@@ -263,13 +262,11 @@ def test_set_in():
     assert d3['e'] == {'f': 42}
     assert d3['a'] is d['a']
 
-
 def test_set_in_list():
     l = [{}, 1]
     l2 = set_in(l, [1], 7)
     assert l2 == [{}, 7]
     assert l2[0] is l[0]
-
 
 def test_update_in():
     d = {'c': []}
@@ -279,6 +276,14 @@ def test_update_in():
     d2 = update_in(d, ['a', 'b'], inc, default=0)
     assert d2['a']['b'] == 1
     assert d2['c'] is d['c']
+
+def test_del_in():
+    d = {'c': [1, 2, 3]}
+
+    assert del_in(d, []) is d
+    assert del_in(d, ['a', 'b']) is d
+    assert del_in(d, ['c', 1]) == {'c': [1, 3]}
+    with pytest.raises(TypeError): del_in(d, ['c', 'b'])
 
 def test_has_path():
     d = {

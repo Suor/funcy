@@ -220,6 +220,16 @@ Dict utils
         # -> {"a": {"cnt": 1}}
 
 
+.. function:: del_in(coll, path)
+
+    Creates a nested collection with ``path`` removed::
+
+        del_in({"a": [1, 2, 3]}, ["a", 1])
+        # -> {"a": [1, 3]}
+
+    Returns the collection as is if the path is missing.
+
+
 .. function:: has_path(coll, path)
 
     Checks if path exists in the given nested collection::

@@ -19,7 +19,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'omit', 'zip_values', 'zip_dicts',
            'where', 'pluck', 'pluck_attr', 'invoke', 'lwhere', 'lpluck', 'lpluck_attr', 'linvoke',
-           'get_in', 'set_in', 'update_in', 'has_path']
+           'get_in', 'set_in', 'update_in', 'del_in', 'has_path']
 
 
 ### Generic ops
@@ -292,6 +292,24 @@ def update_in(coll, path, update, default=None):
         current_default = {} if len(path) > 1 else default
         copy[path[0]] = update_in(copy.get(path[0], current_default), path[1:], update, default)
         return copy
+
+
+def del_in(coll, path):
+    """Creates a copy of coll with a nested key or index deleted."""
+    if not path:
+        return coll
+    try:
+        next_coll = coll[path[0]]
+    except (KeyError, IndexError):
+        return coll
+
+    copy = coll.copy()
+    if len(path) == 1:
+        del copy[path[0]]
+    else:
+        copy[path[0]] = del_in(next_coll, path[1:])
+    return copy
+
 
 def has_path(coll, path):
     """Checks if path exists in the given nested collection."""
