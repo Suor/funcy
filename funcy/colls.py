@@ -251,7 +251,7 @@ def omit(mapping, keys):
 def zip_values(*dicts):
     """Yields tuples of corresponding values of several dicts."""
     if len(dicts) < 1:
-        raise TypeError('izip_values expects at least one argument')
+        raise TypeError('zip_values expects at least one argument')
     keys = set.intersection(*map(set, dicts))
     for key in keys:
         yield tuple(d[key] for d in dicts)
@@ -260,7 +260,7 @@ def zip_dicts(*dicts):
     """Yields tuples like (key, val1, val2, ...)
        for each common key in all given dicts."""
     if len(dicts) < 1:
-        raise TypeError('izip_dicts expects at least one argument')
+        raise TypeError('zip_dicts expects at least one argument')
     keys = set.intersection(*map(set, dicts))
     for key in keys:
         yield key, tuple(d[key] for d in dicts)
