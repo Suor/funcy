@@ -257,7 +257,7 @@ def zip_values(*dicts):
         yield tuple(d[key] for d in dicts)
 
 def zip_dicts(*dicts):
-    """Yields tuples like (key, val1, val2, ...)
+    """Yields tuples like (key, (val1, val2, ...))
        for each common key in all given dicts."""
     if len(dicts) < 1:
         raise TypeError('izip_dicts expects at least one argument')
