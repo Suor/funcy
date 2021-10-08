@@ -2,6 +2,7 @@ try:
     from __builtin__ import all as _all, any as _any
 except ImportError:
     from builtins import all as _all, any as _any
+from copy import copy
 from operator import itemgetter, methodcaller, attrgetter
 from itertools import chain, tee
 from collections import defaultdict
@@ -303,12 +304,12 @@ def del_in(coll, path):
     except (KeyError, IndexError):
         return coll
 
-    copy = coll.copy()
+    coll_copy = copy(coll)
     if len(path) == 1:
-        del copy[path[0]]
+        del coll_copy[path[0]]
     else:
-        copy[path[0]] = del_in(next_coll, path[1:])
-    return copy
+        coll_copy[path[0]] = del_in(next_coll, path[1:])
+    return coll_copy
 
 
 def has_path(coll, path):

@@ -1,5 +1,3 @@
-import sys
-
 import pytest
 from itertools import chain, count
 from collections import defaultdict, namedtuple
@@ -279,7 +277,6 @@ def test_update_in():
     assert d2['a']['b'] == 1
     assert d2['c'] is d['c']
 
-@pytest.mark.xfail(sys.version_info < (3, 0), reason="not working on Python 2")
 def test_del_in():
     d = {'c': [1, 2, 3]}
 
