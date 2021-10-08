@@ -12,7 +12,7 @@ jobs:
       matrix:
         python-version:
           - "2.7"
-          - "3.4"
+          # - "3.4" # tox-gh-actions doesn't work on Python 3.4
           - "3.5"
           - "3.6"
           - "3.7"
