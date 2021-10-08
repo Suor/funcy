@@ -188,8 +188,8 @@ of all of the above::
     tox -e lint
 
 
-.. |Build Status| image:: https://travis-ci.org/Suor/funcy.svg?branch=master
-   :target: https://travis-ci.org/Suor/funcy
+.. |Build Status| image:: https://github.com/Suor/funcy/actions/workflows/test.yml/badge.svg
+   :target: https://github.com/Suor/funcy/actions/workflows/test.yml?query=branch%3Amaster
 
 
 .. |Gitter| image:: https://badges.gitter.im/JoinChat.svg
