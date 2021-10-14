@@ -260,15 +260,5 @@ texinfo_documents = [
 # """
 
 
-from sphinx.ext.autodoc import FunctionDocumenter
-
-class DecoratorDocumenter(FunctionDocumenter):
-    """
-    Specialized Documenter subclass for decorators.
-    """
-    objtype = 'decorator'
-
-
 def setup(app):
-    app.add_stylesheet('overrides.css')
-    app.add_autodocumenter(DecoratorDocumenter)
+    app.add_css_file('overrides.css')
