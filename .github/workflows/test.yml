@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
@@ -44,6 +44,42 @@ jobs:
       run: pytest -W error
     - name: Build docs
       if:  ${{ matrix.python-version == '3.8' }}
+      working-directory: ./docs
+      run: |
+        pip install Sphinx>=1.4.8 sphinx-rtd-theme>=0.1.9
+        sphinx-build -b html -W . _build/html
+
+  lint:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version:
+          - "3.8"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Lint
+      run: |
+        pip install flake8
+        flake8 funcy
+        flake8 --select=F,E5,W tests
+
+  docs:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version:
+          - "3.8"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Build docs
       working-directory: ./docs
       run: |
         pip install Sphinx>=1.4.8 sphinx-rtd-theme>=0.1.9
