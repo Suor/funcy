@@ -200,6 +200,8 @@ Dict utils
         get_in({"a": {"b": 42}}, ["a", "b"])    # -> 42
         get_in({"a": {"b": 42}}, ["c"], "foo")  # -> "foo"
 
+    Note that missing key or index, i.e. `KeyError` and `IndexError` result into `default` being return, while trying to use non-int index for a list will result into `TypeError`. This way funcy stays strict on types.
+
 
 .. function:: set_in(coll, path, value)
 
