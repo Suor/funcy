@@ -1,5 +1,9 @@
 from __future__ import absolute_import
 from inspect import CO_VARARGS, CO_VARKEYWORDS
+try:
+    from inspect import signature
+except ImportError:
+    signature = None  #
 from collections import namedtuple
 import types
 import re
@@ -105,7 +109,7 @@ def get_spec(func, _cache={}):
     except (KeyError, TypeError):
         pass
 
-    mod = func.__module__
+    mod = getattr(func, '__module__', None)
     if mod in STD_MODULES or mod in ARGS and func.__name__ in ARGS[mod]:
         _spec = ARGS[mod].get(func.__name__, '*')
         required, _, optional = _spec.partition('-')
@@ -144,5 +148,28 @@ def get_spec(func, _cache={}):
             max_n = req_n + 1 if func.__code__.co_flags & CO_VARARGS else n
             return Spec(max_n=max_n, names=names, req_n=req_n, req_names=req_names, kw=kw)
         except AttributeError:
-            raise ValueError('Unable to introspect %s() arguments'
-                                % getattr(func, '__name__', func))
+            # We use signature last to be fully backwards compatible. Also it's slower
+            try:
+                sig = signature(func)
+            except (ValueError, TypeError):
+                raise ValueError('Unable to introspect %s() arguments'
+                    % getattr(func, '__qualname__', None) or getattr(func, '__name__', func))
+            else:
+                spec = _cache[func] = _sig_to_spec(sig)
+                return spec
+
+
+def _sig_to_spec(sig):
+    max_n, names, req_n, req_names, kw = 0, set(), 0, set(), False
+    for name, param in sig.parameters.items():
+        max_n += 1
+        if param.kind == param.VAR_KEYWORD:
+            kw = True
+        elif param.kind == param.VAR_POSITIONAL:
+            req_n += 1
+        else:
+            names.add(name)
+            if param.default is param.empty:
+                req_n += 1
+                req_names.add(name)
+    return Spec(max_n=max_n, names=names, req_n=req_n, req_names=req_names, kw=kw)

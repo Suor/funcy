@@ -65,7 +65,7 @@ Functions
 
     Curries function from last argument to first::
 
-        has_suffix = rcurry(str.endswith)
+        has_suffix = rcurry(str.endswith, 2)
         lfilter(has_suffix("ce"), ["nice", "cold", "ice"])
         # -> ["nice", "ice"]
 

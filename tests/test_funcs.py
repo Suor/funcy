@@ -28,7 +28,7 @@ def test_func_partial():
 
     assert A().f() == 11
 
-def test_back_partial():
+def test_rpartial():
     assert rpartial(__sub__, 10)(1) == -9
     assert rpartial(pow, 2, 85)(10) == 15
 
@@ -53,6 +53,7 @@ def test_curry_funcy():
 def test_rcurry():
     assert rcurry(__sub__, 2)(10)(1) == -9
     assert rcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
+    assert rcurry(str.endswith, 2)('c')('abc') is True
 
 def test_autocurry():
     at = autocurry(lambda a, b, c: (a, b, c))
@@ -97,6 +98,7 @@ def test_autocurry_builtin():
     assert autocurry(complex)(imag=1)(0) == 1j
     assert autocurry(map)(_ + 1)([1, 2]) == [2, 3]
     assert autocurry(int)(base=12)('100') == 144
+    assert autocurry(str.split)(sep='_')('a_1') == ['a', '1']
 
 def test_autocurry_hard():
     def required_star(f, *seqs):

@@ -92,7 +92,7 @@ And functions:
     all_fn(isa(int), even)      # is_even_int
 
     one_third = rpartial(operator.div, 3.0)
-    has_suffix = rcurry(str.endswith)
+    has_suffix = rcurry(str.endswith, 2)
 
 
 Create decorators easily:
