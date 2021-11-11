@@ -1,4 +1,4 @@
-Funcy |Build Status| |Gitter|
+Funcy |Build Status|
 =====
 
 A collection of fancy functional tools focused on practicality.
@@ -190,8 +190,3 @@ of all of the above::
 
 .. |Build Status| image:: https://github.com/Suor/funcy/actions/workflows/test.yml/badge.svg
    :target: https://github.com/Suor/funcy/actions/workflows/test.yml?query=branch%3Amaster
-
-
-.. |Gitter| image:: https://badges.gitter.im/JoinChat.svg
-   :alt: Join the chat at https://gitter.im/Suor/funcy
-   :target: https://gitter.im/Suor/funcy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
