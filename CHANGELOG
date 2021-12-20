@@ -1,3 +1,12 @@
+1.17
+- added del_in()
+- made throttle() and limit_error_rate() work on methods
+- added str and repr to Call objects
+- migrated CI to Github actions (thx to Bruno Alla)
+- fixed doc[string] for zip_dicts (Tal Einat)
+- fixed some inspect issues
+- minor doc fixes
+
 1.16
 - support Python 3.9 officially
 - unify @memoize() and @cache(): both have .skip/.memory/.invalidate/.invalidate_all now
