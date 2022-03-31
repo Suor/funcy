@@ -106,12 +106,12 @@ def merge(*colls):
     return join(colls)
 
 
-def join_with(f, dicts):
+def join_with(f, dicts, strict=False):
     """Joins several dicts, combining values with given function."""
     dicts = list(dicts)
     if not dicts:
         return {}
-    elif len(dicts) == 1:
+    elif not strict and len(dicts) == 1:
         return dicts[0]
 
     lists = {}

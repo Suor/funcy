@@ -91,6 +91,8 @@ def test_merge_with():
 
 def test_join_with():
     assert join_with(sum, ({n % 3: n} for n in range(5))) == {0: 3, 1: 5, 2: 2}
+    assert join_with(list, [{1: 1}]) == {1: 1}
+    assert join_with(list, [{1: 1}], strict=True) == {1: [1]}
 
 
 def test_walk():

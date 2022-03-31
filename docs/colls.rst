@@ -124,7 +124,7 @@ Dict utils
 ----------
 
 .. function:: merge_with(f, *dicts)
-              join_with(f, dicts)
+              join_with(f, dicts, strict=False)
 
     Merge several dicts combining values for same key with given function::
 
@@ -136,6 +136,12 @@ Dict utils
 
         join_with(first, ({n % 3: n} for n in range(100, 110)))
         # -> {0: 102, 1: 100, 2: 101}
+
+    Historically ``join_with()`` will return a dict as is if there is only one, which might be inconvenient. To always apply the summarization func use ``strict`` param::
+
+        join_with(list, [{1: 2}])              # {1: 2}
+        join_with(list, [{1: 2}], strict=True) # {1: [2]}
+        join_with(len, [{1: 2}], strict=True)  # {1: 1}
 
 
 .. function:: zipdict(keys, vals)
