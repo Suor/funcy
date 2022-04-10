@@ -1,5 +1,5 @@
 from operator import __not__
-from functools import partial, reduce
+from functools import partial, reduce, wraps
 
 from .compat import map
 from ._inspect import get_spec, Spec
@@ -70,6 +70,7 @@ def autocurry(func, n=EMPTY, _spec=None, _args=(), _kwargs={}):
        until sufficient arguments are passed."""
     spec = _spec or (get_spec(func) if n is EMPTY else Spec(n, set(), n, set(), False))
 
+    @wraps(func)
     def autocurried(*a, **kw):
         args = _args + a
         kwargs = _kwargs.copy()
