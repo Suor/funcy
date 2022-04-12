@@ -129,6 +129,15 @@ def test_autocurry_class():
     class I(int): pass
     assert autocurry(int)(base=12)('100') == 144
 
+def test_autocurry_docstring():
+
+    @autocurry
+    def f(a, b):
+        'docstring'
+
+    assert f.__doc__ == 'docstring'
+
+
 
 def test_compose():
     double = _ * 2
