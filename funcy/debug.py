@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 import re
-import time
 import traceback
 from itertools import chain
 from functools import partial
+from timeit import default_timer as timer
 
 from .compat import basestring
 from .decorators import decorator, wraps, Call
@@ -171,11 +171,11 @@ class log_durations(LabeledContextDecorator):
         self.threshold = threshold
 
     def __enter__(self):
-        self.start = time.time()
+        self.start = timer()
         return self
 
     def __exit__(self, *exc):
-        duration = time.time() - self.start
+        duration = timer() - self.start
         if duration >= self.threshold:
             duration_str = self.format_time(duration)
             self.print_func("%s in %s" % (duration_str, self.label) if self.label else duration_str)
@@ -191,9 +191,9 @@ def log_iter_durations(seq, print_func, label=None, unit='auto'):
     suffix = " of %s" % label if label else ""
     it = iter(seq)
     for i, item in enumerate(it):
-        start = time.time()
+        start = timer()
         yield item
-        duration = _format_time(time.time() - start)
+        duration = _format_time(timer() - start)
         print_func("%s in iteration %d%s" % (duration, i, suffix))
 
 def print_iter_durations(seq, label=None, unit='auto'):
