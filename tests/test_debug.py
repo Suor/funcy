@@ -118,7 +118,7 @@ def test_print_errors_recursion():
 
 def test_log_durations(monkeypatch):
     timestamps = iter([0, 0.01, 1, 1.000025])
-    monkeypatch.setattr('time.time', lambda: next(timestamps))
+    monkeypatch.setattr('funcy.debug.timer', lambda: next(timestamps))
     log = []
 
     f = log_durations(log.append)(lambda: None)
@@ -132,7 +132,7 @@ def test_log_durations(monkeypatch):
 def test_log_durations_ex(monkeypatch):
     timestamps = [0, 0.01, 1, 1.001, 2, 2.02]
     timestamps_iter = iter(timestamps)
-    monkeypatch.setattr('time.time', lambda: next(timestamps_iter))
+    monkeypatch.setattr('funcy.debug.timer', lambda: next(timestamps_iter))
     log = []
 
     f = log_durations(log.append, unit='ms', threshold=1.1e-3)(lambda: None)
