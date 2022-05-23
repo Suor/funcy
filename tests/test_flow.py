@@ -107,6 +107,39 @@ def test_retry_timeout(monkeypatch):
     assert timeouts == [1, 2, 4]
 
 
+def test_retry_timeout_exp(monkeypatch):
+
+    timeouts = []
+    monkeypatch.setattr('time.sleep', timeouts.append)
+
+    retry_deco = retry(5, MyError, timeout=1, exp=2)
+    with pytest.raises(MyError):
+        retry_deco(_make_failing(n=5))()
+    assert timeouts == [1, 2, 4, 8]
+
+
+def test_retry_timeout_exp_with_cap(monkeypatch):
+
+    timeouts = []
+    monkeypatch.setattr('time.sleep', timeouts.append)
+
+    retry_deco = retry(5, MyError, timeout=1, exp=2, cap=5)
+    with pytest.raises(MyError):
+        retry_deco(_make_failing(n=5))()
+    assert timeouts == [1, 2, 4, 5]
+
+
+def test_retry_timeout_jitter(monkeypatch):
+
+    timeouts = []
+    monkeypatch.setattr('time.sleep', timeouts.append)
+
+    retry_deco = retry(5, MyError, timeout=1, jitter_amp=0.5)
+    with pytest.raises(MyError):
+        retry_deco(_make_failing(n=5))()
+    assert all([0.5 <= t <= 2.0 for t in timeouts])
+
+
 def test_retry_many_errors():
     assert retry(2, (MyError, RuntimeError))(_make_failing())() == 1
     assert retry(2, [MyError, RuntimeError])(_make_failing())() == 1
