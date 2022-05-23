@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from math import inf
 from random import uniform
 import time
 import threading
@@ -119,7 +118,10 @@ def reraise(errors, into):
 
 
 @decorator
-def retry(call, tries, errors=Exception, timeout=0, filter_errors=None, exp=1, cap=inf, jitter_amp=1):
+def retry(
+    call, tries, errors=Exception, timeout=0, filter_errors=None,
+    exp=1, cap=float("inf"), jitter_amp=1,
+):
     """Makes decorated function retry up to tries times.
        Retries only on specified errors.
        Sleeps timeout or timeout(attempt) seconds between tries.
