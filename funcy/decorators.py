@@ -25,7 +25,7 @@ def decorator(deco):
         return make_decorator(deco)
     elif has_1pos_and_kwonly(deco):
         # Any arguments after first become decorator arguments
-        # And a decorator with arguments is essentialy a decorator fab
+        # And a decorator with arguments is essentially a decorator fab
         def decorator_fab(_func=None, **dkwargs):  # TODO: make _func pos only in Python 3
             if _func is not None:
                 return make_decorator(deco, (), dkwargs)(_func)

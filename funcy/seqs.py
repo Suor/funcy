@@ -130,7 +130,7 @@ def filter(pred, seq):
 
 if PY2:
     # NOTE: Default imap() behaves strange when passed None as function,
-    #       returns 1-length tuples, which is inconvinient and incompatible with map().
+    #       returns 1-length tuples, which is inconvenient and incompatible with map().
     #       This version is more sane: map() compatible and suitable for our internal use.
     def xmap(f, *seqs):
         return _map(make_func(f), *seqs)
