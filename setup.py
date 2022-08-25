@@ -1,9 +1,8 @@
 from setuptools import setup
 
 
-# Remove build status and move Gitter link under title for PyPi
-README = open('README.rst').read()    \
-    .replace('|Build Status|', '', 1)
+# Remove build status
+README = open('README.rst').read().replace('|Build Status|', '', 1)
 
 
 setup(
