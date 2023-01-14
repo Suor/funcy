@@ -163,10 +163,10 @@ Dive in
 
 Funcy is an embodiment of ideas I explain in several essays:
 
-- `Why Every Language Needs Its Underscore <http://hackflow.com/blog/2014/06/22/why-every-language-needs-its-underscore/>`_
-- `Functional Python Made Easy <http://hackflow.com/blog/2013/10/13/functional-python-made-easy/>`_
-- `Abstracting Control Flow <http://hackflow.com/blog/2013/10/08/abstracting-control-flow/>`_
-- `Painless Decorators <http://hackflow.com/blog/2013/11/03/painless-decorators/>`_
+- `Why Every Language Needs Its Underscore <https://suor.github.io/blog/2014/06/22/why-every-language-needs-its-underscore/>`_
+- `Functional Python Made Easy <https://suor.github.io/blog/2013/10/13/functional-python-made-easy/>`_
+- `Abstracting Control Flow <https://suor.github.io/blog/2013/10/08/abstracting-control-flow/>`_
+- `Painless Decorators <https://suor.github.io/blog/2013/11/03/painless-decorators/>`_
 
 
 Running tests

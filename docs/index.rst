@@ -34,10 +34,10 @@ Contents:
 
 Essays:
 
-- `Why Every Language Needs Its Underscore <http://hackflow.com/blog/2014/06/22/why-every-language-needs-its-underscore/>`_
-- `Functional Python Made Easy <http://hackflow.com/blog/2013/10/13/functional-python-made-easy/>`_
-- `Abstracting Control Flow <http://hackflow.com/blog/2013/10/08/abstracting-control-flow/>`_
-- `Painless Decorators <http://hackflow.com/blog/2013/11/03/painless-decorators/>`_
+- `Why Every Language Needs Its Underscore <https://suor.github.io/blog/2014/06/22/why-every-language-needs-its-underscore/>`_
+- `Functional Python Made Easy <https://suor.github.io/blog/2013/10/13/functional-python-made-easy/>`_
+- `Abstracting Control Flow <https://suor.github.io/blog/2013/10/08/abstracting-control-flow/>`_
+- `Painless Decorators <https://suor.github.io/blog/2013/11/03/painless-decorators/>`_
 
 
 You can also `look at the code <https://github.com/Suor/funcy>`_ or `create an issue <https://github.com/Suor/funcy/issues?state=open>`_.
