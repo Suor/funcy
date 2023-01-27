@@ -1,3 +1,9 @@
+1.18
+- added join_with(strict=)
+- use more precise timer `timeit.default_timer` for log*durations (Saugat Pachhai)
+- preserve metadata when using autocurry as a decorator (#117) (Kale Kundert)
+- doc improvements (thx to Tim Gates)
+
 1.17
 - added del_in()
 - made throttle() and limit_error_rate() work on methods
