@@ -426,9 +426,9 @@ def pairwise(seq):
     next(b, None)
     return zip(a, b)
 
-def lzip(*seqs):
+def lzip(*seqs, strict=False):
     """List zip() version."""
-    return list(zip(*seqs))
+    return list(zip(*seqs, strict=strict))
 
 
 def _reductions(f, seq, acc):

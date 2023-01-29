@@ -254,7 +254,7 @@ Unite
             node.code = lmapcat(translate, interpose(node.op, node.values))
 
 
-.. function:: lzip(*seqs)
+.. function:: lzip(*seqs, strict=False)
 
     Joins given sequences into a list of tuples of corresponding first, second and later values. Essentially a list version of :func:`py3:zip` for Python 3.
 
