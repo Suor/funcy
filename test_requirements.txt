@@ -1,5 +1,5 @@
 pytest==6.2.5; python_version>='3.6'
 pytest==3.9.3; python_version<='3.5'
 more-itertools==4.0.0; python_version=='3.5'
-whatever==0.6
+whatever==0.7
 typing; python_version=='3.4'
