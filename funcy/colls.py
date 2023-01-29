@@ -1,17 +1,14 @@
-try:
-    from __builtin__ import all as _all, any as _any
-except ImportError:
-    from builtins import all as _all, any as _any
+from builtins import all as _all, any as _any
 from copy import copy
 from operator import itemgetter, methodcaller, attrgetter
 from itertools import chain, tee
 from collections import defaultdict
+from collections.abc import Mapping, Set, Iterable, Iterator
 
-from .compat import basestring, range, zip, map, filter, PY2, Mapping, Set, Iterable, Iterator
 from .primitives import EMPTY
 from .funcs import partial, compose
 from .funcmakers import make_func, make_pred
-from .seqs import take, xmap, filter as xfilter
+from .seqs import take, map as xmap, filter as xfilter
 
 
 __all__ = ['empty', 'iteritems', 'itervalues',
@@ -40,7 +37,7 @@ def _factory(coll, mapper=None):
         return partial(defaultdict, item_factory)
     elif isinstance(coll, Iterator):
         return iter
-    elif isinstance(coll, basestring):
+    elif isinstance(coll, (bytes, str)):
         return coll_type().join
     elif coll_type in FACTORY_REPLACE:
         return FACTORY_REPLACE[coll_type]
@@ -53,18 +50,11 @@ def empty(coll):
         return iter([])
     return _factory(coll)()
 
-if PY2:
-    def iteritems(coll):
-        return coll.iteritems() if hasattr(coll, 'iteritems') else coll
+def iteritems(coll):
+    return coll.items() if hasattr(coll, 'items') else coll
 
-    def itervalues(coll):
-        return coll.itervalues() if hasattr(coll, 'itervalues') else coll
-else:
-    def iteritems(coll):
-        return coll.items() if hasattr(coll, 'items') else coll
-
-    def itervalues(coll):
-        return coll.values() if hasattr(coll, 'values') else coll
+def itervalues(coll):
+    return coll.values() if hasattr(coll, 'values') else coll
 
 iteritems.__doc__ = "Yields (key, value) pairs of the given collection."
 itervalues.__doc__ = "Yields values of the given collection."
@@ -80,7 +70,7 @@ def join(colls):
         return None
     cls = dest.__class__
 
-    if isinstance(dest, basestring):
+    if isinstance(dest, (bytes, str)):
         return ''.join(colls)
     elif isinstance(dest, Mapping):
         result = dest.copy()

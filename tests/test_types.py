@@ -1,4 +1,3 @@
-from funcy.compat import range
 from funcy.types import *
 
 

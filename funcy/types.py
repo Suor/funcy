@@ -1,4 +1,4 @@
-from .compat import range, Mapping, Set, Sequence, Iterator, Iterable
+from collections.abc import Mapping, Set, Sequence, Iterator, Iterable
 
 
 __all__ = ('isa', 'is_mapping', 'is_set', 'is_seq', 'is_list', 'is_tuple',

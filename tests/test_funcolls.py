@@ -1,6 +1,6 @@
 from whatever import _
 
-from funcy.compat import lfilter
+from funcy import lfilter
 from funcy.funcolls import *
 
 

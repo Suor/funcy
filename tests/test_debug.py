@@ -2,7 +2,7 @@ import re
 
 from funcy.debug import *
 from funcy.flow import silent
-from funcy.py3 import lmap
+from funcy.seqs import lmap
 
 
 def test_tap():

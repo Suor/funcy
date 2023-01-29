@@ -1,10 +1,9 @@
-from itertools import islice, chain, tee, groupby, \
+from itertools import islice, chain, tee, groupby, filterfalse, accumulate, \
                       takewhile as _takewhile, dropwhile as _dropwhile
+from collections.abc import Sequence
 from collections import defaultdict, deque
 import operator
 
-from .compat import map as _map, filter as _filter, lmap as _lmap, lfilter as _lfilter, \
-                    zip, filterfalse, range, Sequence, PY2, PY3
 from .primitives import EMPTY
 from .types import is_seqcont
 from .funcmakers import make_func, make_pred
@@ -19,9 +18,17 @@ __all__ = [
     'dropwhile', 'takewhile', 'split', 'lsplit', 'split_at', 'lsplit_at', 'split_by', 'lsplit_by',
     'group_by', 'group_by_keys', 'group_values', 'count_by', 'count_reps',
     'partition', 'lpartition', 'chunks', 'lchunks', 'partition_by', 'lpartition_by',
-    'with_prev', 'with_next', 'pairwise',
+    'with_prev', 'with_next', 'pairwise', 'lzip',
     'reductions', 'lreductions', 'sums', 'lsums', 'accumulate',
 ]
+
+_map, _filter = map, filter
+
+def _lmap(f, *seqs):
+    return list(map(f, *seqs))
+
+def _lfilter(f, seq):
+    return list(filter(f, seq))
 
 
 # Re-export
@@ -111,32 +118,22 @@ def ilen(seq):
 def lmap(f, *seqs):
     """An extended version of builtin map() returning a list.
        Derives a mapper from string, int, slice, dict or set."""
-    return _lmap(make_func(f, builtin=PY2), *seqs)
+    return _lmap(make_func(f), *seqs)
 
 def lfilter(pred, seq):
     """An extended version of builtin filter() returning a list.
        Derives a predicate from string, int, slice, dict or set."""
-    return _lfilter(make_pred(pred, builtin=PY2), seq)
+    return _lfilter(make_pred(pred), seq)
 
 def map(f, *seqs):
     """An extended version of builtin map().
        Derives a mapper from string, int, slice, dict or set."""
-    return _map(make_func(f, builtin=PY2), *seqs)
+    return _map(make_func(f), *seqs)
 
 def filter(pred, seq):
     """An extended version of builtin filter().
        Derives a predicate from string, int, slice, dict or set."""
-    return _filter(make_pred(pred, builtin=PY2), seq)
-
-if PY2:
-    # NOTE: Default imap() behaves strange when passed None as function,
-    #       returns 1-length tuples, which is inconvenient and incompatible with map().
-    #       This version is more sane: map() compatible and suitable for our internal use.
-    def xmap(f, *seqs):
-        return _map(make_func(f), *seqs)
-else:
-    xmap = map  # This is already extended version from above
-
+    return _filter(make_pred(pred), seq)
 
 def lremove(pred, seq):
     """Creates a list if items passing given predicate."""
@@ -144,7 +141,7 @@ def lremove(pred, seq):
 
 def remove(pred, seq):
     """Iterates items passing given predicate."""
-    return filterfalse(make_pred(pred, builtin=PY2), seq)
+    return filterfalse(make_pred(pred), seq)
 
 def lkeep(f, seq=EMPTY):
     """Maps seq with f and keeps only truthy results.
@@ -157,7 +154,7 @@ def keep(f, seq=EMPTY):
     if seq is EMPTY:
         return _filter(bool, f)
     else:
-        return _filter(bool, xmap(f, seq))
+        return _filter(bool, map(f, seq))
 
 def without(seq, *items):
     """Iterates over sequence skipping items."""
@@ -185,9 +182,7 @@ def flatten(seq, follow=is_seqcont):
        Unpacks an item if follow(item) is truthy."""
     for item in seq:
         if follow(item):
-            # TODO: use `yield from` when Python 2 is dropped ;)
-            for sub in flatten(item, follow):
-                yield sub
+            yield from flatten(item, follow)
         else:
             yield item
 
@@ -198,11 +193,11 @@ def lflatten(seq, follow=is_seqcont):
 
 def lmapcat(f, *seqs):
     """Maps given sequence(s) and concatenates the results."""
-    return lcat(xmap(f, *seqs))
+    return lcat(map(f, *seqs))
 
 def mapcat(f, *seqs):
     """Maps given sequence(s) and chains the results."""
-    return cat(xmap(f, *seqs))
+    return cat(map(f, *seqs))
 
 def interleave(*seqs):
     """Yields first item of each sequence, then second one and so on."""
@@ -376,8 +371,7 @@ def _cut_iter(drop_tail, n, step, seq):
 def _cut(drop_tail, n, step, seq=EMPTY):
     if seq is EMPTY:
         step, seq = n, step
-    # NOTE: range() is capable of slicing in python 3,
-    if isinstance(seq, Sequence) and (PY3 or not isinstance(seq, range)):
+    if isinstance(seq, Sequence):
         return _cut_seq(drop_tail, n, step, seq)
     else:
         return _cut_iter(drop_tail, n, step, seq)
@@ -432,42 +426,22 @@ def pairwise(seq):
     next(b, None)
     return zip(a, b)
 
+def lzip(*seqs):
+    """List zip() version."""
+    return list(zip(*seqs))
 
-# Use accumulate from itertools if available
-try:
-    from itertools import accumulate
 
-    def _reductions(f, seq, acc):
-        last = acc
-        for x in seq:
-            last = f(last, x)
-            yield last
+def _reductions(f, seq, acc):
+    last = acc
+    for x in seq:
+        last = f(last, x)
+        yield last
 
-    def reductions(f, seq, acc=EMPTY):
-        if acc is EMPTY:
-            return accumulate(seq) if f is operator.add else accumulate(seq, f)
-        return _reductions(f, seq, acc)
-
-except ImportError:
-    def reductions(f, seq, acc=EMPTY):
-        it = iter(seq)
-        if acc is EMPTY:
-            try:
-                last = next(it)
-            except StopIteration:
-                return
-            yield last
-        else:
-            last = acc
-        for x in it:
-            last = f(last, x)
-            yield last
-
-    def accumulate(iterable, func=operator.add):
-        """Return series of accumulated sums (or other binary function results)."""
-        return reductions(func, iterable)
-
-reductions.__doc__ = """Yields intermediate reductions of seq by f."""
+def reductions(f, seq, acc=EMPTY):
+    """Yields intermediate reductions of seq by f."""
+    if acc is EMPTY:
+        return accumulate(seq) if f is operator.add else accumulate(seq, f)
+    return _reductions(f, seq, acc)
 
 def lreductions(f, seq, acc=EMPTY):
     """Lists intermediate reductions of seq by f."""

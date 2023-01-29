@@ -1,8 +1,5 @@
 from inspect import isclass, ismodule
 
-from .compat import PY2
-from .colls import walk_values
-from .funcs import iffy
 from .strings import cut_prefix
 
 
@@ -86,15 +83,10 @@ def monkey(cls, name=None):
 # TODO: monkey_mix()?
 
 
-class namespace_meta(type):
-    def __new__(cls, name, bases, attrs):
-        attrs = walk_values(iffy(callable, staticmethod), attrs)
-        return super(namespace_meta, cls).__new__(cls, name, bases, attrs)
-
 class namespace(object):
     """A base class that prevents its member functions turning into methods."""
-    if PY2:
-        __metaclass__ = namespace_meta
+    # NOTE: a noop in Python 3, keeping for backwards compat
+    pass
 
 
 class LazyObject(object):

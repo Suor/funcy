@@ -1,7 +1,6 @@
 import re
 from operator import methodcaller
 
-from .compat import map
 from .primitives import EMPTY
 
 
@@ -22,7 +21,7 @@ def _make_getter(regex):
     else:
         return lambda m: m
 
-_re_type = type(re.compile(r''))
+_re_type = type(re.compile(r''))  # re.Pattern was added in Python 3.7
 
 def _prepare(regex, flags):
     if not isinstance(regex, _re_type):

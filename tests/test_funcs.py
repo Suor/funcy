@@ -2,7 +2,7 @@ from operator import __add__, __sub__
 import pytest
 from whatever import _
 
-from funcy.py2 import map, merge_with
+from funcy import lmap, merge_with
 from funcy.funcs import *
 from funcy.seqs import keep
 
@@ -47,7 +47,7 @@ def test_curry():
 def test_curry_funcy():
     # curry() doesn't handle required star args,
     # but we can code inspection for funcy utils.
-    assert curry(map)(int)('123') == [1, 2, 3]
+    assert curry(lmap)(int)('123') == [1, 2, 3]
     assert curry(merge_with)(sum)({1: 1}) == {1: 1}
 
 def test_rcurry():
@@ -96,14 +96,14 @@ def test_autocurry_kwargs():
 
 def test_autocurry_builtin():
     assert autocurry(complex)(imag=1)(0) == 1j
-    assert autocurry(map)(_ + 1)([1, 2]) == [2, 3]
+    assert autocurry(lmap)(_ + 1)([1, 2]) == [2, 3]
     assert autocurry(int)(base=12)('100') == 144
     # Only works in newer Pythons, relies on inspect.signature()
     # assert autocurry(str.split)(sep='_')('a_1') == ['a', '1']
 
 def test_autocurry_hard():
     def required_star(f, *seqs):
-        return map(f, *seqs)
+        return lmap(f, *seqs)
 
     assert autocurry(required_star)(__add__)('12', 'ab') == ['1a', '2b']
 
@@ -162,15 +162,15 @@ def test_complement():
 
 def test_juxt():
     assert ljuxt(__add__, __sub__)(10, 2) == [12, 8]
-    assert map(ljuxt(_ + 1, _ - 1), [2, 3]) == [[3, 1], [4, 2]]
+    assert lmap(ljuxt(_ + 1, _ - 1), [2, 3]) == [[3, 1], [4, 2]]
 
 def test_iffy():
-    assert map(iffy(_ % 2, _ * 2, _ / 2), [1,2,3,4]) == [2,1,6,2]
-    assert map(iffy(_ % 2, _ * 2), [1,2,3,4]) == [2,2,6,4]
-    assert map(iffy(_ * 2), [21, '', None]) == [42, '', None]
-    assert map(iffy(_ % 2, _ * 2, None), [1,2,3,4]) == [2, None, 6, None]
-    assert map(iffy(_ + 1, default=1), [1, None, 2]) == [2, 1, 3]
-    assert map(iffy(set([1,4,5]), _ * 2), [1, 2, 3, 4]) == [2, 2, 3, 8]
-    assert map(iffy(r'\d+', str.upper), ['a2', 'c']) == ['A2', 'c']
-    assert map(iffy(set([1,4,5])), [False, 2, 4]) == [False, False, True]
-    assert map(iffy(None), [False, 2, 3, 4]) == [False, 2, 3, 4]
+    assert lmap(iffy(_ % 2, _ * 2, _ / 2), [1,2,3,4]) == [2,1,6,2]
+    assert lmap(iffy(_ % 2, _ * 2), [1,2,3,4]) == [2,2,6,4]
+    assert lmap(iffy(_ * 2), [21, '', None]) == [42, '', None]
+    assert lmap(iffy(_ % 2, _ * 2, None), [1,2,3,4]) == [2, None, 6, None]
+    assert lmap(iffy(_ + 1, default=1), [1, None, 2]) == [2, 1, 3]
+    assert lmap(iffy(set([1,4,5]), _ * 2), [1, 2, 3, 4]) == [2, 2, 3, 8]
+    assert lmap(iffy(r'\d+', str.upper), ['a2', 'c']) == ['A2', 'c']
+    assert lmap(iffy(set([1,4,5])), [False, 2, 4]) == [False, False, True]
+    assert lmap(iffy(None), [False, 2, 3, 4]) == [False, 2, 3, 4]

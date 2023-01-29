@@ -1,10 +1,10 @@
 from operator import __not__
 from functools import partial, reduce, wraps
 
-from .compat import map
 from ._inspect import get_spec, Spec
 from .primitives import EMPTY
 from .funcmakers import make_func, make_pred
+
 
 __all__ = ['identity', 'constantly', 'caller',
            'partial', 'rpartial', 'func_partial',

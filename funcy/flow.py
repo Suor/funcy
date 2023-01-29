@@ -1,8 +1,8 @@
+from collections.abc import Hashable
 from datetime import datetime, timedelta
 import time
 import threading
 
-from .compat import map, range, raise_from, Hashable
 from .decorators import decorator, wraps, get_argnames, arggetter, contextmanager
 
 
@@ -113,7 +113,7 @@ def reraise(errors, into):
     except errors as e:
         if callable(into) and not _is_exception_type(into):
             into = into(e)
-        raise_from(into, e)
+        raise into from e
 
 
 @decorator

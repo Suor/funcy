@@ -1,14 +1,8 @@
 from __future__ import absolute_import
-from inspect import CO_VARARGS, CO_VARKEYWORDS
-try:
-    from inspect import signature
-except ImportError:
-    signature = None  #
+from inspect import CO_VARARGS, CO_VARKEYWORDS, signature
 from collections import namedtuple
-import types
 import re
 
-from .compat import PY2
 from .decorators import unwrap
 
 
@@ -23,19 +17,18 @@ from .decorators import unwrap
 ARGS = {}
 
 
-builtins_name = '__builtin__' if PY2 else 'builtins'
-ARGS[builtins_name] = {
+ARGS['builtins'] = {
     'bool': 'x',
     'complex': 'real,imag',
-    'enumerate': 'sequence,start' if PY2 else 'iterable,start',
+    'enumerate': 'iterable,start',
     'file': 'file-**',
     'float': 'x',
     'int': 'x-*',
     'long': 'x-*',
-    'open': 'name-**' if PY2 else 'file-**',
+    'open': 'file-**',
     'round': 'number-*',
     'setattr': '***',
-    'str': '*-*' if PY2 else 'object-*',
+    'str': 'object-*',
     'unicode': 'string-**',
     '__import__': 'name-****',
     '__buildclass__': '***',
@@ -47,7 +40,7 @@ ARGS[builtins_name] = {
 # Add two argument functions
 two_arg_funcs = '''cmp coerce delattr divmod filter getattr hasattr isinstance issubclass
                    map pow reduce'''
-ARGS[builtins_name].update(dict.fromkeys(two_arg_funcs.split(), '**'))
+ARGS['builtins'].update(dict.fromkeys(two_arg_funcs.split(), '**'))
 
 
 ARGS['functools'] = {'reduce': '**'}
@@ -98,7 +91,6 @@ ARGS['funcy.colls'] = {
 }
 
 
-type_classes = (type, types.ClassType) if hasattr(types, 'ClassType') else type
 Spec = namedtuple("Spec", "max_n names req_n req_names kw")
 
 
@@ -119,7 +111,7 @@ def get_spec(func, _cache={}):
         spec = Spec(max_n=max_n, names=set(), req_n=req_n, req_names=set(req_names), kw=False)
         _cache[func] = spec
         return spec
-    elif isinstance(func, type_classes):
+    elif isinstance(func, type):
         # Old style classes without base
         if not hasattr(func, '__init__'):
             return Spec(max_n=0, names=set(), req_n=0, req_names=set(), kw=False)

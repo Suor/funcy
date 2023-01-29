@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
-from __future__ import print_function
 import re
 import traceback
 from itertools import chain
 from functools import partial
 from timeit import default_timer as timer
 
-from .compat import basestring
 from .decorators import decorator, wraps, Call
 
 
@@ -235,7 +232,7 @@ def signature_repr(call, repr_len=REPR_LEN):
     return '%s(%s)' % (name, ', '.join(chain(args_repr, kwargs_repr)))
 
 def smart_repr(value, max_len=REPR_LEN):
-    if isinstance(value, basestring):
+    if isinstance(value, (bytes, str)):
         res = repr(value)
     else:
         res = str(value)

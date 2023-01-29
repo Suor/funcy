@@ -5,7 +5,7 @@ from collections import deque
 from bisect import bisect
 
 from .decorators import wraps
-from .compat import PY2
+
 
 __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 
@@ -152,13 +152,8 @@ silent_lookuper = _make_lookuper(True)
 silent_lookuper.__name__ = 'silent_lookuper'
 
 
-if PY2:
-    def has_arg_types(func):
-        spec = inspect.getargspec(func)
-        return bool(spec.args or spec.varargs), bool(spec.keywords)
-else:
-    def has_arg_types(func):
-        params = inspect.signature(func).parameters.values()
-        return any(p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD, p.VAR_POSITIONAL)
-                   for p in params), \
-               any(p.kind in (p.KEYWORD_ONLY, p.VAR_KEYWORD) for p in params)
+def has_arg_types(func):
+    params = inspect.signature(func).parameters.values()
+    return any(p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD, p.VAR_POSITIONAL)
+               for p in params), \
+           any(p.kind in (p.KEYWORD_ONLY, p.VAR_KEYWORD) for p in params)

@@ -1,8 +1,8 @@
+from collections.abc import Iterator
 from operator import add
 import pytest
 from whatever import _
 
-from funcy.compat import range, Iterator, PY3
 from funcy import is_list
 from funcy.seqs import *
 
@@ -69,16 +69,6 @@ def test_lmap():
     assert lmap(1, ['abc', '123']) == ['b', '2']
     assert lmap(slice(2), ['abc', '123']) == ['ab', '12']
 
-@pytest.mark.skipif(PY3, reason="map(None, ...) doesn't work in python 3")
-def test_map_multi():
-    assert lmap(None, [1, 2, 3], 'abc') == [(1, 'a'), (2, 'b'), (3, 'c')]
-
-@pytest.mark.skipif(PY3, reason="imap(None, ...) doesn't work in python 3")
-def test_imap_strange():
-    """
-    Demonstrates funcy.imap and itertools.imap have behavior when given None as f.
-    """
-    assert list(map(None, 'abc')) == [('a',), ('b',), ('c',)]
 
 def test_filter():
     assert lfilter(None, [2, 3, 0]) == [2, 3]

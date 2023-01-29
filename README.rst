@@ -7,7 +7,7 @@ Inspired by clojure, underscore and my own abstractions. Keep reading to get an 
 or `read the docs <http://funcy.readthedocs.org/>`_.
 Or jump directly to `cheatsheet <http://funcy.readthedocs.io/en/stable/cheatsheet.html>`_.
 
-Works with Python 2.7, 3.4+ and pypy.
+Works with Python 3.4+ and pypy3.
 
 
 Installation
@@ -180,11 +180,11 @@ To run the tests using your default python:
     py.test
 
 To fully run ``tox`` you need all the supported pythons to be installed. These are
-2.6+, 3.3+, PyPy and PyPy3. You can run it for particular environment even in absense
+3.4+ and PyPy3. You can run it for particular environment even in absense
 of all of the above::
 
-    tox -e py27
-    tox -e py36
+    tox -e py310
+    tox -e pypy3
     tox -e lint
 
 

@@ -11,7 +11,6 @@ Special topics:
    overview
    cheatsheet
    extended_fns
-   python3
 
 
 Contents:
