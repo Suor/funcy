@@ -1,3 +1,4 @@
+import sys
 from itertools import islice, chain, tee, groupby, filterfalse, accumulate, \
                       takewhile as _takewhile, dropwhile as _dropwhile
 from collections.abc import Sequence
@@ -426,9 +427,56 @@ def pairwise(seq):
     next(b, None)
     return zip(a, b)
 
-def lzip(*seqs, strict=False):
-    """List zip() version."""
-    return list(zip(*seqs, strict=strict))
+if sys.version_info >= (3, 10):
+    def lzip(*seqs, strict=False):
+        """List zip() version."""
+        return list(zip(*seqs, strict=strict))
+else:
+    def lzip(*seqs, strict=False):
+        """List zip() version."""
+        if strict and len(seqs) > 1:
+            return list(_zip_strict(*seqs))
+        return list(zip(*seqs))
+
+    def _zip_strict(*seqs):
+        try:
+            # Try compare lens if they are available and use a fast zip() builtin
+            len_1 = len(seqs[0])
+            for i, s in enumerate(seqs, start=1):
+                len_i = len(s)
+                if len_i != len_1:
+                    short_i, long_i = (1, i) if len_1 < len_i else (i, 1)
+                    raise _zip_strict_error(short_i, long_i)
+        except TypeError:
+            return _zip_strict_iters(*seqs)
+        else:
+            return zip(*seqs)
+
+    def _zip_strict_iters(*seqs):
+        iters = [iter(s) for s in seqs]
+        while True:
+            values, stop_i, val_i = [], 0, 0
+            for i, it in enumerate(iters, start=1):
+                try:
+                    values.append(next(it))
+                    if not val_i:
+                        val_i = i
+                except StopIteration:
+                    if not stop_i:
+                        stop_i = i
+
+            if stop_i:
+                if val_i:
+                    raise _zip_strict_error(stop_i, val_i)
+                break
+            yield tuple(values)
+
+    def _zip_strict_error(short_i, long_i):
+        if short_i == 1:
+            return ValueError("zip() argument %d is longer than argument 1" % long_i)
+        else:
+            start = "argument 1" if short_i == 2 else "argument 1-%d" % (short_i - 1)
+            return ValueError("zip() argument %d is shorter than %s" % (short_i, start))
 
 
 def _reductions(f, seq, acc):

@@ -1,5 +1,6 @@
 from collections.abc import Iterator
 from operator import add
+import sys
 import pytest
 from whatever import _
 
@@ -184,6 +185,22 @@ def test_with_next():
 
 def test_pairwise():
     assert list(pairwise(range(3))) == [(0, 1), (1, 2)]
+
+def test_lzip():
+    assert lzip('12', 'xy') == [('1', 'x'), ('2', 'y')]
+    assert lzip('123', 'xy') == [('1', 'x'), ('2', 'y')]
+    assert lzip('12', 'xyz') == [('1', 'x'), ('2', 'y')]
+    assert lzip('12', iter('xyz')) == [('1', 'x'), ('2', 'y')]
+
+def test_lzip_strict():
+    assert lzip('123', 'xy', strict=False) == [('1', 'x'), ('2', 'y')]
+    assert lzip('12', 'xy', strict=True) == [('1', 'x'), ('2', 'y')]
+    assert lzip('12', iter('xy'), strict=True) == [('1', 'x'), ('2', 'y')]
+    for wrap in (str, iter):
+        with pytest.raises(ValueError): lzip(wrap('123'), wrap('xy'), strict=True)
+        with pytest.raises(ValueError): lzip(wrap('12'), wrap('xyz'), wrap('abcd'), strict=True)
+        with pytest.raises(ValueError): lzip(wrap('123'), wrap('xy'), wrap('abcd'), strict=True)
+        with pytest.raises(ValueError): lzip(wrap('123'), wrap('xyz'), wrap('ab'), strict=True)
 
 
 def test_reductions():
