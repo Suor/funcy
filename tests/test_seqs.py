@@ -1,6 +1,5 @@
 from collections.abc import Iterator
 from operator import add
-import sys
 import pytest
 from whatever import _
 
