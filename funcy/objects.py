@@ -3,7 +3,7 @@ from inspect import isclass, ismodule
 from .strings import cut_prefix
 
 
-__all__ = ['cached_property', 'cached_readonly', 'wrap_prop', 'monkey', 'namespace', 'LazyObject']
+__all__ = ['cached_property', 'cached_readonly', 'wrap_prop', 'monkey', 'LazyObject']
 
 
 class cached_property(object):
@@ -81,12 +81,6 @@ def monkey(cls, name=None):
 
 
 # TODO: monkey_mix()?
-
-
-class namespace(object):
-    """A base class that prevents its member functions turning into methods."""
-    # NOTE: a noop in Python 3, keeping for backwards compat
-    pass
 
 
 class LazyObject(object):

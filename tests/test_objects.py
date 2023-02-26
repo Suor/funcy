@@ -144,13 +144,6 @@ def test_monkey_module():
     assert f(21) == 42
 
 
-def test_namespace():
-    class tests(namespace):
-        is_int = lambda x: isinstance(x, int)
-
-    tests.is_int(10)
-
-
 def test_lazy_object():
     class A(object):
         x = 42
