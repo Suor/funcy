@@ -225,27 +225,39 @@ def test_zip_dicts():
     with pytest.raises(TypeError): list(zip_dicts())
 
 
-def test_get_in():
+@pytest.mark.parametrize("get", [get_in, get_lax])
+def test_get(get):
     d = {
         "a": {
             "b": "c",
-            "d": "e",
-            "f": {
-                "g": "h"
-            }
+            "f": {"g": "h"}
         },
         "i": "j"
     }
-    assert get_in(d, ["m"]) is None
-    assert get_in(d, ["m", "n"], "foo") == "foo"
-    assert get_in(d, ["i"]) == "j"
-    assert get_in(d, ["a", "b"]) == "c"
-    assert get_in(d, ["a", "f", "g"]) == "h"
+    assert get(d, ["i"]) == "j"
+    assert get(d, ["a", "b"]) == "c"
+    assert get(d, ["a", "f", "g"]) == "h"
+    assert get(d, ["m"]) is None
+    assert get(d, ["a", "n"]) is None
+    assert get(d, ["m", "n"], "foo") == "foo"
 
-def test_get_in_list():
-    assert get_in([1, 2], [0]) == 1
-    assert get_in([1, 2], [3]) is None
-    assert get_in({'x': [1, 2]}, ['x', 1]) == 2
+@pytest.mark.parametrize("get", [get_in, get_lax])
+def test_get_list(get):
+    assert get([1, 2], [0]) == 1
+    assert get([1, 2], [3]) is None
+    assert get({'x': [1, 2]}, ['x', 1]) == 2
+
+def test_get_error():
+    with pytest.raises(TypeError): get_in([1, 2], ['a'])
+    assert get_lax([1, 2], ['a']) is None
+    assert get_lax([1, 2], ['a'], 'foo') == 'foo'
+
+    with pytest.raises(TypeError): get_in('abc', [2, 'a'])
+    assert get_lax('abc', [2, 'a']) is None
+
+    with pytest.raises(TypeError): get_in(None, ['a', 'b'])
+    assert get_lax({'a': None}, ['a', 'b']) is None
+
 
 def test_set_in():
     d = {

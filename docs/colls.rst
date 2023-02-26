@@ -209,6 +209,14 @@ Dict utils
     Note that missing key or index, i.e. `KeyError` and `IndexError` result into `default` being return, while trying to use non-int index for a list will result into `TypeError`. This way funcy stays strict on types.
 
 
+.. function:: get_lax(coll, path, default=None)
+
+    A version of :func:`get_in` that tolerates type along the path not working with an index::
+
+        get_lax([1, 2, 3], ["a"], "foo")  # -> "foo"
+        get_lax({"a": None}, ["a", "b"])  # -> None
+
+
 .. function:: set_in(coll, path, value)
 
     Creates a nested collection with the ``value`` set at specified ``path``. Original collection is not changed::

@@ -17,7 +17,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'omit', 'zip_values', 'zip_dicts',
            'where', 'pluck', 'pluck_attr', 'invoke', 'lwhere', 'lpluck', 'lpluck_attr', 'linvoke',
-           'get_in', 'set_in', 'update_in', 'del_in', 'has_path']
+           'get_in', 'get_lax', 'set_in', 'update_in', 'del_in', 'has_path']
 
 
 ### Generic ops
@@ -262,6 +262,17 @@ def get_in(coll, path, default=None):
         try:
             coll = coll[key]
         except (KeyError, IndexError):
+            return default
+    return coll
+
+def get_lax(coll, path, default=None):
+    """Returns a value at path in the given nested collection.
+       Does not raise on a wrong collection type along the way, but removes default.
+    """
+    for key in path:
+        try:
+            coll = coll[key]
+        except (KeyError, IndexError, TypeError):
             return default
     return coll
 

@@ -472,6 +472,11 @@
     <b>get_in<em>(coll, path, default=None)</em></b><br><br>
     Returns a value at <em>path</em> in the given nested collection.
 </div>
+<div name="get_lax">
+    <b>get_lax<em>(coll, path, default=None)</em></b><br><br>
+    Returns a value at <em>path</em> in the given nested collection.<br>
+    Ignores <code>TypeError</code>s.
+</div>
 <div name="set_in">
     <b>set_in<em>(coll, path, value)</em></b><br><br>
     Creates a copy of <em>coll</em> with the <em>value</em> set at <em>path</em>.
