@@ -14,10 +14,8 @@ __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 class SkipMemory(Exception):
     pass
 
-SkipMemoization = SkipMemory  # Old name
 
-# TODO: use real kwonly once in Python 3 only
-def memoize(*args, **kwargs):
+def memoize(func=None, /, *, key_func=None):
     """@memoize(key_func=None). Makes decorated function memoize its results.
 
     If key_func is specified uses key_func(*func_args, **func_kwargs) as memory key.
@@ -25,14 +23,8 @@ def memoize(*args, **kwargs):
 
     Exposes its memory via .memory attribute.
     """
-    if args:
-        assert len(args) == 1
-        assert not kwargs
-        return memoize()(args[0])
-    key_func = kwargs.pop('key_func', None)
-    if kwargs:
-        raise TypeError('memoize() got unexpected keyword arguments: %s', ', '.join(kwargs))
-
+    if func is not None:
+        return memoize()(func)
     return _memory_decorator({}, key_func)
 
 memoize.skip = SkipMemory
@@ -61,7 +53,7 @@ def _memory_decorator(memory, key_func):
                 try:
                     value = memory[key] = func(*args, **kwargs)
                     return value
-                except SkipMemoization as e:
+                except SkipMemory as e:
                     return e.args[0] if e.args else None
 
         def invalidate(*args, **kwargs):

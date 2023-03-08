@@ -28,8 +28,8 @@ def test_decorator_with_args():
 
 def test_decorator_kw_only_args():
     @decorator
-    def add(call, **kwargs):  # TODO: use real kw-only args in Python 3
-        return call() + kwargs.get("n", 1)
+    def add(call, *, n=1):
+        return call() + n
 
     def ten(a, b):
         return 10
