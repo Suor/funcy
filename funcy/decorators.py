@@ -3,6 +3,7 @@ import functools
 from inspect import unwrap  # reexport this for backwards compat
 import inspect
 
+from . colls import omit
 
 __all__ = ['decorator', 'wraps', 'unwrap', 'ContextDecorator', 'contextmanager']
 
@@ -101,6 +102,7 @@ def has_1pos_and_kwonly(func):
 
 def get_argnames(func):
     func = getattr(func, '__original__', None) or unwrap(func)
+    # import ipdb; ipdb.set_trace()
     return func.__code__.co_varnames[:func.__code__.co_argcount]
 
 def arggetter(func, _cache={}):
@@ -108,27 +110,49 @@ def arggetter(func, _cache={}):
         return _cache[func]
 
     original = getattr(func, '__original__', None) or unwrap(func)
-    argnames = get_argnames(original)
-    indexes = dict((name, i) for i, name in enumerate(argnames))
-    defaults_tuple = original.__defaults__
-    if defaults_tuple:
-        defaults = dict(zip(argnames[-len(defaults_tuple):], defaults_tuple))
-    else:
-        defaults = {}
+    code = original.__code__
+
+    # Instrospect pos and kw names
+    posnames = code.co_varnames[:code.co_argcount]
+    n = code.co_argcount
+    kwonlynames = code.co_varnames[n:n + code.co_kwonlyargcount]
+    n += code.co_kwonlyargcount
+    kwnames = posnames[code.co_posonlyargcount:] + kwonlynames
+
+    varposname = varkwname = None
+    if code.co_flags & inspect.CO_VARARGS:
+        varposname = code.co_varnames[n]
+        n += 1
+    if code.co_flags & inspect.CO_VARKEYWORDS:
+        varkwname = code.co_varnames[n]
+
+    allnames = set(code.co_varnames)
+
+    # argnames = get_argnames(original)
+    indexes = {name: i for i, name in enumerate(posnames)}
+    defaults = {}
+    if original.__defaults__:
+        defaults.update(zip(posnames[-len(original.__defaults__):], original.__defaults__))
+    if original.__kwdefaults__:
+        defaults.update(original.__kwdefaults__)
 
     def get_arg(name, args, kwargs):
-        if name not in indexes:
+        if name not in allnames:
             raise TypeError("%s() doesn't have argument named %s" % (func.__name__, name))
+
+        index = indexes.get(name)
+        if index is not None and index < len(args):
+            return args[index]
+        elif name in kwargs and name in kwnames:
+            return kwargs[name]
+        elif name == varposname:
+            return args[len(posnames):]
+        elif name == varkwname:
+            return omit(kwargs, kwnames)
+        elif name in defaults:
+            return defaults[name]
         else:
-            index = indexes[name]
-            if index < len(args):
-                return args[index]
-            elif name in kwargs:
-                return kwargs[name]
-            elif name in defaults:
-                return defaults[name]
-            else:
-                raise TypeError("%s() missing required argument: '%s'" % (func.__name__, name))
+            raise TypeError("%s() missing required argument: '%s'" % (func.__name__, name))
 
     _cache[func] = get_arg
     return get_arg
