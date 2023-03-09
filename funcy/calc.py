@@ -15,7 +15,8 @@ class SkipMemory(Exception):
     pass
 
 
-def memoize(func=None, /, *, key_func=None):
+# TODO: use pos-only arg once in Python 3.8+ only
+def memoize(_func=None, *, key_func=None):
     """@memoize(key_func=None). Makes decorated function memoize its results.
 
     If key_func is specified uses key_func(*func_args, **func_kwargs) as memory key.
@@ -23,8 +24,8 @@ def memoize(func=None, /, *, key_func=None):
 
     Exposes its memory via .memory attribute.
     """
-    if func is not None:
-        return memoize()(func)
+    if _func is not None:
+        return memoize()(_func)
     return _memory_decorator({}, key_func)
 
 memoize.skip = SkipMemory
