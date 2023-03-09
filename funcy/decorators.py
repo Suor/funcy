@@ -103,7 +103,6 @@ def has_1pos_and_kwonly(func):
 
 def get_argnames(func):
     func = getattr(func, '__original__', None) or unwrap(func)
-    # import ipdb; ipdb.set_trace()
     return func.__code__.co_varnames[:func.__code__.co_argcount]
 
 def arggetter(func, _cache={}):
@@ -118,7 +117,11 @@ def arggetter(func, _cache={}):
     n = code.co_argcount
     kwonlynames = code.co_varnames[n:n + code.co_kwonlyargcount]
     n += code.co_kwonlyargcount
-    kwnames = posnames[code.co_posonlyargcount:] + kwonlynames
+    # TODO: remove this check once we drop Python 3.7
+    if hasattr(code, 'co_posonlyargcount'):
+        kwnames = posnames[code.co_posonlyargcount:] + kwonlynames
+    else:
+        kwnames = posnames + kwonlynames
 
     varposname = varkwname = None
     if code.co_flags & inspect.CO_VARARGS:
@@ -128,8 +131,6 @@ def arggetter(func, _cache={}):
         varkwname = code.co_varnames[n]
 
     allnames = set(code.co_varnames)
-
-    # argnames = get_argnames(original)
     indexes = {name: i for i, name in enumerate(posnames)}
     defaults = {}
     if original.__defaults__:
