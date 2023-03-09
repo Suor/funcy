@@ -1,7 +1,7 @@
 Calculation
 ===========
 
-.. decorator:: memoize(key_func=None)
+.. decorator:: memoize(*, key_func=None)
 
     Memoizes decorated function results, trading memory for performance. Can skip memoization
     for failed calculation attempts::
@@ -61,7 +61,7 @@ Calculation
     Same as :func:`@make_lookuper<make_lookuper>`, but returns ``None`` on memory miss.
 
 
-.. decorator:: cache(timeout, key_func=None)
+.. decorator:: cache(timeout, *, key_func=None)
 
     Caches decorated function results for ``timeout``.
     It can be either number of seconds or :class:`py3:datetime.timedelta`::
