@@ -5,6 +5,7 @@ Backwards incompatible changes:
 - dropped Python 2 support
 - dropped namespace helper class
 - dropped old SkipMemoization alias for SkipMemory exception
+- in `@cache(key_func)` param is now keyword only
 
 1.18
 - added join_with(strict=)

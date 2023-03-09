@@ -31,7 +31,7 @@ def memoize(_func=None, *, key_func=None):
 memoize.skip = SkipMemory
 
 
-def cache(timeout, key_func=None):
+def cache(timeout, *, key_func=None):
     """Caches a function results for timeout seconds."""
     if isinstance(timeout, timedelta):
         timeout = timeout.total_seconds()
