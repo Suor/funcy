@@ -18,7 +18,7 @@ ARGS = {}
 
 
 ARGS['builtins'] = {
-    'bool': 'x',
+    'bool': '*',
     'complex': 'real,imag',
     'enumerate': 'iterable,start',
     'file': 'file-**',
@@ -91,7 +91,7 @@ ARGS['funcy.colls'] = {
 }
 
 
-Spec = namedtuple("Spec", "max_n names req_n req_names kw")
+Spec = namedtuple("Spec", "max_n names req_n req_names varkw")
 
 
 def get_spec(func, _cache={}):
@@ -108,60 +108,75 @@ def get_spec(func, _cache={}):
         req_names = re.findall(r'\w+|\*', required)  # a list with dups of *
         max_n = len(req_names) + len(optional)
         req_n = len(req_names)
-        spec = Spec(max_n=max_n, names=set(), req_n=req_n, req_names=set(req_names), kw=False)
+        spec = Spec(max_n=max_n, names=set(), req_n=req_n, req_names=set(req_names), varkw=False)
         _cache[func] = spec
         return spec
     elif isinstance(func, type):
-        # Old style classes without base
-        if not hasattr(func, '__init__'):
-            return Spec(max_n=0, names=set(), req_n=0, req_names=set(), kw=False)
         # __init__ inherited from builtin classes
         objclass = getattr(func.__init__, '__objclass__', None)
         if objclass and objclass is not func:
             return get_spec(objclass)
         # Introspect constructor and remove self
         spec = get_spec(func.__init__)
-        self_set = set([func.__init__.__code__.co_varnames[0]])
+        self_set = {func.__init__.__code__.co_varnames[0]}
         return spec._replace(max_n=spec.max_n - 1, names=spec.names - self_set,
                              req_n=spec.req_n - 1, req_names=spec.req_names - self_set)
+    elif hasattr(func, '__code__'):
+        return _code_to_spec(func)
     else:
+        # We use signature last to be fully backwards compatible. Also it's slower
         try:
-            defaults_n = len(func.__defaults__)
-        except (AttributeError, TypeError):
-            defaults_n = 0
-        try:
-            varnames = func.__code__.co_varnames
-            n = func.__code__.co_argcount
-            names = set(varnames[:n])
-            req_n = n - defaults_n
-            req_names = set(varnames[:req_n])
-            kw = bool(func.__code__.co_flags & CO_VARKEYWORDS)
-            # If there are varargs they could be required, but all keywords args can't be
-            max_n = req_n + 1 if func.__code__.co_flags & CO_VARARGS else n
-            return Spec(max_n=max_n, names=names, req_n=req_n, req_names=req_names, kw=kw)
-        except AttributeError:
-            # We use signature last to be fully backwards compatible. Also it's slower
-            try:
-                sig = signature(func)
-            except (ValueError, TypeError):
-                raise ValueError('Unable to introspect %s() arguments'
-                    % (getattr(func, '__qualname__', None) or getattr(func, '__name__', func)))
-            else:
-                spec = _cache[func] = _sig_to_spec(sig)
-                return spec
+            sig = signature(func)
+            # import ipdb; ipdb.set_trace()
+        except (ValueError, TypeError):
+            raise ValueError('Unable to introspect %s() arguments'
+                % (getattr(func, '__qualname__', None) or getattr(func, '__name__', func)))
+        else:
+            spec = _cache[func] = _sig_to_spec(sig)
+            return spec
+
+
+def _code_to_spec(func):
+    code = func.__code__
+
+    # Weird function like objects
+    defaults = getattr(func, '__defaults__', None)
+    defaults_n = len(defaults) if isinstance(defaults, tuple) else 0
+
+    kwdefaults = getattr(func, '__kwdefaults__', None)
+    if not isinstance(kwdefaults, dict):
+        kwdefaults = {}
+
+    # Python 3.7 and earlier does not have this
+    posonly_n = getattr(code, 'co_posonlyargcount', 0)
+
+    varnames = code.co_varnames
+    pos_n = code.co_argcount
+    n = pos_n + code.co_kwonlyargcount
+    names = set(varnames[posonly_n:n])
+    req_n = n - defaults_n - len(kwdefaults)
+    req_names = set(varnames[posonly_n:pos_n - defaults_n] + varnames[pos_n:n]) - set(kwdefaults)
+    varkw = bool(code.co_flags & CO_VARKEYWORDS)
+    # If there are varargs they could be required
+    max_n = n + 1 if code.co_flags & CO_VARARGS else n
+    return Spec(max_n=max_n, names=names, req_n=req_n, req_names=req_names, varkw=varkw)
 
 
 def _sig_to_spec(sig):
-    max_n, names, req_n, req_names, kw = 0, set(), 0, set(), False
+    max_n, names, req_n, req_names, varkw = 0, set(), 0, set(), False
     for name, param in sig.parameters.items():
         max_n += 1
         if param.kind == param.VAR_KEYWORD:
-            kw = True
+            max_n -= 1
+            varkw = True
         elif param.kind == param.VAR_POSITIONAL:
             req_n += 1
+        elif param.kind == param.POSITIONAL_ONLY:
+            if param.default is param.empty:
+                req_n += 1
         else:
             names.add(name)
             if param.default is param.empty:
                 req_n += 1
                 req_names.add(name)
-    return Spec(max_n=max_n, names=names, req_n=req_n, req_names=req_names, kw=kw)
+    return Spec(max_n=max_n, names=names, req_n=req_n, req_names=req_names, varkw=varkw)

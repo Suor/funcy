@@ -64,7 +64,6 @@ def rcurry(func, n=EMPTY):
         return lambda x: rcurry(rpartial(func, x), n - 1)
 
 
-# TODO: drop `n` in next major release
 def autocurry(func, n=EMPTY, _spec=None, _args=(), _kwargs={}):
     """Creates a version of func returning its partial applications
        until sufficient arguments are passed."""
@@ -76,7 +75,7 @@ def autocurry(func, n=EMPTY, _spec=None, _args=(), _kwargs={}):
         kwargs = _kwargs.copy()
         kwargs.update(kw)
 
-        if not spec.kw and len(args) + len(kwargs) >= spec.max_n:
+        if not spec.varkw and len(args) + len(kwargs) >= spec.max_n:
             return func(*args, **kwargs)
         elif len(args) + len(set(kwargs) & spec.names) >= spec.max_n:
             return func(*args, **kwargs)

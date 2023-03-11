@@ -1,4 +1,5 @@
 from operator import __add__, __sub__
+import sys
 import pytest
 from whatever import _
 
@@ -94,12 +95,37 @@ def test_autocurry_kwargs():
     assert at(b=3, c=9)(1) == (1, 3, 9)
     with pytest.raises(TypeError): at(b=2, d=3, e=4)(a=1, c=1)
 
+
+def test_autocurry_kwonly():
+    at = autocurry(lambda a, *, b: (a, b))
+    assert at(1, b=2) == (1, 2)
+    assert at(1)(b=2) == (1, 2)
+    assert at(b=2)(1) == (1, 2)
+
+    at = autocurry(lambda a, *, b=10: (a, b))
+    assert at(1) == (1, 10)
+    assert at(b=2)(1) == (1, 2)
+
+    at = autocurry(lambda a=1, *, b: (a, b))
+    assert at(b=2) == (1, 2)
+    assert at(0)(b=2) == (0, 2)
+
+    at = autocurry(lambda *, a=1, b: (a, b))
+    assert at(b=2) == (1, 2)
+    assert at(a=0)(b=2) == (0, 2)
+
+# TODO: move this here once we drop Python 3.7
+if sys.version_info >= (3, 8):
+    pytest.register_assert_rewrite("tests.py38_funcs")
+    from .py38_funcs import test_autocurry_posonly  # noqa
+
+
 def test_autocurry_builtin():
     assert autocurry(complex)(imag=1)(0) == 1j
     assert autocurry(lmap)(_ + 1)([1, 2]) == [2, 3]
     assert autocurry(int)(base=12)('100') == 144
-    # Only works in newer Pythons, relies on inspect.signature()
-    # assert autocurry(str.split)(sep='_')('a_1') == ['a', '1']
+    if sys.version_info >= (3, 7):
+        assert autocurry(str.split)(sep='_')('a_1') == ['a', '1']
 
 def test_autocurry_hard():
     def required_star(f, *seqs):
@@ -130,13 +156,11 @@ def test_autocurry_class():
     assert autocurry(int)(base=12)('100') == 144
 
 def test_autocurry_docstring():
-
     @autocurry
     def f(a, b):
         'docstring'
 
     assert f.__doc__ == 'docstring'
-
 
 
 def test_compose():
