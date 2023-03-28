@@ -1,11 +1,15 @@
+2.0
 - added get_lax()
 - added lzip(strict) param
+- made autocurry() and friends support kw-only and pos-only arguments
+- improved call._whatever_ arg introspection: pos-only, kw-only, kwargs and varargs are supported
 - test against Python 3.11
 Backwards incompatible changes:
 - dropped Python 2 support
 - dropped namespace helper class
 - dropped old SkipMemoization alias for SkipMemory exception
-- in `@cache(key_func)` param is now keyword only
+- @cache(key_func) param is now keyword only
+- @decorator's call won't access args capturesd by **kwargs individually anymore
 
 1.18
 - added join_with(strict=)
