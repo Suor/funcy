@@ -129,6 +129,18 @@ Flow
         )
 
 
+.. decorator:: nullsafe
+
+    Return None if the first argument is None, otherwise invokes the decorated function::
+
+        @nullsafe
+        def describe(pet):
+            return (pet.name, pet.species)
+
+
+        describe(person.pet)  # person might not have a pet
+
+
 .. function:: limit_error_rate(fails, timeout, exception=ErrorRateExceeded)
 
     If function fails to complete ``fails`` times in a row, calls to it will be intercepted for ``timeout`` with ``exception`` raised instead. A clean way to short-circuit function taking too long to fail::
