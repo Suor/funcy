@@ -139,6 +139,16 @@ def test_fallback():
     assert fallback((raiser(MyError), MyError), lambda: 1) == 1
 
 
+def test_nullsafe():
+    const = lambda t: 1
+    assert nullsafe(const)(2) == 1
+    assert nullsafe(const)(None) is None
+
+    # at least one positional argument must be given
+    with pytest.raises(TypeError):
+        nullsafe(const)(x=None)
+
+
 def test_limit_error_rate():
     calls = []
 

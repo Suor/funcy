@@ -8,7 +8,7 @@ from .decorators import decorator, wraps, get_argnames, arggetter, contextmanage
 
 
 __all__ = ['raiser', 'ignore', 'silent', 'suppress', 'nullcontext', 'reraise', 'retry', 'fallback',
-           'limit_error_rate', 'ErrorRateExceeded', 'throttle',
+           'nullsafe', 'limit_error_rate', 'ErrorRateExceeded', 'throttle',
            'post_processing', 'collecting', 'joining',
            'once', 'once_per', 'once_per_args',
            'wrap_with']
@@ -129,6 +129,21 @@ def _ensure_exceptable(errors):
 
 def _is_exception_type(value):
     return isinstance(value, type) and issubclass(value, BaseException)
+
+
+def nullsafe(func):
+    """Creates a 'null-safe' version of func that returns None if its
+    first argument is None, and otherwise invokes func with the given
+    arguments. func must take at least one positional argument.
+    """
+    @wraps(func)
+    def wrapper(t, *args, **kwargs):
+        if t is None:
+            return None
+
+        return func(t, *args, **kwargs)
+
+    return wrapper
 
 
 class ErrorRateExceeded(Exception):
