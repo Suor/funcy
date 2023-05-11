@@ -1,9 +1,9 @@
 2.0
+- support Python 3.11 officially
 - added get_lax()
 - added lzip(strict) param
 - made autocurry() and friends support kw-only and pos-only arguments
 - improved call._whatever_ arg introspection: pos-only, kw-only, kwargs and varargs are supported
-- test against Python 3.11
 Backwards incompatible changes:
 - dropped Python 2 support
 - dropped namespace helper class
@@ -18,6 +18,7 @@ Backwards incompatible changes:
 - doc improvements (thx to Tim Gates)
 
 1.17
+- support Python 3.10 officially
 - added del_in()
 - made throttle() and limit_error_rate() work on methods
 - added str and repr to Call objects
