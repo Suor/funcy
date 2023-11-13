@@ -101,7 +101,7 @@ Create decorators easily:
 
     @decorator
     def log(call):
-        print call._func.__name__, call._args
+        print(call._func.__name__, call._args)
         return call()
 
 
