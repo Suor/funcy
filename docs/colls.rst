@@ -174,9 +174,12 @@ Dict utils
 
 .. function:: omit(mapping, keys)
 
-    Returns a copy of ``mapping`` with ``keys`` omitted. Preserves collection type::
+    Returns a copy of ``mapping`` with ``keys`` omitted. Each key of `mapping` is checked if it is contained with `keys`, so a string and an array could be used. Preserves collection type::
 
         omit({'a': 1, 'b': 2, 'c': 3}, 'ac')
+        # -> {'b': 2}
+
+        omit({'a': 1, 'b': 2, 'c': 3}, ['a', 'c'])
         # -> {'b': 2}
 
 
@@ -280,6 +283,11 @@ Data manipulation
     Returns an iterator or a list of values for ``key`` in each mapping in the given sequence. Essentially a shortcut for::
 
         map(operator.itemgetter(key), mappings)
+
+    e.g. extracting a key from a list of dictionaries::
+
+        lpluck('name', [{'name': 'John'}, {'name': 'Mary'}])
+        # -> ['John', 'Mary']
 
 
 .. function:: pluck_attr(attr, objects)
