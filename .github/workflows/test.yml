@@ -8,13 +8,13 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.8
+        python-version: 3.11
     - name: Lint
       run: |
         pip install flake8
@@ -22,13 +22,13 @@ jobs:
         flake8 --select=F,E5,W tests
 
   docs:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.8
+        python-version: 3.11
     - name: Build docs
       working-directory: ./docs
       run: |
@@ -36,16 +36,21 @@ jobs:
         sphinx-build -b html -W . _build/html
 
   test:
-    runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.4", "3.5", "3.6", "3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
-
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "pypy3.10"]
+        include:
+          - {os: "ubuntu-22.04"}
+          - {os: "ubuntu-20.04", python-version: "3.6"}
+          - {os: "ubuntu-20.04", python-version: "3.5"}
+          # Doesn't really work
+          # - {os: "ubuntu-18.04", python-version: "3.4"}
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
