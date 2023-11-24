@@ -45,7 +45,7 @@ jobs:
           - {os: "ubuntu-18.04", python-version: "3.6"}
           - {os: "ubuntu-18.04", python-version: "3.5"}
           - {os: "ubuntu-18.04", python-version: "3.4"}
-    runs-on: $${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
