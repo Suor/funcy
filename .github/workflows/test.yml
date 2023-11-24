@@ -42,9 +42,10 @@ jobs:
         python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "pypy3.10"]
         include:
           - {os: "ubuntu-22.04"}
-          - {os: "ubuntu-18.04", python-version: "3.6"}
-          - {os: "ubuntu-18.04", python-version: "3.5"}
-          - {os: "ubuntu-18.04", python-version: "3.4"}
+          - {os: "ubuntu-20.04", python-version: "3.6"}
+          - {os: "ubuntu-20.04", python-version: "3.5"}
+          # Doesn't really work
+          # - {os: "ubuntu-18.04", python-version: "3.4"}
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
