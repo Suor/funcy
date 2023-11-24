@@ -168,6 +168,11 @@ Funcy is an embodiment of ideas I explain in several essays:
 - `Abstracting Control Flow <https://suor.github.io/blog/2013/10/08/abstracting-control-flow/>`_
 - `Painless Decorators <https://suor.github.io/blog/2013/11/03/painless-decorators/>`_
 
+Related Projects
+----------------
+
+- https://pypi.org/project/funcy-chain/
+- https://pypi.org/project/funcy-pipe/
 
 Running tests
 --------------
