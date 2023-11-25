@@ -39,8 +39,8 @@ def test_rpartial():
 
 def test_curry():
     assert curry(lambda: 42)() == 42
-    assert curry(_ * 2)(21) == 42
-    assert curry(_ * _)(6)(7) == 42
+    assert curry(lambda x: x * 2)(21) == 42
+    assert curry(lambda x, y: x * y)(6)(7) == 42
     assert curry(__add__, 2)(10)(1) == 11
     assert curry(__add__)(10)(1) == 11  # Introspect builtin
     assert curry(lambda x,y,z: x+y+z)('a')('b')('c') == 'abc'

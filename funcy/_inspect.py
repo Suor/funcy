@@ -1,10 +1,13 @@
 from __future__ import absolute_import
 from inspect import CO_VARARGS, CO_VARKEYWORDS, signature
 from collections import namedtuple
+import platform
 import re
 
 from .decorators import unwrap
 
+
+IS_PYPY = platform.python_implementation() == "PyPy"
 
 # This provides sufficient introspection for *curry() functions.
 #
@@ -121,7 +124,8 @@ def get_spec(func, _cache={}):
         self_set = {func.__init__.__code__.co_varnames[0]}
         return spec._replace(max_n=spec.max_n - 1, names=spec.names - self_set,
                              req_n=spec.req_n - 1, req_names=spec.req_names - self_set)
-    elif hasattr(func, '__code__'):
+    # In PyPy some builtins might have __code__ but no __defaults__, so we fall back to signature
+    elif not IS_PYPY and hasattr(func, '__code__'):
         return _code_to_spec(func)
     else:
         # We use signature last to be fully backwards compatible. Also it's slower
