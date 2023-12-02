@@ -322,6 +322,8 @@ Content tests
 
         is_distinct(words, key=0)
 
+    Also aliased to `uniq`
+
 
 .. function:: all([pred], seq)
 
