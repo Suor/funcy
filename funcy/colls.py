@@ -360,3 +360,9 @@ def invoke(objects, name, *args, **kwargs):
     """Yields results of the obj.name(*args, **kwargs)
        for each object in objects."""
     return map(methodcaller(name, *args, **kwargs), objects)
+
+def where_attr(objects, **cond):
+    """Iterates over objects containing attributes which satisfy all pairs in cond."""
+    items = cond.items()
+    match = lambda obj: all(hasattr(obj, k) and getattr(obj, k) == v for k, v in items)
+    return filter(match, objects)
