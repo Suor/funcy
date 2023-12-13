@@ -7,7 +7,9 @@ from .funcmakers import make_func, make_pred
 
 
 __all__ = ['identity', 'constantly', 'caller',
-           'partial', 'rpartial', 'func_partial',
+           # reexport functools for convenience
+           'reduce', 'partial',
+           'rpartial', 'func_partial',
            'curry', 'rcurry', 'autocurry',
            'iffy',
            'compose', 'rcompose', 'complement', 'juxt', 'ljuxt']
