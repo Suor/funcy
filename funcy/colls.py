@@ -348,6 +348,12 @@ def where(mappings, **cond):
     match = lambda m: all(k in m and m[k] == v for k, v in items)
     return filter(match, mappings)
 
+def where_not(mappings, **cond):
+    """Iterates over mappings containing all pairs not in cond."""
+    items = cond.items()
+    match = lambda m: none(k in m and m[k] == v for k, v in items)
+    return filter(match, mappings)
+
 def pluck(key, mappings):
     """Iterates over values for key in mappings."""
     return map(itemgetter(key), mappings)
