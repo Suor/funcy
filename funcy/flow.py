@@ -46,9 +46,9 @@ def ignore(errors, default=None):
         return wrapper
     return decorator
 
-def silent(func):
+def silent(func, default=None):
     """Alters function to ignore all exceptions."""
-    return ignore(Exception)(func)
+    return ignore(Exception, default)(func)
 
 
 ### Backport of Python 3.7 nullcontext
