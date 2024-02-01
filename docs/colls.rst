@@ -308,6 +308,11 @@ Data manipulation
 
     Calls named method with given arguments for each object in ``objects`` and returns an iterator or a list of results.
 
+    For example::
+
+        invoke(['abc', 'def', 'b'], 'find', 'b')
+        # ->[1, -1, 0]
+
 
 Content tests
 -------------
