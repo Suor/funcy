@@ -349,8 +349,11 @@ def where(mappings, **cond):
     return filter(match, mappings)
 
 def pluck(key, mappings):
-    """Iterates over values for key in mappings."""
-    return map(itemgetter(key), mappings)
+    """Iterates over values for key, or multiple keys, in mappings."""
+    if isinstance(key, (list, tuple)):
+        return map(itemgetter(*key), mappings)
+    else:
+        return map(itemgetter(key), mappings)
 
 def pluck_attr(attr, objects):
     """Iterates over values of given attribute of given objects."""
