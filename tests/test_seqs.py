@@ -1,5 +1,5 @@
 from collections.abc import Iterator
-from operator import add, attrgetter, itemgetter
+from operator import add, itemgetter
 import pytest
 from whatever import _
 
