@@ -146,7 +146,9 @@ def test_group_by():
 
 def test_group_by_keys():
     assert group_by_keys(r'(\d)(\d)', ['12', '23']) == {'1': ['12'], '2': ['12', '23'], '3': ['23']}
-    assert group_by_keys(str.split, ["hello man", "hello woman"]) == {'hello': ['hello man', 'hello woman'], 'man': ['hello man'], 'woman': ['hello woman']}
+    assert group_by_keys(str.split, ["hello man", "hello woman"]) == {
+        'hello': ['hello man', 'hello woman'], 'man': ['hello man'], 'woman': ['hello woman']
+    }
 
 def test_group_values():
     assert group_values(['ab', 'ac', 'ba']) == {'a': ['b', 'c'], 'b': ['a']}
