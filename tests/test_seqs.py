@@ -1,5 +1,5 @@
 from collections.abc import Iterator
-from operator import add
+from operator import add, attrgetter, itemgetter
 import pytest
 from whatever import _
 
@@ -140,9 +140,13 @@ def test_split_by():
 def test_group_by():
     assert group_by(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}
     assert group_by(r'\d', ['a1', 'b2', 'c1']) == {'1': ['a1', 'c1'], '2': ['b2']}
+    assert group_by(
+        itemgetter("x"), [{"x": 1, "y": 1}, {"x": 2, "y": 2}, {"x": 1, "y": 3}]
+    ) == {1: [{"x": 1, "y": 1}, {"x": 1, "y": 3}], 2: [{"x": 2, "y": 2}]}
 
 def test_group_by_keys():
     assert group_by_keys(r'(\d)(\d)', ['12', '23']) == {'1': ['12'], '2': ['12', '23'], '3': ['23']}
+    assert group_by_keys(str.split, ["hello man", "hello woman"]) == {'hello': ['hello man', 'hello woman'], 'man': ['hello man'], 'woman': ['hello woman']}
 
 def test_group_values():
     assert group_values(['ab', 'ac', 'ba']) == {'a': ['b', 'c'], 'b': ['a']}
