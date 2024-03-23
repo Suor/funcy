@@ -33,7 +33,7 @@ jobs:
       working-directory: ./docs
       run: |
         pip install -r requirements.txt
-        sphinx-build -b html -W . _build/html
+        make html SPHINXOPTS="-W"
 
   test:
     strategy:
