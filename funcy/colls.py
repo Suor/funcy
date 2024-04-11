@@ -17,7 +17,9 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'omit', 'zip_values', 'zip_dicts',
            'where', 'pluck', 'pluck_attr', 'invoke', 'lwhere', 'lpluck', 'lpluck_attr', 'linvoke',
-           'get_in', 'get_lax', 'set_in', 'update_in', 'del_in', 'has_path']
+           'get_in', 'get_lax', 'set_in', 'update_in', 'del_in', 'has_path',
+           'inner_join', 'left_join', 'right_join', 'full_join'
+           ]
 
 
 ### Generic ops
@@ -360,3 +362,19 @@ def invoke(objects, name, *args, **kwargs):
     """Yields results of the obj.name(*args, **kwargs)
        for each object in objects."""
     return map(methodcaller(name, *args, **kwargs), objects)
+
+def inner_join(left, right, left_column, right_column):
+    """Join two lists of dictionaries on the given columns."""
+    return [join([l, r]) for l in left for r in right if left_column in l.keys() and right_column in r.keys() if l[left_column] == r[right_column]]
+
+def left_join(left, right, left_column, right_column):
+    """Join two lists of dictionaries on the given columns."""
+    return inner_join(left, right, left_column, right_column) + [l for l in left if left_column not in l.keys()]
+
+def right_join(left, right, left_column, right_column):
+    """Join two lists of dictionaries on the given columns."""
+    return inner_join(right, left, right_column, left_column) + [r for r in right if right_column not in r.keys()]
+
+def full_join(left, right, left_column, right_column):
+    """Join two lists of dictionaries on the given columns."""
+    return inner_join(left, right, left_column, right_column) + [r for r in right if right_column not in r.keys()] + [l for l in left if left_column not in l.keys()]
