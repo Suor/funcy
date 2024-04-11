@@ -313,6 +313,49 @@ Data manipulation
         invoke(['abc', 'def', 'b'], 'find', 'b')
         # ->[1, -1, 0]
 
+.. function:: inner_join(left,right,right_column,left_column)
+
+        Returns a list of tuples of matching rows from the two tables. The tables are expected to be lists of dictionaries, and the columns are the keys in the dictionaries.
+
+        For example::
+
+            left = [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
+            right = [{'id': 1, 'age': 25}, {'id': 3, 'age': 30}]
+            inner_join(left, right, 'id', 'id')
+            # -> [{'id': 1, 'name': 'Alice', 'age': 25}]
+
+.. function:: left_join(left,right,right_column,left_column)
+
+        Returns a list of tuples of matching rows from the two tables. The tables are expected to be lists of dictionaries, and the columns are the keys in the dictionaries. If a row in the left table does not have a match in the right table, the right table columns will be omitted.
+
+        For example::
+
+            left = [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
+            right = [{'id': 1, 'age': 25}, {'id': 3, 'age': 30}]
+            left_join(left, right, 'id', 'id')
+            # -> [{'id': 1, 'name': 'Alice', 'age': 25}, {'id': 2, 'name': 'Bob'}]
+
+.. function:: right_join(left,right,right_column,left_column)
+
+        Returns a list of tuples of matching rows from the two tables. The tables are expected to be lists of dictionaries, and the columns are the keys in the dictionaries. If a row in the right table does not have a match in the left table, the left table columns will be omitted.
+
+        For example::
+
+            left = [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
+            right = [{'id': 1, 'age': 25}, {'id': 3, 'age': 30}]
+            right_join(left, right, 'id', 'id')
+            # -> [{'id': 1, 'name': 'Alice', 'age': 25}, {'id': 3, 'age': 30}]
+
+.. function:: full_join(left,right,right_column,left_column)
+
+            Returns a list of tuples of matching rows from the two tables. The tables are expected to be lists of dictionaries, and the columns are the keys in the dictionaries. If a row in the left table does not have a match in the right table, the right table columns will be omitted. If a row in any of the tables does not have a match in the other table, the columns from the other table will be omitted.
+
+            For example::
+
+                left = [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
+                right = [{'id': 1, 'age': 25}, {'id': 3, 'age': 30}]
+                full_join(left, right, 'id', 'id')
+                # -> [{'id': 1, 'name': 'Alice', 'age': 25}, {'id': 2, 'name': 'Bob'}, {'id': 3, 'age': 30}]
 
 Content tests
 -------------
