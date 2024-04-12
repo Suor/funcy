@@ -3,7 +3,7 @@ from copy import copy
 from operator import itemgetter, methodcaller, attrgetter
 from itertools import chain, tee
 from collections import defaultdict
-from collections.abc import Mapping, Set, Iterable, Iterator
+from collections.abc import Mapping, Set, Iterable, Iterator, Sequence
 
 from .primitives import EMPTY
 from .funcs import partial, compose
@@ -17,7 +17,7 @@ __all__ = ['empty', 'iteritems', 'itervalues',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'omit', 'zip_values', 'zip_dicts',
            'where', 'pluck', 'pluck_attr', 'invoke', 'lwhere', 'lpluck', 'lpluck_attr', 'linvoke',
-           'get_in', 'get_lax', 'set_in', 'update_in', 'del_in', 'has_path']
+           'get_in', 'get_lax', 'set_in', 'update_in', 'del_in', 'has_path', 'get_paths', 'get_end_paths']
 
 
 ### Generic ops
@@ -360,3 +360,41 @@ def invoke(objects, name, *args, **kwargs):
     """Yields results of the obj.name(*args, **kwargs)
        for each object in objects."""
     return map(methodcaller(name, *args, **kwargs), objects)
+
+def get_paths(coll, prefix=()):
+    """Yields all paths in the nested collection starting with prefix.
+    Treats strings as values, not collections.
+    Yields intermediate paths as well as paths ending in a value."""
+    current_coll = get_in(coll, prefix)
+    yield prefix
+    if isinstance(current_coll, Mapping):
+        for key in current_coll:
+            for path in get_paths(coll, prefix + (key,)):
+                yield path
+    elif isinstance(current_coll, Sequence):
+        if isinstance(current_coll, str):
+            return
+        length = len(current_coll)
+        for i in range(0,length):
+            for path in get_paths(coll, prefix + (i,)):
+                yield path
+
+def get_end_paths(coll,prefix=()):
+    """Yields all paths in the nested collection starting with prefix.
+    Only yields paths that end in a value.
+    Treats strings as values, not collections."""
+    current_coll = get_in(coll, prefix)
+    if isinstance(current_coll, Mapping):
+        for key in current_coll:
+            for path in get_end_paths(coll, prefix + (key,)):
+                yield path
+    elif isinstance(current_coll, Sequence):
+        if isinstance(current_coll, str):
+            yield prefix
+        else:
+            length = len(current_coll)
+            for i in range(0,length):
+                for path in get_end_paths(coll, prefix + (i,)):
+                    yield path
+    else:
+        yield prefix

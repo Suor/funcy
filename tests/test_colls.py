@@ -347,3 +347,58 @@ def test_pluck_attr():
 
 def test_invoke():
     assert linvoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
+
+def test_get_paths():
+    coll = {
+        "a": {
+            "b": "c",
+            "f": {"g": "h"}
+        },
+        "i": "j",
+        "k": [{"n":"abc"},2,3,{"l": 4}]
+    }
+
+    assert list(get_paths(coll)) == [
+        (),
+        ('a',),
+        ('a', 'b'),
+        ('a', 'f'),
+        ('a', 'f', 'g'),
+        ('i',),
+        ("k",),
+        ("k",0),
+        ("k",0,"n"),
+        ("k",1),
+        ("k",2),
+        ("k",3),
+        ("k",3,"l")
+    ]
+    assert list(get_paths(coll, prefix=('a',))) == [
+        ('a',),
+        ('a', 'b'),
+        ('a', 'f'),
+        ('a', 'f', 'g')
+    ]
+
+def test_get_end_paths():
+    coll = {
+        "a": {
+            "b": "c",
+            "f": {"g": "h"}
+        },
+        "i": "j",
+        "k": [{"n":"abc"},2,3,{"l": 4}]
+    }
+    assert list(get_end_paths(coll)) == [
+        ('a', 'b'),
+        ('a', 'f', 'g'),
+        ('i',),
+        ("k",0,"n"),
+        ("k",1),
+        ("k",2),
+        ("k",3,"l")
+    ]
+    assert list(get_end_paths(coll, prefix=('a',))) == [
+        ('a', 'b'),
+        ('a', 'f', 'g')
+    ]

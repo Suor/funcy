@@ -258,6 +258,29 @@ Dict utils
         has_path({"a": [1, 2]}, ["a", 0])  # -> True
 
 
+..  function:: get_paths(coll,prefix=())
+
+    Returns an iterator of paths to all elements in a nested collection.
+    Each path is a tuple of keys or indexes leading to the element::
+
+        list(get_paths({'a': {'b': 42}}))
+        # -> [(), ('a',), ('a', 'b')]
+
+        list(get_paths([1, [2, 3]]))
+        # -> [(), (0,), (1,), (1, 0), (1, 1)]
+
+..  function:: get_end_paths(coll,prefix=())
+
+    Returns an iterator of paths to all end elements in a nested collection.
+    Returns only paths to elements that are not collections themselves.
+    Each path is a tuple of keys or indexes leading to the element::
+
+        list(get_end_paths({'a': {'b': 42}}))
+        # -> [('a', 'b')]
+
+        list(get_end_paths([1, [2, 3]]))
+        # -> [(0,), (1, 0), (1, 1)]
+
 Data manipulation
 -----------------
 
