@@ -416,13 +416,23 @@ Split and chunk
 
     One can use :func:`split` when grouping by boolean predicate. See also :func:`py3:itertools.groupby`.
 
+    You can also easily group dictionaries:
+
+    ::
+
+        group_by(itemgetter("age"), [{"age": 10, "name": "Alice"}, {"age": 12, "name": "Bob"}])
+        # -> {10: [{'age': 10, 'name': 'Alice'}], 12: [{'age': 12, 'name': 'Bob'}]}
+
 
 .. function:: group_by_keys(get_keys, seq)
 
     Groups elements of ``seq`` having multiple keys each into :class:`defaultdict(list) <py3:collections.defaultdict>`. Can be used to reverse grouping::
 
         posts_by_tag = group_by_keys(attrgetter('tags'), posts)
+
+        sentences = ["hello man", "hello woman"]
         sentences_with_word = group_by_keys(str.split, sentences)
+        # -> {'hello': ['hello man', 'hello woman'], 'man': ['hello man'], 'woman': ['hello woman']}
 
 
 .. function:: group_values(seq)
