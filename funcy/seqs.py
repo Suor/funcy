@@ -11,7 +11,7 @@ from .funcmakers import make_func, make_pred
 
 
 __all__ = [
-    'count', 'cycle', 'repeat', 'repeatedly', 'iterate',
+    'count', 'cycle', 'repeat', 'repeatedly', 'iterate', 'shuffle',
     'take', 'drop', 'first', 'second', 'nth', 'last', 'rest', 'butlast', 'ilen',
     'map', 'filter', 'lmap', 'lfilter', 'remove', 'lremove', 'keep', 'lkeep', 'without', 'lwithout',
     'concat', 'lconcat', 'chain', 'cat', 'lcat', 'flatten', 'lflatten', 'mapcat', 'lmapcat',
@@ -34,6 +34,13 @@ def _lfilter(f, seq):
 
 # Re-export
 from itertools import count, cycle, repeat
+import random
+
+def shuffle(seq):
+    new_seq = seq.copy()
+    # NOTE: random.shuffle() is done in place, which is why we copy the array
+    random.shuffle(new_seq)
+    return new_seq
 
 def repeatedly(f, n=EMPTY):
     """Takes a function of no args, presumably with side effects,
