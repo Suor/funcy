@@ -43,6 +43,25 @@ def test_memoize_args_kwargs():
     assert calls == [(0, 1), (1, 1), (0, 1), (1, 1)]
 
 
+def test_memoize_skip():
+    @memoize
+    def inc(x):
+        calls.append(x)
+        if x == 2:
+            raise memoize.skip
+        if x == 3:
+            raise memoize.skip(42)
+        return x + 1
+
+    calls = []
+    assert inc(1) == 2
+    assert inc(2) is None
+    assert inc(2) is None
+    assert inc(3) == 42
+    assert inc(3) == 42
+    assert calls == [1, 2, 2, 3, 3]
+
+
 def test_memoize_memory():
     @memoize
     def inc(x):
