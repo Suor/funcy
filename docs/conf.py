@@ -31,6 +31,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.intersphinx',
     'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
     'sphinxcontrib.jquery'
 ]
 
