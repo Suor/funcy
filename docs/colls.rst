@@ -167,9 +167,13 @@ Dict utils
 
     Returns a dict containing only those entries in ``mapping`` whose key is in ``keys``.
 
-    Most useful to shrink some common data or options to predefined subset. One particular case is constructing a dict of used variables::
-
-        merge(project(__builtins__, names), project(globals(), names))
+        d={"a":1,"b":2,"c":3}
+        project(d,"a")
+        # -> {"a":1}
+        project(d,("a","b"))
+        # -> {'a': 1, 'b': 2}
+        project(d,("a","x"))
+        # -> {"a":1}
 
 
 .. function:: omit(mapping, keys)
