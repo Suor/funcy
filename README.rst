@@ -182,7 +182,7 @@ To run the tests using your default python:
 ::
 
     pip install -r test_requirements.txt
-    py.test
+    pytest
 
 To fully run ``tox`` you need all the supported pythons to be installed. These are
 3.4+ and PyPy3. You can run it for particular environment even in absense
