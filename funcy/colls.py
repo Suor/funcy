@@ -267,7 +267,7 @@ def get_in(coll, path, default=None):
 
 def get_lax(coll, path, default=None):
     """Returns a value at path in the given nested collection.
-       Does not raise on a wrong collection type along the way, but removes default.
+       Does not raise on a wrong collection type along the way, returns default instead.
     """
     for key in path:
         try:
