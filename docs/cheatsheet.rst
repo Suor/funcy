@@ -31,7 +31,7 @@ Collections
 ===================== ==============================================================
 Join                  :func:`merge` :func:`merge_with` :func:`join` :func:`join_with`
 Transform             :func:`walk` :func:`walk_keys` :func:`walk_values`
-Filter                :func:`select` :func:`select_keys` :func:`select_values` :func:`compact`
+Filter                :func:`select` :func:`select_keys` :func:`select_values` :func:`split_keys` :func:`compact`
 Dicts :ref:`*<colls>` :func:`flip` :func:`zipdict` :func:`pluck` :func:`where` :func:`itervalues` :func:`iteritems` :func:`zip_values` :func:`zip_dicts` :func:`project` :func:`omit`
 Misc                  :func:`empty` :func:`get_in` :func:`get_lax` :func:`set_in` :func:`update_in` :func:`del_in` :func:`has_path`
 ===================== ==============================================================

@@ -111,6 +111,18 @@ All functions in this section support :ref:`extended_fns`.
         # Construct a dict of methods
         select_values(inspect.isfunction, cls.__dict__)
 
+
+.. function:: split_keys(pred, coll)
+
+    Splits a dictionary into two based on a predicate applied to its keys.
+
+    Say, you can separate custom HTTP headers from standard ones::
+
+        custom, standard = split_keys(r'^X-', headers)
+        # custom -> {'X-Custom-Header': 'value'}
+        # standard -> {'Content-Type': 'application/json', ...}
+
+
 .. function:: compact(coll)
 
     Removes falsy values from given collection. When compacting a dict all keys with falsy values are removed.
