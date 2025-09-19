@@ -33,7 +33,7 @@ def decorator(deco):
                 return make_decorator(deco, (), dkwargs)(_func)
             return make_decorator(deco, (), dkwargs)
     else:
-        def decorator_fab(*dargs, **dkwargs):
+        def decorator_fab(*dargs, **dkwargs):  # type: ignore[misc]
             return make_decorator(deco, dargs, dkwargs)
 
     return wraps(deco)(decorator_fab)

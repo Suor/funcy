@@ -1,6 +1,11 @@
+from __future__ import annotations
 import sys
 import pytest
 from funcy.decorators import *
+from typing import TYPE_CHECKING, reveal_type
+
+if TYPE_CHECKING:
+    from funcy.decorators import Call
 
 
 def test_decorator_no_args():
@@ -28,9 +33,14 @@ def test_decorator_with_args():
 
 
 def test_decorator_kw_only_args():
-    @decorator
-    def add(call, *, n=1):
+    def _add(call, *, n=1) -> int:
         return call() + n
+    reveal_type(_add)
+    @decorator
+    def add(call, *, n=1) -> int:
+        return call() + n
+
+    reveal_type(add)
 
     def ten(a, b):
         return 10
@@ -44,7 +54,7 @@ def test_decorator_kw_only_args():
 # TODO: replace this with a full version once we drop Python 3.7
 def test_decorator_access_args():
     @decorator
-    def return_x(call):
+    def return_x(call) -> int:
         return call.x
 
     # no arg
@@ -52,6 +62,9 @@ def test_decorator_access_args():
 
     # pos arg
     assert return_x(lambda x: None)(10) == 10
+    reveal_type(return_x)
+    reveal_type(return_x(lambda: None))
+    reveal_type(return_x(lambda: None)())
     with pytest.raises(AttributeError): return_x(lambda x: None)()
     assert return_x(lambda x=11: None)(10) == 10
     assert return_x(lambda x=11: None)() == 11
@@ -133,15 +146,20 @@ def test_chain_arg_access():
 
 def test_meta_attribtes():
     @decorator
-    def decor(call):
+    def decor(call: Call) -> float:
         return call()
 
-    def func(x):
+    def func(x: int) -> int:
         "Some doc"
         return x
 
+    reveal_type(decor)
     decorated = decor(func)
     double_decorated = decor(decorated)
+    reveal_type(decorated)
+    reveal_type(decorated.__wrapped__)
+    reveal_type(double_decorated)
+    reveal_type(double_decorated.__wrapped__)
 
     assert decorated.__name__ == 'func'
     assert decorated.__module__ == __name__
@@ -154,13 +172,21 @@ def test_meta_attribtes():
 
 
 def test_decorator_introspection():
+    def _decor(call, x) -> Call:
+        return call()
+    reveal_type(_decor)
     @decorator
-    def decor(call, x):
+    def decor(call, x) -> Call:
         return call()
 
     assert decor.__name__ == 'decor'
 
+    reveal_type(decor)
+    reveal_type(decor.__wrapped__)
     decor_x = decor(42)
+    reveal_type(decor_x)
+    reveal_type(decor_x(lambda y: y)(10))
+    # import ipdb; ipdb.set_trace()
     assert decor_x.__name__ == 'decor'
     assert decor_x._func is decor.__wrapped__
     assert decor_x._args == (42,)

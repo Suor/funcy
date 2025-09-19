@@ -4,3 +4,5 @@ pytest==3.9.3; python_version<='3.5'
 more-itertools==4.0.0; python_version=='3.5'
 whatever==0.7
 typing; python_version=='3.4'
+mypy==1.10.1
+pytest-mypy-testing==0.1.3

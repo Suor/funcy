@@ -55,7 +55,7 @@ def silent(func):
 try:
     from contextlib import nullcontext
 except ImportError:
-    class nullcontext(object):
+    class nullcontext(object):  # type: ignore[no-redef]
         """Context manager that does no additional processing.
 
         Used as a stand-in for a normal context manager, when a particular

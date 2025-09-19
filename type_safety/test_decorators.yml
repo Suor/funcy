@@ -1,0 +1,13 @@
+- case: yaml_test
+  main: |
+    from funcy import decorator
+
+    @decorator
+    def inc(call) -> int:
+        return call() + 1
+
+    reveal_type(inc) # R: funcy.decorators._DecoOrFab[[], builtins.int]
+
+    inc()
+    inc(1) # E: No overload variant of "__call__" of "_DecoOrFab" matches argument type "int"  [call-overload]
+    inc(1, 2)

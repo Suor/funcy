@@ -28,7 +28,7 @@ def memoize(_func=None, *, key_func=None):
         return memoize()(_func)
     return _memory_decorator({}, key_func)
 
-memoize.skip = SkipMemory
+memoize.skip = SkipMemory  # type: ignore[attr-defined]
 
 
 def cache(timeout, *, key_func=None):
@@ -61,13 +61,13 @@ def _memory_decorator(memory, key_func):
             key = key_func(*args, **kwargs) if key_func else \
                   args + tuple(sorted(kwargs.items())) if kwargs else args
             memory.pop(key, None)
-        wrapper.invalidate = invalidate
+        wrapper.invalidate = invalidate  # type: ignore[attr-defined]
 
         def invalidate_all():
             memory.clear()
-        wrapper.invalidate_all = invalidate_all
+        wrapper.invalidate_all = invalidate_all  # type: ignore[attr-defined]
 
-        wrapper.memory = memory
+        wrapper.memory = memory  # type: ignore[attr-defined]
         return wrapper
     return decorator
 

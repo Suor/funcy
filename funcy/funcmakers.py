@@ -4,7 +4,7 @@ from operator import itemgetter
 from .strings import re_tester, re_finder, _re_type
 
 
-__all__ = ('make_func', 'make_pred')
+__all__ = ['make_func', 'make_pred']
 
 
 def make_func(f, test=False):
