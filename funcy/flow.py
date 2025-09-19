@@ -102,7 +102,7 @@ def retry(call, tries, errors=Exception, timeout=0, filter_errors=None):
                 raise
 
             # Reraise error on last attempt
-            if attempt + 1 == tries:
+            if attempt + 1 >= tries:
                 raise
             else:
                 timeout_value = timeout(attempt) if callable(timeout) else timeout
@@ -176,13 +176,13 @@ def throttle(period):
         @wraps(func)
         def wrapper(*args, **kwargs):
             now = time.time()
-            if wrapper.blocked_until and wrapper.blocked_until > now:
+            if wrapper.blocked_until > now:
                 return
             wrapper.blocked_until = now + period
 
             return func(*args, **kwargs)
 
-        wrapper.blocked_until = None
+        wrapper.blocked_until = 0
         return wrapper
 
     return decorator
