@@ -9,6 +9,21 @@ def test_tap():
     assert capture(tap, 42) == '42\n'
     assert capture(tap, 42, label='Life and ...') == 'Life and ...: 42\n'
 
+def test_log_calls_keyword():
+    log = []
+
+    @log_calls(log.append)
+    def f(x, y=2):
+        return x + y
+
+    f(1)
+    f(1, y=3)
+    assert log == [
+        'Call f(1)',
+        '-> 3 from f(1)',
+        'Call f(1, y=3)',
+        '-> 4 from f(1, y=3)'
+    ]
 
 def test_log_calls():
     log = []
