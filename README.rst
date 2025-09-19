@@ -173,6 +173,7 @@ Related Projects
 
 - https://pypi.org/project/funcy-chain/
 - https://pypi.org/project/funcy-pipe/
+- https://github.com/ruancomelli/funcy-stubs (types `won't be added <https://github.com/Suor/funcy/issues/106>`_ to funcy itself)
 
 Running tests
 --------------
