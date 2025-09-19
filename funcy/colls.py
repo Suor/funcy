@@ -13,7 +13,8 @@ from .seqs import take, map as xmap, filter as xfilter
 
 __all__ = ['empty', 'iteritems', 'itervalues',
            'join', 'merge', 'join_with', 'merge_with',
-           'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values', 'compact',
+           'walk', 'walk_keys', 'walk_values', 'select', 'select_keys', 'select_values',
+           'split_keys', 'compact',
            'is_distinct', 'all', 'any', 'none', 'one', 'some',
            'zipdict', 'flip', 'project', 'omit', 'zip_values', 'zip_dicts',
            'where', 'pluck', 'pluck_attr', 'invoke', 'lwhere', 'lpluck', 'lpluck_attr', 'linvoke',
@@ -164,6 +165,17 @@ def select_values(pred, coll):
     """Select part of the collection with values passing pred."""
     pred = make_pred(pred)
     return select(lambda pair: pred(pair[1]), coll)
+
+
+# TODO: test and document it
+def split_keys(pred, coll):
+    """Splits key-value pairs with keys, which pass the predicate from the ones that don't.
+       Returns a pair of dicts (passed, failed)."""
+    pred = make_pred(pred)
+    yes, no = _factory(coll)(), _factory(coll)()
+    for key, value in coll.items():
+        (yes if pred(key) else no)[key] = value
+    return yes, no
 
 
 def compact(coll):
