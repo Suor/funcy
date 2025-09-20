@@ -1,6 +1,8 @@
 Functions
 =========
 
+.. module:: funcy.funcs
+
 .. function:: identity(x)
 
     Returns its argument.
