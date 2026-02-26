@@ -26,9 +26,9 @@ assert_type(re_test(pattern, "abc123"), bool)
 assert_type(re_find(r"\d+", "abc123"), str | None)  # XFAIL: can't narrow by capture groups
 assert_type(re_find(r"(\d+)", "abc123"), str | None)  # XFAIL: can't narrow by capture groups
 assert_type(re_all(r"\d+", "abc123"), list[str])  # XFAIL: can't narrow by capture groups
-# Multiple groups -> ideally tuple[str, ...]
-assert_type(re_find(r"(\d+)-(\w+)", "1-a"), tuple[str, ...] | None)  # XFAIL: can't narrow by capture groups
-assert_type(re_all(r"(\d+)-(\w+)", "1-a 2-b"), list[tuple[str, ...]])  # XFAIL: can't narrow by capture groups
+# Multiple groups -> ideally tuple[str, str]
+assert_type(re_find(r"(\d+)-(\w+)", "1-a"), tuple[str, str] | None)  # XFAIL: can't narrow by capture groups
+assert_type(re_all(r"(\d+)-(\w+)", "1-a 2-b"), list[tuple[str, str]])  # XFAIL: can't narrow by capture groups
 # Named groups -> ideally dict[str, str]
 assert_type(re_find(r"(?P<num>\d+)", "123"), dict[str, str] | None)  # XFAIL: can't narrow by capture groups
 

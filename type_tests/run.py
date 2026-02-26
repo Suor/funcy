@@ -74,6 +74,8 @@ def normalize_type(revealed, checker):
         # mypy omits -> None in revealed types, add it back for consistency
         if s.startswith("def ") and "->" not in s:
             s = s + " -> None"
+    # Normalize bottom type: pyright uses NoReturn, mypy/ty use Never
+    s = re.sub(r'\bNoReturn\b', 'Never', s)
     # Normalize whitespace
     s = re.sub(r'\s+', ' ', s).strip()
     return s
@@ -187,11 +189,64 @@ CHECKERS = {
     "ty": run_ty,
 }
 
+# Names that are intentionally not tested (internal helpers, re-exports, etc.)
+COVERAGE_SKIP = {"SkipMemory", "Call"}
+
+
+def check_coverage(test_dir):
+    """Check that all public names from stubs are imported in type tests."""
+    import ast
+
+    # Collect all public names from .pyi stubs
+    stub_dir = os.path.join(os.path.dirname(test_dir), "funcy")
+    stub_names = set()
+    for filepath in sorted(glob.glob(os.path.join(stub_dir, "*.pyi"))):
+        mod = os.path.basename(filepath).replace(".pyi", "")
+        if mod == "__init__":
+            continue
+        with open(filepath) as f:
+            tree = ast.parse(f.read())
+        for node in ast.iter_child_nodes(tree):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if not node.name.startswith("_"):
+                    stub_names.add(node.name)
+            elif isinstance(node, ast.ClassDef):
+                if not node.name.startswith("_"):
+                    stub_names.add(node.name)
+            elif isinstance(node, ast.Assign):
+                for t in node.targets:
+                    if isinstance(t, ast.Name) and not t.id.startswith("_"):
+                        stub_names.add(t.id)
+
+    # Collect all names imported from funcy in test files
+    tested = set()
+    for filepath in sorted(glob.glob(os.path.join(test_dir, "test_*.py"))):
+        with open(filepath) as f:
+            tree = ast.parse(f.read())
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module and "funcy" in node.module:
+                for alias in node.names:
+                    tested.add(alias.name)
+
+    missing = stub_names - tested - COVERAGE_SKIP
+    if missing:
+        print("FAIL - untested public stub names:")
+        for name in sorted(missing):
+            print(f"  {name}")
+        sys.exit(1)
+    else:
+        print(f"OK - all {len(stub_names)} public stub names are covered "
+              f"({len(COVERAGE_SKIP)} skipped)")
+
 
 def main():
-    if len(sys.argv) != 2 or sys.argv[1] not in CHECKERS:
-        print(f"Usage: {sys.argv[0]} {{{','.join(CHECKERS)}}}")
+    if len(sys.argv) != 2 or sys.argv[1] not in {*CHECKERS, "coverage"}:
+        print(f"Usage: {sys.argv[0]} {{{','.join(CHECKERS)},coverage}}")
         sys.exit(2)
+
+    if sys.argv[1] == "coverage":
+        check_coverage(TEST_DIR)
+        return
 
     checker = sys.argv[1]
     print(f"Running {checker} on {TEST_DIR}...")
@@ -220,8 +275,19 @@ def main():
         unexpected = act - exp - skip
         # Missing errors: lines marked # E: that didn't error
         missing = exp - act
-        # Stale XFAILs: lines marked # XFAIL that no longer error
-        stale = skip - act
+        # Stale XFAILs: lines marked # XFAIL that no longer fail
+        # An XFAIL is stale if it doesn't error AND doesn't have a mismatching reveal
+        exp_rev = expected_reveals.get(filepath, {})
+        act_rev = actual_reveals.get(filepath, {})
+        reveal_mismatches = set()
+        for lineno, pattern in exp_rev.items():
+            if lineno not in act_rev:
+                reveal_mismatches.add(lineno)
+            else:
+                actual_type = normalize_type(act_rev[lineno], checker)
+                if pattern not in actual_type:
+                    reveal_mismatches.add(lineno)
+        stale = skip - act - reveal_mismatches
 
         relpath = os.path.relpath(filepath)
         if unexpected:
@@ -235,11 +301,9 @@ def main():
         if stale:
             ok = False
             for line in sorted(stale):
-                print(f"  STALE XFAIL (no longer errors): {relpath}:{line}")
+                print(f"  STALE XFAIL (no longer fails): {relpath}:{line}")
 
         # Check reveal_type matches
-        exp_rev = expected_reveals.get(filepath, {})
-        act_rev = actual_reveals.get(filepath, {})
         for lineno, pattern in sorted(exp_rev.items()):
             if lineno in skip:
                 continue
@@ -251,7 +315,7 @@ def main():
                 if pattern not in actual_type:
                     ok = False
                     print(f"  REVEAL MISMATCH: {relpath}:{lineno}")
-                    print(f"    expected to contain: {pattern}")
+                    print(f"    expected: {pattern}")
                     print(f"    actual: {actual_type}")
 
     if ok:
