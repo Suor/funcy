@@ -5,9 +5,9 @@ from funcy import log_durations, print_durations
 from funcy import log_iter_durations, print_iter_durations
 
 # -- tap preserves type --
-assert_type(tap(42), int)  # XFAIL[ty]: Unknown TypeVars
-assert_type(tap("hello"), str)  # XFAIL[ty]: Unknown TypeVars
-assert_type(tap(42, "label"), int)  # XFAIL[ty]: Unknown TypeVars
+assert_type(tap(42), int)  # XFAIL[ty]: Literal narrowing
+assert_type(tap("hello"), str)  # XFAIL[ty]: Literal narrowing
+assert_type(tap(42, "label"), int)  # XFAIL[ty]: Literal narrowing
 
 # -- log_calls / print_calls preserve function signature --
 @log_calls(print)
@@ -43,6 +43,6 @@ with log_durations(print) as dur_ctx:
 assert_type(print_durations, log_durations)
 
 # -- iter durations preserves type --
-nums = [1, 2, 3]
-assert_type(log_iter_durations(nums, print), Iterator[int])  # XFAIL[ty]: Unknown TypeVars
-assert_type(print_iter_durations(nums), Iterator[int])  # XFAIL[ty]: Unknown TypeVars
+nums: list[int] = [1, 2, 3]
+assert_type(log_iter_durations(nums, print), Iterator[int])
+assert_type(print_iter_durations(nums), Iterator[int])
