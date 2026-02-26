@@ -1,7 +1,5 @@
 # Functions using the EMPTY sentinel pattern have default values
 # that stubtest can't reconcile with the overloaded stub signatures
-funcy.strings.str_join
-funcy.colls.is_distinct
 funcy.colls.all
 funcy.colls.any
 funcy.colls.none
@@ -9,18 +7,12 @@ funcy.colls.one
 funcy.colls.some
 funcy.seqs.chunks
 funcy.seqs.lchunks
-funcy.seqs.distinct
-funcy.seqs.ldistinct
 funcy.seqs.dropwhile
 funcy.seqs.takewhile
 funcy.seqs.keep
 funcy.seqs.lkeep
 funcy.seqs.lpartition
 funcy.seqs.partition
-funcy.seqs.repeatedly
-funcy.funcs.autocurry
-funcy.funcs.curry
-funcy.funcs.rcurry
 funcy.calc.memoize
 
 # @decorator-based functions: runtime signature has extra `call` arg

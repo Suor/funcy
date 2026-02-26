@@ -59,11 +59,11 @@ reveal_type(lmap({1, 2, 3}, nums))  # R: list[bool]
 reveal_type(lmap(frozenset({"a", "b"}), strs))  # R: list[bool]
 
 # str: regex finder
-reveal_type(lmap(r"\d+", strs))  # R: list[
+reveal_type(lmap(r"\d+", strs))  # R: list[str | tuple[str, ...] | dict[str, str] | None]
 # bytes: regex finder
-reveal_type(lmap(b"\\d+", strs))  # R: list[
+reveal_type(lmap(b"\\d+", strs))  # R: list[str | tuple[str, ...] | dict[str, str] | None]
 # re.Pattern: regex finder
-reveal_type(lmap(re.compile(r"\d+"), strs))  # R: list[
+reveal_type(lmap(re.compile(r"\d+"), strs))  # R: list[str | tuple[str, ...] | dict[str, str] | None]
 
 # int: itemgetter on sequences
 reveal_type(lmap(0, int_pairs))  # R: list[int]
@@ -92,7 +92,7 @@ reveal_type(map(None, nums))  # R: Iterator[int]
 # Set: membership
 reveal_type(map({1, 2, 3}, nums))  # R: Iterator[bool]
 # Regex
-reveal_type(map(r"\d+", strs))  # R: Iterator[
+reveal_type(map(r"\d+", strs))  # R: Iterator[str | tuple[str, ...] | dict[str, str] | None]
 # int: itemgetter
 reveal_type(map(0, int_pairs))  # R: Iterator[int]
 # slice: itemgetter
@@ -127,8 +127,9 @@ reveal_type(concat(nums, nums))  # R: Iterator[int]
 reveal_type(lconcat(nums, nums))  # R: list[int]
 reveal_type(cat([nums, nums]))  # R: Iterator[int]
 reveal_type(lcat([nums, nums]))  # R: list[int]
-reveal_type(flatten([1, [2, [3]]]))  # R: Iterator[
-reveal_type(lflatten([1, [2, [3]]]))  # R: list[
+# FIX: can we do better than Any?
+reveal_type(flatten([1, [2, [3]]]))  # R: Iterator[Any]
+reveal_type(lflatten([1, [2, [3]]]))  # R: list[Any]
 
 # -- Mapcat --
 def int_to_list(x: int) -> list[str]: return [str(x)]

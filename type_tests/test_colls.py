@@ -69,7 +69,7 @@ reveal_type(walk_keys(key_map, si_dict))  # R: dict[int, int]
 seq_key_dict: dict[Sequence[int], int] = {(1, 2): 10, (3, 4): 20}
 reveal_type(walk_keys(0, seq_key_dict))  # R: dict[int, int]
 # walk_keys: str/regex = regex finder on keys
-reveal_type(walk_keys(r"\d+", si_dict))  # R: dict[
+reveal_type(walk_keys(r"\d+", si_dict))  # R: dict[str | tuple[str, ...] | dict[str, str] | None, int]
 
 # -- walk_values: Callable transforms values, keys preserved --
 def int_to_str(v: int) -> str: return str(v)
@@ -88,13 +88,16 @@ val_map: dict[int, str] = {1: "one", 2: "two"}
 reveal_type(walk_values(val_map, si_dict))  # R: dict[str, str]
 # walk_values: str/regex = regex finder on values
 str_dict: dict[str, str] = {"a": "123", "b": "abc"}
-reveal_type(walk_values(r"\d+", str_dict))  # R: dict[str,
+reveal_type(walk_values(r"\d+", str_dict))  # R: dict[str, str | tuple[str, ...] | dict[str, str] | None]
 
 # -- walk: Callable transforms items --
 reveal_type(walk(int_to_str, int_list))  # R: list[str]
 reveal_type(walk(int_to_str, int_set))  # R: set[str]
 # walk: dict uses extended function protocol (returns dict)
-reveal_type(walk(int_to_str, si_dict))  # R: dict[
+# FIX: this could be done better, should get proper type. Although this test is weird - when walking a dict
+#      a function get pairs, which won't work here
+# FIX: also should add examples where we pass wrong func and it should fail type check
+reveal_type(walk(int_to_str, si_dict))  # R: dict[Any, Any]
 
 # -- select: filtering preserves type --
 reveal_type(select(pred_true, si_dict))  # R: dict[str, int]
@@ -158,12 +161,12 @@ reveal_type(pluck("name", records))  # R: Iterator[int]
 reveal_type(lpluck("name", records))  # R: list[int]
 
 # -- pluck_attr / lpluck_attr (dynamic attr, Any is correct) --
-reveal_type(pluck_attr("real", int_list))  # R: Iterator[
-reveal_type(lpluck_attr("real", int_list))  # R: list[
+reveal_type(pluck_attr("real", int_list))  # R: Iterator[Any]
+reveal_type(lpluck_attr("real", int_list))  # R: list[Any]
 
 # -- invoke / linvoke (dynamic method, Any is correct) --
-reveal_type(invoke(strs, "upper"))  # R: Iterator[
-reveal_type(linvoke(strs, "upper"))  # R: list[
+reveal_type(invoke(strs, "upper"))  # R: Iterator[Any]
+reveal_type(linvoke(strs, "upper"))  # R: list[Any]
 
 # -- zip_values / zip_dicts --
 d1: dict[str, int] = {"a": 1, "b": 2}
@@ -181,9 +184,10 @@ reveal_type(update_in(nested, ["a", "b"], inc))  # R: Any
 reveal_type(del_in(nested, ["a", "b"]))  # R: Any
 
 # -- join_with / merge_with --
+# FIX: Any is not good enough
 dict_pair2: list[dict[str, int]] = [d1, d2]
-reveal_type(join_with(sum, dict_pair2))  # R: dict[str,
-reveal_type(merge_with(sum, d1, d2))  # R: dict[str,
+reveal_type(join_with(sum, dict_pair2))  # R: dict[str, Any]
+reveal_type(merge_with(sum, d1, d2))  # R: dict[str, Any]
 
 # -- Extended function protocol in predicates (int, str) --
 reveal_type(all(r"\d+", strs))  # R: bool
