@@ -18,6 +18,7 @@ setup(
     license='BSD',
 
     packages=['funcy'],
+    package_data={"funcy": ["py.typed", "*.pyi"]},
 
     classifiers=[
         'Development Status :: 5 - Production/Stable',
