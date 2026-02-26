@@ -7,8 +7,8 @@ from funcy import (
 )
 
 # -- raiser returns a function that raises --
-reveal_type(raiser(ValueError))  # R: -> Never
-reveal_type(raiser("error message"))  # R: -> Never
+reveal_type(raiser(ValueError))  # R: (...) -> Never
+reveal_type(raiser("error message"))  # R: (...) -> Never
 
 # -- ignore / silent preserve function signature --
 @ignore(ValueError)
@@ -20,7 +20,7 @@ def always_safe(x: int) -> int: return x
 reveal_type(always_safe)  # R: (x: int) -> int
 
 # -- reraise --
-reveal_type(reraise(ValueError, RuntimeError))  # R: AbstractContextManager[None
+reveal_type(reraise(ValueError, RuntimeError))  # R: AbstractContextManager[None, bool | None]
 
 # -- retry preserves function signature --
 @retry(3, errors=ValueError)
@@ -41,19 +41,21 @@ reveal_type(rate_limited)  # R: (x: int) -> str
 @post_processing(list)
 def gen_list() -> Any:
     yield 1
-reveal_type(gen_list)  # R: () ->
+reveal_type(gen_list)  # R: () -> Any
 
+# FIX: collecting and joining are NOT preserving function signature, but they are changing it predictably
+#      same for post_processing. These three need to be properly typed and tests updated
 # -- collecting --
 @collecting
 def gen() -> Any:
     yield 1
-reveal_type(gen)  # R: () ->
+reveal_type(gen)  # R: () -> Any
 
 # -- joining preserves function signature --
 @joining(", ")
 def gen_strs() -> Any:
     yield "a"
-reveal_type(gen_strs)  # R: () ->
+reveal_type(gen_strs)  # R: () -> Any
 
 # -- wrap_with preserves function signature --
 import threading
