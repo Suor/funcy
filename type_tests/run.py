@@ -64,16 +64,37 @@ def parse_markers(test_dir, checker):
 
 
 def normalize_type(revealed, checker):
-    """Normalize a revealed type string for comparison."""
+    """Normalize a revealed type string to a canonical form for exact comparison.
+
+    Handles differences between mypy and ty:
+    - mypy: "def (*Any, **Any) -> str", "def (str) -> int", "_T`6"
+    - ty: "(...) -> str", "(str, /) -> int", "_T'return"
+    Canonical form: "(...) -> str", "(str) -> int", "_T"
+    """
     s = revealed
     if checker == "mypy":
         # mypy uses qualified names: builtins.int -> int, builtins.str -> str
         s = re.sub(r'builtins\.', '', s)
-        # Remove module prefixes for common types
-        s = re.sub(r'\b[a-z_][a-z_0-9]*\.([A-Z])', r'\1', s)
+        # Remove module prefixes for common types (handles multiple levels like funcy.objects.X)
+        s = re.sub(r'\b(?:[a-z_][a-z_0-9]*\.)+([A-Z])', r'\1', s)
         # mypy omits -> None in revealed types, add it back for consistency
         if s.startswith("def ") and "->" not in s:
             s = s + " -> None"
+        # Normalize Callable[..., X]: mypy "(*Any, **Any)" -> "..."
+        s = re.sub(r'\(\*Any, \*\*Any\)', '(...)', s)
+        # Normalize TypeVar suffixes: mypy uses _T`123
+        s = re.sub(r'`\d+', '', s)
+    if checker == "ty":
+        # Strip positional-only marker at end of params: ", /)" -> ")"
+        s = re.sub(r', /\)', ')', s)
+        # Normalize TypeVar suffixes: ty uses _T'word
+        s = re.sub(r"'[a-z_]+", '', s)
+        # ty uses Unknown for unresolved types
+        s = re.sub(r'\bUnknown\b', 'Any', s)
+    # Strip "def name" prefix: mypy uses "def (...)", ty uses "def name(...)"
+    s = re.sub(r'^def \w*\s*', '', s)
+    # Strip generic TypeVar prefix: [_T] or [_K, _V] at start
+    s = re.sub(r'^\[[\w, ]+\]\s*', '', s)
     # Normalize bottom type: pyright uses NoReturn, mypy/ty use Never
     s = re.sub(r'\bNoReturn\b', 'Never', s)
     # Normalize whitespace
@@ -189,53 +210,41 @@ CHECKERS = {
     "ty": run_ty,
 }
 
-# Names that are intentionally not tested (internal helpers, re-exports, etc.)
-COVERAGE_SKIP = {"SkipMemory", "Call"}
+# Names intentionally not tested (stdlib re-exports, etc.)
+COVERAGE_SKIP = {
+    "accumulate", "chain", "contextmanager", "count", "cycle",
+    "nullcontext", "partial", "reduce", "repeat", "suppress",
+    "unwrap", "ContextDecorator",
+}
 
 
 def check_coverage(test_dir):
-    """Check that all public names from stubs are imported in type tests."""
+    """Check that all public funcy names are actually used in type tests."""
     import ast
+    sys.path.insert(0, os.path.join(os.path.dirname(test_dir)))
+    import funcy
 
-    # Collect all public names from .pyi stubs
-    stub_dir = os.path.join(os.path.dirname(test_dir), "funcy")
-    stub_names = set()
-    for filepath in sorted(glob.glob(os.path.join(stub_dir, "*.pyi"))):
-        mod = os.path.basename(filepath).replace(".pyi", "")
-        if mod == "__init__":
-            continue
-        with open(filepath) as f:
-            tree = ast.parse(f.read())
-        for node in ast.iter_child_nodes(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                if not node.name.startswith("_"):
-                    stub_names.add(node.name)
-            elif isinstance(node, ast.ClassDef):
-                if not node.name.startswith("_"):
-                    stub_names.add(node.name)
-            elif isinstance(node, ast.Assign):
-                for t in node.targets:
-                    if isinstance(t, ast.Name) and not t.id.startswith("_"):
-                        stub_names.add(t.id)
+    public_names = set(funcy.__all__)
 
-    # Collect all names imported from funcy in test files
-    tested = set()
+    # Collect names actually used (not just imported) in test files.
+    # ast.Name nodes only appear for real references, not inside import statements
+    # (those use ast.alias), so any ast.Name matching a funcy name is a real usage.
+    used = set()
     for filepath in sorted(glob.glob(os.path.join(test_dir, "test_*.py"))):
         with open(filepath) as f:
             tree = ast.parse(f.read())
         for node in ast.walk(tree):
-            if isinstance(node, ast.ImportFrom) and node.module and "funcy" in node.module:
-                for alias in node.names:
-                    tested.add(alias.name)
+            if isinstance(node, ast.Name) and node.id in public_names:
+                used.add(node.id)
 
-    missing = stub_names - tested - COVERAGE_SKIP
+    missing = public_names - used - COVERAGE_SKIP
     if missing:
-        print("FAIL - untested public stub names:")
+        print("FAIL - public funcy names not tested:")
         for name in sorted(missing):
             print(f"  {name}")
         sys.exit(1)
     else:
-        print(f"OK - all {len(stub_names)} public stub names are covered "
+        print(f"OK - all {len(public_names)} public funcy names are covered "
               f"({len(COVERAGE_SKIP)} skipped)")
 
 
@@ -265,6 +274,7 @@ def main():
     all_files = sorted(set(list(expected.keys()) + list(actual.keys())
                            + list(expected_reveals.keys())))
 
+    # TODO: factor it properly, dedup code
     ok = True
     for filepath in all_files:
         exp = expected.get(filepath, set())
@@ -285,7 +295,7 @@ def main():
                 reveal_mismatches.add(lineno)
             else:
                 actual_type = normalize_type(act_rev[lineno], checker)
-                if pattern not in actual_type:
+                if pattern != actual_type:
                     reveal_mismatches.add(lineno)
         stale = skip - act - reveal_mismatches
 
@@ -312,7 +322,7 @@ def main():
                 print(f"  MISSING REVEAL: {relpath}:{lineno} (expected: {pattern})")
             else:
                 actual_type = normalize_type(act_rev[lineno], checker)
-                if pattern not in actual_type:
+                if pattern != actual_type:
                     ok = False
                     print(f"  REVEAL MISMATCH: {relpath}:{lineno}")
                     print(f"    expected: {pattern}")

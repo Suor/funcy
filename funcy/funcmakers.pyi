@@ -1,0 +1,47 @@
+import re
+from collections.abc import Callable, Mapping, Sequence, Set as AbstractSet
+from typing import Any, TypeAlias, TypeVar, overload
+
+__all__ = ('make_func', 'make_pred')
+
+_K = TypeVar('_K')
+_T = TypeVar('_T')
+_V = TypeVar('_V')
+
+_Func = int | slice | str | bytes | re.Pattern[str] | Mapping[Any, Any] | AbstractSet[Any] | None
+_ReResult: TypeAlias = str | tuple[str, ...] | dict[str, str]
+
+# make_func: return types reflect test=False (the default)
+# For test=True behavior, use make_pred instead.
+
+@overload
+def make_func(f: Callable[..., _V], test: bool = ...) -> Callable[..., _V]: ...
+@overload
+def make_func(f: None, test: bool = ...) -> Callable[..., Any]: ...
+@overload
+def make_func(f: int, test: bool = ...) -> Callable[[Sequence[_T]], _T]: ...
+@overload
+def make_func(f: slice, test: bool = ...) -> Callable[[Sequence[_T]], Sequence[_T]]: ...
+@overload
+def make_func(f: str | bytes | re.Pattern[str], test: bool = ...) -> Callable[[str], _ReResult | None]: ...
+@overload
+def make_func(f: Mapping[_K, _V], test: bool = ...) -> Callable[[_K], _V]: ...
+@overload
+def make_func(f: AbstractSet[Any], test: bool = ...) -> Callable[[Any], bool]: ...
+
+# make_pred: return types reflect test=True behavior
+
+@overload
+def make_pred(pred: Callable[..., _V]) -> Callable[..., _V]: ...
+@overload
+def make_pred(pred: None) -> Callable[[Any], bool]: ...
+@overload
+def make_pred(pred: int) -> Callable[[Sequence[_T]], _T]: ...
+@overload
+def make_pred(pred: slice) -> Callable[[Sequence[_T]], Sequence[_T]]: ...
+@overload
+def make_pred(pred: str | bytes | re.Pattern[str]) -> Callable[[str], bool]: ...
+@overload
+def make_pred(pred: Mapping[_K, _V]) -> Callable[[_K], _V]: ...
+@overload
+def make_pred(pred: AbstractSet[Any]) -> Callable[[Any], bool]: ...
