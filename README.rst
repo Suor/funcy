@@ -184,6 +184,12 @@ To run the tests using your default python:
     pip install -r test_requirements.txt
     pytest
 
+To run type checking tests::
+
+    pip install mypy pyright
+    python type_tests/run.py mypy
+    python type_tests/run.py pyright
+
 To fully run ``tox`` you need all the supported pythons to be installed. These are
 3.4+ and PyPy3. You can run it for particular environment even in absense
 of all of the above::
@@ -191,6 +197,8 @@ of all of the above::
     tox -e py310
     tox -e pypy3
     tox -e lint
+    tox -e typetest
+    tox -e stubtest
 
 
 .. |Build Status| image:: https://github.com/Suor/funcy/actions/workflows/test.yml/badge.svg
