@@ -1,0 +1,53 @@
+# Python 3.13+ class internals not part of public API
+(funcy\..*\.__firstlineno__)
+(funcy\..*\.__static_attributes__)
+
+# Functions using the EMPTY sentinel pattern have default values
+# that stubtest can't reconcile with the overloaded stub signatures
+funcy.strings.str_join
+funcy.colls.is_distinct
+funcy.colls.all
+funcy.colls.any
+funcy.colls.none
+funcy.colls.one
+funcy.colls.some
+funcy.seqs.chunks
+funcy.seqs.lchunks
+funcy.seqs.distinct
+funcy.seqs.ldistinct
+funcy.seqs.dropwhile
+funcy.seqs.takewhile
+funcy.seqs.keep
+funcy.seqs.lkeep
+funcy.seqs.lpartition
+funcy.seqs.partition
+funcy.seqs.repeatedly
+funcy.funcs.autocurry
+funcy.funcs.curry
+funcy.funcs.rcurry
+funcy.calc.memoize
+
+# @decorator-based functions: runtime signature has extra `call` arg
+funcy.flow.collecting
+funcy.flow.joining
+funcy.flow.post_processing
+funcy.flow.retry
+funcy.flow.wrap_with
+funcy.debug.log_calls
+funcy.debug.log_enters
+funcy.debug.log_exits
+funcy.debug.print_calls
+funcy.debug.print_enters
+funcy.debug.print_exits
+
+# Re-exported from itertools: different arg names or classmethods
+funcy.seqs.cat
+funcy.seqs.concat
+funcy.seqs.chain.__class_getitem__
+funcy.funcs.partial.__class_getitem__
+
+# Overloaded __call__/__get__/__exit__ don't match runtime exactly
+funcy.debug.log_errors.__call__
+funcy.debug.log_errors.__exit__
+funcy.debug.log_durations.__call__
+funcy.objects.cached_property.__get__
