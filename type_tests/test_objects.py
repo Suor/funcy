@@ -1,5 +1,4 @@
-from typing import assert_type
-from funcy import cached_property, cached_readonly, monkey, LazyObject
+from funcy import cached_property, cached_readonly, wrap_prop, monkey, LazyObject
 
 # -- cached_property --
 class MyClass:
@@ -12,12 +11,15 @@ class MyClass:
         return "hello"
 
 obj = MyClass()
-assert_type(obj.value, int)
-assert_type(obj.ro_value, str)
+reveal_type(obj.value)  # R: int
+reveal_type(obj.ro_value)  # R: str
 
 # -- LazyObject --
 lazy = LazyObject(lambda: [1, 2, 3])
-assert_type(lazy, LazyObject)
+reveal_type(lazy)  # R: LazyObject
+
+# -- wrap_prop --
+reveal_type(wrap_prop(None))  # R: -> Any
 
 # -- monkey --
 class Target:

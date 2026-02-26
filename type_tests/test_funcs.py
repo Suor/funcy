@@ -1,5 +1,3 @@
-from typing import Any, assert_type
-from collections.abc import Callable, Iterator
 from funcy import (
     identity, constantly, caller,
     rpartial, func_partial,
@@ -8,32 +6,43 @@ from funcy import (
 )
 
 # -- identity preserves type --
-assert_type(identity(42), int)  # XFAIL[ty]: Literal narrowing
-assert_type(identity("hello"), str)  # XFAIL[ty]: Literal narrowing
+x: int = 42
+s: str = "hello"
+reveal_type(identity(x))  # R: int  # XFAIL[ty]: Literal narrowing
+reveal_type(identity(s))  # R: str  # XFAIL[ty]: Literal narrowing
 
 # -- constantly returns a function that always returns x --
-f = constantly(42)
-assert_type(f, Callable[..., int])  # XFAIL[ty]: Literal narrowing
-assert_type(f("anything"), int)  # XFAIL[ty]: Literal narrowing
+f = constantly(x)
+reveal_type(f)  # R: -> int  # XFAIL[ty]: Literal narrowing
+reveal_type(f("anything"))  # R: int  # XFAIL[ty]: Literal narrowing
+
+# -- caller --
+def add_int(a: int, b: int) -> int: return a + b
+reveal_type(caller(1, 2)(add_int))  # R: int
 
 # -- rpartial / func_partial preserve return type --
 def add(a: int, b: int) -> int: return a + b
-assert_type(rpartial(add, 1), Callable[..., int])
-assert_type(func_partial(add, 1), Callable[..., int])
+reveal_type(rpartial(add, 1))  # R: -> int
+reveal_type(func_partial(add, 1))  # R: -> int
+
+# -- curry / rcurry --
+reveal_type(curry(add))  # R: -> Any
+reveal_type(rcurry(add))  # R: -> Any
 
 # -- autocurry preserves function signature --
 reveal_type(autocurry(add))  # R: (a: int, b: int) -> int
 
 # -- iffy --
-assert_type(iffy(bool, str), Callable[..., Any])
+def int_to_str(x: int) -> str: return str(x)
+reveal_type(iffy(bool, int_to_str))  # R: -> Any
 
 # -- compose / rcompose --
-assert_type(compose(str, abs), Callable[..., Any])
-assert_type(rcompose(abs, str), Callable[..., Any])
+reveal_type(compose(int_to_str, abs))  # R: -> Any
+reveal_type(rcompose(abs, int_to_str))  # R: -> Any
 
 # -- complement --
-assert_type(complement(bool), Callable[..., bool])
+reveal_type(complement(bool))  # R: -> bool
 
 # -- juxt / ljuxt --
-assert_type(juxt(str, int), Callable[..., Iterator[Any]])
-assert_type(ljuxt(str, int), Callable[..., list[Any]])
+reveal_type(juxt(int_to_str, abs))  # R: -> Iterator[
+reveal_type(ljuxt(int_to_str, abs))  # R: -> list[

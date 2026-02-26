@@ -1,4 +1,4 @@
-from funcy import decorator
+from funcy import decorator, wraps
 
 # -- simple decorator preserves function signature --
 @decorator
@@ -28,3 +28,10 @@ def render2(text: str) -> str:
     return text
 
 reveal_type(render2)  # R: (text: str) -> str
+
+# -- wraps preserves wrapper type --
+def original(x: int, y: str) -> bool: return True
+def wrapper(*args: object, **kwargs: object) -> bool:
+    return original(*args, **kwargs)  # type: ignore[arg-type]
+wrapped = wraps(original)(wrapper)
+reveal_type(wrapped)  # R: -> bool
