@@ -8,13 +8,13 @@ from funcy import (
 )
 
 # -- identity preserves type --
-assert_type(identity(42), int)  # XFAIL[ty]: Unknown TypeVars
-assert_type(identity("hello"), str)  # XFAIL[ty]: Unknown TypeVars
+assert_type(identity(42), int)  # XFAIL[ty]: Literal narrowing
+assert_type(identity("hello"), str)  # XFAIL[ty]: Literal narrowing
 
 # -- constantly returns a function that always returns x --
 f = constantly(42)
-assert_type(f, Callable[..., int])  # XFAIL[ty]: Unknown TypeVars
-assert_type(f("anything"), int)  # XFAIL[ty]: Unknown TypeVars
+assert_type(f, Callable[..., int])  # XFAIL[ty]: Literal narrowing
+assert_type(f("anything"), int)  # XFAIL[ty]: Literal narrowing
 
 # -- rpartial / func_partial preserve return type --
 def add(a: int, b: int) -> int: return a + b

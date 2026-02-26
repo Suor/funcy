@@ -220,6 +220,8 @@ def main():
         unexpected = act - exp - skip
         # Missing errors: lines marked # E: that didn't error
         missing = exp - act
+        # Stale XFAILs: lines marked # XFAIL that no longer error
+        stale = skip - act
 
         relpath = os.path.relpath(filepath)
         if unexpected:
@@ -230,6 +232,10 @@ def main():
             ok = False
             for line in sorted(missing):
                 print(f"  MISSING EXPECTED ERROR: {relpath}:{line}")
+        if stale:
+            ok = False
+            for line in sorted(stale):
+                print(f"  STALE XFAIL (no longer errors): {relpath}:{line}")
 
         # Check reveal_type matches
         exp_rev = expected_reveals.get(filepath, {})
