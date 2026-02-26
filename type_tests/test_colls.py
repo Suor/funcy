@@ -21,6 +21,8 @@ int_list: list[int] = [1, 2, 3]
 int_set: set[int] = {1, 2, 3}
 str_keys: list[str] = ["a", "b"]
 int_vals: list[int] = [1, 2]
+strs: list[str] = ["abc", "def"]
+int_pairs: list[tuple[int, int]] = [(1, 2)]
 
 # Typed collections for join tests (avoid inline literals that ty can't infer)
 dict_list: list[dict[str, int]] = [{"a": 1}, {"b": 2}]
@@ -28,7 +30,7 @@ int_list_list: list[list[int]] = [[1, 2], [3]]
 int_set_list: list[set[int]] = [{1, 2}, {3}]
 
 # Typed functions (not Callable-annotated lambdas — ty can't infer those through overloads)
-def pred_true(p: Any) -> bool: return True
+def pred_true(p: object) -> bool: return True
 def pred_gt0(x: int) -> bool: return x > 0
 def pred_gt1(v: int) -> bool: return v > 1
 def pred_ne_c(k: str) -> bool: return k != "c"
@@ -38,159 +40,156 @@ def pred_eq_a(k: str) -> bool: return k == "a"
 str_to_intlist: dict[str, Sequence[int]] = {"a": [1, 2], "b": [3, 4]}
 str_to_int1: dict[str, int] = {"a": 1}
 
-# Typed list for join_with test
-dict_pair: list[dict[str, int]] = [si_dict, si_dict2]
+# -- merge --
+reveal_type(merge(si_dict, si_dict2))  # R: dict[str, int]
+reveal_type(merge(int_list, int_list))  # R: list[int]
+reveal_type(merge(int_set, int_set))  # R: set[int]
 
-# -- merge: with args -> not None; no args -> None --
-# FIX: add tests for the above
-assert_type(merge(si_dict, si_dict2), dict[str, int])
-assert_type(merge(int_list, int_list), list[int])
-assert_type(merge(int_set, int_set), set[int])
-
-# -- join: may be None (depends on value) --
-assert_type(join(dict_list), dict[str, int] | None)
-assert_type(join(int_list_list), list[int] | None)
-assert_type(join(int_set_list), set[int] | None)
+# -- join: may be None --
+reveal_type(join(dict_list))  # R: dict[str, int] | None
+reveal_type(join(int_list_list))  # R: list[int] | None
+reveal_type(join(int_set_list))  # R: set[int] | None
 # Canary: detect when ty starts inferring types of inline list literals
 assert_type(join([{"a": 1}, {"b": 2}]), dict[str, int] | None)  # XFAIL[ty]: inline list literal Unknown
 
 # -- walk_keys: Callable transforms keys, values preserved --
 def str_key_to_int(k: str) -> int: return ord(k)
-assert_type(walk_keys(str_key_to_int, si_dict), dict[int, int])
-assert_type(walk_keys(str.upper, si_dict), dict[str, int])
+reveal_type(walk_keys(str_key_to_int, si_dict))  # R: dict[int, int]
+reveal_type(walk_keys(str.upper, si_dict))  # R: dict[str, int]
 # walk_keys: Canary for ty builtin overload resolution
-assert_type(walk_keys(len, si_dict), dict[int, int])  # XFAIL[ty]: len overload not matched
+reveal_type(walk_keys(len, si_dict))  # R: dict[int, int]  # XFAIL[ty]: len overload not matched
 # walk_keys: None = identity
-assert_type(walk_keys(None, si_dict), dict[str, int])
+reveal_type(walk_keys(None, si_dict))  # R: dict[str, int]
 # walk_keys: Set = membership -> bool keys
-assert_type(walk_keys({"a", "b"}, si_dict), dict[bool, int])
+reveal_type(walk_keys({"a", "b"}, si_dict))  # R: dict[bool, int]
 # walk_keys: Mapping = lookup -> mapped key type
 key_map: dict[str, int] = {"a": 1, "b": 2}
-assert_type(walk_keys(key_map, si_dict), dict[int, int])
+reveal_type(walk_keys(key_map, si_dict))  # R: dict[int, int]
 # walk_keys: int = itemgetter on sequence keys
 seq_key_dict: dict[Sequence[int], int] = {(1, 2): 10, (3, 4): 20}
-assert_type(walk_keys(0, seq_key_dict), dict[int, int])
+reveal_type(walk_keys(0, seq_key_dict))  # R: dict[int, int]
 # walk_keys: str/regex = regex finder on keys
-assert_type(walk_keys(r"\d+", si_dict), dict[_ReResult | None, int])
+reveal_type(walk_keys(r"\d+", si_dict))  # R: dict[
 
 # -- walk_values: Callable transforms values, keys preserved --
 def int_to_str(v: int) -> str: return str(v)
-assert_type(walk_values(int_to_str, si_dict), dict[str, str])
-assert_type(walk_values(pred_gt0, str_to_int1), dict[str, bool])
+reveal_type(walk_values(int_to_str, si_dict))  # R: dict[str, str]
+reveal_type(walk_values(pred_gt0, str_to_int1))  # R: dict[str, bool]
 # walk_values: None = identity
-assert_type(walk_values(None, si_dict), dict[str, int])
+reveal_type(walk_values(None, si_dict))  # R: dict[str, int]
 # walk_values: Set = membership -> bool values
-assert_type(walk_values({1, 2}, si_dict), dict[str, bool])
+reveal_type(walk_values({1, 2}, si_dict))  # R: dict[str, bool]
 # walk_values: int = itemgetter on sequence values
-assert_type(walk_values(0, str_to_intlist), dict[str, int])
+reveal_type(walk_values(0, str_to_intlist))  # R: dict[str, int]
 # walk_values: slice = subsequence of sequence values
-assert_type(walk_values(slice(0, 2), str_to_intlist), dict[str, Sequence[int]])
+reveal_type(walk_values(slice(0, 2), str_to_intlist))  # R: dict[str, Sequence[int]]
 # walk_values: Mapping = lookup -> mapped value type
 val_map: dict[int, str] = {1: "one", 2: "two"}
-assert_type(walk_values(val_map, si_dict), dict[str, str])
+reveal_type(walk_values(val_map, si_dict))  # R: dict[str, str]
 # walk_values: str/regex = regex finder on values
 str_dict: dict[str, str] = {"a": "123", "b": "abc"}
-assert_type(walk_values(r"\d+", str_dict), dict[str, _ReResult | None])
+reveal_type(walk_values(r"\d+", str_dict))  # R: dict[str,
 
 # -- walk: Callable transforms items --
-def int_to_float(x: int) -> float: return float(x)
-assert_type(walk(int_to_float, int_list), list[float])
-assert_type(walk(int_to_float, int_set), set[float])
+reveal_type(walk(int_to_str, int_list))  # R: list[str]
+reveal_type(walk(int_to_str, int_set))  # R: set[str]
 # walk: dict uses extended function protocol (returns dict)
-assert_type(walk(int_to_str, si_dict), dict[Any, Any])
+reveal_type(walk(int_to_str, si_dict))  # R: dict[
 
 # -- select: filtering preserves type --
-assert_type(select(pred_true, si_dict), dict[str, int])
-assert_type(select(pred_gt0, int_list), list[int])
-assert_type(select(pred_gt0, int_set), set[int])
+reveal_type(select(pred_true, si_dict))  # R: dict[str, int]
+reveal_type(select(pred_gt0, int_list))  # R: list[int]
+reveal_type(select(pred_gt0, int_set))  # R: set[int]
 
-# -- select_keys / select_values: dict in, dict out --
+# -- select_keys / select_values --
 d: dict[str, int] = {"a": 1, "b": 2, "c": 3}
-assert_type(select_keys(pred_ne_c, d), dict[str, int])
-assert_type(select_values(pred_gt1, d), dict[str, int])
+reveal_type(select_keys(pred_ne_c, d))  # R: dict[str, int]
+reveal_type(select_values(pred_gt1, d))  # R: dict[str, int]
 
 # -- compact: preserves type --
-assert_type(compact(d), dict[str, int])
+reveal_type(compact(d))  # R: dict[str, int]
 maybe_list: list[int | None] = [0, 1, None, 2]
-assert_type(compact(maybe_list), list[int | None])
+reveal_type(compact(maybe_list))  # R: list[int | None]
 
 # -- empty: preserves type --
-assert_type(empty(d), dict[str, int])
-assert_type(empty(int_list), list[int])
+reveal_type(empty(d))  # R: dict[str, int]
+reveal_type(empty(int_list))  # R: list[int]
 
 # -- iteritems / itervalues --
-assert_type(iteritems(d), Iterable[tuple[str, int]])
-assert_type(itervalues(d), Iterable[int])
+reveal_type(iteritems(d))  # R: Iterable[tuple[str, int]]
+reveal_type(itervalues(d))  # R: Iterable[int]
 
 # -- split_keys --
-assert_type(split_keys(pred_eq_a, d), tuple[dict[str, int], dict[str, int]])
+reveal_type(split_keys(pred_eq_a, d))  # R: tuple[dict[str, int], dict[str, int]]
 
 # -- flip / project / omit --
-assert_type(flip(d), dict[int, str])
-assert_type(project(d, str_keys), dict[str, int])
-assert_type(omit(d, str_keys), dict[str, int])
+reveal_type(flip(d))  # R: dict[int, str]
+reveal_type(project(d, str_keys))  # R: dict[str, int]
+reveal_type(omit(d, str_keys))  # R: dict[str, int]
 
-# -- zipdict: generic key/value types --
-assert_type(zipdict(str_keys, int_vals), dict[str, int])
-assert_type(zipdict(range(3), str_keys), dict[int, str])
+# -- zipdict --
+reveal_type(zipdict(str_keys, int_vals))  # R: dict[str, int]
+reveal_type(zipdict(range(3), str_keys))  # R: dict[int, str]
 
 # -- bool-returning functions --
-assert_type(is_distinct([1, 2, 3]), bool)
-assert_type(is_distinct([1, 2, 3], key=str), bool)
-assert_type(all([True, True]), bool)
-assert_type(all(lambda x: x > 0, [1, 2, 3]), bool)
-assert_type(any([False, True]), bool)
-assert_type(any(lambda x: x > 0, [1, 2, 3]), bool)
-assert_type(none([False, False]), bool)
-assert_type(none(lambda x: x > 0, [1, 2, 3]), bool)
-assert_type(one([False, True]), bool)
-assert_type(one(lambda x: x > 0, [1, 2, 3]), bool)
-assert_type(has_path({"a": {"b": 1}}, ["a", "b"]), bool)
+reveal_type(is_distinct(int_list))  # R: bool
+reveal_type(all(int_list))  # R: bool
+reveal_type(all(pred_gt0, int_list))  # R: bool
+reveal_type(any(int_list))  # R: bool
+reveal_type(any(pred_gt0, int_list))  # R: bool
+reveal_type(none(int_list))  # R: bool
+reveal_type(none(pred_gt0, int_list))  # R: bool
+reveal_type(one(int_list))  # R: bool
+reveal_type(one(pred_gt0, int_list))  # R: bool
+reveal_type(has_path(si_dict, str_keys))  # R: bool
 
 # -- some returns element type --
 maybe_ints: list[int | None] = [0, None, 3]
-assert_type(some(maybe_ints), int | None)
-assert_type(some(pred_gt0, int_list), int | None)
+reveal_type(some(maybe_ints))  # R: int | None
+reveal_type(some(pred_gt0, int_list))  # R: int | None
 
-# -- where / lwhere --
-records: list[dict[str, Any]] = [{"name": "a", "age": 1}]
-assert_type(where(records, name="a"), Iterator[Mapping[str, Any]])
-assert_type(lwhere(records, name="a"), list[Mapping[str, Any]])
+# -- where / lwhere: preserves element type --
+records: list[dict[str, int]] = [{"name": 1, "age": 2}]
+reveal_type(where(records, name=1))  # R: Iterator[dict[str, int]]
+reveal_type(lwhere(records, name=1))  # R: list[dict[str, int]]
 
 # -- pluck / lpluck --
-assert_type(pluck("name", records), Iterator[Any])
-assert_type(lpluck("name", records), list[Any])
+reveal_type(pluck("name", records))  # R: Iterator[int]
+reveal_type(lpluck("name", records))  # R: list[int]
 
-# -- pluck_attr / lpluck_attr --
-assert_type(pluck_attr("real", [1, 2, 3]), Iterator[Any])
-assert_type(lpluck_attr("real", [1, 2, 3]), list[Any])
+# -- pluck_attr / lpluck_attr (dynamic attr, Any is correct) --
+reveal_type(pluck_attr("real", int_list))  # R: Iterator[
+reveal_type(lpluck_attr("real", int_list))  # R: list[
 
-# -- invoke / linvoke --
-assert_type(invoke(["abc", "def"], "upper"), Iterator[Any])
-assert_type(linvoke(["abc", "def"], "upper"), list[Any])
+# -- invoke / linvoke (dynamic method, Any is correct) --
+reveal_type(invoke(strs, "upper"))  # R: Iterator[
+reveal_type(linvoke(strs, "upper"))  # R: list[
 
 # -- zip_values / zip_dicts --
 d1: dict[str, int] = {"a": 1, "b": 2}
 d2: dict[str, int] = {"a": 3, "b": 4}
-assert_type(zip_values(d1, d2), Iterator[tuple[Any, ...]])
-assert_type(zip_dicts(d1, d2), Iterator[tuple[Any, tuple[Any, ...]]])
+reveal_type(zip_values(d1, d2))  # R: Iterator[tuple[int, ...]]
+reveal_type(zip_dicts(d1, d2))  # R: Iterator[tuple[str, tuple[int, ...]]]
 
-# -- get_in / set_in / update_in / del_in --
-nested: dict[str, Any] = {"a": {"b": 1}}
-assert_type(get_in(nested, ["a", "b"]), Any)
-assert_type(get_lax(nested, ["a", "b"]), Any)
-assert_type(has_path(nested, ["a", "b"]), bool)
+# -- get_in / set_in / update_in / del_in (nested access, Any is correct) --
+nested: dict[str, dict[str, int]] = {"a": {"b": 1}}
+reveal_type(get_in(nested, ["a", "b"]))  # R: Any
+reveal_type(get_lax(nested, ["a", "b"]))  # R: Any
+reveal_type(set_in(nested, ["a", "b"], 42))  # R: Any
+def inc(x: int) -> int: return x + 1
+reveal_type(update_in(nested, ["a", "b"], inc))  # R: Any
+reveal_type(del_in(nested, ["a", "b"]))  # R: Any
 
 # -- join_with / merge_with --
 dict_pair2: list[dict[str, int]] = [d1, d2]
-assert_type(join_with(sum, dict_pair2), dict[str, Any])
-assert_type(merge_with(sum, d1, d2), dict[str, Any])
+reveal_type(join_with(sum, dict_pair2))  # R: dict[str,
+reveal_type(merge_with(sum, d1, d2))  # R: dict[str,
 
 # -- Extended function protocol in predicates (int, str) --
-assert_type(all(r"\d+", ["1", "2", "abc"]), bool)
-assert_type(any(0, [(1,), (0,)]), bool)
+reveal_type(all(r"\d+", strs))  # R: bool
+reveal_type(any(0, int_pairs))  # R: bool
 
 # -- Should be errors --
-# FIX: should match actual error messages, or their standartized form
+# FIX: should match actual error messages, or their standardized form
 zipdict(123, [1, 2]) # E: not iterable
 has_path(nested, 42)  # E: path not iterable

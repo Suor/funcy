@@ -1,7 +1,3 @@
-# Python 3.13+ class internals not part of public API
-(funcy\..*\.__firstlineno__)
-(funcy\..*\.__static_attributes__)
-
 # Functions using the EMPTY sentinel pattern have default values
 # that stubtest can't reconcile with the overloaded stub signatures
 funcy.strings.str_join
@@ -43,8 +39,6 @@ funcy.debug.print_exits
 # Re-exported from itertools: different arg names or classmethods
 funcy.seqs.cat
 funcy.seqs.concat
-funcy.seqs.chain.__class_getitem__
-funcy.funcs.partial.__class_getitem__
 
 # Overloaded __call__/__get__/__exit__ don't match runtime exactly
 funcy.debug.log_errors.__call__
