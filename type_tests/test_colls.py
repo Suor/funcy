@@ -150,16 +150,42 @@ reveal_type(itervalues(d))  # R: Iterable[int]
 reveal_type(split_keys(pred_eq_a, d))  # R: tuple[dict[str, int], dict[str, int]]
 reveal_type(split_keys(r"\d+", d))  # R: tuple[dict[str, int], dict[str, int]]
 
-# FIX: do not omit, add at least some tests
+# -- select_keys: XPred variants --
+reveal_type(select_keys(None, d))  # R: dict[str, int]
+reveal_type(select_keys({"a", "b"}, d))  # R: dict[str, int]  # XFAIL[ty]: Set pred Any|str
+reveal_type(select_keys(r"\w+", d))  # R: dict[str, int]
+key_lookup: dict[str, int] = {"a": 1, "b": 2}
+reveal_type(select_keys(key_lookup, d))  # R: dict[str, int]
+
+# -- select_values: XPred variants --
+reveal_type(select_values(None, d))  # R: dict[str, int]
+reveal_type(select_values({1, 2}, d))  # R: dict[str, int]  # XFAIL[ty]: Set pred Any|int
+int_to_int_map: dict[int, str] = {1: "yes", 2: "yes"}
+reveal_type(select_values(int_to_int_map, d))  # R: dict[str, int]
+
+# -- select_keys / select_values with Mapping: XPred variants --
+reveal_type(select_keys(None, real_mapping))  # R: Mapping[str, int]
+reveal_type(select_keys({"a"}, real_mapping))  # R: Mapping[str, int]  # XFAIL[ty]: Set pred Any|str
+reveal_type(select_values(None, real_mapping))  # R: Mapping[str, int]
+reveal_type(select_values({1, 2}, real_mapping))  # R: Mapping[str, int]  # XFAIL[ty]: Set pred Any|int
+
+# -- split_keys: XPred variants --
+reveal_type(split_keys(None, d))  # R: tuple[dict[str, int], dict[str, int]]
+reveal_type(split_keys({"a"}, d))  # R: tuple[dict[str, int], dict[str, int]]  # XFAIL[ty]: Set pred Any|str
+reveal_type(split_keys(key_lookup, d))  # R: tuple[dict[str, int], dict[str, int]]
+
+# -- some: XPred variants --
+reveal_type(some(r"\d+", strs))  # R: str | None
+reveal_type(some({1, 2}, int_list))  # R: int | None  # XFAIL[ty]: Set pred Any|int
+
 # -- flip / project / omit: preserve collection type --
 reveal_type(flip(d))  # R: dict[int, str]
 reveal_type(project(d, str_keys))  # R: dict[str, int]
 reveal_type(omit(d, str_keys))  # R: dict[str, int]
 # flip / project / omit with real Mapping
 reveal_type(flip(real_mapping))  # R: Mapping[int, str]
-# FIX: explore why this is failing in ty
-reveal_type(project(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: str | Any
-reveal_type(omit(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: str | Any
+reveal_type(project(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: TypeVar unification across Mapping + Iterable params gives str | Unknown
+reveal_type(omit(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: TypeVar unification across Mapping + Iterable params gives str | Unknown
 
 # -- zipdict --
 reveal_type(zipdict(str_keys, int_vals))  # R: dict[str, int]
