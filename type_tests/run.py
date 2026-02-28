@@ -35,21 +35,25 @@ def parse_markers(test_dir, checker):
     expected = {}
     skipped = {}
     reveals = {}
+    has_error_marker = {}  # lines with # E: regardless of XFAIL
     for filepath in sorted(glob.glob(os.path.join(test_dir, "test_*.py"))):
         exp = set()
         skip = set()
+        e_lines = set()
         rev = {}
         with open(filepath) as f:
             for lineno, line in enumerate(f, 1):
-                if "# E:" in line:
-                    exp.add(lineno)
-                elif "# XFAIL:" in line:
+                # Check for checker-specific XFAIL first (can coexist with # E:)
+                xfail_match = re.search(r"# XFAIL\[([^\]]+)\]:", line)
+                is_xfail_for_checker = (
+                    xfail_match and checker in xfail_match.group(1).split(",")
+                )
+                if "# XFAIL:" in line or is_xfail_for_checker:
                     skip.add(lineno)
-                else:
-                    # Check for checker-specific XFAIL: # XFAIL[ty]:
-                    m = re.search(r"# XFAIL\[([^\]]+)\]:", line)
-                    if m and checker in m.group(1).split(","):
-                        skip.add(lineno)
+                if "# E:" in line:
+                    e_lines.add(lineno)
+                    if not is_xfail_for_checker:
+                        exp.add(lineno)
                 # R: marker can coexist with XFAIL markers
                 r = re.search(r"# R: (.+?)(?:\s*# (?:XFAIL|E:).*)?$", line)
                 if r:
@@ -61,7 +65,9 @@ def parse_markers(test_dir, checker):
             skipped[abspath] = skip
         if rev:
             reveals[abspath] = rev
-    return expected, skipped, reveals
+        if e_lines:
+            has_error_marker[abspath] = e_lines
+    return expected, skipped, reveals, has_error_marker
 
 
 def normalize_type(revealed, checker):
@@ -244,6 +250,7 @@ def check_coverage(test_dir):
         with open(filepath) as f:
             tree = ast.parse(f.read())
         for node in ast.walk(tree):
+            # FIX: won't this go over import and add them too?
             if isinstance(node, ast.Name) and node.id in public_names:
                 used.add(node.id)
 
@@ -259,6 +266,7 @@ def check_coverage(test_dir):
 
 
 def main():
+    # FIX: looks complicated, refactor, clean up
     if len(sys.argv) != 2 or sys.argv[1] not in {*CHECKERS, "coverage"}:
         print(f"Usage: {sys.argv[0]} {{{','.join(CHECKERS)},coverage}}")
         sys.exit(2)
@@ -270,7 +278,7 @@ def main():
     checker = sys.argv[1]
     print(f"Running {checker} on {TEST_DIR}...")
 
-    expected, skipped, expected_reveals = parse_markers(TEST_DIR, checker)
+    expected, skipped, expected_reveals, error_markers = parse_markers(TEST_DIR, checker)
     actual, actual_reveals = CHECKERS[checker](TEST_DIR)
 
     # Only consider errors in test files (ignore errors in runner and library source)
@@ -297,9 +305,9 @@ def main():
         # Missing errors: lines marked # E: that didn't error
         missing = exp - act
         # Stale XFAILs: lines marked # XFAIL that no longer fail
-        # An XFAIL is stale if it doesn't error AND doesn't have a mismatching reveal
         exp_rev = expected_reveals.get(filepath, {})
         act_rev = actual_reveals.get(filepath, {})
+        e_markers = error_markers.get(filepath, set())
         reveal_mismatches = set()
         for lineno, pattern in exp_rev.items():
             if lineno not in act_rev:
@@ -308,7 +316,18 @@ def main():
                 actual_type = normalize_type(act_rev[lineno], checker)
                 if pattern != actual_type:
                     reveal_mismatches.add(lineno)
-        stale = skip - act - reveal_mismatches
+        # For # E: + # XFAIL[checker]: lines, XFAIL is stale when checker NOW errors
+        # For pure XFAIL lines, stale when no longer errors/mismatches
+        stale = set()
+        for lineno in skip:
+            if lineno in e_markers:
+                # # E: + # XFAIL: stale only if checker now catches the error
+                if lineno in act:
+                    stale.add(lineno)
+            else:
+                # Pure XFAIL: stale if no longer errors and no reveal mismatch
+                if lineno not in act and lineno not in reveal_mismatches:
+                    stale.add(lineno)
 
         relpath = os.path.relpath(filepath)
         if unexpected:

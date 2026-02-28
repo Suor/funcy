@@ -1,5 +1,11 @@
 from typing import Any, assert_type
 from collections.abc import Iterable, Iterator, Mapping, Sequence
+
+# Real abstract-type implementations (not concrete types cast to abstract — checkers see through that)
+class StrIntMapping(Mapping[str, int]):
+    def __getitem__(self, k: str) -> int: return 0
+    def __iter__(self) -> Iterator[str]: return iter([])
+    def __len__(self) -> int: return 0
 from funcy import (
     empty, iteritems, itervalues,
     join, merge, join_with, merge_with,
@@ -90,24 +96,42 @@ reveal_type(walk_values(val_map, si_dict))  # R: dict[str, str]
 str_dict: dict[str, str] = {"a": "123", "b": "abc"}
 reveal_type(walk_values(r"\d+", str_dict))  # R: dict[str, str | tuple[str, ...] | dict[str, str] | None]
 
-# -- walk: Callable transforms items --
+# -- walk: Callable transforms items, preserves collection type --
 reveal_type(walk(int_to_str, int_list))  # R: list[str]
 reveal_type(walk(int_to_str, int_set))  # R: set[str]
+# walk: XFunc variants on list/set
+reveal_type(walk(None, int_list))  # R: list[int]
+reveal_type(walk(None, int_set))  # R: set[int]
 # walk: dict with properly typed pair function
 def swap_pair(pair: tuple[str, int]) -> tuple[int, str]: return (pair[1], str(pair[0]))
 reveal_type(walk(swap_pair, si_dict))  # R: dict[int, str]
 # walk: dict with untyped/extended function falls back to dict[Any, Any]
 reveal_type(walk(int_to_str, si_dict))  # R: dict[Any, Any]
+# walk: frozenset
+int_fset: frozenset[int] = frozenset({1, 2, 3})
+reveal_type(walk(int_to_str, int_fset))  # R: frozenset[str]
+
+# -- walk_keys: always returns dict --
+reveal_type(walk_keys(str_key_to_int, si_dict))  # R: dict[int, int]
+real_mapping = StrIntMapping()
+reveal_type(walk_keys(str_key_to_int, real_mapping))  # R: dict[int, int]
+
+# -- walk_values: always returns dict --
+reveal_type(walk_values(int_to_str, si_dict))  # R: dict[str, str]
+reveal_type(walk_values(int_to_str, real_mapping))  # R: dict[str, str]
 
 # -- select: filtering preserves type --
 reveal_type(select(pred_true, si_dict))  # R: dict[str, int]
 reveal_type(select(pred_gt0, int_list))  # R: list[int]
 reveal_type(select(pred_gt0, int_set))  # R: set[int]
 
-# -- select_keys / select_values --
+# -- select_keys / select_values: preserves collection type --
 d: dict[str, int] = {"a": 1, "b": 2, "c": 3}
 reveal_type(select_keys(pred_ne_c, d))  # R: dict[str, int]
 reveal_type(select_values(pred_gt1, d))  # R: dict[str, int]
+# select_keys / select_values with real Mapping input preserves Mapping type
+reveal_type(select_keys(pred_ne_c, real_mapping))  # R: Mapping[str, int]
+reveal_type(select_values(pred_gt1, real_mapping))  # R: Mapping[str, int]
 
 # -- compact: preserves type --
 reveal_type(compact(d))  # R: dict[str, int]
@@ -124,11 +148,18 @@ reveal_type(itervalues(d))  # R: Iterable[int]
 
 # -- split_keys --
 reveal_type(split_keys(pred_eq_a, d))  # R: tuple[dict[str, int], dict[str, int]]
+reveal_type(split_keys(r"\d+", d))  # R: tuple[dict[str, int], dict[str, int]]
 
-# -- flip / project / omit --
+# FIX: do not omit, add at least some tests
+# -- flip / project / omit: preserve collection type --
 reveal_type(flip(d))  # R: dict[int, str]
 reveal_type(project(d, str_keys))  # R: dict[str, int]
 reveal_type(omit(d, str_keys))  # R: dict[str, int]
+# flip / project / omit with real Mapping
+reveal_type(flip(real_mapping))  # R: Mapping[int, str]
+# FIX: explore why this is failing in ty
+reveal_type(project(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: str | Any
+reveal_type(omit(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: str | Any
 
 # -- zipdict --
 reveal_type(zipdict(str_keys, int_vals))  # R: dict[str, int]
@@ -136,6 +167,9 @@ reveal_type(zipdict(range(3), str_keys))  # R: dict[int, str]
 
 # -- bool-returning functions --
 reveal_type(is_distinct(int_list))  # R: bool
+reveal_type(is_distinct(int_list, int_to_str))  # R: bool
+reveal_type(is_distinct(strs, None))  # R: bool
+reveal_type(is_distinct(int_list, {1, 2}))  # R: bool
 reveal_type(all(int_list))  # R: bool
 reveal_type(all(pred_gt0, int_list))  # R: bool
 reveal_type(any(int_list))  # R: bool
@@ -174,26 +208,37 @@ d2: dict[str, int] = {"a": 3, "b": 4}
 reveal_type(zip_values(d1, d2))  # R: Iterator[tuple[int, ...]]
 reveal_type(zip_dicts(d1, d2))  # R: Iterator[tuple[str, tuple[int, ...]]]
 
-# -- get_in / set_in / update_in / del_in (nested access, Any is correct) --
+# -- get_in / set_in / update_in / del_in: nested access --
 nested: dict[str, dict[str, int]] = {"a": {"b": 1}}
 reveal_type(get_in(nested, ["a", "b"]))  # R: Any
 reveal_type(get_lax(nested, ["a", "b"]))  # R: Any
-reveal_type(set_in(nested, ["a", "b"], 42))  # R: Any
+# set_in / update_in / del_in preserve collection type
+reveal_type(set_in(nested, ["a", "b"], 42))  # R: dict[str, dict[str, int]]
 def inc(x: int) -> int: return x + 1
-reveal_type(update_in(nested, ["a", "b"], inc))  # R: Any
-reveal_type(del_in(nested, ["a", "b"]))  # R: Any
+reveal_type(update_in(nested, ["a", "b"], inc))  # R: dict[str, dict[str, int]]
+reveal_type(del_in(nested, ["a", "b"]))  # R: dict[str, dict[str, int]]
 
 # -- join_with / merge_with --
 dict_pair2: list[dict[str, int]] = [d1, d2]
-# FIX: do not use sum() to not confuse ty
-reveal_type(join_with(sum, dict_pair2))  # R: dict[str, int]  # XFAIL[ty]: int | Any
-reveal_type(merge_with(sum, d1, d2))  # R: dict[str, int]  # XFAIL[ty]: int | Any
+def add_all(xs: list[int]) -> int: return 0
+reveal_type(join_with(add_all, dict_pair2))  # R: dict[str, int]
+reveal_type(merge_with(add_all, d1, d2))  # R: dict[str, int]
 
 # -- Extended function protocol in predicates (int, str) --
 reveal_type(all(r"\d+", strs))  # R: bool
 reveal_type(any(0, int_pairs))  # R: bool
 
+# -- Extended function return type tests --
+reveal_type(walk_keys(None, si_dict))  # R: dict[str, int]
+reveal_type(walk_values(None, si_dict))  # R: dict[str, int]
+
 # -- Should be errors --
 walk(int_to_str, int_list, int_list)  # E: too many arguments
 zipdict(123, [1, 2]) # E: not iterable
 has_path(nested, 42)  # E: path not iterable
+
+# Extended function type mismatches
+walk_keys({1: "a"}, si_dict)  # E: Mapping[int, str] keys don't match str keys
+split_keys({1, 2}, d)  # E: Set[int] pred vs str keys
+select_keys({1, 2}, d)  # E: Set[int] pred vs str keys
+select_values(r"\d+", d)  # E: regex pred vs int values
