@@ -250,7 +250,6 @@ def check_coverage(test_dir):
         with open(filepath) as f:
             tree = ast.parse(f.read())
         for node in ast.walk(tree):
-            # FIX: won't this go over import and add them too?
             if isinstance(node, ast.Name) and node.id in public_names:
                 used.add(node.id)
 
@@ -265,8 +264,73 @@ def check_coverage(test_dir):
               f"({len(COVERAGE_SKIP)} skipped)")
 
 
+def find_stale_xfails(skip, error_markers, actual_lines, expected_rev, actual_rev, checker):
+    """Find XFAIL lines that no longer fail.
+
+    Two cases:
+    - # E: + # XFAIL[checker]: stale if checker now catches the error
+    - Pure XFAIL: stale if no longer errors and no reveal mismatch
+    """
+    stale = set()
+    for lineno in skip:
+        if lineno in error_markers:
+            if lineno in actual_lines:
+                stale.add(lineno)
+        else:
+            has_error = lineno in actual_lines
+            has_reveal_mismatch = (
+                lineno in expected_rev
+                and (lineno not in actual_rev
+                     or expected_rev[lineno] != normalize_type(actual_rev[lineno], checker))
+            )
+            if not has_error and not has_reveal_mismatch:
+                stale.add(lineno)
+    return stale
+
+
+def validate_file(filepath, expected, skipped, expected_reveals, error_markers,
+                  actual, actual_reveals, checker):
+    """Validate a single test file, return list of failure message strings."""
+    exp = expected.get(filepath, set())
+    act_dict = actual.get(filepath, {})
+    act = set(act_dict.keys())
+    skip = skipped.get(filepath, set())
+    exp_rev = expected_reveals.get(filepath, {})
+    act_rev = actual_reveals.get(filepath, {})
+    e_markers = error_markers.get(filepath, set())
+
+    relpath = os.path.relpath(filepath)
+    failures = []
+
+    # Unexpected errors: actual errors on lines not marked # E: or # XFAIL:
+    for line in sorted(act - exp - skip):
+        failures.append(f"  UNEXPECTED ERROR: {relpath}:{line}: {act_dict.get(line, '')}")
+
+    # Missing errors: lines marked # E: that didn't error
+    for line in sorted(exp - act):
+        failures.append(f"  MISSING EXPECTED ERROR: {relpath}:{line}")
+
+    # Stale XFAILs: lines marked # XFAIL that no longer fail
+    for line in sorted(find_stale_xfails(skip, e_markers, act, exp_rev, act_rev, checker)):
+        failures.append(f"  STALE XFAIL (no longer fails): {relpath}:{line}")
+
+    # Reveal type mismatches
+    for lineno, pattern in sorted(exp_rev.items()):
+        if lineno in skip:
+            continue
+        if lineno not in act_rev:
+            failures.append(f"  MISSING REVEAL: {relpath}:{lineno} (expected: {pattern})")
+        else:
+            actual_type = normalize_type(act_rev[lineno], checker)
+            if pattern != actual_type:
+                failures.append(f"  REVEAL MISMATCH: {relpath}:{lineno}")
+                failures.append(f"    expected: {pattern}")
+                failures.append(f"    actual: {actual_type}")
+
+    return failures
+
+
 def main():
-    # FIX: looks complicated, refactor, clean up
     if len(sys.argv) != 2 or sys.argv[1] not in {*CHECKERS, "coverage"}:
         print(f"Usage: {sys.argv[0]} {{{','.join(CHECKERS)},coverage}}")
         sys.exit(2)
@@ -292,76 +356,17 @@ def main():
     all_files = sorted(set(list(expected.keys()) + list(actual.keys())
                            + list(expected_reveals.keys())))
 
-    # TODO: factor it properly, dedup code
-    ok = True
+    failures = []
     for filepath in all_files:
-        exp = expected.get(filepath, set())
-        act_dict = actual.get(filepath, {})
-        act = set(act_dict.keys())
-        skip = skipped.get(filepath, set())
+        failures.extend(validate_file(
+            filepath, expected, skipped, expected_reveals, error_markers,
+            actual, actual_reveals, checker))
 
-        # Unexpected errors: actual errors on lines not marked # E: or # XFAIL:
-        unexpected = act - exp - skip
-        # Missing errors: lines marked # E: that didn't error
-        missing = exp - act
-        # Stale XFAILs: lines marked # XFAIL that no longer fail
-        exp_rev = expected_reveals.get(filepath, {})
-        act_rev = actual_reveals.get(filepath, {})
-        e_markers = error_markers.get(filepath, set())
-        reveal_mismatches = set()
-        for lineno, pattern in exp_rev.items():
-            if lineno not in act_rev:
-                reveal_mismatches.add(lineno)
-            else:
-                actual_type = normalize_type(act_rev[lineno], checker)
-                if pattern != actual_type:
-                    reveal_mismatches.add(lineno)
-        # For # E: + # XFAIL[checker]: lines, XFAIL is stale when checker NOW errors
-        # For pure XFAIL lines, stale when no longer errors/mismatches
-        stale = set()
-        for lineno in skip:
-            if lineno in e_markers:
-                # # E: + # XFAIL: stale only if checker now catches the error
-                if lineno in act:
-                    stale.add(lineno)
-            else:
-                # Pure XFAIL: stale if no longer errors and no reveal mismatch
-                if lineno not in act and lineno not in reveal_mismatches:
-                    stale.add(lineno)
-
-        relpath = os.path.relpath(filepath)
-        if unexpected:
-            ok = False
-            for line in sorted(unexpected):
-                msg = act_dict.get(line, "")
-                print(f"  UNEXPECTED ERROR: {relpath}:{line}: {msg}")
-        if missing:
-            ok = False
-            for line in sorted(missing):
-                print(f"  MISSING EXPECTED ERROR: {relpath}:{line}")
-        if stale:
-            ok = False
-            for line in sorted(stale):
-                print(f"  STALE XFAIL (no longer fails): {relpath}:{line}")
-
-        # Check reveal_type matches
-        for lineno, pattern in sorted(exp_rev.items()):
-            if lineno in skip:
-                continue
-            if lineno not in act_rev:
-                ok = False
-                print(f"  MISSING REVEAL: {relpath}:{lineno} (expected: {pattern})")
-            else:
-                actual_type = normalize_type(act_rev[lineno], checker)
-                if pattern != actual_type:
-                    ok = False
-                    print(f"  REVEAL MISMATCH: {relpath}:{lineno}")
-                    print(f"    expected: {pattern}")
-                    print(f"    actual: {actual_type}")
-
-    if ok:
+    if not failures:
         print(f"OK - {checker}: all type errors match expectations")
     else:
+        for msg in failures:
+            print(msg)
         print(f"FAIL - {checker}: type error mismatches found")
         sys.exit(1)
 

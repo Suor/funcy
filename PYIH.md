@@ -1,8 +1,6 @@
 # `.pyih` → `.pyi` Stub Generation
-# FIX: add this info to README and to CLAUDE.md "progressive discovery", if can stay DRY do it
 
-# FIX: pyih = pyi higher, not "Python Interface Hints"
-Funcy uses `.pyih` ("Python Interface Hints") source files to generate `.pyi` type stubs. This avoids the cross-product explosion of overloads when typing the extended function protocol (7 variants) combined with collection type preservation.
+Funcy uses `.pyih` (pyi higher) source files to generate `.pyi` type stubs. This avoids the cross-product explosion of overloads when typing the extended function protocol (7 variants) combined with collection type preservation.
 
 ## Quick Start
 
