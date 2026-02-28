@@ -37,6 +37,26 @@ def find_pyih_files():
 # Parsing
 # ---------------------------------------------------------------------------
 
+_XFUNC_SKIP_RE = re.compile(r'\s*#\s*xfunc_skip:\s*(.+)')
+
+
+def extract_xfunc_skip(lines: list[str]) -> tuple[set[str], list[str]]:
+    """Extract xfunc_skip directives from a list of source lines.
+
+    Returns (skip_set, remaining_lines) where skip_set contains the variant names
+    to skip and remaining_lines are the lines without the xfunc_skip directives.
+    """
+    skip = set()
+    remaining = []
+    for line in lines:
+        m = _XFUNC_SKIP_RE.match(line)
+        if m:
+            skip = {s.strip() for s in m.group(1).split(',')}
+        else:
+            remaining.append(line)
+    return skip, remaining
+
+
 def parse_pyih(source: str) -> list[dict]:
     """Parse a .pyih file into a list of items (imports, comments, functions, etc.).
 
@@ -84,14 +104,7 @@ def parse_pyih(source: str) -> list[dict]:
         # - regular verbatim content (comments, blanks)
         # - xfunc_skip directive applying to the first overload
         pre_lines = source_lines[last_end:func_start]
-        xfunc_skip_first = set()
-        clean_pre = []
-        for line in pre_lines:
-            m = re.match(r'\s*#\s*xfunc_skip:\s*(.+)', line)
-            if m:
-                xfunc_skip_first = {s.strip() for s in m.group(1).split(',')}
-            else:
-                clean_pre.append(line)
+        xfunc_skip_first, clean_pre = extract_xfunc_skip(pre_lines)
         if clean_pre:
             items.append({'kind': 'verbatim', 'text': '\n'.join(clean_pre)})
 
@@ -111,12 +124,8 @@ def parse_pyih(source: str) -> list[dict]:
                     and isinstance(body[i + 1], ast.FunctionDef)
                     and body[i + 1].name == func_name):
                 next_start = body[i + 1].lineno - 1
-                for line in source_lines[func_node.end_lineno:next_start]:
-                    # FIX: why this re.match(...xfunc_skip...) goes twice. Looks like this function
-                    #      is not properly structured, fix it
-                    m = re.match(r'\s*#\s*xfunc_skip:\s*(.+)', line)
-                    if m:
-                        xfunc_skip = {s.strip() for s in m.group(1).split(',')}
+                gap_lines = source_lines[func_node.end_lineno:next_start]
+                xfunc_skip, _ = extract_xfunc_skip(gap_lines)
 
             i += 1
 
@@ -154,6 +163,16 @@ def parse_func_node(node: ast.FunctionDef, xfunc_skip: set) -> dict:
 
     # FIX: this function looks weird, like we undo the parsing to convert back to string,
     #      should not do that, should work with structured data
+    # RES: All three string-vs-structured-data FIXes (here, XFunc regex detection at ~L207,
+    #      and replace_typevar_in_container at ~L358) are coupled. The early stringification
+    #      here forces regex use downstream. Proper fix: store ast.expr nodes in params (with
+    #      defaults as a separate field), detect XFunc/XPred by checking isinstance(node,
+    #      ast.Subscript) with node.value.id == 'XFunc'/'XPred', and substitute typevars via
+    #      an AST transformer. Stringify only at final output. This touches ~15 functions across
+    #      the whole pipeline — too large/risky for a single pass. Do it as a dedicated branch
+    #      with incremental steps: (1) add ast.expr to param tuples alongside strings,
+    #      (2) switch XFunc/XPred detection to AST, (3) switch substitutions to AST transforms,
+    #      (4) remove string intermediaries. Verify output unchanged after each step.
     params = []
     for j, arg in enumerate(all_args):
         pname = arg.arg
@@ -196,6 +215,8 @@ def parse_func_node(node: ast.FunctionDef, xfunc_skip: set) -> dict:
         # Strip default from ptype for matching
         base_type = ptype.split(' = ')[0]
         # FIX: on top of the above, this looks like remnant of regex parsing
+        # RES: Coupled with FIX at ~L164. Once params store ast.expr nodes, detect XFunc/XPred
+        #      via isinstance(annotation, ast.Subscript) and annotation.value.id check.
         xf_match = re.match(r'XFunc\[\[(\w+)\],\s*(\w+)\]', base_type)
         if xf_match:
             xfunc_param = pname
@@ -220,8 +241,7 @@ def parse_func_node(node: ast.FunctionDef, xfunc_skip: set) -> dict:
         'xfunc_b': xfunc_b,
         'coll_var': coll_var,
         'coll_types': coll_types,
-        # FIX: why copy? why would anyone change the result of this func?
-        'xfunc_skip': xfunc_skip.copy(),
+        'xfunc_skip': xfunc_skip,
     }
 
 
@@ -349,6 +369,8 @@ def replace_typevar_in_container(type_str: str, var: str, replacement: str) -> s
     # Use word boundary to avoid partial matches
     # FIX: will this be easier if we don't keep strings and work with ast nodes OR other way
     #      structured data?
+    # RES: Yes. With AST nodes, this becomes an ast.NodeTransformer that replaces Name(id=var)
+    #      nodes with the replacement subtree. Coupled with FIX at ~L164 — see plan there.
     return re.sub(r'\b' + re.escape(var) + r'\b', replacement, type_str)
 
 
