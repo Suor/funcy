@@ -34,5 +34,4 @@ def original(x: int, y: str) -> bool: return True
 def wrapper(*args: object, **kwargs: object) -> bool:
     return original(*args, **kwargs)  # type: ignore[arg-type]
 wrapped = wraps(original)(wrapper)
-# FIX: looks wrong, also why we testing a builtin?
-reveal_type(wrapped)  # R: (*args: object, **kwargs: object) -> bool
+reveal_type(wrapped)  # R: (x: int, y: str) -> bool

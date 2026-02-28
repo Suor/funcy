@@ -25,25 +25,26 @@ def add(a: int, b: int) -> int: return a + b
 reveal_type(rpartial(add, 1))  # R: (...) -> int
 reveal_type(func_partial(add, 1))  # R: (...) -> int
 
-# FIX: can do better than Any
 # -- curry / rcurry --
-reveal_type(curry(add))  # R: (...) -> Any
-reveal_type(rcurry(add))  # R: (...) -> Any
+reveal_type(curry(add))  # R: (...) -> int
+reveal_type(rcurry(add))  # R: (...) -> int
 
 # -- autocurry preserves function signature --
 reveal_type(autocurry(add))  # R: (a: int, b: int) -> int
 
 # -- iffy --
 def int_to_str(x: int) -> str: return str(x)
-reveal_type(iffy(bool, int_to_str))  # R: (...) -> Any
+reveal_type(iffy(bool, int_to_str))  # R: (...) -> str
+reveal_type(iffy(int_to_str))  # R: (...) -> str
 
 # -- compose / rcompose --
-reveal_type(compose(int_to_str, abs))  # R: (...) -> Any
-reveal_type(rcompose(abs, int_to_str))  # R: (...) -> Any
+reveal_type(compose(int_to_str, abs))  # R: (...) -> str
+reveal_type(rcompose(abs, int_to_str))  # R: (...) -> str
 
 # -- complement --
 reveal_type(complement(bool))  # R: (...) -> bool
 
 # -- juxt / ljuxt --
-reveal_type(juxt(int_to_str, abs))  # R: (...) -> Iterator[Any]
-reveal_type(ljuxt(int_to_str, abs))  # R: (...) -> list[Any]
+def to_bytes(x: int) -> bytes: return str(x).encode()
+reveal_type(juxt(int_to_str, to_bytes))  # R: (...) -> Iterator[str | bytes]
+reveal_type(ljuxt(int_to_str, to_bytes))  # R: (...) -> list[str | bytes]

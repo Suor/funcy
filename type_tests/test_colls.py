@@ -93,10 +93,10 @@ reveal_type(walk_values(r"\d+", str_dict))  # R: dict[str, str | tuple[str, ...]
 # -- walk: Callable transforms items --
 reveal_type(walk(int_to_str, int_list))  # R: list[str]
 reveal_type(walk(int_to_str, int_set))  # R: set[str]
-# walk: dict uses extended function protocol (returns dict)
-# FIX: this could be done better, should get proper type. Although this test is weird - when walking a dict
-#      a function get pairs, which won't work here
-# FIX: also should add examples where we pass wrong func and it should fail type check
+# walk: dict with properly typed pair function
+def swap_pair(pair: tuple[str, int]) -> tuple[int, str]: return (pair[1], str(pair[0]))
+reveal_type(walk(swap_pair, si_dict))  # R: dict[int, str]
+# walk: dict with untyped/extended function falls back to dict[Any, Any]
 reveal_type(walk(int_to_str, si_dict))  # R: dict[Any, Any]
 
 # -- select: filtering preserves type --
@@ -184,16 +184,16 @@ reveal_type(update_in(nested, ["a", "b"], inc))  # R: Any
 reveal_type(del_in(nested, ["a", "b"]))  # R: Any
 
 # -- join_with / merge_with --
-# FIX: Any is not good enough
 dict_pair2: list[dict[str, int]] = [d1, d2]
-reveal_type(join_with(sum, dict_pair2))  # R: dict[str, Any]
-reveal_type(merge_with(sum, d1, d2))  # R: dict[str, Any]
+# FIX: do not use sum() to not confuse ty
+reveal_type(join_with(sum, dict_pair2))  # R: dict[str, int]  # XFAIL[ty]: int | Any
+reveal_type(merge_with(sum, d1, d2))  # R: dict[str, int]  # XFAIL[ty]: int | Any
 
 # -- Extended function protocol in predicates (int, str) --
 reveal_type(all(r"\d+", strs))  # R: bool
 reveal_type(any(0, int_pairs))  # R: bool
 
 # -- Should be errors --
-# FIX: should match actual error messages, or their standardized form
+walk(int_to_str, int_list, int_list)  # E: too many arguments
 zipdict(123, [1, 2]) # E: not iterable
 has_path(nested, 42)  # E: path not iterable
