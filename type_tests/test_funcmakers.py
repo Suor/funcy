@@ -21,8 +21,8 @@ reveal_type(make_func(None))       # R: (_T) -> _T
 f_int = make_func(0)
 reveal_type(f_int)           # R: (Sequence[_T]) -> _T
 reveal_type(f_int(nums))     # R: int
-strs: tuple[str, str] = ("a", "b")
-reveal_type(f_int(strs))          # R: str  # XFAIL[ty]: Literal inference
+strs: tuple[str, ...] = ("a", "b", to_str(123))
+reveal_type(f_int(strs))     # R: str
 
 # -- slice: itemgetter on Sequences --
 f_slice = make_func(slice(1, 3))

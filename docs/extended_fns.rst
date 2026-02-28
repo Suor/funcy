@@ -85,6 +85,7 @@ truthiness when used as a predicate::
 Supporting functions
 --------------------
 
+# FIX: this list is probably incomplete, recheck and update
 Here is a full list of functions supporting extended function semantics:
 
 ========================= ==============================================================

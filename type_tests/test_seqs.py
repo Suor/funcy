@@ -209,7 +209,29 @@ reveal_type(sums(nums, 0))  # R: Iterator[int]
 reveal_type(lsums(nums))  # R: list[int]
 reveal_type(lsums(nums, 0))  # R: list[int]
 
+# -- Extended function return type tests --
+reveal_type(map(None, nums))  # R: Iterator[int]
+reveal_type(map({1, 2}, nums))  # R: Iterator[bool]
+reveal_type(filter(None, nums))  # R: Iterator[int]
+reveal_type(filter({1, 2}, nums))  # R: Iterator[int]  # XFAIL[ty]: Any | int
+reveal_type(group_by(None, nums))  # R: dict[int, list[int]]
+reveal_type(group_by({1, 2}, nums))  # R: dict[bool, list[int]]  # XFAIL[ty]: Any | int
+reveal_type(count_by(None, nums))  # R: dict[int, int]
+
 # -- Should be errors --
 take("nope", nums)  # E: wrong arg type
 first(42)  # E: not iterable
 lmap(double, 42)  # E: not iterable
+
+# Extended function type mismatches — predicates
+filter(re.compile(r"x"), nums)  # E: regex pred requires str elements
+lfilter(r"\d+", nums)  # E: regex pred requires str elements
+remove(re.compile(r"x"), nums)  # E: regex pred requires str elements
+filter({1: True}, strs)  # E: Mapping[int] pred vs Iterable[str]
+lremove({1: True}, strs)  # E: Mapping[int] pred vs Iterable[str]
+
+# Extended function type mismatches — mappers
+map({1: "a"}, strs)  # E: Mapping[int, str] vs Iterable[str]  # XFAIL[ty]: not caught
+lmap({1: "a"}, strs)  # E: Mapping[int, str] vs Iterable[str]  # XFAIL[ty]: not caught
+group_by({1: "a"}, strs)  # E: Mapping[int, str] vs Iterable[str]  # XFAIL[ty]: not caught
+count_by({1: "a"}, strs)  # E: Mapping[int, str] vs Iterable[str]  # XFAIL[ty]: not caught
