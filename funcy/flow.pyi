@@ -1,7 +1,7 @@
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Iterator
 from contextlib import suppress, AbstractContextManager
 from datetime import timedelta
-from typing import Any, NoReturn, TypeVar, overload
+from typing import Any, NoReturn, ParamSpec, TypeVar, overload
 
 __all__ = ['raiser', 'ignore', 'silent', 'suppress', 'nullcontext', 'reraise', 'retry', 'fallback',
            'limit_error_rate', 'ErrorRateExceeded', 'throttle',
@@ -10,6 +10,8 @@ __all__ = ['raiser', 'ignore', 'silent', 'suppress', 'nullcontext', 'reraise', '
            'wrap_with']
 
 _T = TypeVar('_T')
+_T2 = TypeVar('_T2')
+_P = ParamSpec('_P')
 _F = TypeVar('_F', bound=Callable[..., Any])
 
 _ExcType = type[BaseException] | tuple[type[BaseException], ...]
@@ -37,9 +39,9 @@ def throttle(period: int | float | timedelta) -> Callable[[_F], _F]: ...
 
 ### Post processing
 
-def post_processing(func: Callable[..., Any]) -> Callable[[_F], _F]: ...
-def collecting(func: _F) -> _F: ...
-def joining(sep: str) -> Callable[[_F], _F]: ...
+def post_processing(func: Callable[[_T], _T2]) -> Callable[[Callable[_P, _T]], Callable[_P, _T2]]: ...
+def collecting(func: Callable[_P, Iterable[_T]]) -> Callable[_P, list[_T]]: ...
+def joining(sep: str) -> Callable[[Callable[_P, Any]], Callable[_P, str]]: ...
 
 ### Initialization
 
