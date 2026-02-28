@@ -1,4 +1,5 @@
 from typing import Any
+from collections.abc import Iterator
 from funcy import (
     raiser, ignore, silent, reraise, retry, fallback,
     limit_error_rate, ErrorRateExceeded, throttle,
@@ -37,25 +38,23 @@ reveal_type(throttled)  # R: () -> int
 def rate_limited(x: int) -> str: return str(x)
 reveal_type(rate_limited)  # R: (x: int) -> str
 
-# -- post_processing preserves function signature --
+# -- post_processing transforms return type --
 @post_processing(list)
-def gen_list() -> Any:
+def gen_list() -> Iterator[int]:
     yield 1
-reveal_type(gen_list)  # R: () -> Any
+reveal_type(gen_list)  # R: () -> list[int]  # XFAIL[ty]: can't infer through Callable[[_T], _T2]
 
-# FIX: collecting and joining are NOT preserving function signature, but they are changing it predictably
-#      same for post_processing. These three need to be properly typed and tests updated
-# -- collecting --
+# -- collecting returns list --
 @collecting
-def gen() -> Any:
+def gen() -> Iterator[int]:
     yield 1
-reveal_type(gen)  # R: () -> Any
+reveal_type(gen)  # R: () -> list[int]
 
-# -- joining preserves function signature --
+# -- joining returns str --
 @joining(", ")
-def gen_strs() -> Any:
-    yield "a"
-reveal_type(gen_strs)  # R: () -> Any
+def gen_ints() -> Iterator[int]:
+    yield 1
+reveal_type(gen_ints)  # R: () -> str
 
 # -- wrap_with preserves function signature --
 import threading

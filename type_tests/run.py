@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Runner for type-checking tests.
 
 Runs a type checker (pyright, mypy, or ty) on type_tests/ and validates
@@ -66,8 +67,9 @@ def parse_markers(test_dir, checker):
 def normalize_type(revealed, checker):
     """Normalize a revealed type string to a canonical form for exact comparison.
 
-    Handles differences between mypy and ty:
+    Handles differences between mypy, pyright, and ty:
     - mypy: "def (*Any, **Any) -> str", "def (str) -> int", "_T`6"
+    - pyright: "_T@make_func", "(str | int)" parenthesized unions
     - ty: "(...) -> str", "(str, /) -> int", "_T'return"
     Canonical form: "(...) -> str", "(str) -> int", "_T"
     """
@@ -84,6 +86,11 @@ def normalize_type(revealed, checker):
         s = re.sub(r'\(\*Any, \*\*Any\)', '(...)', s)
         # Normalize TypeVar suffixes: mypy uses _T`123
         s = re.sub(r'`\d+', '', s)
+    if checker == "pyright":
+        # Normalize TypeVar suffixes: pyright uses _T@func_name
+        s = re.sub(r'@\w+', '', s)
+        # Strip parentheses around union types in return position: "-> (A | B)" -> "-> A | B"
+        s = re.sub(r'->\s*\(([^()]+)\)', r'-> \1', s)
     if checker == "ty":
         # Strip positional-only marker at end of params: ", /)" -> ")"
         s = re.sub(r', /\)', ')', s)
@@ -108,7 +115,7 @@ def run_pyright(test_dir):
         ["pyright", "--outputjson", test_dir],
         capture_output=True, text=True,
     )
-    errors = {}  # {filepath: set of line numbers}
+    errors = {}  # {filepath: {lineno: message}}
     reveals = {}  # {filepath: {lineno: revealed_type}}
     try:
         import json
@@ -117,7 +124,7 @@ def run_pyright(test_dir):
             filepath = os.path.abspath(diag["file"])
             lineno = diag["range"]["start"]["line"] + 1  # pyright uses 0-based
             if diag.get("severity") == "error":
-                errors.setdefault(filepath, set()).add(lineno)
+                errors.setdefault(filepath, {})[lineno] = diag.get("message", "")
             elif diag.get("severity") == "information":
                 m = re.search(r'Type of ".+?" is "(.+)"', diag.get("message", ""))
                 if m:
@@ -135,15 +142,15 @@ def run_mypy(test_dir):
         ["python", "-m", "mypy", test_dir, "--no-error-summary"],
         capture_output=True, text=True,
     )
-    errors = {}  # {filepath: set of line numbers}
+    errors = {}  # {filepath: {lineno: message}}
     reveals = {}  # {filepath: {lineno: revealed_type}}
     for line in result.stdout.splitlines():
-        # mypy error format: file.py:lineno: error: message
-        match = re.match(r"(.+?):(\d+):\s*error:", line)
+        # mypy error format: file.py:lineno: error: message [code]
+        match = re.match(r"(.+?):(\d+):\s*error:\s*(.*)", line)
         if match:
             filepath = os.path.abspath(match.group(1))
             lineno = int(match.group(2))
-            errors.setdefault(filepath, set()).add(lineno)
+            errors.setdefault(filepath, {})[lineno] = match.group(3).strip()
             continue
         # mypy reveal format: file.py:lineno: note: Revealed type is "..."
         match = re.match(r'(.+?):(\d+):\s*note:\s*Revealed type is "(.+)"', line)
@@ -160,11 +167,12 @@ def run_ty(test_dir):
         ["ty", "check", test_dir],
         capture_output=True, text=True,
     )
-    errors = {}  # {filepath: set of line numbers}
+    errors = {}  # {filepath: {lineno: message}}
     reveals = {}  # {filepath: {lineno: revealed_type}}
     output = (result.stdout + result.stderr).splitlines()
     in_error = False
     in_reveal = False
+    error_message = ""
     reveal_file = None
     reveal_line = 0
     for line in output:
@@ -174,9 +182,11 @@ def run_ty(test_dir):
         #   info[revealed-type]: Revealed type
         #     --> file.py:lineno:col
         #        | ^^^ `type_here`
-        if re.match(r"\s*error\[", line):
+        m_err = re.match(r"\s*error\[.+?\]:\s*(.*)", line)
+        if m_err:
             in_error = True
             in_reveal = False
+            error_message = m_err.group(1).strip()
         elif re.match(r"\s*info\[revealed-type\]:", line):
             in_reveal = True
             in_error = False
@@ -188,7 +198,7 @@ def run_ty(test_dir):
             if match:
                 filepath = os.path.abspath(match.group(1))
                 lineno = int(match.group(2))
-                errors.setdefault(filepath, set()).add(lineno)
+                errors.setdefault(filepath, {})[lineno] = error_message
                 in_error = False
         elif in_reveal:
             # Try to get the type from the ^^^ `type` line
@@ -278,7 +288,8 @@ def main():
     ok = True
     for filepath in all_files:
         exp = expected.get(filepath, set())
-        act = actual.get(filepath, set())
+        act_dict = actual.get(filepath, {})
+        act = set(act_dict.keys())
         skip = skipped.get(filepath, set())
 
         # Unexpected errors: actual errors on lines not marked # E: or # XFAIL:
@@ -303,7 +314,8 @@ def main():
         if unexpected:
             ok = False
             for line in sorted(unexpected):
-                print(f"  UNEXPECTED ERROR: {relpath}:{line}")
+                msg = act_dict.get(line, "")
+                print(f"  UNEXPECTED ERROR: {relpath}:{line}: {msg}")
         if missing:
             ok = False
             for line in sorted(missing):

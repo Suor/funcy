@@ -1,5 +1,3 @@
-from typing import Any, assert_type
-from collections.abc import Callable
 from funcy import memoize, cache, make_lookuper, silent_lookuper
 
 # -- memoize as decorator (no args) --
@@ -20,16 +18,14 @@ def cached_fn(x: int) -> str:
     return str(x)
 reveal_type(cached_fn)  # R: (x: int) -> str
 
-# FIX: it's possible to detect type, i.e. dict[str, int] -> Callable[[str], int]
-#      or int | None for silent_lookuper. Should check with reveal_type
 # -- make_lookuper --
 @make_lookuper
 def my_lookup() -> dict[str, int]:
     return {"a": 1, "b": 2}
-assert_type(my_lookup, Callable[..., Any])  # XFAIL[ty]: wrapper transforms signature
+reveal_type(my_lookup)  # R: (...) -> int
 
 # -- silent_lookuper --
 @silent_lookuper
 def my_silent() -> dict[str, int]:
     return {"a": 1, "b": 2}
-assert_type(my_silent, Callable[..., Any])  # XFAIL[ty]: wrapper transforms signature
+reveal_type(my_silent)  # R: (...) -> int | None

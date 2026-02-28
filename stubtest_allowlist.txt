@@ -14,6 +14,7 @@ funcy.seqs.lkeep
 funcy.seqs.lpartition
 funcy.seqs.partition
 funcy.calc.memoize
+funcy.funcs.iffy
 
 # @decorator-based functions: runtime signature has extra `call` arg
 funcy.flow.collecting

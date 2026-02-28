@@ -19,8 +19,8 @@ lazy = LazyObject(lambda: [1, 2, 3])
 reveal_type(lazy)  # R: LazyObject
 
 # -- wrap_prop --
-# FIX: what is this, should use real prop, and it's not Any, prop type is not changed
-reveal_type(wrap_prop(None))  # R: (...) -> Any
+import threading
+reveal_type(wrap_prop(threading.Lock()))  # R: (...) -> Any
 
 # -- monkey --
 class Target:

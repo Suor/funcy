@@ -127,7 +127,7 @@ reveal_type(concat(nums, nums))  # R: Iterator[int]
 reveal_type(lconcat(nums, nums))  # R: list[int]
 reveal_type(cat([nums, nums]))  # R: Iterator[int]
 reveal_type(lcat([nums, nums]))  # R: list[int]
-# FIX: can we do better than Any?
+# Note: flatten is recursive, can't type the leaf element statically
 reveal_type(flatten([1, [2, [3]]]))  # R: Iterator[Any]
 reveal_type(lflatten([1, [2, [3]]]))  # R: list[Any]
 
