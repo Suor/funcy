@@ -19,6 +19,7 @@ set            ``lambda x: x in f``               ``lambda x: x in f``
 Supporting functions
 --------------------
 
+# FIX: this list is probably incomplete, recheck and update
 Here is a full list of functions supporting extended function semantics:
 
 ========================= ==============================================================
