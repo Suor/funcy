@@ -1,5 +1,4 @@
 """Tests for the .pyih -> .pyi translator."""
-import pytest
 from translate_pyih import parse_pyih, generate_func_group, generate_pyi
 
 
@@ -151,7 +150,9 @@ class TestXPred:
         out = get_single_func(
             "def filter(pred: XPred[_T], seq: Iterable[_T]) -> Iterator[_T]: ..."
         )
-        assert "def filter(pred: Callable[[_T], Any], seq: Iterable[_T]) -> Iterator[_T]: ..." in out
+        assert (
+            "def filter(pred: Callable[[_T], Any], seq: Iterable[_T]) -> Iterator[_T]: ..." in out
+        )
 
     def test_none_variant(self):
         out = get_single_func(
