@@ -1,6 +1,18 @@
 from typing import Any, assert_type
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
 
+from funcy import (
+    empty, iteritems, itervalues,
+    join, merge, join_with, merge_with,
+    walk, walk_keys, walk_values, select, select_keys, select_values,
+    split_keys, compact,
+    is_distinct, zipdict, flip, project, omit, zip_values, zip_dicts,
+    where, pluck, pluck_attr, invoke,
+    lwhere, lpluck, lpluck_attr, linvoke,
+    get_in, get_lax, set_in, update_in, del_in, has_path,
+)
+from funcy.colls import all, any, none, one, some  # shadow builtins
+
 # Real abstract-type implementations (not concrete types cast to abstract — checkers see through that)
 class StrIntMapping(Mapping[str, int]):
     def __getitem__(self, k: str) -> int: return 0
@@ -13,17 +25,11 @@ class StrIntMutableMapping(MutableMapping[str, int]):
     def __delitem__(self, k: str) -> None: pass
     def __iter__(self) -> Iterator[str]: return iter([])
     def __len__(self) -> int: return 0
-from funcy import (
-    empty, iteritems, itervalues,
-    join, merge, join_with, merge_with,
-    walk, walk_keys, walk_values, select, select_keys, select_values,
-    split_keys, compact,
-    is_distinct, zipdict, flip, project, omit, zip_values, zip_dicts,
-    where, pluck, pluck_attr, invoke,
-    lwhere, lpluck, lpluck_attr, linvoke,
-    get_in, get_lax, set_in, update_in, del_in, has_path,
-)
-from funcy.colls import all, any, none, one, some  # shadow builtins
+
+class IntSequence(Sequence[int]):
+    def __getitem__(self, index: int) -> int: return 0  # type: ignore[override]
+    def __len__(self) -> int: return 0
+
 
 _ReResult = str | tuple[str, ...] | dict[str, str]
 
@@ -122,10 +128,10 @@ reveal_type(walk_keys(str_key_to_int, si_dict))  # R: dict[int, int]
 real_mapping = StrIntMapping()
 real_mutable_mapping = StrIntMutableMapping()
 # walk: Mapping with typed pair function returns dict
-reveal_type(walk(swap_pair, real_mapping))  # R: dict[int, str]
+reveal_type(walk(swap_pair, real_mapping))  # R: Mapping[int, str]
 # walk: MutableMapping with typed pair function returns dict
-reveal_type(walk(swap_pair, StrIntMutableMapping()))  # R: dict[int, str]
-reveal_type(walk_keys(str_key_to_int, real_mapping))  # R: dict[int, int]
+reveal_type(walk(swap_pair, StrIntMutableMapping()))  # R: MutableMapping[int, str]
+reveal_type(walk_keys(str_key_to_int, real_mapping))  # R: Mapping[int, int]
 # walk: collection of pairs (list[tuple[K, V]]) — handled by list XFunc overload
 str_int_pairs: list[tuple[str, int]] = [("a", 1), ("b", 2)]
 def transform_pair(p: tuple[str, int]) -> tuple[int, str]: return (p[1], str(p[0]))
@@ -134,8 +140,8 @@ reveal_type(walk(None, str_int_pairs))  # R: list[tuple[str, int]]
 reveal_type(walk(str, str_int_pairs))  # R: list[str]  # XFAIL[ty]: TypeVar inference gives list[tuple[str, int]]
 
 # -- walk_keys: MutableMapping returns dict --
-reveal_type(walk_keys(str_key_to_int, real_mutable_mapping))  # R: dict[int, int]
-reveal_type(walk_keys(None, real_mutable_mapping))  # R: dict[str, int]
+reveal_type(walk_keys(str_key_to_int, real_mutable_mapping))  # R: MutableMapping[int, int]
+reveal_type(walk_keys(None, real_mutable_mapping))  # R: MutableMapping[str, int]
 # -- walk_keys: collection of pairs preserves collection type --
 reveal_type(walk_keys(str_key_to_int, str_int_pairs))  # R: list[tuple[int, int]]
 reveal_type(walk_keys(str.upper, str_int_pairs))  # R: list[tuple[str, int]]
@@ -149,10 +155,10 @@ reveal_type(walk_keys(None, str_int_pair_set))  # R: set[tuple[str, int]]
 
 # -- walk_values: always returns dict --
 reveal_type(walk_values(int_to_str, si_dict))  # R: dict[str, str]
-reveal_type(walk_values(int_to_str, real_mapping))  # R: dict[str, str]
+reveal_type(walk_values(int_to_str, real_mapping))  # R: Mapping[str, str]
 # -- walk_values: MutableMapping returns dict --
-reveal_type(walk_values(int_to_str, real_mutable_mapping))  # R: dict[str, str]
-reveal_type(walk_values(None, real_mutable_mapping))  # R: dict[str, int]
+reveal_type(walk_values(int_to_str, real_mutable_mapping))  # R: MutableMapping[str, str]
+reveal_type(walk_values(None, real_mutable_mapping))  # R: MutableMapping[str, int]
 # -- walk_values: collection of pairs preserves collection type --
 reveal_type(walk_values(int_to_str, str_int_pairs))  # R: list[tuple[str, str]]
 reveal_type(walk_values(None, str_int_pairs))  # R: list[tuple[str, int]]
@@ -362,6 +368,33 @@ reveal_type(any(0, int_pairs))  # R: bool
 # -- Extended function return type tests --
 reveal_type(walk_keys(None, si_dict))  # R: dict[str, int]
 reveal_type(walk_values(None, si_dict))  # R: dict[str, int]
+
+# -- New collection types: tuple --
+int_tuple: tuple[int, ...] = tuple(int_list)
+reveal_type(walk(int_to_str, int_tuple))  # R: tuple[str, ...]
+reveal_type(walk(None, int_tuple))  # R: tuple[int, ...]
+reveal_type(select(pred_gt0, int_tuple))  # R: tuple[int, ...]
+reveal_type(select(None, int_tuple))  # R: tuple[int, ...]
+reveal_type(compact(int_tuple))  # R: tuple[int, ...]
+str_int_tuple_pairs: tuple[tuple[str, int], ...] = tuple(str_int_pairs)
+reveal_type(walk_keys(str_key_to_int, str_int_tuple_pairs))  # R: tuple[tuple[int, int], ...]
+reveal_type(walk_keys(None, str_int_tuple_pairs))  # R: tuple[tuple[str, int], ...]
+reveal_type(walk_values(int_to_str, str_int_tuple_pairs))  # R: tuple[tuple[str, str], ...]
+reveal_type(select_keys(pred_ne_c, str_int_tuple_pairs))  # R: tuple[tuple[str, int], ...]
+reveal_type(select_values(pred_gt1, str_int_tuple_pairs))  # R: tuple[tuple[str, int], ...]
+reveal_type(flip(str_int_tuple_pairs))  # R: tuple[tuple[int, str], ...]
+
+# -- New collection types: Sequence --
+real_sequence = IntSequence()
+reveal_type(walk(int_to_str, real_sequence))  # R: Sequence[str]
+reveal_type(walk(None, real_sequence))  # R: Sequence[int]
+reveal_type(select(pred_gt0, real_sequence))  # R: Sequence[int]
+reveal_type(compact(real_sequence))  # R: Sequence[int]
+
+# -- New collection types: Iterator --
+int_iter: Iterator[int] = iter([1, 2, 3])
+reveal_type(walk(int_to_str, int_iter))  # R: Iterator[str]  # XFAIL[ty]: Iterator gives Any
+reveal_type(select(pred_gt0, int_iter))  # R: Iterator[int]  # XFAIL[ty]: Iterator gives Any
 
 # -- Should be errors --
 walk(int_to_str, int_list, int_list)  # E: too many arguments
