@@ -256,6 +256,15 @@ reveal_type(omit(d, str_keys))  # R: dict[str, int]
 reveal_type(flip(real_mapping))  # R: Mapping[int, str]
 reveal_type(project(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: TypeVar unification across Mapping + Iterable params gives str | Unknown
 reveal_type(omit(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: TypeVar unification across Mapping + Iterable params gives str | Unknown
+# flip / project / omit with real MutableMapping
+reveal_type(flip(real_mutable_mapping))  # R: MutableMapping[int, str]
+reveal_type(project(real_mutable_mapping, ["a"]))  # R: MutableMapping[str, int]  # XFAIL[ty]: TypeVar unification across MutableMapping + Iterable params gives str | Unknown
+reveal_type(omit(real_mutable_mapping, ["a"]))  # R: MutableMapping[str, int]  # XFAIL[ty]: TypeVar unification across MutableMapping + Iterable params gives str | Unknown
+# flip with collection of pairs
+reveal_type(flip(str_int_pairs))  # R: list[tuple[int, str]]
+reveal_type(flip(str_int_pair_set))  # R: set[tuple[int, str]]
+int_str_fset_pairs: frozenset[tuple[int, str]] = frozenset({(1, "a"), (2, "b")})
+reveal_type(flip(int_str_fset_pairs))  # R: frozenset[tuple[str, int]]
 
 # -- zipdict --
 reveal_type(zipdict(str_keys, int_vals))  # R: dict[str, int]
