@@ -120,6 +120,7 @@ reveal_type(walk(int_to_str, int_fset))  # R: frozenset[str]
 # -- walk_keys: always returns dict --
 reveal_type(walk_keys(str_key_to_int, si_dict))  # R: dict[int, int]
 real_mapping = StrIntMapping()
+real_mutable_mapping = StrIntMutableMapping()
 # walk: Mapping with typed pair function returns dict
 reveal_type(walk(swap_pair, real_mapping))  # R: dict[int, str]
 # walk: MutableMapping with typed pair function returns dict
@@ -132,9 +133,33 @@ reveal_type(walk(transform_pair, str_int_pairs))  # R: list[tuple[int, str]]
 reveal_type(walk(None, str_int_pairs))  # R: list[tuple[str, int]]
 reveal_type(walk(str, str_int_pairs))  # R: list[str]  # XFAIL[ty]: TypeVar inference gives list[tuple[str, int]]
 
+# -- walk_keys: MutableMapping returns dict --
+reveal_type(walk_keys(str_key_to_int, real_mutable_mapping))  # R: dict[int, int]
+reveal_type(walk_keys(None, real_mutable_mapping))  # R: dict[str, int]
+# -- walk_keys: collection of pairs preserves collection type --
+reveal_type(walk_keys(str_key_to_int, str_int_pairs))  # R: list[tuple[int, int]]
+reveal_type(walk_keys(str.upper, str_int_pairs))  # R: list[tuple[str, int]]
+reveal_type(walk_keys(None, str_int_pairs))  # R: list[tuple[str, int]]
+reveal_type(walk_keys({"a", "b"}, str_int_pairs))  # R: list[tuple[bool, int]]
+reveal_type(walk_keys(key_map, str_int_pairs))  # R: list[tuple[int, int]]
+# walk_keys: collection of pairs with set
+str_int_pair_set: set[tuple[str, int]] = {("a", 1), ("b", 2)}
+reveal_type(walk_keys(str_key_to_int, str_int_pair_set))  # R: set[tuple[int, int]]
+reveal_type(walk_keys(None, str_int_pair_set))  # R: set[tuple[str, int]]
+
 # -- walk_values: always returns dict --
 reveal_type(walk_values(int_to_str, si_dict))  # R: dict[str, str]
 reveal_type(walk_values(int_to_str, real_mapping))  # R: dict[str, str]
+# -- walk_values: MutableMapping returns dict --
+reveal_type(walk_values(int_to_str, real_mutable_mapping))  # R: dict[str, str]
+reveal_type(walk_values(None, real_mutable_mapping))  # R: dict[str, int]
+# -- walk_values: collection of pairs preserves collection type --
+reveal_type(walk_values(int_to_str, str_int_pairs))  # R: list[tuple[str, str]]
+reveal_type(walk_values(None, str_int_pairs))  # R: list[tuple[str, int]]
+reveal_type(walk_values({1, 2}, str_int_pairs))  # R: list[tuple[str, bool]]
+reveal_type(walk_values(val_map, str_int_pairs))  # R: list[tuple[str, str]]
+# walk_values: collection of pairs with set
+reveal_type(walk_values(int_to_str, str_int_pair_set))  # R: set[tuple[str, str]]
 
 # -- select: filtering preserves type --
 reveal_type(select(pred_true, si_dict))  # R: dict[str, int]
@@ -154,7 +179,6 @@ reveal_type(select(pair_pred, si_dict))  # R: dict[str, int]
 # select: Mapping with Callable on pairs
 reveal_type(select(pred_true, real_mapping))  # R: Mapping[str, int]
 # select: MutableMapping with Callable on pairs
-real_mutable_mapping = StrIntMutableMapping()
 reveal_type(select(pred_true, real_mutable_mapping))  # R: MutableMapping[str, int]
 
 # -- select_keys / select_values: preserves collection type --
