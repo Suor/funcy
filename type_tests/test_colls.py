@@ -196,6 +196,17 @@ reveal_type(select_values(pred_gt1, real_mutable_mapping))  # R: MutableMapping[
 reveal_type(compact(d))  # R: dict[str, int]
 maybe_list: list[int | None] = [0, 1, None, 2]
 reveal_type(compact(maybe_list))  # R: list[int | None]
+# compact: set, frozenset
+maybe_set: set[int | None] = {0, 1, None, 2}
+reveal_type(compact(maybe_set))  # R: set[int | None]
+maybe_fset: frozenset[int | None] = frozenset({0, 1, None, 2})
+reveal_type(compact(maybe_fset))  # R: frozenset[int | None]
+# compact: Mapping and MutableMapping (collection of pairs — filters by value truthiness)
+reveal_type(compact(real_mapping))  # R: Mapping[str, int]
+reveal_type(compact(real_mutable_mapping))  # R: MutableMapping[str, int]
+# compact: collection of pairs as list[tuple[K, V]]
+compact_pairs: list[tuple[str, int | None]] = [("a", 1), ("b", None), ("c", 0)]
+reveal_type(compact(compact_pairs))  # R: list[tuple[str, int | None]]
 
 # -- empty: preserves type --
 reveal_type(empty(d))  # R: dict[str, int]
