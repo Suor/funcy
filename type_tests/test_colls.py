@@ -322,6 +322,15 @@ reveal_type(set_in(nested, ["a", "b"], 42))  # R: dict[str, dict[str, int]]
 def inc(x: int) -> int: return x + 1
 reveal_type(update_in(nested, ["a", "b"], inc))  # R: dict[str, dict[str, int]]
 reveal_type(del_in(nested, ["a", "b"]))  # R: dict[str, dict[str, int]]
+# set_in / update_in / del_in with MutableMapping
+reveal_type(set_in(real_mutable_mapping, ["a"], 42))  # R: MutableMapping[str, int]
+reveal_type(update_in(real_mutable_mapping, ["a"], inc))  # R: MutableMapping[str, int]
+reveal_type(del_in(real_mutable_mapping, ["a"]))  # R: MutableMapping[str, int]
+# set_in / update_in / del_in with list
+nested_list: list[int] = [1, 2, 3]
+reveal_type(set_in(nested_list, [0], 42))  # R: list[int]
+reveal_type(update_in(nested_list, [0], inc))  # R: list[int]
+reveal_type(del_in(nested_list, [0]))  # R: list[int]
 
 # -- join_with / merge_with --
 dict_pair2: list[dict[str, int]] = [d1, d2]
