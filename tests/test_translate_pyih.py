@@ -1,4 +1,5 @@
 """Tests for the .pyih -> .pyi translator."""
+# FIX: only run this in Python 3.12+
 from translate_pyih import parse_pyih, generate_func_group, generate_pyi
 
 
