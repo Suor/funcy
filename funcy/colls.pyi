@@ -45,8 +45,8 @@ def merge_with(f: Callable[[list[Any]], _V], *dicts: Mapping[_K, Any]) -> dict[_
 ### Walk / Select
 
 # 1-param collections × XFunc (quadratic expansion)
-# FIX: add abstract collections like MutableMapping, Mapping, Sequence, Set, Iterator, Iterable
-#      drop catch all stuff
+# RES: Sequence, Set, Iterator, Iterable not added - constructors not guaranteed to accept iterables,
+#      and Set/frozenset already covered by concrete expansion above
 @overload
 def walk(f: Callable[[_T], _V], coll: list[_T]) -> list[_V]: ...
 @overload
@@ -91,6 +91,10 @@ def walk(f: slice, coll: frozenset[Sequence[_T]]) -> frozenset[Sequence[_T]]: ..
 def walk(f: Mapping[_T, _V], coll: frozenset[_T]) -> frozenset[_V]: ...
 @overload
 def walk(f: Callable[[tuple[_K, _V]], tuple[_K2, _V2]], coll: dict[_K, _V]) -> dict[_K2, _V2]: ...
+@overload
+def walk(f: Callable[[tuple[_K, _V]], tuple[_K2, _V2]], coll: MutableMapping[_K, _V]) -> dict[_K2, _V2]: ...
+@overload
+def walk(f: Callable[[tuple[_K, _V]], tuple[_K2, _V2]], coll: Mapping[_K, _V]) -> dict[_K2, _V2]: ...
 @overload
 def walk(f: Callable[..., Any] | _Func, coll: dict[Any, Any]) -> dict[Any, Any]: ...
 @overload

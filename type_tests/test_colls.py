@@ -117,10 +117,13 @@ reveal_type(walk(int_to_str, si_dict))  # R: dict[Any, Any]
 # walk: frozenset
 int_fset: frozenset[int] = frozenset({1, 2, 3})
 reveal_type(walk(int_to_str, int_fset))  # R: frozenset[str]
-
 # -- walk_keys: always returns dict --
 reveal_type(walk_keys(str_key_to_int, si_dict))  # R: dict[int, int]
 real_mapping = StrIntMapping()
+# walk: Mapping with typed pair function returns dict
+reveal_type(walk(swap_pair, real_mapping))  # R: dict[int, str]
+# walk: MutableMapping with typed pair function returns dict
+reveal_type(walk(swap_pair, StrIntMutableMapping()))  # R: dict[int, str]
 reveal_type(walk_keys(str_key_to_int, real_mapping))  # R: dict[int, int]
 
 # -- walk_values: always returns dict --
