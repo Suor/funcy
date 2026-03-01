@@ -125,6 +125,12 @@ reveal_type(walk(swap_pair, real_mapping))  # R: dict[int, str]
 # walk: MutableMapping with typed pair function returns dict
 reveal_type(walk(swap_pair, StrIntMutableMapping()))  # R: dict[int, str]
 reveal_type(walk_keys(str_key_to_int, real_mapping))  # R: dict[int, int]
+# walk: collection of pairs (list[tuple[K, V]]) — handled by list XFunc overload
+str_int_pairs: list[tuple[str, int]] = [("a", 1), ("b", 2)]
+def transform_pair(p: tuple[str, int]) -> tuple[int, str]: return (p[1], str(p[0]))
+reveal_type(walk(transform_pair, str_int_pairs))  # R: list[tuple[int, str]]
+reveal_type(walk(None, str_int_pairs))  # R: list[tuple[str, int]]
+reveal_type(walk(str, str_int_pairs))  # R: list[str]  # XFAIL[ty]: TypeVar inference gives list[tuple[str, int]]
 
 # -- walk_values: always returns dict --
 reveal_type(walk_values(int_to_str, si_dict))  # R: dict[str, str]
