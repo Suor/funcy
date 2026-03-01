@@ -198,6 +198,8 @@ maybe_list: list[int | None] = [0, 1, None, 2]
 reveal_type(compact(maybe_list))  # R: list[int | None]
 # compact: set, frozenset
 maybe_set: set[int | None] = {0, 1, None, 2}
+# FIX: can we type that it removes | None? if not we should add a failing test. But maybe guards
+#      will do the trick
 reveal_type(compact(maybe_set))  # R: set[int | None]
 maybe_fset: frozenset[int | None] = frozenset({0, 1, None, 2})
 reveal_type(compact(maybe_fset))  # R: frozenset[int | None]
