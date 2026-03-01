@@ -20,6 +20,7 @@ _T = TypeVar('_T')
 # Non-callable types accepted by the extended function protocol (funcmakers.make_func):
 # int/slice for itemgetter, str/bytes/re.Pattern for regex,
 # Mapping for lookup, Set for membership, None for identity/bool
+# FIX: should include Callable into _Func, it's unied anyway all the time
 _Func = int | slice | str | bytes | re.Pattern[str] | Mapping[Any, Any] | AbstractSet[Any] | None
 _ReResult: TypeAlias = str | tuple[str, ...] | dict[str, str]
 
@@ -35,16 +36,24 @@ def join(colls: Iterable[_T]) -> _T | None: ...
 def merge(__coll: _T, *colls: _T) -> _T: ...
 def merge() -> None: ...
 
+# FIX: should be able to say that Callable accepts Iterable of the same type as dict values have
+#      or wider. Add tests for both same and wider first. Test that should fail type check too.
 def join_with(f: Callable[[list[Any]], _V], dicts: Iterable[Mapping[_K, Any]], strict: bool = ...) -> dict[_K, _V]: ...
 def merge_with(f: Callable[[list[Any]], _V], *dicts: Mapping[_K, Any]) -> dict[_K, _V]: ...
 
 ### Walk / Select
 
 # 1-param collections × XFunc (quadratic expansion)
+# FIX: add abstract collections like MutableMapping, Mapping, Sequence, Set, Iterator, Iterable
+#      drop catch all stuff
 # RES: Sequence, Set, Iterator, Iterable not added - constructors not guaranteed to accept iterables,
 #      and Set/frozenset already covered by concrete expansion above
+# FIX: the above RES is untrue, walk will work with all of the above
 def walk[C: (list, set, frozenset)](f: XFunc[[_T], _V], coll: C[_T]) -> C[_V]: ...
 # dict/MutableMapping/Mapping: typed Callable with pair→pair signature
+# FIX: this also works with collections of pairs, add a test and fix it here
+#      also might need to reorder. Relying on last catch all is not the best solution!
+#      We loose type checking of arguments, i.e. that element types match callable
 def walk(f: Callable[[tuple[_K, _V]], tuple[_K2, _V2]], coll: dict[_K, _V]) -> dict[_K2, _V2]: ...
 def walk(f: Callable[[tuple[_K, _V]], tuple[_K2, _V2]], coll: MutableMapping[_K, _V]) -> dict[_K2, _V2]: ...
 def walk(f: Callable[[tuple[_K, _V]], tuple[_K2, _V2]], coll: Mapping[_K, _V]) -> dict[_K2, _V2]: ...
@@ -73,6 +82,7 @@ def walk_values(f: XFunc[[_V], _V2], coll: Mapping[_K, _V]) -> dict[_K, _V2]: ..
 # 1-param collections × XPred
 def select[C: (list, set, frozenset)](pred: XPred[_T], coll: C[_T]) -> C[_T]: ...
 # dict/Mapping: pred receives (key, value) pairs, only Callable is meaningful
+# FIX: should use coll parametrization here
 def select(pred: Callable[[tuple[_K, _V]], Any], coll: dict[_K, _V]) -> dict[_K, _V]: ...
 def select(pred: Callable[[tuple[_K, _V]], Any], coll: MutableMapping[_K, _V]) -> MutableMapping[_K, _V]: ...
 def select(pred: Callable[[tuple[_K, _V]], Any], coll: Mapping[_K, _V]) -> Mapping[_K, _V]: ...
@@ -83,6 +93,14 @@ def select_keys[C: (list, set, frozenset)](pred: XPred[_K], coll: C[tuple[_K, _V
 # select_keys: dict/MutableMapping/Mapping
 def select_keys[C: (dict, MutableMapping, Mapping)](pred: XPred[_K], coll: C[_K, _V]) -> C[_K, _V]: ...
 
+# FIX0: looks like we are getting lazy everywhere, i.e. here it should be not (list, set, frozenset)
+#       but (list, tuple[T, ...], set, frozenset, Sequence, Iterator, Iterable)
+#       and this is repeating patterns, so let's come up with a systemic decision, we'll add aliases
+#       like ALL_SEQUENCES, ALL_MAPPINGS, ALL_CONTAINERS - these should be global find a good place
+#       for those maybe a separate pyih file like global.pyih or defines.pyih. Then use those aliases
+#       instead of literal listing collection types. Update our pyih translator to support this.
+#
+#       Maybe move other global stuff there too. Could be imports?
 # select_values: collection of pairs × XPred
 def select_values[C: (list, set, frozenset)](pred: XPred[_V], coll: C[tuple[_K, _V]]) -> C[tuple[_K, _V]]: ...
 # select_values: dict/MutableMapping/Mapping
