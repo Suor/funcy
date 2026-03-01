@@ -233,6 +233,21 @@ reveal_type(select_values({1, 2}, d))  # R: dict[str, int]  # XFAIL[ty]: Set pre
 int_to_int_map: dict[int, str] = {1: "yes", 2: "yes"}
 reveal_type(select_values(int_to_int_map, d))  # R: dict[str, int]
 
+# -- select_keys / select_values: collection of pairs --
+sk_pairs: list[tuple[str, int]] = [("a", 1), ("b", 2), ("c", 3)]
+reveal_type(select_keys(pred_ne_c, sk_pairs))  # R: list[tuple[str, int]]
+reveal_type(select_values(pred_gt1, sk_pairs))  # R: list[tuple[str, int]]
+reveal_type(select_keys(None, sk_pairs))  # R: list[tuple[str, int]]
+reveal_type(select_values(None, sk_pairs))  # R: list[tuple[str, int]]
+reveal_type(select_keys({"a", "b"}, sk_pairs))  # R: list[tuple[str, int]]  # XFAIL[ty]: Set pred Any|str
+reveal_type(select_values({1, 2}, sk_pairs))  # R: list[tuple[str, int]]  # XFAIL[ty]: Set pred Any|int
+reveal_type(select_keys(r"[ab]", sk_pairs))  # R: list[tuple[str, int]]
+sk_pair_set: set[tuple[str, int]] = {("a", 1), ("b", 2)}
+reveal_type(select_keys(pred_ne_c, sk_pair_set))  # R: set[tuple[str, int]]
+reveal_type(select_values(pred_gt1, sk_pair_set))  # R: set[tuple[str, int]]
+reveal_type(select_keys(None, sk_pair_set))  # R: set[tuple[str, int]]
+reveal_type(select_values(None, sk_pair_set))  # R: set[tuple[str, int]]
+
 # -- select_keys / select_values with Mapping: XPred variants --
 reveal_type(select_keys(None, real_mapping))  # R: Mapping[str, int]
 reveal_type(select_keys({"a"}, real_mapping))  # R: Mapping[str, int]  # XFAIL[ty]: Set pred Any|str
