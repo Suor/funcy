@@ -1,9 +1,16 @@
 from typing import Any, assert_type
-from collections.abc import Iterable, Iterator, Mapping, Sequence
+from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
 
 # Real abstract-type implementations (not concrete types cast to abstract — checkers see through that)
 class StrIntMapping(Mapping[str, int]):
     def __getitem__(self, k: str) -> int: return 0
+    def __iter__(self) -> Iterator[str]: return iter([])
+    def __len__(self) -> int: return 0
+
+class StrIntMutableMapping(MutableMapping[str, int]):
+    def __getitem__(self, k: str) -> int: return 0
+    def __setitem__(self, k: str, v: int) -> None: pass
+    def __delitem__(self, k: str) -> None: pass
     def __iter__(self) -> Iterator[str]: return iter([])
     def __len__(self) -> int: return 0
 from funcy import (
@@ -124,6 +131,22 @@ reveal_type(walk_values(int_to_str, real_mapping))  # R: dict[str, str]
 reveal_type(select(pred_true, si_dict))  # R: dict[str, int]
 reveal_type(select(pred_gt0, int_list))  # R: list[int]
 reveal_type(select(pred_gt0, int_set))  # R: set[int]
+# select: XPred variants on list
+reveal_type(select(None, int_list))  # R: list[int]
+reveal_type(select({1, 2}, int_list))  # R: list[int]  # XFAIL[ty]: Set pred Any|int
+int_lookup: dict[int, str] = {1: "yes", 2: "yes"}
+reveal_type(select(int_lookup, int_list))  # R: list[int]
+# select: frozenset
+reveal_type(select(pred_gt0, int_fset))  # R: frozenset[int]
+reveal_type(select(None, int_fset))  # R: frozenset[int]
+# select: dict with Callable on pairs
+def pair_pred(pair: tuple[str, int]) -> bool: return pair[1] > 1
+reveal_type(select(pair_pred, si_dict))  # R: dict[str, int]
+# select: Mapping with Callable on pairs
+reveal_type(select(pred_true, real_mapping))  # R: Mapping[str, int]
+# select: MutableMapping with Callable on pairs
+real_mutable_mapping = StrIntMutableMapping()
+reveal_type(select(pred_true, real_mutable_mapping))  # R: MutableMapping[str, int]
 
 # -- select_keys / select_values: preserves collection type --
 d: dict[str, int] = {"a": 1, "b": 2, "c": 3}
@@ -132,6 +155,9 @@ reveal_type(select_values(pred_gt1, d))  # R: dict[str, int]
 # select_keys / select_values with real Mapping input preserves Mapping type
 reveal_type(select_keys(pred_ne_c, real_mapping))  # R: Mapping[str, int]
 reveal_type(select_values(pred_gt1, real_mapping))  # R: Mapping[str, int]
+# select_keys / select_values with MutableMapping
+reveal_type(select_keys(pred_ne_c, real_mutable_mapping))  # R: MutableMapping[str, int]
+reveal_type(select_values(pred_gt1, real_mutable_mapping))  # R: MutableMapping[str, int]
 
 # -- compact: preserves type --
 reveal_type(compact(d))  # R: dict[str, int]
