@@ -63,8 +63,9 @@ def walk_values[C: MAPS](f: XFunc[[_V], _V2], coll: C[_K, _V]) -> C[_K, _V2]: ..
 
 # dict/Mapping: pred receives (key, value) pairs, only Callable is meaningful
 # (must come before COLLS — dict is Iterable[K], so Iterable overload would shadow these)
-# FIX: should use coll parametrization here
 def select[C: MAPS](pred: Callable[[tuple[_K, _V]], Any], coll: C[_K, _V]) -> C[_K, _V]: ...
+# dict/Mapping: catch-all for _XFunc preds
+def select[C: MAPS](pred: _XFunc, coll: C[_K, _V]) -> C[_K, _V]: ...
 # 1-param collections × XPred
 def select[C: COLLS](pred: XPred[_T], coll: C[_T]) -> C[_T]: ...
 # catch-all for other collection types
