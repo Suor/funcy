@@ -21,12 +21,11 @@ flake8 funcy
 flake8 --select=F,E5,W tests
 
 # Type checking tests (validates stubs against # E: markers)
-# FIX: make ./type_tests/run.py (without arguments) run all three
-python type_tests/run.py mypy
+python type_tests/run.py          # run all three checkers
+python type_tests/run.py mypy     # run a single checker
 python type_tests/run.py pyright
 python type_tests/run.py ty
-
-# FIX: add ./type_tests/run.py coverage here 
+python type_tests/run.py coverage # verify all public names have type tests
 
 # Verify stubs match runtime signatures
 tox -e stubtest
