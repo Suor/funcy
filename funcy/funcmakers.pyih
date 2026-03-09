@@ -8,7 +8,7 @@ _K = TypeVar('_K')
 _T = TypeVar('_T')
 _V = TypeVar('_V')
 
-_Func = int | slice | str | bytes | re.Pattern[str] | Mapping[Any, Any] | AbstractSet[Any] | None
+_XFunc = Callable[..., Any] | int | slice | str | bytes | re.Pattern[str] | Mapping[Any, Any] | AbstractSet[Any] | None
 _ReResult: TypeAlias = str | tuple[str, ...] | dict[str, str]
 
 # make_func: return types reflect test=False (the default)

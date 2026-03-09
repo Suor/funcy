@@ -17,11 +17,10 @@ _V = TypeVar('_V')
 _V2 = TypeVar('_V2')
 _T = TypeVar('_T')
 
-# Non-callable types accepted by the extended function protocol (funcmakers.make_func):
-# int/slice for itemgetter, str/bytes/re.Pattern for regex,
+# All types accepted by the extended function protocol (funcmakers.make_func):
+# Callable, int/slice for itemgetter, str/bytes/re.Pattern for regex,
 # Mapping for lookup, Set for membership, None for identity/bool
-# FIX: should include Callable into _Func, it's unied anyway all the time, also name it _XFunc
-_Func = int | slice | str | bytes | re.Pattern[str] | Mapping[Any, Any] | AbstractSet[Any] | None
+_XFunc = Callable[..., Any] | int | slice | str | bytes | re.Pattern[str] | Mapping[Any, Any] | AbstractSet[Any] | None
 _ReResult: TypeAlias = str | tuple[str, ...] | dict[str, str]
 
 ### Generic ops
@@ -46,12 +45,12 @@ def merge_with(f: Callable[[list[Any]], _V], *dicts: Mapping[_K, Any]) -> dict[_
 # dict/MutableMapping/Mapping: typed Callable with pair→pair signature
 # (must come before COLLS — dict is Iterable[K], so Iterable overload would shadow)
 def walk[C: MAPS](f: Callable[[tuple[_K, _V]], tuple[_K2, _V2]], coll: C[_K, _V]) -> C[_K2, _V2]: ...
-# catch-alls for _Func and other collection types
-def walk[C: MAPS](f: Callable[..., Any] | _Func, coll: C[Any, Any]) -> C[Any, Any]: ...
+# catch-alls for _XFunc and other collection types
+def walk[C: MAPS](f: _XFunc, coll: C[Any, Any]) -> C[Any, Any]: ...
 # 1-param collections × XFunc (quadratic expansion)
 def walk[C: COLLS](f: XFunc[[_T], _V], coll: C[_T]) -> C[_V]: ...
 # catch-all for other collection types
-def walk(f: Callable[..., Any] | _Func, coll: _T) -> _T: ...
+def walk(f: _XFunc, coll: _T) -> _T: ...
 
 # walk_keys: collection of pairs × XFunc
 # xfunc_skip: slice
@@ -69,7 +68,7 @@ def select[C: MAPS](pred: Callable[[tuple[_K, _V]], Any], coll: C[_K, _V]) -> C[
 # 1-param collections × XPred
 def select[C: COLLS](pred: XPred[_T], coll: C[_T]) -> C[_T]: ...
 # catch-all for other collection types
-def select(pred: Callable[..., Any] | _Func, coll: _T) -> _T: ...
+def select(pred: _XFunc, coll: _T) -> _T: ...
 # select_keys: collection of pairs × XPred
 def select_keys[C: COLLS](pred: XPred[_K], coll: C[tuple[_K, _V]]) -> C[tuple[_K, _V]]: ...
 # select_keys: dict/MutableMapping/Mapping
