@@ -17,6 +17,7 @@ _K = TypeVar('_K')
 _K2 = TypeVar('_K2')
 _V = TypeVar('_V')
 _V2 = TypeVar('_V2')
+_W = TypeVar('_W')
 _T = TypeVar('_T')
 
 # All types accepted by the extended function protocol (funcmakers.make_func):
@@ -39,10 +40,8 @@ def merge(__coll: _T, *colls: _T) -> _T: ...
 @overload
 def merge() -> None: ...
 
-# FIX: should be able to say that Callable accepts Iterable of the same type as dict values have
-#      or wider. Add tests for both same and wider first. Test that should fail type check too.
-def join_with(f: Callable[[list[Any]], _V], dicts: Iterable[Mapping[_K, Any]], strict: bool = ...) -> dict[_K, _V]: ...
-def merge_with(f: Callable[[list[Any]], _V], *dicts: Mapping[_K, Any]) -> dict[_K, _V]: ...
+def join_with(f: Callable[[list[_W]], _V], dicts: Iterable[Mapping[_K, _W]], strict: bool = ...) -> dict[_K, _V]: ...
+def merge_with(f: Callable[[list[_W]], _V], *dicts: Mapping[_K, _W]) -> dict[_K, _V]: ...
 
 ### Walk / Select
 
