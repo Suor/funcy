@@ -330,16 +330,8 @@ def validate_file(filepath, expected, skipped, expected_reveals, error_markers,
     return failures
 
 
-def main():
-    if len(sys.argv) != 2 or sys.argv[1] not in {*CHECKERS, "coverage"}:
-        print(f"Usage: {sys.argv[0]} {{{','.join(CHECKERS)},coverage}}")
-        sys.exit(2)
-
-    if sys.argv[1] == "coverage":
-        check_coverage(TEST_DIR)
-        return
-
-    checker = sys.argv[1]
+def run_checker(checker):
+    """Run a single type checker and validate results. Returns True on success."""
     print(f"Running {checker} on {TEST_DIR}...")
 
     expected, skipped, expected_reveals, error_markers = parse_markers(TEST_DIR, checker)
@@ -364,10 +356,29 @@ def main():
 
     if not failures:
         print(f"OK - {checker}: all type errors match expectations")
+        return True
     else:
         for msg in failures:
             print(msg)
         print(f"FAIL - {checker}: type error mismatches found")
+        return False
+
+
+def main():
+    valid = {*CHECKERS, "coverage", "all"}
+    if len(sys.argv) > 2 or (len(sys.argv) == 2 and sys.argv[1] not in valid):
+        print(f"Usage: {sys.argv[0]} [{','.join(CHECKERS)},coverage,all]")
+        sys.exit(2)
+
+    command = sys.argv[1] if len(sys.argv) == 2 else "all"
+
+    if command == "coverage":
+        check_coverage(TEST_DIR)
+        return
+
+    checkers = list(CHECKERS) if command == "all" else [command]
+    failed = [c for c in checkers if not run_checker(c)]
+    if failed:
         sys.exit(1)
 
 
