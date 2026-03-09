@@ -360,6 +360,14 @@ dict_pair2: list[dict[str, int]] = [d1, d2]
 def add_all(xs: list[int]) -> int: return 0
 reveal_type(join_with(add_all, dict_pair2))  # R: dict[str, int]
 reveal_type(merge_with(add_all, d1, d2))  # R: dict[str, int]
+# wider Callable: accepts Iterable[int] instead of list[int]
+def sum_iter(xs: Iterable[int]) -> int: return 0
+reveal_type(join_with(sum_iter, dict_pair2))  # R: dict[str, int]
+reveal_type(merge_with(sum_iter, d1, d2))  # R: dict[str, int]
+# wrong value type: Callable accepts list[str] but dicts have int values
+def join_strs(xs: list[str]) -> str: return ""
+join_with(join_strs, dict_pair2)  # E: value type mismatch
+merge_with(join_strs, d1, d2)  # E: value type mismatch
 
 # -- Extended function protocol in predicates (int, str) --
 reveal_type(all(r"\d+", strs))  # R: bool
