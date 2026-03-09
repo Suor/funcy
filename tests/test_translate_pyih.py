@@ -1,5 +1,11 @@
 """Tests for the .pyih -> .pyi translator."""
-# FIX: only run this in Python 3.12+
+import sys
+import pytest
+
+pytestmark = pytest.mark.skipif(
+    sys.version_info < (3, 12), reason="translate_pyih requires Python 3.12+ (PEP 695 syntax)"
+)
+
 from translate_pyih import parse_pyih, generate_func_group, generate_pyi
 
 
