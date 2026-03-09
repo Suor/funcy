@@ -201,20 +201,24 @@ reveal_type(select_values(pred_gt1, real_mutable_mapping))  # R: MutableMapping[
 # -- compact: preserves type --
 reveal_type(compact(d))  # R: dict[str, int]
 maybe_list: list[int | None] = [0, 1, None, 2]
-reveal_type(compact(maybe_list))  # R: list[int | None]
+reveal_type(compact(maybe_list))  # R: list[int]
 # compact: set, frozenset
 maybe_set: set[int | None] = {0, 1, None, 2}
-# FIX: can we type that it removes | None? if not we should add a failing test. But maybe guards
-#      will do the trick
-reveal_type(compact(maybe_set))  # R: set[int | None]
+reveal_type(compact(maybe_set))  # R: set[int]
 maybe_fset: frozenset[int | None] = frozenset({0, 1, None, 2})
-reveal_type(compact(maybe_fset))  # R: frozenset[int | None]
-# compact: Mapping and MutableMapping (collection of pairs — filters by value truthiness)
+reveal_type(compact(maybe_fset))  # R: frozenset[int]
+# compact: dict with None values — strips None
+maybe_dict: dict[str, int | None] = {"a": 1, "b": None}
+reveal_type(compact(maybe_dict))  # R: dict[str, int]
+# compact: Mapping and MutableMapping without None
 reveal_type(compact(real_mapping))  # R: Mapping[str, int]
 reveal_type(compact(real_mutable_mapping))  # R: MutableMapping[str, int]
 # compact: collection of pairs as list[tuple[K, V]]
 compact_pairs: list[tuple[str, int | None]] = [("a", 1), ("b", None), ("c", 0)]
 reveal_type(compact(compact_pairs))  # R: list[tuple[str, int | None]]
+# compact on list without None in element type
+non_none_list: list[int] = [0, 1, 2]
+reveal_type(compact(non_none_list))  # R: list[int]
 
 # -- empty: preserves type --
 reveal_type(empty(d))  # R: dict[str, int]
