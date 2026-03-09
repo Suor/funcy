@@ -75,7 +75,7 @@ def to_bytes(x: int) -> bytes: return str(x).encode()
 reveal_type(juxt(int_to_str, to_bytes))  # R: (...) -> Iterator[str | bytes]
 reveal_type(ljuxt(int_to_str, to_bytes))  # R: (...) -> list[str | bytes]
 
-# -- juxt / ljuxt: _Func fallback --
+# -- juxt / ljuxt: _XFunc fallback --
 reveal_type(juxt(int_to_str, None))  # R: (...) -> Iterator[Any]
 reveal_type(ljuxt(int_to_str, None))  # R: (...) -> list[Any]
 
