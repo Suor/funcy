@@ -9,4 +9,3 @@ docs/_build
 htmlcov
 .cache
 .pytest_cache
-!GEMINI.md
