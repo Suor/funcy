@@ -185,6 +185,14 @@ def parse_func_node(node: ast.FunctionDef, xfunc_skip: set) -> dict:
     #      with incremental steps: (1) add ast.expr to param tuples alongside strings,
     #      (2) switch XFunc/XPred detection to AST, (3) switch substitutions to AST transforms,
     #      (4) remove string intermediaries. Verify output unchanged after each step.
+    # FIX: actually three sane approaches here:
+    #      1. Revert to string usage, do not mix regex and ast
+    #      2. Use ast everywhere
+    #      3. Use ast to parse but store as dicts and other nested collections, which will
+    #         be easier to use downstream.
+    #      Should evaluate all three (not destroying the current implementation) and compare. In the
+    #      extreme maybe we should implement it all three ways - control that it behaves the same.
+    #      And then compare the scripts.
     params = []
     for j, arg in enumerate(all_args):
         pname = arg.arg
