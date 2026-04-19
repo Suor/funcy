@@ -2,9 +2,10 @@
 import sys
 import pytest
 
-pytestmark = pytest.mark.skipif(
-    sys.version_info < (3, 12), reason="translate_pyih requires Python 3.12+ (PEP 695 syntax)"
-)
+if sys.version_info < (3, 12):
+    pytest.skip(
+        "translate_pyih requires Python 3.12+ (PEP 695 syntax)", allow_module_level=True
+    )
 
 from translate_pyih import parse_pyih, generate_func_group, generate_pyi
 
