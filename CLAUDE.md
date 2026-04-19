@@ -1,5 +1,3 @@
-# CLAUDE.md
-
 ## Project Overview
 
 Funcy is a Python library of functional programming tools. It has zero runtime dependencies and supports Python 3.4+ and PyPy3.
