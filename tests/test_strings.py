@@ -19,11 +19,24 @@ def test_str_join():
     assert str_join('_', [1, 2, 3]) == '1_2_3'
     assert isinstance(str_join(u'_', [1, 2, 3]), type(u''))
 
+def test_str_join_empty():
+    assert str_join('-', []) == ''
+    assert str_join([]) == ''
 
 def test_cut_prefix():
     assert cut_prefix('name:alex', 'name:') == 'alex'
     assert cut_prefix('alex', 'name:') == 'alex'
 
+def test_cut_prefix_edge_cases():
+    assert cut_prefix('', 'x') == ''
+    assert cut_prefix('abc', 'abc') == ''
+    assert cut_prefix('abc', '') == 'abc'
+
 def test_cut_suffix():
     assert cut_suffix('name.py', '.py') == 'name'
     assert cut_suffix('name', '.py') == 'name'
+
+def test_cut_suffix_edge_cases():
+    assert cut_suffix('', 'x') == ''
+    assert cut_suffix('abc', 'abc') == ''
+    assert cut_suffix('abc', 'ab') == 'abc'
