@@ -131,8 +131,19 @@ def get_spec(func, _cache={}):
         # We use signature last to be fully backwards compatible. Also it's slower
         try:
             sig = signature(func)
-            # import ipdb; ipdb.set_trace()
         except (ValueError, TypeError):
+            # Unbound methods of built-in types (e.g. str.endswith, list.append) are
+            # method_descriptor objects that expose __objclass__ but have no inspectable
+            # signature on CPython.  Treat them as two-positional-argument functions:
+            # the first is the implicit self and the second is the primary method argument.
+            # This lets curry()/rcurry()/autocurry() work without an explicit n=.
+            if getattr(func, '__objclass__', None) is not None:
+                spec = Spec(max_n=2, names=set(), req_n=2, req_names={'*', '*'}, varkw=False)
+                try:
+                    _cache[func] = spec
+                except TypeError:
+                    pass
+                return spec
             raise ValueError('Unable to introspect %s() arguments'
                 % (getattr(func, '__qualname__', None) or getattr(func, '__name__', func)))
         else:

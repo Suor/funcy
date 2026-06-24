@@ -56,6 +56,13 @@ def test_rcurry():
     assert rcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
     assert rcurry(str.endswith, 2)('c')('abc') is True
 
+def test_curry_builtin_method():
+    # Unbound built-in methods (method_descriptor) should be introspectable
+    # without requiring an explicit n=. See issue #108.
+    assert curry(str.endswith)('abc')('c') is True
+    assert rcurry(str.endswith)('c')('abc') is True
+    assert rcurry(str.startswith)('ab')('abc') is True
+
 def test_autocurry():
     at = autocurry(lambda a, b, c: (a, b, c))
 
