@@ -165,10 +165,26 @@ def test_partition():
     assert lpartition(2, iter(range(5))) == [[0, 1], [2, 3]]
     assert lmap(list, lpartition(2, range(5))) == [[0, 1], [2, 3]]
 
+def test_partition_rejects_non_positive_n_or_step():
+    with pytest.raises(ValueError):
+        list(partition(2, 0, iter([1, 2, 3, 4])))
+    with pytest.raises(ValueError):
+        lpartition(2, 0, [1, 2, 3, 4])
+    with pytest.raises(ValueError):
+        lpartition(0, [1, 2, 3])
+    with pytest.raises(ValueError):
+        list(partition(0, iter([1, 2, 3])))
+
 def test_chunks():
     assert lchunks(2, [0, 1, 2, 3, 4]) == [[0, 1], [2, 3], [4]]
     assert lchunks(2, 1, [0, 1, 2, 3]) == [[0, 1], [1, 2], [2, 3], [3]]
     assert lchunks(3, 1, iter(range(3))) == [[0, 1, 2], [1, 2], [2]]
+
+def test_chunks_rejects_non_positive_n_or_step():
+    with pytest.raises(ValueError):
+        list(chunks(2, 0, iter([1, 2, 3, 4])))
+    with pytest.raises(ValueError):
+        lchunks(0, [1, 2, 3])
 
 def test_partition_by():
     assert lpartition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
