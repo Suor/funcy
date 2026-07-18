@@ -27,7 +27,7 @@ def test_cut_prefix():
 def test_cut_suffix():
     assert cut_suffix('name.py', '.py') == 'name'
     assert cut_suffix('name', '.py') == 'name'
-    # Empty suffix is a no-op (same as str.removesuffix); s[:-0] would wipe s.
+    # Empty suffix is a no-op (same as str.removesuffix).
     assert cut_suffix('name.py', '') == 'name.py'
     assert cut_suffix(b'name.py', b'') == b'name.py'
     assert cut_suffix('', '') == ''

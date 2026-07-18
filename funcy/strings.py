@@ -75,5 +75,5 @@ def cut_prefix(s, prefix):
 
 def cut_suffix(s, suffix):
     """Cuts suffix from given string if it's present."""
-    # Empty suffix is always a suffix; s[:-0] is '' so guard like str.removesuffix.
-    return s[:-len(suffix)] if suffix and s.endswith(suffix) else s
+    # Use len-based slice: s[:-0] is '' so empty suffix would wipe s.
+    return s[: len(s) - len(suffix)] if s.endswith(suffix) else s
