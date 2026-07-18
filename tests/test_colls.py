@@ -29,6 +29,13 @@ def test_empty_iter():
     assert isinstance(it, Iterator)
     assert list(it) == []
 
+def test_empty_str_bytes():
+    assert empty('') == ''
+    assert empty('abc') == ''
+    assert empty(b'') == b''
+    assert empty(b'abc') == b''
+    assert empty(bytearray(b'abc')) == bytearray()
+
 def test_empty_quirks():
     class A:
         FLAG = 1
@@ -56,6 +63,8 @@ def test_join():
     assert join([]) is None
     with pytest.raises(TypeError): join([1])
     assert eq(join(['ab', '', 'cd']), 'abcd')
+    assert eq(join([b'ab', b'', b'cd']), b'abcd')
+    assert eq(merge(b'a', b'bc'), b'abc')
     assert eq(join([['a', 'b'], 'c']), list('abc'))
     assert eq(join([('a', 'b'), ('c',)]), tuple('abc'))
     assert eq(join([{'a': 1}, {'b': 2}]), {'a': 1, 'b': 2})

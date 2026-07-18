@@ -49,6 +49,9 @@ def empty(coll):
     """Creates an empty collection of the same type."""
     if isinstance(coll, Iterator):
         return iter([])
+    # _factory returns ''.join/b''.join, which cannot be called with zero args.
+    if isinstance(coll, (bytes, str)):
+        return type(coll)()
     return _factory(coll)()
 
 def iteritems(coll):
@@ -72,7 +75,8 @@ def join(colls):
     cls = dest.__class__
 
     if isinstance(dest, (bytes, str)):
-        return ''.join(colls)
+        # dest[:0] is '' or b'' so bytes join does not go through str.join.
+        return dest[:0].join(colls)
     elif isinstance(dest, Mapping):
         result = dest.copy()
         for d in it:
