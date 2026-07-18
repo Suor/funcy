@@ -354,3 +354,10 @@ def test_pluck_attr():
 
 def test_invoke():
     assert linvoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
+
+
+def test_empty_str_bytes():
+    assert empty('abc') == ''
+    assert empty(b'abc') == b''
+    assert empty('') == ''
+    assert empty(b'') == b''
