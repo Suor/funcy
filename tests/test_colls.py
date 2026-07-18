@@ -164,6 +164,15 @@ def test_compact():
     assert eq(compact({'a': None, 'b': 0, 'c': 1}), {'c': 1})
 
 
+def test_compact_select_walk_bytes():
+    # bytes iterates as ints; factory must rebuild with bytes(), not b''.join.
+    assert compact(b'a\x00b\x00c') == b'abc'
+    assert select(lambda x: x > 50, b'abc') == b'abc'
+    assert select(lambda x: x < 50, b'a\x00b') == b'\x00'
+    assert walk(lambda x: x + 1, b'ab') == b'bc'
+    assert eq(compact(bytearray(b'a\x00b')), bytearray(b'ab'))
+
+
 def test_is_distinct():
     assert is_distinct('abc')
     assert not is_distinct('aba')
