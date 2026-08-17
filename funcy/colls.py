@@ -72,7 +72,7 @@ def join(colls):
     cls = dest.__class__
 
     if isinstance(dest, (bytes, str)):
-        return ''.join(colls)
+        return cls().join(colls)
     elif isinstance(dest, Mapping):
         result = dest.copy()
         for d in it:
