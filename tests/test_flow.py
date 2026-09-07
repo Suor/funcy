@@ -241,6 +241,23 @@ def test_once_per_args():
     assert calls == [1, 2, 1]
 
 
+@pytest.mark.parametrize('decorate', [once_per('n'), once_per_args])
+@pytest.mark.parametrize('make_value', [list, dict, set, lambda: ([],)])
+def test_once_per_unhashable_arguments(decorate, make_value):
+    calls = []
+
+    @decorate
+    def call(n):
+        calls.append(n)
+        return 'called'
+
+    assert call(make_value()) == 'called'
+    assert call(n=make_value()) is None
+    assert call('other') == 'called'
+    assert call('other') is None
+    assert calls == [make_value(), 'other']
+
+
 def test_wrap_with():
     calls = []
 
