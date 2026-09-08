@@ -88,6 +88,32 @@ def test_memoize_key_func():
     assert calls == ['a', 'ab']
 
 
+def test_cache_expiration_preserves_refilled_key(monkeypatch):
+    now = [0]
+    monkeypatch.setattr('funcy.calc.time.time', lambda: now[0])
+    calls = []
+
+    @cache(10)
+    def cached(key):
+        calls.append(key)
+        return len(calls)
+
+    assert cached('refilled') == 1
+    assert cached('expired') == 2
+    now[0] = 5
+    cached.invalidate('refilled')
+    assert cached('refilled') == 3
+
+    now[0] = 10
+    assert cached('expired') == 4
+    assert cached('refilled') == 3
+    assert calls == ['refilled', 'expired', 'refilled', 'expired']
+
+    now[0] = 15
+    assert cached('refilled') == 5
+    assert cached('expired') == 4
+
+
 def test_make_lookuper():
     @make_lookuper
     def letter_index():

@@ -92,8 +92,11 @@ class CacheMemory(dict):
     def expire(self):
         i = bisect(self._expires, time.time())
         for _ in range(i):
-            self._expires.popleft()
-            self.pop(self._keys.popleft(), None)
+            expires_at = self._expires.popleft()
+            key = self._keys.popleft()
+            entry = dict.get(self, key)
+            if entry is not None and entry[1] <= expires_at:
+                self.pop(key, None)
 
     def clear(self):
         dict.clear(self)
