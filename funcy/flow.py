@@ -1,4 +1,3 @@
-from collections.abc import Hashable
 from datetime import datetime, timedelta
 import time
 import threading
@@ -220,10 +219,12 @@ def once_per(*argnames):
         def wrapper(*args, **kwargs):
             with lock:
                 values = tuple(get_arg(name, args, kwargs) for name in argnames)
-                if isinstance(values, Hashable):
-                    done, add = done_set, done_set.add
-                else:
+                try:
+                    hash(values)
+                except TypeError:
                     done, add = done_list, done_list.append
+                else:
+                    done, add = done_set, done_set.add
 
                 if values not in done:
                     add(values)
