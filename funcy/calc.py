@@ -25,7 +25,7 @@ def memoize(_func=None, *, key_func=None):
     Exposes its memory via .memory attribute.
     """
     if _func is not None:
-        return memoize()(_func)
+        return memoize(key_func=key_func)(_func)
     return _memory_decorator({}, key_func)
 
 memoize.skip = SkipMemory

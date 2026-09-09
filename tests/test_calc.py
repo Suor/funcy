@@ -88,6 +88,23 @@ def test_memoize_key_func():
     assert calls == ['a', 'ab']
 
 
+def test_memoize_direct_key_func():
+    calls = []
+
+    def total(values):
+        calls.append(list(values))
+        return sum(values)
+
+    cached_total = memoize(total, key_func=tuple)
+    assert cached_total([1, 2]) == 3
+    assert cached_total([1, 2]) == 3
+    assert calls == [[1, 2]]
+
+    cached_total.invalidate([1, 2])
+    assert cached_total([1, 2]) == 3
+    assert calls == [[1, 2], [1, 2]]
+
+
 def test_make_lookuper():
     @make_lookuper
     def letter_index():
