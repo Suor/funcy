@@ -1,3 +1,17 @@
+2.1
+- support Python 3.12, 3.13, 3.14 officially
+- added split_keys()
+- preserve key_func when memoize is called directly (Jack Walker)
+- preserve refilled cache values during stale expiration (Jack Walker)
+- fixed once_per handling of unhashable arguments (Alexandre Rodrigues)
+- fixed join() raises TypeError when joining bytes (Kotesh Kumar Yelamati)
+- fixed func inspection for PyPy builtins methods, i.e. str.split()
+- fixed partition()/chunks when step > n (DualFroz)
+- fixed cut_suffix("") returning empty string (Kotesh Kumar Yelamati)
+- reexport reduce (Michael Bianco)
+- some optimizations
+- improved docs and examples
+
 2.0
 - support Python 3.11 officially
 - added get_lax()
