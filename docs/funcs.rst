@@ -13,7 +13,13 @@ Functions
 
 .. function:: caller(*args, **kwargs)
 
-    Returns function calling its argument with passed arguments.
+    Returns function calling its argument with passed arguments::
+
+        apply_operation_to_values = caller([2,4])
+        apply_operation_to_values(sum)
+        # 6
+        apply_operation_to_values(math.prod)
+        # 8
 
 
 .. function:: partial(func, *args, **kwargs)
