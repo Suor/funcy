@@ -27,7 +27,7 @@ class StrIntMutableMapping(MutableMapping[str, int]):
     def __len__(self) -> int: return 0
 
 class IntSequence(Sequence[int]):
-    def __getitem__(self, index: int) -> int: return 0  # type: ignore[override]
+    def __getitem__(self, index: int) -> int: return 0  # type: ignore[override]  # ty: ignore[invalid-method-override]
     def __len__(self) -> int: return 0
 
 
@@ -68,15 +68,14 @@ reveal_type(merge(int_set, int_set))  # R: set[int]
 reveal_type(join(dict_list))  # R: dict[str, int] | None
 reveal_type(join(int_list_list))  # R: list[int] | None
 reveal_type(join(int_set_list))  # R: set[int] | None
-# Canary: detect when ty starts inferring types of inline list literals
-assert_type(join([{"a": 1}, {"b": 2}]), dict[str, int] | None)  # XFAIL[ty]: inline list literal Unknown
+assert_type(join([{"a": 1}, {"b": 2}]), dict[str, int] | None)
 
 # -- walk_keys: Callable transforms keys, values preserved --
 def str_key_to_int(k: str) -> int: return ord(k)
 reveal_type(walk_keys(str_key_to_int, si_dict))  # R: dict[int, int]
 reveal_type(walk_keys(str.upper, si_dict))  # R: dict[str, int]
 # walk_keys: Canary for ty builtin overload resolution
-reveal_type(walk_keys(len, si_dict))  # R: dict[int, int]  # XFAIL[ty]: len overload not matched
+reveal_type(walk_keys(len, si_dict))  # R: dict[int, int]
 # walk_keys: None = identity
 reveal_type(walk_keys(None, si_dict))  # R: dict[str, int]
 # walk_keys: Set = membership -> bool keys
@@ -137,7 +136,7 @@ str_int_pairs: list[tuple[str, int]] = [("a", 1), ("b", 2)]
 def transform_pair(p: tuple[str, int]) -> tuple[int, str]: return (p[1], str(p[0]))
 reveal_type(walk(transform_pair, str_int_pairs))  # R: list[tuple[int, str]]
 reveal_type(walk(None, str_int_pairs))  # R: list[tuple[str, int]]
-reveal_type(walk(str, str_int_pairs))  # R: list[str]  # XFAIL[ty]: TypeVar inference gives list[tuple[str, int]]
+reveal_type(walk(str, str_int_pairs))  # R: list[str]
 
 # -- walk_keys: MutableMapping returns dict --
 reveal_type(walk_keys(str_key_to_int, real_mutable_mapping))  # R: MutableMapping[int, int]
@@ -173,7 +172,7 @@ reveal_type(select(pred_gt0, int_list))  # R: list[int]
 reveal_type(select(pred_gt0, int_set))  # R: set[int]
 # select: XPred variants on list
 reveal_type(select(None, int_list))  # R: list[int]
-reveal_type(select({1, 2}, int_list))  # R: list[int]  # XFAIL[ty]: Set pred Any|int
+reveal_type(select({1, 2}, int_list))  # R: list[int]
 int_lookup: dict[int, str] = {1: "yes", 2: "yes"}
 reveal_type(select(int_lookup, int_list))  # R: list[int]
 # select: frozenset
@@ -234,14 +233,14 @@ reveal_type(split_keys(r"\d+", d))  # R: tuple[dict[str, int], dict[str, int]]
 
 # -- select_keys: XPred variants --
 reveal_type(select_keys(None, d))  # R: dict[str, int]
-reveal_type(select_keys({"a", "b"}, d))  # R: dict[str, int]  # XFAIL[ty]: Set pred Any|str
+reveal_type(select_keys({"a", "b"}, d))  # R: dict[str, int]
 reveal_type(select_keys(r"\w+", d))  # R: dict[str, int]
 key_lookup: dict[str, int] = {"a": 1, "b": 2}
 reveal_type(select_keys(key_lookup, d))  # R: dict[str, int]
 
 # -- select_values: XPred variants --
 reveal_type(select_values(None, d))  # R: dict[str, int]
-reveal_type(select_values({1, 2}, d))  # R: dict[str, int]  # XFAIL[ty]: Set pred Any|int
+reveal_type(select_values({1, 2}, d))  # R: dict[str, int]
 int_to_int_map: dict[int, str] = {1: "yes", 2: "yes"}
 reveal_type(select_values(int_to_int_map, d))  # R: dict[str, int]
 
@@ -251,8 +250,8 @@ reveal_type(select_keys(pred_ne_c, sk_pairs))  # R: list[tuple[str, int]]
 reveal_type(select_values(pred_gt1, sk_pairs))  # R: list[tuple[str, int]]
 reveal_type(select_keys(None, sk_pairs))  # R: list[tuple[str, int]]
 reveal_type(select_values(None, sk_pairs))  # R: list[tuple[str, int]]
-reveal_type(select_keys({"a", "b"}, sk_pairs))  # R: list[tuple[str, int]]  # XFAIL[ty]: Set pred Any|str
-reveal_type(select_values({1, 2}, sk_pairs))  # R: list[tuple[str, int]]  # XFAIL[ty]: Set pred Any|int
+reveal_type(select_keys({"a", "b"}, sk_pairs))  # R: list[tuple[str, int]]
+reveal_type(select_values({1, 2}, sk_pairs))  # R: list[tuple[str, int]]
 reveal_type(select_keys(r"[ab]", sk_pairs))  # R: list[tuple[str, int]]
 sk_pair_set: set[tuple[str, int]] = {("a", 1), ("b", 2)}
 reveal_type(select_keys(pred_ne_c, sk_pair_set))  # R: set[tuple[str, int]]
@@ -262,18 +261,18 @@ reveal_type(select_values(None, sk_pair_set))  # R: set[tuple[str, int]]
 
 # -- select_keys / select_values with Mapping: XPred variants --
 reveal_type(select_keys(None, real_mapping))  # R: Mapping[str, int]
-reveal_type(select_keys({"a"}, real_mapping))  # R: Mapping[str, int]  # XFAIL[ty]: Set pred Any|str
+reveal_type(select_keys({"a"}, real_mapping))  # R: Mapping[str, int]
 reveal_type(select_values(None, real_mapping))  # R: Mapping[str, int]
-reveal_type(select_values({1, 2}, real_mapping))  # R: Mapping[str, int]  # XFAIL[ty]: Set pred Any|int
+reveal_type(select_values({1, 2}, real_mapping))  # R: Mapping[str, int]
 
 # -- split_keys: XPred variants --
 reveal_type(split_keys(None, d))  # R: tuple[dict[str, int], dict[str, int]]
-reveal_type(split_keys({"a"}, d))  # R: tuple[dict[str, int], dict[str, int]]  # XFAIL[ty]: Set pred Any|str
+reveal_type(split_keys({"a"}, d))  # R: tuple[dict[str, int], dict[str, int]]
 reveal_type(split_keys(key_lookup, d))  # R: tuple[dict[str, int], dict[str, int]]
 
 # -- some: XPred variants --
 reveal_type(some(r"\d+", strs))  # R: str | None
-reveal_type(some({1, 2}, int_list))  # R: int | None  # XFAIL[ty]: Set pred Any|int
+reveal_type(some({1, 2}, int_list))  # R: int | None
 
 # -- flip / project / omit: preserve collection type --
 reveal_type(flip(d))  # R: dict[int, str]
@@ -281,12 +280,12 @@ reveal_type(project(d, str_keys))  # R: dict[str, int]
 reveal_type(omit(d, str_keys))  # R: dict[str, int]
 # flip / project / omit with real Mapping
 reveal_type(flip(real_mapping))  # R: Mapping[int, str]
-reveal_type(project(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: TypeVar unification across Mapping + Iterable params gives str | Unknown
-reveal_type(omit(real_mapping, ["a"]))  # R: Mapping[str, int]  # XFAIL[ty]: TypeVar unification across Mapping + Iterable params gives str | Unknown
+reveal_type(project(real_mapping, ["a"]))  # R: Mapping[str, int]
+reveal_type(omit(real_mapping, ["a"]))  # R: Mapping[str, int]
 # flip / project / omit with real MutableMapping
 reveal_type(flip(real_mutable_mapping))  # R: MutableMapping[int, str]
-reveal_type(project(real_mutable_mapping, ["a"]))  # R: MutableMapping[str, int]  # XFAIL[ty]: TypeVar unification across MutableMapping + Iterable params gives str | Unknown
-reveal_type(omit(real_mutable_mapping, ["a"]))  # R: MutableMapping[str, int]  # XFAIL[ty]: TypeVar unification across MutableMapping + Iterable params gives str | Unknown
+reveal_type(project(real_mutable_mapping, ["a"]))  # R: MutableMapping[str, int]
+reveal_type(omit(real_mutable_mapping, ["a"]))  # R: MutableMapping[str, int]
 # flip with collection of pairs
 reveal_type(flip(str_int_pairs))  # R: list[tuple[int, str]]
 reveal_type(flip(str_int_pair_set))  # R: set[tuple[int, str]]
@@ -405,8 +404,8 @@ reveal_type(compact(real_sequence))  # R: Sequence[int]
 
 # -- New collection types: Iterator --
 int_iter: Iterator[int] = iter([1, 2, 3])
-reveal_type(walk(int_to_str, int_iter))  # R: Iterator[str]  # XFAIL[ty]: Iterator gives Any
-reveal_type(select(pred_gt0, int_iter))  # R: Iterator[int]  # XFAIL[ty]: Iterator gives Any
+reveal_type(walk(int_to_str, int_iter))  # R: Iterator[str]
+reveal_type(select(pred_gt0, int_iter))  # R: Iterator[int]
 
 # -- Should be errors --
 walk(int_to_str, int_list, int_list)  # E: too many arguments
