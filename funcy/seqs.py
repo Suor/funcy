@@ -363,8 +363,12 @@ def _cut_iter(drop_tail, n, step, seq):
         if len(pool) < n:
             break
         yield pool
-        pool = pool[step:]
-        pool.extend(islice(it, step))
+        if step < n:
+            pool = pool[step:]
+            pool.extend(islice(it, step))
+        else:
+            take(step - n, it)  # discard the gap between parts
+            pool = take(n, it)
     if not drop_tail:
         for item in _cut_seq(drop_tail, n, step, pool):
             yield item

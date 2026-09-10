@@ -170,6 +170,18 @@ def test_chunks():
     assert lchunks(2, 1, [0, 1, 2, 3]) == [[0, 1], [1, 2], [2, 3], [3]]
     assert lchunks(3, 1, iter(range(3))) == [[0, 1, 2], [1, 2], [2]]
 
+def test_partition_step_gt_n():
+    # The iterator path must skip step - n items between parts, like the
+    # Sequence path, when step > n.
+    assert lpartition(2, 3, iter(range(10))) == lpartition(2, 3, list(range(10)))
+    assert lpartition(2, 3, iter(range(10))) == [[0, 1], [3, 4], [6, 7]]
+
+def test_chunks_step_gt_n():
+    # The iterator path must skip step - n items between parts, like the
+    # Sequence path, when step > n.
+    assert lchunks(2, 3, iter(range(10))) == lchunks(2, 3, list(range(10)))
+    assert lchunks(2, 3, iter(range(10))) == [[0, 1], [3, 4], [6, 7], [9]]
+
 def test_partition_by():
     assert lpartition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
     assert lpartition_by('x', 'abxcd') == [['a', 'b'], ['x'], ['c', 'd']]
