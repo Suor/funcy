@@ -67,7 +67,7 @@ reveal_type(make_pred(b"\\d+"))             # R: (str) -> bool
 reveal_type(make_pred(re.compile(r"\d+")))  # R: (str) -> bool
 
 # -- Mapping: lookup (used as predicate) --
-reveal_type(make_pred({"a": 1}))  # R: (str) -> int  # XFAIL[ty]: can't infer Mapping TypeVars
+reveal_type(make_pred({"a": 1}))  # R: (str) -> int
 
 # -- Set: membership test --
 int_set: set[int] = {1, 2, 3}

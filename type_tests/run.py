@@ -16,6 +16,7 @@ Usage:
     python type_tests/run.py ty
 """
 import glob
+import json
 import os
 import re
 import subprocess
@@ -124,7 +125,6 @@ def run_pyright(test_dir):
     errors = {}  # {filepath: {lineno: message}}
     reveals = {}  # {filepath: {lineno: revealed_type}}
     try:
-        import json
         data = json.loads(result.stdout)
         for diag in data.get("generalDiagnostics", []):
             filepath = os.path.abspath(diag["file"])

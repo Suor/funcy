@@ -32,6 +32,6 @@ reveal_type(render2)  # R: (text: str) -> str
 # -- wraps preserves wrapper type --
 def original(x: int, y: str) -> bool: return True
 def wrapper(*args: object, **kwargs: object) -> bool:
-    return original(*args, **kwargs)  # type: ignore[arg-type]
+    return original(*args, **kwargs)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 wrapped = wraps(original)(wrapper)
 reveal_type(wrapped)  # R: (x: int, y: str) -> bool
