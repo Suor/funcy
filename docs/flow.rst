@@ -1,6 +1,8 @@
 Flow
 ====
 
+.. module:: funcy.flow
+
 .. decorator:: silent
 
     Ignore all real exceptions (descendants of :exc:`~py3:exceptions.Exception`). Handy for cleaning data such as user input::
