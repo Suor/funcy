@@ -56,6 +56,13 @@ def test_rcurry():
     assert rcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
     assert rcurry(str.endswith, 2)('c')('abc') is True
 
+def test_rcurry_method_descriptor():
+    # Regression test for https://github.com/Suor/funcy/issues/108 --
+    # get_spec() should introspect method descriptors of builtin types
+    # (which have no __module__) instead of crashing.
+    assert rcurry(str.endswith)('.py')('test.py') is True
+    assert rcurry(str.startswith)('test')('test.py') is True
+
 def test_autocurry():
     at = autocurry(lambda a, b, c: (a, b, c))
 
