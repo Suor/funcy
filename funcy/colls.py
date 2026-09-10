@@ -167,7 +167,6 @@ def select_values(pred, coll):
     return select(lambda pair: pred(pair[1]), coll)
 
 
-# TODO: test and document it
 def split_keys(pred, coll):
     """Splits key-value pairs with keys, which pass the predicate from the ones that don't.
        Returns a pair of dicts (passed, failed)."""
