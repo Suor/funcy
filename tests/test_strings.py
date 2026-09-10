@@ -27,3 +27,4 @@ def test_cut_prefix():
 def test_cut_suffix():
     assert cut_suffix('name.py', '.py') == 'name'
     assert cut_suffix('name', '.py') == 'name'
+    assert cut_suffix('name.py', '') == 'name.py'
