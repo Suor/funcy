@@ -1,0 +1,40 @@
+# Functions using the EMPTY sentinel pattern have default values
+# that stubtest can't reconcile with the overloaded stub signatures
+funcy.colls.all
+funcy.colls.any
+funcy.colls.none
+funcy.colls.one
+funcy.colls.some
+funcy.seqs.chunks
+funcy.seqs.lchunks
+funcy.seqs.dropwhile
+funcy.seqs.takewhile
+funcy.seqs.keep
+funcy.seqs.lkeep
+funcy.seqs.lpartition
+funcy.seqs.partition
+funcy.calc.memoize
+funcy.funcs.iffy
+
+# @decorator-based functions: runtime signature has extra `call` arg
+funcy.flow.collecting
+funcy.flow.joining
+funcy.flow.post_processing
+funcy.flow.retry
+funcy.flow.wrap_with
+funcy.debug.log_calls
+funcy.debug.log_enters
+funcy.debug.log_exits
+funcy.debug.print_calls
+funcy.debug.print_enters
+funcy.debug.print_exits
+
+# Re-exported from itertools: different arg names or classmethods
+funcy.seqs.cat
+funcy.seqs.concat
+
+# Overloaded __call__/__get__/__exit__ don't match runtime exactly
+funcy.debug.log_errors.__call__
+funcy.debug.log_errors.__exit__
+funcy.debug.log_durations.__call__
+funcy.objects.cached_property.__get__

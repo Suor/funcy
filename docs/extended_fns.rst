@@ -29,7 +29,7 @@ Sequence filtering        :func:`filter` :func:`remove` :func:`distinct`
 Sequence splitting        :func:`dropwhile` :func:`takewhile` :func:`split` :func:`split_by` :func:`partition_by`
 Aggregration              :func:`group_by` :func:`count_by` :func:`group_by_keys`
 Collection transformation :func:`walk` :func:`walk_keys` :func:`walk_values`
-Collection filtering      :func:`select` :func:`select_keys` :func:`select_values`
+Collection filtering      :func:`select` :func:`select_keys` :func:`select_values` :func:`split_keys`
 Content tests             :func:`all` :func:`any` :func:`none` :func:`one` :func:`some` :func:`is_distinct`
 Function logic            :func:`all_fn` :func:`any_fn` :func:`none_fn` :func:`one_fn` :func:`some_fn`
 Function tools            :func:`iffy` :func:`compose` :func:`rcompose` :func:`complement` :func:`juxt` :func:`all_fn` :func:`any_fn` :func:`none_fn` :func:`one_fn` :func:`some_fn`
