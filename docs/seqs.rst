@@ -170,6 +170,11 @@ This section provides some robust tools for sequence slicing. Consider :ref:`py3
     Returns an iterator of all elements of the sequence but last.
 
 
+.. function:: shuffled(seq)
+
+    Returns a list of items of the sequence in random order.
+
+
 .. function:: ilen(seq)
 
     Calculates length of iterator. Will consume it or hang up if it's infinite.

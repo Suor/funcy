@@ -213,6 +213,11 @@ def test_sums():
     assert lsums([1, 2, 3, 4]) == [1, 3, 6, 10]
     assert lsums([[1],[2],[3]]) == [[1], [1, 2], [1, 2, 3]]
 
+def test_shuffled():
+    assert sorted(shuffled([1, 2, 3])) == [1, 2, 3]
+    assert sorted(shuffled(range(3))) == [0, 1, 2]
+    assert isinstance(shuffled(range(3)), list)
+
 def test_without():
     assert lwithout([]) == []
     assert lwithout([1, 2, 3, 4]) == [1, 2, 3, 4]
