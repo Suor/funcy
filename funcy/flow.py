@@ -209,7 +209,7 @@ def joining(call, sep):
 def once_per(*argnames):
     """Call function only once for every combination of the given arguments."""
     def once(func):
-        lock = threading.Lock()
+        lock = threading.RLock()
         done_set = set()
         done_list = list()
 
