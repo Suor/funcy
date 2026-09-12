@@ -276,3 +276,19 @@ def test_wrap_with():
 
     calc()
     assert calls == [1]
+
+
+@pytest.mark.parametrize('timeout', [0.5, timedelta(seconds=0.5)])
+def test_limit_error_rate_fractional_timeout(timeout):
+    @limit_error_rate(1, timeout)
+    def fail():
+        raise MyError
+
+    with pytest.raises(MyError):
+        fail()
+    with pytest.raises(ErrorRateExceeded):
+        fail()
+
+    fail.blocked -= timedelta(seconds=1)
+    with pytest.raises(MyError):
+        fail()

@@ -136,7 +136,7 @@ class ErrorRateExceeded(Exception):
 def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
     """If function fails to complete fails times in a row,
        calls to it will be intercepted for timeout with exception raised instead."""
-    if isinstance(timeout, int):
+    if isinstance(timeout, (int, float)):
         timeout = timedelta(seconds=timeout)
 
     def decorator(func):
