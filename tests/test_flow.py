@@ -308,3 +308,19 @@ def test_once_allows_reentrant_calls(decorate, expected):
     assert not worker.is_alive(), 'reentrant call deadlocked'
     assert not errors
     assert calls == expected
+
+
+@pytest.mark.parametrize('timeout', [0.5, timedelta(seconds=0.5)])
+def test_limit_error_rate_fractional_timeout(timeout):
+    @limit_error_rate(1, timeout)
+    def fail():
+        raise MyError
+
+    with pytest.raises(MyError):
+        fail()
+    with pytest.raises(ErrorRateExceeded):
+        fail()
+
+    fail.blocked -= timedelta(seconds=1)
+    with pytest.raises(MyError):
+        fail()
