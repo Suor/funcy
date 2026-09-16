@@ -14,9 +14,15 @@ obj = MyClass()
 reveal_type(obj.value)  # R: int
 reveal_type(obj.ro_value)  # R: str
 
-# -- LazyObject --
-lazy = LazyObject(lambda: [1, 2, 3])
-reveal_type(lazy)  # R: LazyObject
+# -- LazyObject becomes the object built by init --
+class Client:
+    def get(self, key: str) -> int: return 0
+
+@LazyObject
+def client() -> Client:
+    return Client()
+reveal_type(client)  # R: Client
+reveal_type(client.get("a"))  # R: int
 
 # -- wrap_prop --
 import threading
