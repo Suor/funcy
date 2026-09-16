@@ -1,4 +1,5 @@
 from datetime import timedelta
+from threading import Thread
 import pytest
 from funcy.flow import *
 
@@ -276,3 +277,34 @@ def test_wrap_with():
 
     calc()
     assert calls == [1]
+
+
+@pytest.mark.parametrize('decorate, expected', [
+    (once, [2]),
+    (once_per('n'), [2, 1, 0]),
+    (once_per_args, [2, 1, 0]),
+])
+def test_once_allows_reentrant_calls(decorate, expected):
+    calls = []
+    errors = []
+
+    @decorate
+    def initialize(n):
+        calls.append(n)
+        if n:
+            initialize(n - 1)
+
+    def run():
+        try:
+            initialize(2)
+            initialize(2)
+        except Exception as error:
+            errors.append(error)
+
+    worker = Thread(target=run)
+    worker.daemon = True
+    worker.start()
+    worker.join(5)
+    assert not worker.is_alive(), 'reentrant call deadlocked'
+    assert not errors
+    assert calls == expected
