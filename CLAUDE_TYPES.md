@@ -21,7 +21,7 @@ For full `.pyih` syntax documentation (XFunc, XPred, collection expansion, xfunc
 
 ## Type Tests
 
-Type tests live in `type_tests/` at repo root. The runner (`type_tests/run.py`) validates against three checkers (mypy, pyright, ty).
+Type tests live in `type_tests/` at repo root. The runner (`type_tests/run.py`) validates against four checkers (mypy, pyright, ty, pyrefly).
 
 Test file markers:
 - No marker: line must type-check cleanly on all checkers

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Runner for type-checking tests.
 
-Runs a type checker (pyright, mypy, or ty) on type_tests/ and validates
+Runs a type checker (pyright, mypy, ty, or pyrefly) on type_tests/ and validates
 that errors match the expected markers in test files.
 
 Markers:
@@ -14,6 +14,7 @@ Usage:
     python type_tests/run.py pyright
     python type_tests/run.py mypy
     python type_tests/run.py ty
+    python type_tests/run.py pyrefly
 """
 import glob
 import json
@@ -58,7 +59,7 @@ def parse_markers(test_dir, checker):
                 # R: marker can coexist with XFAIL markers
                 r = re.search(r"# R: (.+?)(?:\s*# (?:XFAIL|E:).*)?$", line)
                 if r:
-                    rev[lineno] = r.group(1).strip()
+                    rev[lineno] = sort_unions(r.group(1).strip())
         abspath = os.path.abspath(filepath)
         if exp:
             expected[abspath] = exp
@@ -69,6 +70,30 @@ def parse_markers(test_dir, checker):
         if e_lines:
             has_error_marker[abspath] = e_lines
     return expected, skipped, reveals, has_error_marker
+
+
+def sort_unions(s):
+    """Sort union members within each slot (argument, return type) at every bracket depth,
+    so that checkers ordering unions differently compare equal."""
+    # Each level is a list of (separator, [union members]) slots; \1 stands for "->"
+    stack = [[("", [""])]]
+    for ch in s.replace("->", "\1") + "\0":
+        slots = stack[-1]
+        if ch in "[(":
+            slots[-1][1][-1] += ch
+            stack.append([("", [""])])
+        elif ch in "])\0":
+            joined = "".join(sep + " | ".join(sorted(m.strip() for m in members))
+                             for sep, members in stack.pop())
+            if ch == "\0":
+                return joined.replace("\1", " -> ")
+            stack[-1][-1][1][-1] += joined + ch
+        elif ch in ",\1":
+            slots.append((", " if ch == "," else "\1", [""]))
+        elif ch == "|":
+            slots[-1][1].append("")
+        else:
+            slots[-1][1][-1] += ch
 
 
 def normalize_type(revealed, checker):
@@ -113,7 +138,7 @@ def normalize_type(revealed, checker):
     s = re.sub(r'\bNoReturn\b', 'Never', s)
     # Normalize whitespace
     s = re.sub(r'\s+', ' ', s).strip()
-    return s
+    return sort_unions(s)
 
 
 def run_pyright(test_dir):
@@ -220,10 +245,31 @@ def run_ty(test_dir):
     return errors, reveals
 
 
+def run_pyrefly(test_dir):
+    """Run pyrefly and parse errors and reveal_type notes."""
+    # Bare reveal_type() is fine here: type tests are only checked, never executed
+    result = subprocess.run(
+        ["pyrefly", "check", test_dir, "--output-format", "json", "--preset", "default",
+         "--ignore", "unimported-directive"],
+        capture_output=True, text=True,
+    )
+    errors = {}  # {filepath: {lineno: message}}
+    reveals = {}  # {filepath: {lineno: revealed_type}}
+    for diag in json.loads(result.stdout)["errors"]:
+        filepath = os.path.abspath(diag["path"])
+        if diag["name"] == "reveal-type":
+            m = re.match(r"revealed type: (.+)", diag["description"])
+            reveals.setdefault(filepath, {})[diag["line"]] = m.group(1)
+        elif diag["severity"] == "error":
+            errors.setdefault(filepath, {})[diag["line"]] = diag["description"]
+    return errors, reveals
+
+
 CHECKERS = {
     "pyright": run_pyright,
     "mypy": run_mypy,
     "ty": run_ty,
+    "pyrefly": run_pyrefly,
 }
 
 # Names intentionally not tested (stdlib re-exports, etc.)
