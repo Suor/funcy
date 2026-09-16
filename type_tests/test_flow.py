@@ -11,14 +11,20 @@ from funcy import (
 reveal_type(raiser(ValueError))  # R: (...) -> Never
 reveal_type(raiser("error message"))  # R: (...) -> Never
 
-# -- ignore / silent preserve function signature --
+# -- ignore / silent preserve params, may return None or default --
 @ignore(ValueError)
 def may_fail(x: int) -> int: return x
-reveal_type(may_fail)  # R: (x: int) -> int
+reveal_type(may_fail)  # R: (x: int) -> int | None
+
+# Non-literal default: ty keeps Literal[""] for a literal one
+def empty_str() -> str: return ""
+@ignore(ValueError, empty_str())
+def may_fail_str(x: int) -> int: return x
+reveal_type(may_fail_str)  # R: (x: int) -> int | str
 
 @silent
 def always_safe(x: int) -> int: return x
-reveal_type(always_safe)  # R: (x: int) -> int
+reveal_type(always_safe)  # R: (x: int) -> int | None
 
 # -- reraise --
 reveal_type(reraise(ValueError, RuntimeError))  # R: AbstractContextManager[None, bool | None]  # XFAIL[pyrefly]: omits defaulted type arg bool | None
@@ -66,6 +72,10 @@ reveal_type(locked)  # R: (x: int) -> str
 @once
 def init() -> None: pass
 reveal_type(init)  # R: () -> None
+
+@once
+def load() -> int: return 1
+reveal_type(load)  # R: () -> int | None
 
 @once_per("x")
 def init_per(x: int) -> None: pass
