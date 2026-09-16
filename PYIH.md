@@ -15,6 +15,7 @@ python translate_pyih.py
 python type_tests/run.py mypy
 python type_tests/run.py pyright
 python type_tests/run.py ty
+python type_tests/run.py pyrefly
 ```
 
 ## Which modules use `.pyih`
@@ -105,5 +106,5 @@ def take(n: int, seq: Iterable[_T]) -> list[_T]: ...  # copied as-is
 
 1. **Never edit `.pyi` files directly** if a `.pyih` counterpart exists — a repo hook blocks this.
 2. After editing a `.pyih`, always run `python translate_pyih.py` to regenerate.
-3. Run all three type checkers: `python type_tests/run.py mypy && python type_tests/run.py ty && python type_tests/run.py pyright`
+3. Run all four type checkers: `python type_tests/run.py`
 4. Run `python -m mypy.stubtest funcy.<module> --allowlist stubtest_allowlist.txt` to verify stubs match runtime.

@@ -21,7 +21,7 @@ def always_safe(x: int) -> int: return x
 reveal_type(always_safe)  # R: (x: int) -> int
 
 # -- reraise --
-reveal_type(reraise(ValueError, RuntimeError))  # R: AbstractContextManager[None, bool | None]
+reveal_type(reraise(ValueError, RuntimeError))  # R: AbstractContextManager[None, bool | None]  # XFAIL[pyrefly]: omits defaulted type arg bool | None
 
 # -- retry preserves function signature --
 @retry(3, errors=ValueError)
@@ -42,7 +42,7 @@ reveal_type(rate_limited)  # R: (x: int) -> str
 @post_processing(list)
 def gen_list() -> Iterator[int]:
     yield 1
-reveal_type(gen_list)  # R: () -> list[int]  # XFAIL[ty]: can't infer through Callable[[_T], _T2]
+reveal_type(gen_list)  # R: () -> list[int]  # XFAIL[ty,pyrefly]: can't infer through Callable[[_T], _T2]
 
 # -- collecting returns list --
 @collecting
