@@ -38,3 +38,6 @@ funcy.debug.log_errors.__call__
 funcy.debug.log_errors.__exit__
 funcy.debug.log_durations.__call__
 funcy.objects.cached_property.__get__
+
+# Stub types construction via __new__ returning the lazily built object, so no __init__
+funcy.objects.LazyObject.__init__
