@@ -114,6 +114,50 @@ def test_make_lookuper():
     with pytest.raises(LookupError): letter_index('_')
 
 
+@pytest.mark.parametrize('decorate', [make_lookuper, silent_lookuper])
+@pytest.mark.parametrize('partial', [False, True])
+def test_lookuper_retries_failed_initialization(decorate, partial):
+    attempts = []
+
+    @decorate
+    def lookup():
+        attempts.append(None)
+        if len(attempts) == 1:
+            if partial:
+                yield 'stale', 0
+            raise ValueError('temporary failure')
+        yield 'ready', 42
+
+    with pytest.raises(ValueError, match='temporary failure'):
+        lookup('ready')
+    assert lookup('ready') == 42
+    assert lookup('ready') == 42
+    if decorate is make_lookuper:
+        with pytest.raises(LookupError):
+            lookup('stale')
+    else:
+        assert lookup('stale') is None
+    assert len(attempts) == 2
+
+
+@pytest.mark.parametrize('decorate', [make_lookuper, silent_lookuper])
+def test_lookuper_caches_empty_table(decorate):
+    attempts = []
+
+    @decorate
+    def lookup():
+        attempts.append(None)
+        return {}
+
+    for _ in range(2):
+        if decorate is make_lookuper:
+            with pytest.raises(LookupError):
+                lookup('missing')
+        else:
+            assert lookup('missing') is None
+    assert len(attempts) == 1
+
+
 def test_make_lookuper_nested():
     tables_built = [0]
 

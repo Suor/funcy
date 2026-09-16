@@ -130,8 +130,8 @@ def _make_lookuper(silent):
 
             def wrapper(arg):
                 if not memory:
+                    memory.update(dict(func()))
                     memory[object()] = None # prevent continuos memory refilling
-                    memory.update(func())
 
                 if silent:
                     return memory.get(arg)
