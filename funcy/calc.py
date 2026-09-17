@@ -129,9 +129,12 @@ def _make_lookuper(silent):
             memory = {}
 
             def wrapper(arg):
-                nonlocal memory
                 if not memory:
-                    memory = dict(func())
+                    try:
+                        memory.update(func())
+                    except BaseException:
+                        memory.clear()
+                        raise
                     memory[object()] = None # prevent continuos memory refilling
 
                 if silent:

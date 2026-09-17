@@ -116,7 +116,8 @@ def test_make_lookuper():
 
 @pytest.mark.parametrize('decorate', [make_lookuper, silent_lookuper])
 @pytest.mark.parametrize('partial', [False, True])
-def test_lookuper_retries_failed_initialization(decorate, partial):
+@pytest.mark.parametrize('error_type', [ValueError, KeyboardInterrupt])
+def test_lookuper_retries_failed_initialization(decorate, partial, error_type):
     attempts = []
 
     @decorate
@@ -125,10 +126,10 @@ def test_lookuper_retries_failed_initialization(decorate, partial):
         if len(attempts) == 1:
             if partial:
                 yield 'stale', 0
-            raise ValueError('temporary failure')
+            raise error_type('temporary failure')
         yield 'ready', 42
 
-    with pytest.raises(ValueError, match='temporary failure'):
+    with pytest.raises(error_type, match='temporary failure'):
         lookup('ready')
     assert lookup('ready') == 42
     assert lookup('ready') == 42
