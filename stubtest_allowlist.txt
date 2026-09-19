@@ -41,3 +41,6 @@ funcy.objects.cached_property.__get__
 
 # Stub types construction via __new__ returning the lazily built object, so no __init__
 funcy.objects.LazyObject.__init__
+
+# Overloads split the deco and returning= forms, so neither carries the runtime default
+funcy.decorators.decorator
