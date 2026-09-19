@@ -13,7 +13,10 @@ Functions
 
 .. function:: caller(*args, **kwargs)
 
-    Returns function calling its argument with passed arguments.
+    Returns function calling its argument with passed arguments. Handy to apply several functions to the same data::
+
+        lmap(caller(data), [mean, median, stdev])
+        # -> [mean(data), median(data), stdev(data)]
 
 
 .. function:: partial(func, *args, **kwargs)
