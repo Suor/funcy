@@ -26,7 +26,7 @@ def memoize(_func=None, *, key_func=None):
     """
     if _func is not None:
         return memoize(key_func=key_func)(_func)
-    return _memory_decorator({}, key_func)
+    return _memory_decorator(dict, key_func)
 
 memoize.skip = SkipMemory
 
@@ -36,13 +36,15 @@ def cache(timeout, *, key_func=None):
     if isinstance(timeout, timedelta):
         timeout = timeout.total_seconds()
 
-    return _memory_decorator(CacheMemory(timeout), key_func)
+    return _memory_decorator(lambda: CacheMemory(timeout), key_func)
 
 cache.skip = SkipMemory
 
 
-def _memory_decorator(memory, key_func):
+def _memory_decorator(memory_factory, key_func):
     def decorator(func):
+        memory = memory_factory()
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             # We inline this here since @memoize also targets microoptimizations

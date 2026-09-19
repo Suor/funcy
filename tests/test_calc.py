@@ -105,6 +105,37 @@ def test_memoize_direct_key_func():
     assert calls == [[1, 2], [1, 2]]
 
 
+@pytest.mark.parametrize('deco', [memoize(), cache(60)], ids=['memoize', 'cache'])
+def test_reused_memory_decorator(deco):
+    calls = []
+
+    @deco
+    def inc(x):
+        calls.append('inc')
+        return x + 1
+
+    @deco
+    def double(x):
+        calls.append('double')
+        return x * 2
+
+    assert inc(3) == 4
+    assert double(3) == 6
+    assert inc(3) == 4
+    assert double(3) == 6
+    assert calls == ['inc', 'double']
+
+    inc.invalidate(3)
+    assert double(3) == 6
+    assert inc(3) == 4
+    assert calls == ['inc', 'double', 'inc']
+
+    inc.invalidate_all()
+    assert double(3) == 6
+    assert inc(3) == 4
+    assert calls == ['inc', 'double', 'inc', 'inc']
+
+
 def test_make_lookuper():
     @make_lookuper
     def letter_index():
