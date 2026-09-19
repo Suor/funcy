@@ -13,7 +13,7 @@ Sequences
 Create     :func:`count` :func:`cycle` :func:`repeat` :func:`repeatedly` :func:`iterate` :func:`re_all` :func:`re_iter`
 Access     :func:`first` :func:`second` :func:`last` :func:`nth` :func:`some` :func:`take`
 Slice      :func:`take` :func:`drop` :func:`rest` :func:`butlast` :func:`takewhile` :func:`dropwhile` :func:`split_at` :func:`split_by`
-Transform  :func:`map` :func:`mapcat` :func:`keep` :func:`pluck` :func:`pluck_attr` :func:`invoke`
+Transform  :func:`map` :func:`mapcat` :func:`keep` :func:`shuffled` :func:`pluck` :func:`pluck_attr` :func:`invoke`
 Filter     :func:`filter` :func:`remove` :func:`keep` :func:`distinct` :func:`where` :func:`without`
 Join       :func:`cat` :func:`concat` :func:`flatten` :func:`mapcat` :func:`interleave` :func:`interpose`
 Partition  :func:`chunks` :func:`partition` :func:`partition_by` :func:`split_at` :func:`split_by`
