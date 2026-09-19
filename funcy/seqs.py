@@ -4,6 +4,7 @@ from itertools import islice, chain, tee, groupby, filterfalse, accumulate, \
 from collections.abc import Sequence
 from collections import defaultdict, deque
 import operator
+import random
 
 from .primitives import EMPTY
 from .types import is_seqcont
@@ -11,8 +12,8 @@ from .funcmakers import make_func, make_pred
 
 
 __all__ = [
-    'count', 'cycle', 'repeat', 'repeatedly', 'iterate', 'shuffled',
-    'take', 'drop', 'first', 'second', 'nth', 'last', 'rest', 'butlast', 'ilen',
+    'count', 'cycle', 'repeat', 'repeatedly', 'iterate',
+    'take', 'drop', 'first', 'second', 'nth', 'last', 'rest', 'butlast', 'shuffled', 'ilen',
     'map', 'filter', 'lmap', 'lfilter', 'remove', 'lremove', 'keep', 'lkeep', 'without', 'lwithout',
     'concat', 'lconcat', 'chain', 'cat', 'lcat', 'flatten', 'lflatten', 'mapcat', 'lmapcat',
     'interleave', 'interpose', 'distinct', 'ldistinct',
@@ -34,15 +35,6 @@ def _lfilter(f, seq):
 
 # Re-export
 from itertools import count, cycle, repeat
-import random
-
-def shuffled(seq):
-    """Returns a shuffled list of items in the sequence."""
-    new_seq = list(seq)
-    # NOTE: random.shuffle() is done in place, which is why we copy the array
-    random.shuffle(new_seq)
-    return new_seq
-
 def repeatedly(f, n=EMPTY):
     """Takes a function of no args, presumably with side effects,
        and returns an infinite (or length n) iterator of calls to it."""
@@ -112,6 +104,12 @@ def butlast(seq):
         for item in it:
             yield prev
             prev = item
+
+def shuffled(seq):
+    """Returns a list of items of the sequence in random order."""
+    items = list(seq)
+    random.shuffle(items)
+    return items
 
 def ilen(seq):
     """Consumes an iterable not reading it into memory
