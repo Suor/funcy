@@ -37,16 +37,29 @@ def test_cached_property_doc():
     assert A.prop.__doc__ == "prop doc"
 
 
-def test_cached_readonly():
+@pytest.mark.parametrize('value', [7, None, False, 0, []])
+def test_cached_readonly(value):
+    calls = []
+
     class A(object):
         @cached_readonly
         def prop(self):
-            return 7
+            calls.append(self)
+            return value
 
     a = A()
-    assert a.prop == 7
+    assert isinstance(A.prop, cached_readonly)
+    assert a.prop is value
+    assert a.prop is value
+    assert calls == [a]
     with pytest.raises(AttributeError):
         a.prop = 8
+    assert a.prop is value
+    assert calls == [a]
+
+    b = A()
+    assert b.prop is value
+    assert calls == [a, b]
 
 
 def test_wrap_prop():

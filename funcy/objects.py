@@ -28,6 +28,11 @@ class cached_property(object):
 
 class cached_readonly(cached_property):
     """Same as @cached_property, but protected against rewrites."""
+    def __get__(self, instance, type=None):
+        if instance is not None and self.fget.__name__ in instance.__dict__:
+            return instance.__dict__[self.fget.__name__]
+        return super().__get__(instance, type)
+
     def __set__(self, instance, value):
         raise AttributeError("property is read-only")
 
