@@ -132,8 +132,12 @@ def _make_lookuper(silent):
 
             def wrapper(arg):
                 if not memory:
+                    try:
+                        memory.update(func())
+                    except BaseException:
+                        memory.clear()
+                        raise
                     memory[object()] = None # prevent continuos memory refilling
-                    memory.update(func())
 
                 if silent:
                     return memory.get(arg)
