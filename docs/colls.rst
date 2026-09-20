@@ -1,6 +1,8 @@
 Collections
 ===========
 
+.. module:: funcy.colls
+
 Unite
 -----
 
