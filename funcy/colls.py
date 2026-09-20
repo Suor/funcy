@@ -49,6 +49,8 @@ def empty(coll):
     """Creates an empty collection of the same type."""
     if isinstance(coll, Iterator):
         return iter([])
+    if isinstance(coll, (str, bytes)):
+        return type(coll)()
     return _factory(coll)()
 
 def iteritems(coll):
