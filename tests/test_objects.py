@@ -1,4 +1,5 @@
 import sys
+from contextlib import contextmanager
 import pytest
 from funcy.objects import *
 from funcy import suppress
@@ -104,6 +105,39 @@ def test_wrap_prop():
     # Do not wrap __set__ for non-data props
     a.cached_property = 2
     assert calls == ['p']
+
+
+@pytest.mark.parametrize('has_deleter', [True, False])
+def test_wrap_prop_delete(has_deleter):
+    calls = []
+
+    @contextmanager
+    def manager():
+        calls.append('enter')
+        try:
+            yield
+        finally:
+            calls.append('exit')
+
+    def delete(instance):
+        calls.append('delete')
+        del instance.value
+
+    class A(object):
+        prop = wrap_prop(manager())(property(
+            lambda self: self.value, fdel=delete if has_deleter else None))
+
+    a = A()
+    a.value = 7
+    if has_deleter:
+        del a.prop
+        assert not hasattr(a, 'value')
+        assert calls == ['enter', 'delete', 'exit']
+    else:
+        with pytest.raises(AttributeError):
+            del a.prop
+        assert a.value == 7
+        assert calls == ['enter', 'exit']
 
 
 ### Monkey tests
