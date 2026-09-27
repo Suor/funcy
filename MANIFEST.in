@@ -3,3 +3,5 @@ include CHANGELOG
 include README.rst
 include VERSION
 recursive-include tests *
+prune tests/**/__pycache__
+global-exclude *.py[co]
