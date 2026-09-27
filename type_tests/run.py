@@ -110,7 +110,7 @@ def normalize_type(revealed, checker):
         # mypy uses qualified names: builtins.int -> int, builtins.str -> str
         s = re.sub(r'builtins\.', '', s)
         # Remove module prefixes for common types (handles multiple levels like funcy.objects.X)
-        s = re.sub(r'\b(?:[a-z_][a-z_0-9]*\.)+([A-Z])', r'\1', s)
+        s = re.sub(r'\b(?:[a-z_][a-z_0-9]*\.)+([A-Za-z_])', r'\1', s)
         # mypy omits -> None in revealed types, add it back for consistency
         if s.startswith("def ") and "->" not in s:
             s = s + " -> None"
