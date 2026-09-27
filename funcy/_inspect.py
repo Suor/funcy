@@ -94,7 +94,25 @@ ARGS['funcy.colls'] = {
 }
 
 
+# Manual arg-specs for method descriptors of builtin types (e.g. str.endswith),
+# keyed by the owning type's name (func.__objclass__.__name__), mirroring how
+# ARGS[mod] works for module-level builtins above. These cover builtin methods
+# whose __text_signature__ is missing/invalid, so signature() can't handle them.
+ARGS['str'] = {
+    'startswith': 'self,prefix',
+    'endswith': 'self,suffix',
+}
+
+
 Spec = namedtuple("Spec", "max_n names req_n req_names varkw")
+
+
+def _spec_from_str(_spec):
+    required, _, optional = _spec.partition('-')
+    req_names = re.findall(r'\w+|\*', required)  # a list with dups of *
+    max_n = len(req_names) + len(optional)
+    req_n = len(req_names)
+    return Spec(max_n=max_n, names=set(), req_n=req_n, req_names=set(req_names), varkw=False)
 
 
 def get_spec(func, _cache={}):
@@ -105,14 +123,13 @@ def get_spec(func, _cache={}):
         pass
 
     mod = getattr(func, '__module__', None)
+    objclass = getattr(func, '__objclass__', None)
+    objclass_name = getattr(objclass, '__name__', None)
     if mod in STD_MODULES or mod in ARGS and func.__name__ in ARGS[mod]:
-        _spec = ARGS[mod].get(func.__name__, '*')
-        required, _, optional = _spec.partition('-')
-        req_names = re.findall(r'\w+|\*', required)  # a list with dups of *
-        max_n = len(req_names) + len(optional)
-        req_n = len(req_names)
-        spec = Spec(max_n=max_n, names=set(), req_n=req_n, req_names=set(req_names), varkw=False)
-        _cache[func] = spec
+        spec = _cache[func] = _spec_from_str(ARGS[mod].get(func.__name__, '*'))
+        return spec
+    elif objclass_name in ARGS and func.__name__ in ARGS[objclass_name]:
+        spec = _cache[func] = _spec_from_str(ARGS[objclass_name][func.__name__])
         return spec
     elif isinstance(func, type):
         # __init__ inherited from builtin classes
