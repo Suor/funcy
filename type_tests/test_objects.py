@@ -13,6 +13,8 @@ class MyClass:
 obj = MyClass()
 reveal_type(obj.value)  # R: int
 reveal_type(obj.ro_value)  # R: str
+reveal_type(MyClass.value)  # R: cached_property[int]
+reveal_type(MyClass.ro_value)  # R: cached_readonly[str]
 
 # -- LazyObject becomes the object built by init --
 class Client:
