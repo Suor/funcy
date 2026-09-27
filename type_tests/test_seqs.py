@@ -2,7 +2,7 @@ import re
 from typing import Any, assert_type
 from collections.abc import Iterator, Sequence
 from funcy import (
-    take, drop, first, second, nth, last, rest, butlast, ilen,
+    take, drop, first, second, nth, last, rest, butlast, shuffled, ilen,
     repeatedly, iterate,
     lmap, lfilter, remove, lremove, lkeep, without, lwithout,
     concat, lconcat, cat, lcat, flatten, lflatten, mapcat, lmapcat,
@@ -40,6 +40,7 @@ reveal_type(nth(0, nums))  # R: int | None
 reveal_type(last(nums))  # R: int | None
 reveal_type(rest(nums))  # R: Iterator[int]
 reveal_type(butlast(nums))  # R: Iterator[int]
+reveal_type(shuffled(nums))  # R: list[int]
 reveal_type(ilen(nums))  # R: int
 
 ### lmap: comprehensive extended function protocol tests ###
