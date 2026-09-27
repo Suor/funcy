@@ -29,6 +29,12 @@ def test_empty_iter():
     assert isinstance(it, Iterator)
     assert list(it) == []
 
+@pytest.mark.parametrize('value', ['', 'text', b'', b'bytes'])
+def test_empty_text(value):
+    result = empty(value)
+    assert type(result) is type(value)
+    assert result == value[:0]
+
 def test_empty_quirks():
     class A:
         FLAG = 1
