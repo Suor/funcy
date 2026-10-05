@@ -178,6 +178,36 @@ def test_chunks_step_gt_n():
     assert lchunks(2, 3, iter(range(10))) == lchunks(2, 3, list(range(10)))
     assert lchunks(2, 3, iter(range(10))) == [[0, 1], [3, 4], [6, 7], [9]]
 
+@pytest.mark.parametrize('cut', (partition, lpartition, chunks, lchunks))
+@pytest.mark.parametrize('call', (
+    lambda cut, seq: cut(0, seq),
+    lambda cut, seq: cut(0, 1, seq),
+    lambda cut, seq: cut(2, 0, seq),
+    lambda cut, seq: cut(0, 0, seq),
+))
+@pytest.mark.parametrize('source', ('sequence', 'iterator'))
+@pytest.mark.parametrize('values', ([1, 2], []))
+def test_zero_size_or_step_rejected_without_consuming(cut, call, source, values):
+    class TrackingIterator:
+        def __init__(self, values):
+            self._iterator = iter(values)
+            self.reads = 0
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            self.reads += 1
+            return next(self._iterator)
+
+    seq = values if source == 'sequence' else TrackingIterator(values)
+    with pytest.raises(ValueError):
+        call(cut, seq)
+    if source == 'sequence':
+        assert seq == values
+    else:
+        assert seq.reads == 0
+
 def test_partition_by():
     assert lpartition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
     assert lpartition_by('x', 'abxcd') == [['a', 'b'], ['x'], ['c', 'd']]
