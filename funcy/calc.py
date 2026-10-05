@@ -9,6 +9,8 @@ from .decorators import wraps
 
 __all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
 
+_KWARGS_MARKER = (object(),)
+
 
 
 class SkipMemory(Exception):
@@ -20,7 +22,7 @@ def memoize(_func=None, *, key_func=None):
     """@memoize(key_func=None). Makes decorated function memoize its results.
 
     If key_func is specified uses key_func(*func_args, **func_kwargs) as memory key.
-    Otherwise uses args + tuple(sorted(kwargs.items()))
+    Otherwise separates positional args from sorted keyword items with a private marker.
 
     Exposes its memory via .memory attribute.
     """
@@ -49,7 +51,7 @@ def _memory_decorator(memory_factory, key_func):
         def wrapper(*args, **kwargs):
             # We inline this here since @memoize also targets microoptimizations
             key = key_func(*args, **kwargs) if key_func else \
-                  args + tuple(sorted(kwargs.items())) if kwargs else args
+                  args + _KWARGS_MARKER + tuple(sorted(kwargs.items())) if kwargs else args
             try:
                 return memory[key]
             except KeyError:
@@ -61,7 +63,7 @@ def _memory_decorator(memory_factory, key_func):
 
         def invalidate(*args, **kwargs):
             key = key_func(*args, **kwargs) if key_func else \
-                  args + tuple(sorted(kwargs.items())) if kwargs else args
+                  args + _KWARGS_MARKER + tuple(sorted(kwargs.items())) if kwargs else args
             memory.pop(key, None)
         wrapper.invalidate = invalidate
 

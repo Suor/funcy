@@ -15,6 +15,9 @@ Calculation
             except Timeout:
                 raise memoize.skip(CITY)  # return CITY, but don't memoize it
 
+    By default, positional tuple arguments and keyword arguments are cached separately, even
+    when a tuple has the same contents as a keyword item.
+
     Additionally ``@memoize`` exposes its memory for you to manipulate::
 
         # Prefill memory
