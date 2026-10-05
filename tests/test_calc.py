@@ -317,3 +317,50 @@ def test_cache_invalidate():
     # ensure invalidate() is idempotent (doesn't raise KeyError on the 2nd call)
     inc.invalidate(0)
     inc.invalidate(0)
+
+
+@pytest.mark.parametrize('decorate', [memoize, cache(60)], ids=['memoize', 'cache'])
+@pytest.mark.parametrize('keyword_first', [False, True])
+def test_memory_distinguishes_positional_and_keyword_arguments(decorate, keyword_first):
+    calls = []
+
+    @decorate
+    def echo(value):
+        calls.append(value)
+        return value
+
+    positional_value = ('value', 1)
+    if keyword_first:
+        assert echo(value=1) == 1
+        assert echo(positional_value) == positional_value
+        expected_calls = [1, positional_value]
+    else:
+        assert echo(positional_value) == positional_value
+        assert echo(value=1) == 1
+        expected_calls = [positional_value, 1]
+
+    assert echo(value=1) == 1
+    assert echo(positional_value) == positional_value
+    assert calls == expected_calls
+
+    echo.invalidate(value=1)
+    assert echo(positional_value) == positional_value
+    assert echo(value=1) == 1
+    assert calls == expected_calls + [1]
+
+    echo.invalidate(positional_value)
+    assert echo(value=1) == 1
+    assert echo(positional_value) == positional_value
+    assert calls == expected_calls + [1, positional_value]
+
+
+@pytest.mark.parametrize('decorate', [memoize, cache(60)], ids=['memoize', 'cache'])
+def test_memory_distinguishes_mixed_arguments(decorate):
+    @decorate
+    def echo(first, second):
+        return first, second
+
+    assert echo(0, ('second', 1)) == (0, ('second', 1))
+    assert echo(0, second=1) == (0, 1)
+    assert echo(second=1, first=0) == (0, 1)
+    assert echo(first=0, second=1) == (0, 1)
