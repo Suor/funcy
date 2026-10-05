@@ -452,6 +452,9 @@ Split and chunk
         # Structure user credentials
         {id: (name, password) for id, name, password in partition(3, users)}
 
+    ``n`` and ``step`` must be non-zero. A zero value raises ``ValueError``
+    before the input sequence is read.
+
     A three argument variant of :func:`partition` can be used to process sequence items in context of their neighbors::
 
         # Smooth data by averaging out with a sliding window
@@ -473,6 +476,9 @@ Split and chunk
         # -> 'ab', 'e'
 
     Handy for batch processing.
+
+    As with :func:`partition`, ``n`` and ``step`` must be non-zero. A zero
+    value raises ``ValueError`` before the input sequence is read.
 
 .. function:: partition_by(f, seq)
               lpartition_by(f, seq)
