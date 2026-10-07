@@ -106,6 +106,63 @@ def test_wrap_prop():
     assert calls == ['p']
 
 
+@pytest.mark.parametrize('raises', [False, True])
+def test_wrap_prop_delete(raises):
+    calls = []
+
+    class Manager:
+        def __enter__(self):
+            calls.append('enter')
+
+        def __exit__(self, exc_type, exc_value, traceback):
+            calls.append(('exit', exc_type))
+
+    class A:
+        def __init__(self):
+            self.value = 1
+
+        @property
+        def prop(self):
+            return self.value
+
+        @prop.deleter
+        def prop(self):
+            calls.append('delete')
+            if raises:
+                raise ValueError('cannot delete')
+            del self.value
+
+        prop = wrap_prop(Manager())(prop)
+
+    a = A()
+    if raises:
+        with pytest.raises(ValueError, match='cannot delete'):
+            del a.prop
+        assert a.value == 1
+        assert calls == ['enter', 'delete', ('exit', ValueError)]
+    else:
+        del a.prop
+        assert not hasattr(a, 'value')
+        assert calls == ['enter', 'delete', ('exit', None)]
+
+
+def test_wrap_prop_delete_cached_property():
+    calls = []
+
+    class A:
+        @wrap_prop(suppress())
+        @cached_property
+        def prop(self):
+            calls.append('get')
+            return len(calls)
+
+    a = A()
+    assert a.prop == 1
+    del a.prop
+    assert a.prop == 2
+    assert calls == ['get', 'get']
+
+
 ### Monkey tests
 
 def test_monkey():

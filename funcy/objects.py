@@ -56,10 +56,10 @@ def wrap_prop(ctx):
                     with ctx:
                         return prop.__set__(name, value)
 
-            if hasattr(prop, '__del__'):
-                def __del__(self, name):
+            if hasattr(prop, '__delete__'):
+                def __delete__(self, instance):
                     with ctx:
-                        return prop.__del__(name)
+                        return prop.__delete__(instance)
 
         return WrapperProp()
     return decorator
