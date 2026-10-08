@@ -105,6 +105,54 @@ def test_memoize_direct_key_func():
     assert calls == [[1, 2], [1, 2]]
 
 
+class FalseyKey(object):
+    def __bool__(self):
+        return False
+
+    def __call__(self, values):
+        return tuple(values)
+
+
+class EmptyKey(object):
+    def __len__(self):
+        return 0
+
+    def __call__(self, values):
+        return tuple(values)
+
+
+@pytest.mark.parametrize('key_type', [FalseyKey, EmptyKey])
+@pytest.mark.parametrize('decorate',
+    [memoize, lambda **kw: cache(60, **kw)], ids=['memoize', 'cache'])
+def test_falsey_key_func(decorate, key_type):
+    key_func = key_type()
+    assert callable(key_func) and not key_func
+    calls = []
+
+    @decorate(key_func=key_func)
+    def total(values):
+        calls.append(values)
+        return sum(values)
+
+    assert total([1, 2]) == 3
+    assert total(values=[1, 2]) == 3
+    assert calls == [[1, 2]]
+
+
+@pytest.mark.parametrize('key_type', [FalseyKey, EmptyKey])
+@pytest.mark.parametrize('decorate',
+    [memoize, lambda **kw: cache(60, **kw)], ids=['memoize', 'cache'])
+def test_falsey_key_func_invalidate(decorate, key_type):
+    @decorate(key_func=key_type())
+    def total(values):
+        return sum(values)
+
+    total.memory[(1, 2)] = 3
+    total.invalidate(values=[1, 2])
+    assert not total.memory
+    total.invalidate([1, 2])
+
+
 @pytest.mark.parametrize('deco', [memoize(), cache(60)], ids=['memoize', 'cache'])
 def test_reused_memory_decorator(deco):
     calls = []

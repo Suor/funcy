@@ -48,7 +48,7 @@ def _memory_decorator(memory_factory, key_func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # We inline this here since @memoize also targets microoptimizations
-            key = key_func(*args, **kwargs) if key_func else \
+            key = key_func(*args, **kwargs) if key_func is not None else \
                   args + tuple(sorted(kwargs.items())) if kwargs else args
             try:
                 return memory[key]
@@ -60,7 +60,7 @@ def _memory_decorator(memory_factory, key_func):
                     return e.args[0] if e.args else None
 
         def invalidate(*args, **kwargs):
-            key = key_func(*args, **kwargs) if key_func else \
+            key = key_func(*args, **kwargs) if key_func is not None else \
                   args + tuple(sorted(kwargs.items())) if kwargs else args
             memory.pop(key, None)
         wrapper.invalidate = invalidate
