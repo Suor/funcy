@@ -226,6 +226,51 @@ def test_once_per():
     assert calls == [1, 2]
 
 
+def test_once_per_args_keyword_only():
+    calls = []
+
+    @once_per_args
+    def initialize(*, language='en'):
+        calls.append(language)
+
+    initialize()
+    initialize(language='en')
+    initialize(language='fr')
+    initialize(language='fr')
+    assert calls == ['en', 'fr']
+
+
+def test_once_per_args_variadic():
+    calls = []
+
+    @once_per_args
+    def initialize(*args, **kwargs):
+        calls.append((args, kwargs))
+
+    initialize(1, enabled=True)
+    initialize(1, enabled=True)
+    initialize(2, enabled=True)
+    initialize(2, enabled=False)
+    assert calls == [((1,), {'enabled': True}), ((2,), {'enabled': True}),
+                     ((2,), {'enabled': False})]
+
+
+def test_once_per_args_mixed_parameters():
+    calls = []
+
+    @once_per_args
+    def initialize(name, *args, language='en', **kwargs):
+        calls.append((name, args, language, kwargs))
+
+    initialize('x')
+    initialize(name='x', language='en')
+    initialize('x', 1)
+    initialize('x', 1, language='fr')
+    initialize('x', 1, language='fr', extra=[1])
+    initialize('x', 1, language='fr', extra=[1])
+    assert len(calls) == 4
+
+
 def test_once_per_args():
     calls = []
 

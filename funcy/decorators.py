@@ -103,7 +103,11 @@ def has_1pos_and_kwonly(func):
 
 def get_argnames(func):
     func = getattr(func, '__original__', None) or unwrap(func)
-    return func.__code__.co_varnames[:func.__code__.co_argcount]
+    code = func.__code__
+    count = code.co_argcount + code.co_kwonlyargcount
+    count += bool(code.co_flags & inspect.CO_VARARGS)
+    count += bool(code.co_flags & inspect.CO_VARKEYWORDS)
+    return code.co_varnames[:count]
 
 def arggetter(func, _cache={}):
     if func in _cache:
