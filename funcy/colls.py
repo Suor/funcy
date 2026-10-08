@@ -253,7 +253,7 @@ def omit(mapping, keys):
     if isinstance(keys, Iterator) and not hasattr(keys, '__contains__'):
         keys = tee(keys, 1)[0]
         return _factory(mapping)(
-            (k, v) for k, v in iteritems(mapping) if k not in tee(keys, 1)[0])
+            (k, v) for k, v in iteritems(mapping) if k not in tee(keys)[1])
     return _factory(mapping)((k, v) for k, v in iteritems(mapping) if k not in keys)
 
 def zip_values(*dicts):
