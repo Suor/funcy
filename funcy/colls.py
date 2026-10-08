@@ -250,6 +250,8 @@ def project(mapping, keys):
 
 def omit(mapping, keys):
     """Removes given keys from mapping."""
+    if isinstance(keys, Iterator) and not hasattr(keys, '__contains__'):
+        keys = tuple(keys)
     return _factory(mapping)((k, v) for k, v in iteritems(mapping) if k not in keys)
 
 def zip_values(*dicts):

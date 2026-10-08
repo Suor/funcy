@@ -369,3 +369,29 @@ def test_pluck_attr():
 
 def test_invoke():
     assert linvoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
+
+
+@pytest.mark.parametrize('keys_factory', [iter, lambda keys: (key for key in keys)])
+def test_omit_iterator_keys(keys_factory):
+    mapping = {'keep': 1, 'remove': 2, 'other': 3}
+    assert omit(mapping, keys_factory(['remove'])) == {'keep': 1, 'other': 3}
+    assert omit(mapping, keys_factory(['other', 'remove'])) == {'keep': 1}
+    assert omit(mapping, keys_factory([])) == mapping
+
+
+def test_omit_preserves_string_membership():
+    assert omit({'ab': 1, 'b': 2, 'keep': 3}, 'abc') == {'keep': 3}
+
+
+def test_omit_preserves_custom_iterator_membership():
+    class LookupKeys:
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            raise AssertionError('membership should not consume the iterator')
+
+        def __contains__(self, key):
+            return key == 'remove'
+
+    assert omit({'keep': 1, 'remove': 2}, LookupKeys()) == {'keep': 1}
