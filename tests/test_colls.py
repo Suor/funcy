@@ -395,3 +395,12 @@ def test_omit_preserves_custom_iterator_membership():
             return key == 'remove'
 
     assert omit({'keep': 1, 'remove': 2}, LookupKeys()) == {'keep': 1}
+
+
+def test_omit_does_not_exhaust_lazy_key_iterator():
+    def keys():
+        yield 'first'
+        yield 'second'
+        raise AssertionError('only the needed key prefix should be consumed')
+
+    assert omit({'first': 1, 'second': 2}, keys()) == {}
