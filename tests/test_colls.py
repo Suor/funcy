@@ -1,5 +1,5 @@
 from collections.abc import Iterator
-from collections import defaultdict, namedtuple
+from collections import Counter, defaultdict, namedtuple
 from itertools import chain, count
 import pytest
 from whatever import _
@@ -369,3 +369,34 @@ def test_pluck_attr():
 
 def test_invoke():
     assert linvoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
+
+
+class CustomCounter(Counter):
+    pass
+
+
+@pytest.mark.parametrize('counter_type', [Counter, CustomCounter])
+@pytest.mark.parametrize('operation, expected', [
+    (lambda data: walk_values(lambda value: value * 2, data),
+     {'a': 4, 'b': 6, 'zero': 0, 'negative': -2}),
+    (lambda data: walk_keys(str.upper, data),
+     {'A': 2, 'B': 3, 'ZERO': 0, 'NEGATIVE': -1}),
+    (lambda data: project(data, ['a', 'zero']), {'a': 2, 'zero': 0}),
+    (lambda data: omit(data, ['b']), {'a': 2, 'zero': 0, 'negative': -1}),
+    (lambda data: select_values(lambda value: value > 1, data), {'a': 2, 'b': 3}),
+])
+def test_counter_mapping_operations(counter_type, operation, expected):
+    original = {'a': 2, 'b': 3, 'zero': 0, 'negative': -1}
+    data = counter_type(original)
+    result = operation(data)
+    assert type(result) is counter_type
+    assert dict(result) == expected
+    assert result['missing'] == 0
+    assert dict(data) == original
+
+
+@pytest.mark.parametrize('counter_type', [Counter, CustomCounter])
+def test_empty_counter_preserves_type(counter_type):
+    result = empty(counter_type(a=2))
+    assert type(result) is counter_type
+    assert dict(result) == {}
