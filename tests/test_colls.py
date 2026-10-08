@@ -372,11 +372,13 @@ def test_invoke():
 
 
 @pytest.mark.parametrize('keys_factory', [iter, lambda keys: (key for key in keys)])
-def test_omit_iterator_keys(keys_factory):
+def test_omit_rejects_iterator_keys_without_consuming_them(keys_factory):
     mapping = {'keep': 1, 'remove': 2, 'other': 3}
-    assert omit(mapping, keys_factory(['remove'])) == {'keep': 1, 'other': 3}
-    assert omit(mapping, keys_factory(['other', 'remove'])) == {'keep': 1}
-    assert omit(mapping, keys_factory([])) == mapping
+    for values in (['remove'], ['other', 'remove'], []):
+        keys = keys_factory(values)
+        with pytest.raises(TypeError, match='key iterators'):
+            omit(mapping, keys)
+        assert list(keys) == values
 
 
 def test_omit_preserves_string_membership():
@@ -397,10 +399,10 @@ def test_omit_preserves_custom_iterator_membership():
     assert omit({'keep': 1, 'remove': 2}, LookupKeys()) == {'keep': 1}
 
 
-def test_omit_does_not_exhaust_lazy_key_iterator():
+def test_omit_rejects_lazy_key_iterator_before_reading_it():
     def keys():
-        yield 'first'
-        yield 'second'
-        raise AssertionError('only the needed key prefix should be consumed')
+        raise AssertionError('the iterator should not be consumed')
+        yield 'unused'
 
-    assert omit({'first': 1, 'second': 2}, keys()) == {}
+    with pytest.raises(TypeError, match='key iterators'):
+        omit({'first': 1, 'second': 2}, keys())

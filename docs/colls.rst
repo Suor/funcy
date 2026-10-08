@@ -186,6 +186,9 @@ Dict utils
 
 .. function:: omit(mapping, keys)
 
+    One-shot key iterators without a containment operation raise ``TypeError``.
+    Convert them to a list or set before passing them as ``keys``.
+
     Returns a copy of ``mapping`` with ``keys`` omitted. Each key of `mapping` is checked if it is contained with `keys`, so a string and an array could be used. Preserves collection type::
 
         omit({'a': 1, 'b': 2, 'c': 3}, 'ac')
