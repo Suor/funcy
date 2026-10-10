@@ -369,3 +369,40 @@ def test_pluck_attr():
 
 def test_invoke():
     assert linvoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
+
+
+@pytest.mark.parametrize('keys_factory', [iter, lambda keys: (key for key in keys)])
+def test_omit_rejects_iterator_keys_without_consuming_them(keys_factory):
+    mapping = {'keep': 1, 'remove': 2, 'other': 3}
+    for values in (['remove'], ['other', 'remove'], []):
+        keys = keys_factory(values)
+        with pytest.raises(TypeError, match='key iterators'):
+            omit(mapping, keys)
+        assert list(keys) == values
+
+
+def test_omit_preserves_string_membership():
+    assert omit({'ab': 1, 'b': 2, 'keep': 3}, 'abc') == {'keep': 3}
+
+
+def test_omit_preserves_custom_iterator_membership():
+    class LookupKeys:
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            raise AssertionError('membership should not consume the iterator')
+
+        def __contains__(self, key):
+            return key == 'remove'
+
+    assert omit({'keep': 1, 'remove': 2}, LookupKeys()) == {'keep': 1}
+
+
+def test_omit_rejects_lazy_key_iterator_before_reading_it():
+    def keys():
+        raise AssertionError('the iterator should not be consumed')
+        yield 'unused'
+
+    with pytest.raises(TypeError, match='key iterators'):
+        omit({'first': 1, 'second': 2}, keys())
