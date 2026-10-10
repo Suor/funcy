@@ -174,14 +174,14 @@ def throttle(period):
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            now = time.time()
+            now = time.monotonic()
             if wrapper.blocked_until > now:
                 return
             wrapper.blocked_until = now + period
 
             return func(*args, **kwargs)
 
-        wrapper.blocked_until = 0
+        wrapper.blocked_until = float('-inf')
         return wrapper
 
     return decorator
