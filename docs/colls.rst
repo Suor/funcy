@@ -47,6 +47,10 @@ All functions in this section support :ref:`extended_fns`.
         walk(lambda x: x * 2, 'ABC')   # -> 'AABBCC'
         walk(compose(str, ord), 'ABC') # -> '656667'
 
+    For ``bytes``, the mapper receives integers, as it does when iterating bytes
+    in Python. It must return integers in the range 0 to 255. The result retains
+    the input bytes type. :func:`select` and :func:`compact` support bytes too.
+
     One should use :func:`map` when there is no need to preserve collection type.
 
     .. note about constructor interface?

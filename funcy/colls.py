@@ -38,7 +38,7 @@ def _factory(coll, mapper=None):
         return partial(defaultdict, item_factory)
     elif isinstance(coll, Iterator):
         return iter
-    elif isinstance(coll, (bytes, str)):
+    elif isinstance(coll, str):
         return coll_type().join
     elif coll_type in FACTORY_REPLACE:
         return FACTORY_REPLACE[coll_type]

@@ -369,3 +369,29 @@ def test_pluck_attr():
 
 def test_invoke():
     assert linvoke(['abc', 'def', 'b'], 'find', 'b') == [1, -1, 0]
+
+
+@pytest.mark.parametrize('value', [b'', b'a\x00b', b'\x00\xff'])
+def test_walk_bytes(value):
+    result = walk(None, value)
+    assert type(result) is bytes
+    assert result == value
+
+
+def test_walk_bytes_integer_values():
+    assert walk(lambda value: value + 1, b'abc') == b'bcd'
+
+
+def test_select_bytes():
+    assert select(lambda value: value >= 128, b'\x00\x7f\x80\xff') == b'\x80\xff'
+    assert compact(b'a\x00b') == b'ab'
+    assert select(None, b'\x00') == b''
+
+
+def test_walk_bytes_subclass():
+    class Binary(bytes):
+        pass
+
+    result = walk(None, Binary(b'abc'))
+    assert type(result) is Binary
+    assert result == b'abc'
