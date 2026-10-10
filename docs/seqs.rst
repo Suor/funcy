@@ -388,6 +388,10 @@ Split and chunk
         lsplit_by(bool, iter([-2, -1, 0, 1, 2]))
         # [-2, -1], [0, 1, 2]
 
+    The predicate is evaluated once per item through the first failure, and is
+    not called for later items. Both iterators share that boundary, regardless
+    of which iterator is consumed first.
+
 
 .. function:: takewhile([pred], seq)
 
