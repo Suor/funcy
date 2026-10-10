@@ -301,19 +301,13 @@ def lsplit_at(n, seq):
 def split_by(pred, seq):
     """Lazily splits the start of the sequence,
        consisting of items passing pred, from the rest of it."""
-    pred = make_pred(pred)
+    a, b = tee(seq)
+    head, head_copy = tee(takewhile(pred, a))
 
-    def classified():
-        passing = True
-        for item in seq:
-            if passing:
-                passing = bool(pred(item))
-            yield passing, item
+    def tail():
+        yield from drop(ilen(head_copy), b)
 
-    a, b = tee(classified())
-    head = _takewhile(operator.itemgetter(0), a)
-    tail = _dropwhile(operator.itemgetter(0), b)
-    return _map(operator.itemgetter(1), head), _map(operator.itemgetter(1), tail)
+    return head, tail()
 
 def lsplit_by(pred, seq):
     """Splits the start of the sequence,
