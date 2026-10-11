@@ -1,6 +1,7 @@
 import sys
 import pytest
 from funcy.decorators import *
+from funcy.decorators import arggetter
 
 
 def test_decorator_no_args():
@@ -165,3 +166,47 @@ def test_decorator_introspection():
     assert decor_x._func is decor.__wrapped__
     assert decor_x._args == (42,)
     assert decor_x._kwargs == {}
+
+
+@pytest.mark.parametrize('method_name', ['method', 'class_method'])
+@pytest.mark.parametrize('wrapped', [False, True])
+def test_decorator_access_bound_method_args(method_name, wrapped):
+    @decorator
+    def capture(call):
+        return call.x, call.y, call.args, call.kwargs
+
+    @decorator
+    def passthrough(call):
+        return call()
+
+    wrap = passthrough if wrapped else lambda f: f
+
+    class A(object):
+        @wrap
+        def method(self, x, y=2, *args, **kwargs):
+            pass
+
+        @classmethod
+        @wrap
+        def class_method(cls, x, y=2, *args, **kwargs):
+            pass
+
+    wrapped = capture(getattr(A(), method_name))
+    assert wrapped(1) == (1, 2, (), {})
+    assert wrapped(1, 3, 4, z=5) == (1, 3, (4,), {'z': 5})
+    assert wrapped(x=6, y=7) == (6, 7, (), {})
+
+
+def test_arggetter_bound_method_positional_only():
+    # Defining this through exec retains compatibility with Python 3.4-3.7.
+    if sys.version_info < (3, 8):
+        pytest.skip('positional-only parameters require Python 3.8+')
+    namespace = {}
+    exec('class A:\n    def method(self, x, /, y=2): pass', namespace)
+    method = namespace['A']().method
+    get_arg = arggetter(method)
+    assert get_arg('x', (1,), {}) == 1
+    assert get_arg('y', (1,), {}) == 2
+    assert get_arg('y', (1,), {'y': 3}) == 3
+    with pytest.raises(TypeError, match='missing required argument'):
+        get_arg('x', (), {'x': 1})
