@@ -181,7 +181,7 @@ def throttle(period):
 
             return func(*args, **kwargs)
 
-        wrapper.blocked_until = float('-inf')
+        wrapper.blocked_until = 0
         return wrapper
 
     return decorator

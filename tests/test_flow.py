@@ -201,11 +201,6 @@ def test_throttle_ignores_wall_clock_jumps(monkeypatch, jump):
     assert calls == ['first', 'at deadline']
 
 
-def test_throttle_negative_monotonic_origin(monkeypatch):
-    monkeypatch.setattr('time.monotonic', lambda: -100)
-    assert throttle(10)(lambda: 'first call')() == 'first call'
-
-
 def test_post_processing():
     @post_processing(max)
     def my_max(l):

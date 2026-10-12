@@ -164,9 +164,6 @@ Flow
             process_beat(pk, i / n)
             # ... do actual processing
 
-    The period is measured with a monotonic clock, so system-clock adjustments
-    do not shorten or extend the interval between calls.
-
 
 .. decorator:: collecting
 
