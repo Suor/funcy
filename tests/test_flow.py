@@ -158,7 +158,7 @@ def test_limit_error_rate():
     [pytest.param(int, id='int'), pytest.param(lambda s: timedelta(seconds=s), id='timedelta')])
 def test_throttle(monkeypatch, typ):
     timestamps = iter([0, 0.01, 1, 1.000025])
-    monkeypatch.setattr('time.time', lambda: next(timestamps))
+    monkeypatch.setattr('time.monotonic', lambda: next(timestamps))
 
     calls = []
 
@@ -180,6 +180,25 @@ def test_throttle_class():
 
     a = A()
     assert throttle(1)(a.foo)() == 42
+
+
+@pytest.mark.parametrize('jump', [-3600, 3600])
+def test_throttle_ignores_wall_clock_jumps(monkeypatch, jump):
+    clock = {'wall': 10000, 'elapsed': 100}
+    monkeypatch.setattr('time.time', lambda: clock['wall'])
+    monkeypatch.setattr('time.monotonic', lambda: clock['elapsed'])
+    calls = []
+    throttled = throttle(10)(calls.append)
+
+    throttled('first')
+    clock['wall'] += jump
+    clock['elapsed'] += 1
+    throttled('too soon')
+    assert calls == ['first']
+
+    clock['elapsed'] += 9
+    throttled('at deadline')
+    assert calls == ['first', 'at deadline']
 
 
 def test_post_processing():
@@ -224,6 +243,39 @@ def test_once_per():
     call(2)
     call(1, 42)
     assert calls == [1, 2]
+
+
+def test_once_per_bound_method():
+    calls = []
+
+    class A:
+        def method(self, x, y=None):
+            calls.append(x)
+
+    method = once_per('x')(A().method)
+    method(1)
+    method(1, 2)
+    method(x=2)
+    wrapped = once_per('x')(silent(A().method))
+    wrapped(3)
+    wrapped(3)
+    assert calls == [1, 2, 3]
+
+
+def test_once_per_args_all_kinds():
+    calls = []
+
+    @once_per_args
+    def call(*args, lang='en', **kwargs):
+        calls.append((args, lang, kwargs))
+
+    call(1)
+    call(1, lang='en')
+    call(2)
+    call(2, lang='fr')
+    call(2, lang='fr', x=[1])
+    call(2, lang='fr', x=[1])
+    assert calls == [((1,), 'en', {}), ((2,), 'en', {}), ((2,), 'fr', {}), ((2,), 'fr', {'x': [1]})]
 
 
 def test_once_per_args():

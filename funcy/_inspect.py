@@ -1,6 +1,7 @@
 from __future__ import absolute_import
-from inspect import CO_VARARGS, CO_VARKEYWORDS, signature
+from inspect import CO_VARARGS, CO_VARKEYWORDS, signature, ismethod
 from collections import namedtuple
+from types import MethodType
 import platform
 import re
 
@@ -98,7 +99,10 @@ Spec = namedtuple("Spec", "max_n names req_n req_names varkw")
 
 
 def get_spec(func, _cache={}):
+    bound_self = func.__self__ if ismethod(func) else None
     func = getattr(func, '__original__', None) or unwrap(func)
+    if bound_self is not None and not ismethod(func):
+        func = MethodType(func, bound_self)
     try:
         return _cache[func]
     except (KeyError, TypeError):
@@ -163,6 +167,12 @@ def _code_to_spec(func):
     varkw = bool(code.co_flags & CO_VARKEYWORDS)
     # If there are varargs they could be required
     max_n = n + 1 if code.co_flags & CO_VARARGS else n
+    if ismethod(func) and pos_n:
+        names.discard(varnames[0])
+        req_names.discard(varnames[0])
+        max_n -= 1
+        if pos_n > defaults_n:
+            req_n -= 1
     return Spec(max_n=max_n, names=names, req_n=req_n, req_names=req_names, varkw=varkw)
 
 
