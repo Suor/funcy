@@ -158,7 +158,7 @@ def test_limit_error_rate():
     [pytest.param(int, id='int'), pytest.param(lambda s: timedelta(seconds=s), id='timedelta')])
 def test_throttle(monkeypatch, typ):
     timestamps = iter([0, 0.01, 1, 1.000025])
-    monkeypatch.setattr('time.time', lambda: next(timestamps))
+    monkeypatch.setattr('time.monotonic', lambda: next(timestamps))
 
     calls = []
 
@@ -180,6 +180,30 @@ def test_throttle_class():
 
     a = A()
     assert throttle(1)(a.foo)() == 42
+
+
+@pytest.mark.parametrize('jump', [-3600, 3600])
+def test_throttle_ignores_wall_clock_jumps(monkeypatch, jump):
+    clock = {'wall': 10000, 'elapsed': 100}
+    monkeypatch.setattr('time.time', lambda: clock['wall'])
+    monkeypatch.setattr('time.monotonic', lambda: clock['elapsed'])
+    calls = []
+    throttled = throttle(10)(calls.append)
+
+    throttled('first')
+    clock['wall'] += jump
+    clock['elapsed'] += 1
+    throttled('too soon')
+    assert calls == ['first']
+
+    clock['elapsed'] += 9
+    throttled('at deadline')
+    assert calls == ['first', 'at deadline']
+
+
+def test_throttle_negative_monotonic_origin(monkeypatch):
+    monkeypatch.setattr('time.monotonic', lambda: -100)
+    assert throttle(10)(lambda: 'first call')() == 'first call'
 
 
 def test_post_processing():
