@@ -1,4 +1,5 @@
 2.1
+- honor false-valued key_func callables in memoize/cache and invalidation
 - support Python 3.12, 3.13, 3.14 officially
 - added split_keys()
 - preserve key_func when memoize is called directly (Jack Walker)
