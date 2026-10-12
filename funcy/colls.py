@@ -38,6 +38,16 @@ def _factory(coll, mapper=None):
         return partial(defaultdict, item_factory)
     elif isinstance(coll, Iterator):
         return iter
+    elif isinstance(coll, bytes):
+        def bytes_factory(items=()):
+            items = iter(items)
+            try:
+                first = next(items)
+            except StopIteration:
+                return coll_type()
+            items = chain((first,), items)
+            return coll_type(items) if isinstance(first, int) else coll_type().join(items)
+        return bytes_factory
     elif isinstance(coll, str):
         return coll_type().join
     elif coll_type in FACTORY_REPLACE:

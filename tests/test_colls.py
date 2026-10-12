@@ -382,6 +382,14 @@ def test_walk_bytes_integer_values():
     assert walk(lambda value: value + 1, b'abc') == b'bcd'
 
 
+def test_walk_bytes_chunks():
+    assert walk(lambda value: bytes([value]).upper(), b'ab') == b'AB'
+    assert walk(lambda value: bytes([value]) * 2, b'ab') == b'aabb'
+    assert walk(lambda value: bytearray([value]), b'ab') == b'ab'
+    assert walk(lambda value: memoryview(bytes([value])), b'ab') == b'ab'
+    assert walk(lambda value: b'', b'ab') == b''
+
+
 def test_select_bytes():
     assert select(lambda value: value >= 128, b'\x00\x7f\x80\xff') == b'\x80\xff'
     assert compact(b'a\x00b') == b'ab'
