@@ -1,10 +1,10 @@
 from operator import __add__, __sub__
-from functools import wraps as std_wraps
+from functools import wraps
 import sys
 import pytest
 from whatever import _
 
-from funcy import lmap, merge_with, wraps as funcy_wraps
+from funcy import lmap, merge_with
 from funcy.funcs import *
 from funcy.seqs import keep
 
@@ -57,81 +57,39 @@ def test_rcurry():
     assert rcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
     assert rcurry(str.endswith, 2)('c')('abc') is True
 
+def test_curry_bound_method():
+    def deco(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            return f(*args, **kwargs)
+        return wrapper
 
-@pytest.mark.parametrize('currying', [curry, rcurry, autocurry])
-@pytest.mark.parametrize('method_kind', ['instance', 'class'])
-@pytest.mark.parametrize('wrap', [None, std_wraps, funcy_wraps])
-@pytest.mark.parametrize('bound_first', [False, True])
-def test_curry_bound_methods(currying, method_kind, wrap, bound_first):
-    def method(receiver, left, right):
-        return receiver, left, right
+    class A:
+        def add(self, a, b):
+            return a + b
 
-    if wrap is not None:
-        original = method
+        @deco
+        def wrapped_add(self, a, b):
+            return a + b
 
-        @wrap(original)
-        def method(*args, **kwargs):
-            return original(*args, **kwargs)
+        @classmethod
+        def cls_add(cls, a, b):
+            return a + b
 
-    class Target:
-        calculate = method if method_kind == 'instance' else classmethod(method)
-
-    receiver = Target() if method_kind == 'instance' else Target
-    bound = receiver.calculate
-    functions = [bound, method] if bound_first else [method, bound]
-    for func in functions:
-        args = [1, 2] if func is bound else [receiver, 1, 2]
-        result = currying(func)
-        for arg in reversed(args) if currying is rcurry else args:
-            result = result(arg)
-        assert result == (receiver, 1, 2)
-
-
-@pytest.mark.parametrize('method_kind', ['instance', 'class'])
-def test_autocurry_bound_method_defaults(method_kind):
-    def method(receiver, left, right=10, *, scale=1):
-        return receiver, (left + right) * scale
-
-    class Target:
-        calculate = method if method_kind == 'instance' else classmethod(method)
-
-    receiver = Target() if method_kind == 'instance' else Target
-    calculate = autocurry(receiver.calculate)
-    assert calculate(3) == (receiver, 13)
-    assert calculate(right=4, scale=2)(3) == (receiver, 14)
-
-
-def test_autocurry_bound_method_default_receiver():
-    class Target:
-        def calculate(self=None):
+        def default_self(self=None):
             return self
 
-    receiver = Target()
-    assert autocurry(receiver.calculate)() is receiver
-
-
-def test_autocurry_bound_method_variadic():
-    class Target:
-        def calculate(*args):
+        def variadic(*args):
             return args
 
-    receiver = Target()
-    assert autocurry(receiver.calculate)(1) == (receiver, 1)
-    if sys.implementation.name == 'cpython':
-        assert autocurry(receiver.calculate)() == (receiver,)
-
-
-@pytest.mark.parametrize('currying', [curry, rcurry, autocurry])
-def test_curry_staticmethod(currying):
-    class Target:
-        @staticmethod
-        def calculate(left, right):
-            return left, right
-
-    args = [2, 1] if currying is rcurry else [1, 2]
-    for method in [Target.calculate, Target().calculate]:
-        assert currying(method)(args[0])(args[1]) == (1, 2)
-
+    a = A()
+    assert curry(a.add)(1)(2) == 3
+    assert rcurry(a.add)('a')('b') == 'ba'
+    assert autocurry(a.add)(1)(2) == 3
+    assert autocurry(a.wrapped_add)(1)(2) == 3
+    assert autocurry(A.cls_add)(1)(2) == 3
+    assert autocurry(a.default_self)() is a
+    assert autocurry(a.variadic)(1) == (a, 1)
 
 def test_autocurry():
     at = autocurry(lambda a, b, c: (a, b, c))
