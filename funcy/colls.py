@@ -37,7 +37,11 @@ def _factory(coll, mapper=None):
                        else coll.default_factory
         return partial(defaultdict, item_factory)
     elif isinstance(coll, Counter):
-        return lambda items=(): coll_type(dict(items))
+        def counter_factory(items=()):
+            counter = coll_type()
+            dict.update(counter, items)
+            return counter
+        return counter_factory
     elif isinstance(coll, Iterator):
         return iter
     elif isinstance(coll, (bytes, str)):
