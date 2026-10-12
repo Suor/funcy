@@ -48,6 +48,9 @@ Flow
                once_per_args
                once_per(*argnames)
 
+    ``once_per_args`` includes keyword-only arguments, ``*args`` and ``**kwargs``.
+    Omitted defaults and explicitly supplied defaults count as the same values.
+
     Call function only once, once for every combination of values of its arguments or once for every combination of given arguments. Thread safe. Handy for various initialization purposes::
 
         # Global initialization
