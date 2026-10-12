@@ -122,6 +122,11 @@ def get_spec(func, _cache={}):
         # __init__ inherited from builtin classes
         objclass = getattr(func.__init__, '__objclass__', None)
         if objclass and objclass is not func:
+            if func.__new__ is not objclass.__new__:
+                try:
+                    return _sig_to_spec(signature(func))
+                except (ValueError, TypeError):
+                    pass
             return get_spec(objclass)
         # Introspect constructor and remove self
         spec = get_spec(func.__init__)
