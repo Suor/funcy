@@ -63,6 +63,9 @@ Calculation
 
 .. decorator:: cache(timeout, *, key_func=None)
 
+    Cache lifetimes use a monotonic clock, so changing the system clock does not
+    expire entries early or extend their lifetimes.
+
     Caches decorated function results for ``timeout``.
     It can be either number of seconds or :class:`py3:datetime.timedelta`::
 

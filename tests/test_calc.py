@@ -263,9 +263,33 @@ def test_cache_timedout():
     assert len(inc.memory) == 1  # Both call should be erased then one added
 
 
+@pytest.mark.parametrize('wall_jump', [-1000, 1000])
+def test_cache_expiration_ignores_wall_clock_jumps(monkeypatch, wall_jump):
+    elapsed = [0]
+    wall = [100]
+    monkeypatch.setattr('funcy.calc.time.time', lambda: wall[0])
+    monkeypatch.setattr('funcy.calc.time.monotonic', lambda: elapsed[0])
+    calls = []
+
+    @cache(10)
+    def cached():
+        calls.append(None)
+        return len(calls)
+
+    assert cached() == 1
+    elapsed[0] = 5
+    wall[0] += wall_jump
+    assert cached() == 1
+    elapsed[0] = 10
+    assert cached() == 2
+    elapsed[0] = 20
+    cached.memory.expire()
+    assert len(cached.memory) == 0
+
+
 def test_cache_expiration_preserves_refilled_key(monkeypatch):
     now = [0]
-    monkeypatch.setattr('funcy.calc.time.time', lambda: now[0])
+    monkeypatch.setattr('funcy.calc.time.monotonic', lambda: now[0])
     calls = []
 
     @cache(10)
