@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from threading import Thread
 import pytest
 from funcy.flow import *
@@ -363,7 +363,9 @@ def test_once_allows_reentrant_calls(decorate, expected):
 
 
 @pytest.mark.parametrize('timeout', [0.5, timedelta(seconds=0.5)])
-def test_limit_error_rate_fractional_timeout(timeout):
+def test_limit_error_rate_fractional_timeout(monkeypatch, timeout):
+    clock = iter([1, 1.1, 2, 2])
+    monkeypatch.setattr('time.monotonic', lambda: next(clock))
     @limit_error_rate(1, timeout)
     def fail():
         raise MyError
@@ -373,6 +375,37 @@ def test_limit_error_rate_fractional_timeout(timeout):
     with pytest.raises(ErrorRateExceeded):
         fail()
 
-    fail.blocked -= timedelta(seconds=1)
     with pytest.raises(MyError):
         fail()
+
+
+@pytest.mark.parametrize('jump', [-3600, 3600])
+def test_limit_error_rate_ignores_wall_clock_jumps(monkeypatch, jump):
+    clock = {'wall': 10000, 'elapsed': 0}
+
+    class WallClock:
+        @staticmethod
+        def now():
+            return datetime.fromtimestamp(clock['wall'])
+
+    monkeypatch.setattr('funcy.flow.datetime', WallClock, raising=False)
+    monkeypatch.setattr('time.monotonic', lambda: clock['elapsed'])
+    calls = []
+
+    @limit_error_rate(1, 10)
+    def limited():
+        calls.append(1)
+        if len(calls) == 1:
+            raise MyError
+        return 'recovered'
+
+    with pytest.raises(MyError):
+        limited()
+    clock['wall'] += jump
+    clock['elapsed'] += 1
+    with pytest.raises(ErrorRateExceeded):
+        limited()
+    assert len(calls) == 1
+    clock['elapsed'] += 9
+    assert limited() == 'recovered'
+    assert len(calls) == 2
