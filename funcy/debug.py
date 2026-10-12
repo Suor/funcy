@@ -201,7 +201,7 @@ def print_iter_durations(seq, label=None, unit='auto'):
 ### Formatting utils
 
 def _format_error(label, e, stack=True):
-    if isinstance(e, Exception):
+    if isinstance(e, BaseException):
         if stack:
             e_message = traceback.format_exc()
         else:
