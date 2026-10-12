@@ -2,7 +2,7 @@ from builtins import all as _all, any as _any
 from copy import copy
 from operator import itemgetter, methodcaller, attrgetter
 from itertools import chain, tee
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Mapping, Set, Iterable, Iterator
 
 from .primitives import EMPTY
@@ -36,6 +36,12 @@ def _factory(coll, mapper=None):
         item_factory = compose(mapper, coll.default_factory) if mapper and coll.default_factory \
                        else coll.default_factory
         return partial(defaultdict, item_factory)
+    elif isinstance(coll, Counter):
+        def counter_factory(items=()):
+            counter = coll_type()
+            dict.update(counter, items)
+            return counter
+        return counter_factory
     elif isinstance(coll, Iterator):
         return iter
     elif isinstance(coll, bytes):

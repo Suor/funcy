@@ -1,5 +1,5 @@
 from collections.abc import Iterator
-from collections import defaultdict, namedtuple
+from collections import Counter, defaultdict, namedtuple
 from itertools import chain, count
 import pytest
 from whatever import _
@@ -403,3 +403,20 @@ def test_walk_bytes_subclass():
     result = walk(None, Binary(b'abc'))
     assert type(result) is Binary
     assert result == b'abc'
+def test_counter_mapping_operations():
+    data = Counter(a=2, b=-1, zero=0)
+    assert dict(walk_values(lambda value: value * 2, data)) == {'a': 4, 'b': -2, 'zero': 0}
+    assert dict(walk_keys(str.upper, data)) == {'A': 2, 'B': -1, 'ZERO': 0}
+    assert dict(project(data, ['a', 'zero'])) == {'a': 2, 'zero': 0}
+    assert dict(omit(data, ['a'])) == {'b': -1, 'zero': 0}
+    assert select_values(lambda value: value > 1, data) == Counter(a=2)
+    assert dict(data) == {'a': 2, 'b': -1, 'zero': 0}
+    assert empty(data) == Counter()
+
+    class CustomCounter(Counter):
+        pass
+
+    result = walk_values(lambda value: value * 2, CustomCounter(a=2))
+    assert type(result) is CustomCounter
+    assert result == CustomCounter(a=4)
+    assert type(empty(result)) is CustomCounter
