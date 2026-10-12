@@ -1,3 +1,6 @@
+Unreleased
+- preserve later-value precedence when merging Counter dictionaries
+
 2.1
 - support Python 3.12, 3.13, 3.14 officially
 - added split_keys()

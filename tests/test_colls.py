@@ -58,6 +58,25 @@ def test_itervalues():
 def test_merge():
     assert eq(merge({1: 2}, {3: 4}), {1: 2, 3: 4})
 
+def test_merge_counters():
+    left = Counter(a=2, b=4, untouched=5)
+    right = Counter(a=3, b=0, negative=-1)
+    expected = {'a': 3, 'b': 0, 'untouched': 5, 'negative': -1}
+
+    result = merge(left, right)
+    assert type(result) is Counter
+    assert dict(result) == expected
+    assert dict(join(iter([left, right]))) == expected
+    assert dict(left) == {'a': 2, 'b': 4, 'untouched': 5}
+    assert dict(right) == {'a': 3, 'b': 0, 'negative': -1}
+
+    class CustomCounter(Counter):
+        pass
+
+    result = merge(CustomCounter(a=2), CustomCounter(a=3))
+    assert type(result) is CustomCounter
+    assert dict(result) == {'a': 3}
+
 def test_join():
     assert join([]) is None
     with pytest.raises(TypeError): join([1])

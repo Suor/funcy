@@ -84,7 +84,10 @@ def join(colls):
     elif isinstance(dest, Mapping):
         result = dest.copy()
         for d in it:
-            result.update(d)
+            if isinstance(result, Counter):
+                dict.update(result, d)
+            else:
+                result.update(d)
         return result
     elif isinstance(dest, Set):
         return dest.union(*it)
