@@ -278,6 +278,28 @@ def test_once_per_args_all_kinds():
     assert calls == [((1,), 'en', {}), ((2,), 'en', {}), ((2,), 'fr', {}), ((2,), 'fr', {'x': [1]})]
 
 
+@pytest.mark.parametrize('method_name', ['method', 'class_method'])
+def test_once_per_args_bound_method(method_name):
+    calls = []
+
+    class Initializer:
+        def method(self, value, *, mode='default'):
+            calls.append((value, mode))
+            return value
+
+        @classmethod
+        def class_method(cls, value, *, mode='default'):
+            calls.append((value, mode))
+            return value
+
+    initialize = once_per_args(getattr(Initializer(), method_name))
+    assert initialize(1) == 1
+    assert initialize(value=1, mode='default') is None
+    assert initialize(2) == 2
+    assert initialize(2, mode='other') == 2
+    assert calls == [(1, 'default'), (2, 'default'), (2, 'other')]
+
+
 def test_once_per_args():
     calls = []
 
