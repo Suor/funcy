@@ -260,3 +260,15 @@ def test_autocurry_builtin_subclass_constructor():
         pass
 
     assert autocurry(Number)('12') == 12
+
+
+def test_autocurry_class_metaclass_signature():
+    class Constructor(type):
+        def __call__(cls, value):
+            return value
+
+    class Value(metaclass=Constructor):
+        def __new__(cls, first, second):
+            return super().__new__(cls)
+
+    assert autocurry(Value)(value=3) == 3

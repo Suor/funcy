@@ -121,6 +121,9 @@ def get_spec(func, _cache={}):
     elif isinstance(func, type):
         # __init__ inherited from builtin classes
         objclass = getattr(func.__init__, '__objclass__', None)
+        # PyPy implements object.__init__ as a function without __objclass__.
+        if objclass is None and func.__init__ is object.__init__:
+            objclass = object
         if objclass and objclass is not func:
             if func.__new__ is not objclass.__new__:
                 try:
