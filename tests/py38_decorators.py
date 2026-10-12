@@ -40,3 +40,16 @@ def test_decorator_access_args():
     assert return_x(lambda **x: None)(a=1, x=3) == {'a': 1, 'x': 3}  # Not just 3
     assert return_x(lambda a, **x: None)(a=1, b=2) == {'b': 2}
     assert return_x(lambda a, /, **x: None)(a=1, b=2) == {'a': 1, 'b': 2}
+
+
+def test_decorator_bound_method_posonly():
+    @decorator
+    def return_y(call):
+        return call.y
+
+    class A:
+        def method(self, x, /, y=None):
+            pass
+
+    assert return_y(A().method)(1, 2) == 2
+    assert return_y(A().method)(1, y=2) == 2

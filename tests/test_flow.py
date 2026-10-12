@@ -245,6 +245,23 @@ def test_once_per():
     assert calls == [1, 2]
 
 
+def test_once_per_bound_method():
+    calls = []
+
+    class A:
+        def method(self, x, y=None):
+            calls.append(x)
+
+    method = once_per('x')(A().method)
+    method(1)
+    method(1, 2)
+    method(x=2)
+    wrapped = once_per('x')(silent(A().method))
+    wrapped(3)
+    wrapped(3)
+    assert calls == [1, 2, 3]
+
+
 def test_once_per_args_all_kinds():
     calls = []
 
