@@ -178,6 +178,12 @@ def test_chunks_step_gt_n():
     assert lchunks(2, 3, iter(range(10))) == lchunks(2, 3, list(range(10)))
     assert lchunks(2, 3, iter(range(10))) == [[0, 1], [3, 4], [6, 7], [9]]
 
+def test_partition_zero():
+    with pytest.raises(ValueError):
+        lpartition(0, iter(range(3)))
+    with pytest.raises(ValueError):
+        lchunks(2, 0, [0, 1, 2])
+
 def test_partition_by():
     assert lpartition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
     assert lpartition_by('x', 'abxcd') == [['a', 'b'], ['x'], ['c', 'd']]

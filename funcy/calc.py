@@ -79,20 +79,20 @@ class CacheMemory(dict):
         self.clear()
 
     def __setitem__(self, key, value):
-        expires_at = time.time() + self.timeout
+        expires_at = time.monotonic() + self.timeout
         dict.__setitem__(self, key, (value, expires_at))
         self._keys.append(key)
         self._expires.append(expires_at)
 
     def __getitem__(self, key):
         value, expires_at = dict.__getitem__(self, key)
-        if expires_at <= time.time():
+        if expires_at <= time.monotonic():
             self.expire()
             raise KeyError(key)
         return value
 
     def expire(self):
-        i = bisect(self._expires, time.time())
+        i = bisect(self._expires, time.monotonic())
         for _ in range(i):
             expires_at = self._expires.popleft()
             key = self._keys.popleft()

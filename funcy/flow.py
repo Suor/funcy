@@ -174,7 +174,7 @@ def throttle(period):
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            now = time.time()
+            now = time.monotonic()
             if wrapper.blocked_until > now:
                 return
             wrapper.blocked_until = now + period

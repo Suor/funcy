@@ -1,4 +1,5 @@
 from operator import __add__, __sub__
+from functools import wraps
 import sys
 import pytest
 from whatever import _
@@ -55,6 +56,40 @@ def test_rcurry():
     assert rcurry(__sub__, 2)(10)(1) == -9
     assert rcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
     assert rcurry(str.endswith, 2)('c')('abc') is True
+
+def test_curry_bound_method():
+    def deco(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            return f(*args, **kwargs)
+        return wrapper
+
+    class A:
+        def add(self, a, b):
+            return a + b
+
+        @deco
+        def wrapped_add(self, a, b):
+            return a + b
+
+        @classmethod
+        def cls_add(cls, a, b):
+            return a + b
+
+        def default_self(self=None):
+            return self
+
+        def variadic(*args):
+            return args
+
+    a = A()
+    assert curry(a.add)(1)(2) == 3
+    assert rcurry(a.add)('a')('b') == 'ba'
+    assert autocurry(a.add)(1)(2) == 3
+    assert autocurry(a.wrapped_add)(1)(2) == 3
+    assert autocurry(A.cls_add)(1)(2) == 3
+    assert autocurry(a.default_self)() is a
+    assert autocurry(a.variadic)(1) == (a, 1)
 
 def test_autocurry():
     at = autocurry(lambda a, b, c: (a, b, c))

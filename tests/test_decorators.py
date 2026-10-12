@@ -68,7 +68,7 @@ def test_decorator_access_args():
 
 if sys.version_info >= (3, 8):
     pytest.register_assert_rewrite("tests.py38_decorators")
-    from .py38_decorators import test_decorator_access_args  # noqa
+    from .py38_decorators import test_decorator_access_args, test_decorator_bound_method_posonly  # noqa
 
 
 def test_double_decorator_defaults():
