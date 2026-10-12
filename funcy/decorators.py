@@ -118,14 +118,14 @@ def arggetter(func, _cache={}):
 
     # Instrospect pos and kw names
     posnames = code.co_varnames[:code.co_argcount]
+    posonly_n = getattr(code, 'co_posonlyargcount', 0)
+    if inspect.ismethod(func) or inspect.ismethod(original):
+        posnames = posnames[1:]
+        posonly_n = max(0, posonly_n - 1)
     n = code.co_argcount
     kwonlynames = code.co_varnames[n:n + code.co_kwonlyargcount]
     n += code.co_kwonlyargcount
-    # TODO: remove this check once we drop Python 3.7
-    if hasattr(code, 'co_posonlyargcount'):
-        kwnames = posnames[code.co_posonlyargcount:] + kwonlynames
-    else:
-        kwnames = posnames + kwonlynames
+    kwnames = posnames[posonly_n:] + kwonlynames
 
     varposname = varkwname = None
     if code.co_flags & inspect.CO_VARARGS:
