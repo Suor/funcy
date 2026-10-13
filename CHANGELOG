@@ -1,3 +1,24 @@
+- support Python 3.15
+- added shuffled() (Michael Bianco)
+- walk() and select() work with bytes now (thx to Huanyi Xie)
+- use monotonic clock in cache() and throttle(), system clock changes don't affect them (Saturday-boyi)
+- once_per_args() takes keyword-only, *args and **kwargs into account (Saturday-boyi)
+- partition() and chunks() raise ValueError on zero n or step instead of hanging (thx to WU Leizhi)
+- fixed curry(), rcurry() and autocurry() for bound methods (Huanyi Xie)
+- fixed accessing bound method arguments in decorators and once_per() (Muneeb Sheikh)
+- fixed walk_values(), project(), omit() and friends for Counter (Huanyi Xie)
+- fixed empty() for strings and bytes (ammann)
+- fixed deleting properties wrapped with wrap_prop() (Himanshu Kumar)
+- fixed fractional-second timeouts in limit_error_rate() (Vitaliy)
+- fixed reentrant calls deadlocking once() and friends (Vitaliy)
+- fixed lookuper initialization not retried after builder failure (Alexandre Rodrigues)
+- fixed reused cache() or memoize() decorators sharing memory (Sunhy)
+- fixed cached_readonly recomputing value on every read (Jake Wang)
+- fixed memoize() and cache() mixing up positional and keyword arguments (thx to fan wu)
+- added extended function semantics examples to docs (Kudala Bharani Kumar Reddy)
+- added caller() example to docs
+- dropped Python 2 refs in docs
+
 2.1
 - support Python 3.12, 3.13, 3.14 officially
 - added split_keys()
