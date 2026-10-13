@@ -47,6 +47,13 @@ All functions in this section support :ref:`extended_fns`.
         walk(lambda x: x * 2, 'ABC')   # -> 'AABBCC'
         walk(compose(str, ord), 'ABC') # -> '656667'
 
+    And with bytes, mapping each byte to an int or to bytes::
+
+        walk(lambda x: (x + 13) % 256, b'hey')  # rot13
+
+        CARET = {x: b'^%c' % (x ^ 64) if x < 32 or x == 127 else b'%c' % x for x in range(256)}
+        walk(CARET, b'a\tb\x7f\r\n')  # -> b'a^Ib^?^M^J', like cat -v
+
     One should use :func:`map` when there is no need to preserve collection type.
 
     .. note about constructor interface?
@@ -89,6 +96,9 @@ All functions in this section support :ref:`extended_fns`.
 
         select(lambda (k, v): k == v, {1: 1, 2: 3})
         # -> {1: 1}
+
+        select(lambda x: x > 32, b'as hey\tthere')
+        # -> b'asheythere'
 
 
 .. function:: select_keys(pred, coll)

@@ -114,6 +114,12 @@ def test_walk_iter():
     it = walk(inc, (i for i in [0,1,2]))
     assert isinstance(it, Iterator) and list(it) == [1,2,3]
 
+def test_bytes():
+    assert eq(walk(lambda x: (x + 13) % 256, b'hey'), b'ur\x86')
+    caret = {x: b'^%c' % (x ^ 64) if x < 32 or x == 127 else b'%c' % x for x in range(256)}
+    assert eq(walk(caret, b'a\tb\x7f\r\n'), b'a^Ib^?^M^J')
+    assert eq(select(lambda x: x > 32, b'as hey\tthere'), b'asheythere')
+
 def test_walk_extended():
     assert walk(None, {2, 3}) == {2, 3}
     assert walk(r'\d+', {'a2', '13b'}) == {'2', '13'}

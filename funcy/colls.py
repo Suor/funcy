@@ -44,7 +44,16 @@ def _factory(coll, mapper=None):
         return counter_factory
     elif isinstance(coll, Iterator):
         return iter
-    elif isinstance(coll, (bytes, str)):
+    elif isinstance(coll, bytes):
+        # Iterating bytes gives ints, but mapper may return bytes
+        def bytes_factory(items=()):
+            # join() makes a list anyway, and bytes() has a fast path for lists
+            items = list(items)
+            if items and isinstance(items[0], int):
+                return coll_type(items)
+            return coll_type().join(items)
+        return bytes_factory
+    elif isinstance(coll, str):
         return coll_type().join
     elif coll_type in FACTORY_REPLACE:
         return FACTORY_REPLACE[coll_type]
