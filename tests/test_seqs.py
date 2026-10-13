@@ -137,6 +137,54 @@ def test_split_at():
 def test_split_by():
     assert lsplit_by(_ % 2, [1, 2, 3]) == ([1], [2, 3])
 
+
+@pytest.mark.parametrize('tail_first', [False, True])
+def test_split_by_stateful_predicate(tail_first):
+    calls = []
+
+    def predicate(value):
+        calls.append(value)
+        return len(calls) <= 2
+
+    head, tail = split_by(predicate, iter([1, 2, 3, 4]))
+    assert calls == []
+    if tail_first:
+        tail = list(tail)
+        head = list(head)
+    else:
+        head = list(head)
+        tail = list(tail)
+    assert (head, tail) == ([1, 2], [3, 4])
+    assert calls == [1, 2, 3]
+
+
+def test_split_by_interleaved_consumption():
+    calls = []
+
+    def predicate(value):
+        calls.append(value)
+        return value < 3
+
+    head, tail = split_by(predicate, iter([1, 2, 3, 4, 5]))
+    assert next(head) == 1
+    assert calls == [1]
+    assert next(tail) == 3
+    assert calls == [1, 2, 3]
+    assert list(head) == [2]
+    assert list(tail) == [4, 5]
+    assert calls == [1, 2, 3]
+
+
+@pytest.mark.parametrize('seq, expected', [
+    ([], ([], [])),
+    ([1, 2], ([1, 2], [])),
+    ([0, 1], ([], [0, 1])),
+])
+def test_split_by_boundaries(seq, expected):
+    head, tail = split_by(bool, iter(seq))
+    tail = list(tail)
+    assert (list(head), tail) == expected
+
 def test_group_by():
     assert group_by(_ % 2, range(5)) == {0: [0, 2, 4], 1: [1, 3]}
     assert group_by(r'\d', ['a1', 'b2', 'c1']) == {'1': ['a1', 'c1'], '2': ['b2']}
