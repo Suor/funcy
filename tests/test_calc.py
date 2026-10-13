@@ -42,6 +42,16 @@ def test_memoize_args_kwargs():
     assert mul(0, 1) == 0
     assert calls == [(0, 1), (1, 1), (0, 1), (1, 1)]
 
+def test_memoize_kwargs_key():
+    @memoize
+    def echo(*args, **kwargs):
+        return args, kwargs
+
+    assert echo(('x', 1)) == ((('x', 1),), {})
+    assert echo((), frozenset({('x', 1)})) == (((), frozenset({('x', 1)})), {})
+    assert echo(x=1) == ((), {'x': 1})
+    assert echo(x=1, y=2) is echo(y=2, x=1)
+
 
 def test_memoize_skip():
     @memoize

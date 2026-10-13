@@ -15,12 +15,16 @@ class SkipMemory(Exception):
     pass
 
 
+# Makes kwargs keys never equal to positional args keys
+_KWARGS_MARK = object()
+
+
 # TODO: use pos-only arg once in Python 3.8+ only
 def memoize(_func=None, *, key_func=None):
     """@memoize(key_func=None). Makes decorated function memoize its results.
 
     If key_func is specified uses key_func(*func_args, **func_kwargs) as memory key.
-    Otherwise uses args + tuple(sorted(kwargs.items()))
+    Otherwise uses args, adding frozenset(kwargs.items()) if there are any.
 
     Exposes its memory via .memory attribute.
     """
@@ -49,7 +53,7 @@ def _memory_decorator(memory_factory, key_func):
         def wrapper(*args, **kwargs):
             # We inline this here since @memoize also targets microoptimizations
             key = key_func(*args, **kwargs) if key_func else \
-                  args + tuple(sorted(kwargs.items())) if kwargs else args
+                  (_KWARGS_MARK, args, frozenset(kwargs.items())) if kwargs else args
             try:
                 return memory[key]
             except KeyError:
@@ -61,7 +65,7 @@ def _memory_decorator(memory_factory, key_func):
 
         def invalidate(*args, **kwargs):
             key = key_func(*args, **kwargs) if key_func else \
-                  args + tuple(sorted(kwargs.items())) if kwargs else args
+                  (_KWARGS_MARK, args, frozenset(kwargs.items())) if kwargs else args
             memory.pop(key, None)
         wrapper.invalidate = invalidate
 
