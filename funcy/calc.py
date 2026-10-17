@@ -83,7 +83,10 @@ class CacheMemory(dict):
         self.clear()
 
     def __setitem__(self, key, value):
-        expires_at = time.monotonic() + self.timeout
+        now = time.monotonic()
+        if self._expires and self._expires[0] <= now:
+            self.expire()
+        expires_at = now + self.timeout
         dict.__setitem__(self, key, (value, expires_at))
         self._keys.append(key)
         self._expires.append(expires_at)
