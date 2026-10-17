@@ -140,7 +140,11 @@ def get_spec(func, _cache={}):
             raise ValueError('Unable to introspect %s() arguments'
                 % (getattr(func, '__qualname__', None) or getattr(func, '__name__', func)))
         else:
-            spec = _cache[func] = _sig_to_spec(sig)
+            spec = _sig_to_spec(sig)
+            try:
+                _cache[func] = spec
+            except TypeError:
+                pass
             return spec
 
 
