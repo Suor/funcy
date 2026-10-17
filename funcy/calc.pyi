@@ -1,0 +1,43 @@
+from collections.abc import Callable, Mapping
+from datetime import timedelta
+from typing import Any, Concatenate, ParamSpec, Protocol, Self, TypeVar, overload
+
+__all__ = ['memoize', 'make_lookuper', 'silent_lookuper', 'cache']
+
+_P = ParamSpec('_P')
+_P2 = ParamSpec('_P2')
+_R = TypeVar('_R')
+_R2 = TypeVar('_R2')
+_R_co = TypeVar('_R_co', covariant=True)
+_S = TypeVar('_S')
+_K = TypeVar('_K')
+_V = TypeVar('_V')
+
+class SkipMemory(Exception): ...
+
+class _Memoized(Protocol[_P, _R_co]):
+    memory: dict[Any, Any]
+    def __call__(self, *args: _P.args, **kwargs: _P.kwargs) -> _R_co: ...
+    def invalidate(self, *args: _P.args, **kwargs: _P.kwargs) -> None: ...
+    def invalidate_all(self) -> None: ...
+    # Bind like a plain function when decorating a method
+    @overload
+    def __get__(self, instance: None, owner: type) -> Self: ...
+    @overload
+    def __get__(self: _Memoized[Concatenate[_S, _P2], _R2], instance: _S, owner: type) -> _Memoized[_P2, _R2]: ...
+
+@overload
+def memoize(func: Callable[_P, _R]) -> _Memoized[_P, _R]: ...
+@overload
+def memoize(*, key_func: Callable[..., Any]) -> Callable[[Callable[_P, _R]], _Memoized[_P, _R]]: ...
+
+def cache(timeout: int | float | timedelta, *, key_func: Callable[..., Any] | None = ...) -> Callable[[Callable[_P, _R]], _Memoized[_P, _R]]: ...
+
+@overload
+def make_lookuper(func: Callable[[], Mapping[_K, _V]]) -> Callable[[_K], _V]: ...
+@overload
+def make_lookuper(func: Callable[_P, Mapping[_K, _V]]) -> Callable[_P, Callable[[_K], _V]]: ...
+@overload
+def silent_lookuper(func: Callable[[], Mapping[_K, _V]]) -> Callable[[_K], _V | None]: ...
+@overload
+def silent_lookuper(func: Callable[_P, Mapping[_K, _V]]) -> Callable[_P, Callable[[_K], _V | None]]: ...

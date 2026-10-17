@@ -8,7 +8,7 @@ from . colls import omit
 __all__ = ['decorator', 'wraps', 'unwrap', 'ContextDecorator', 'contextmanager']
 
 
-def decorator(deco):
+def decorator(deco=None, *, returning=None):
     """
     Transforms a flat wrapper into decorator::
 
@@ -21,7 +21,12 @@ def decorator(deco):
             print(call._func, call_args, call._kwargs)
             # Finally make a call:
             return call()
+
+    Pass returning= to tell type checkers what the decorated function returns.
     """
+    if deco is None:
+        return decorator
+
     if has_single_arg(deco):
         return make_decorator(deco)
     elif has_1pos_and_kwonly(deco):

@@ -74,6 +74,37 @@ Decorators
 
     You can see more examples in :mod:`flow` and :mod:`debug` submodules source code.
 
+    Type checkers see the decorated function keeping its own signature. Pass ``returning=``
+    when the decorator returns something else::
+
+        @decorator(returning=HttpResponse)
+        def render_to(call, template):
+            return render(call.request, template, call())
+
+        @decorator(returning=str)
+        def as_json(call):
+            return json.dumps(call())
+
+    For a decorator you can't annotate, cast it to the same protocol::
+
+        from funcy.typing import DecoReturning
+
+        retrying = cast(DecoReturning[Response | None], third_party_retry)
+
+    A decorator may also alter the arguments: ``call(conn)`` appends one, so callers of
+    the decorated function pass one less. ``DecoReturning`` fits here too — the extra
+    argument stays in the signature and passing it won't be caught, everything else is.
+
+    To spell such a call out, cast the decorated function, not the decorator, which is
+    used on many functions and has no single signature. The cast needs a name of its
+    own, since the name a ``def`` binds already has a type::
+
+        @with_conn
+        def _query(sql: str, *, limit: int = 10, conn: Conn) -> list[Row]:
+            ...
+
+        query = cast(_Query, _query)  # a Callable will do when names don't matter
+
 
 .. decorator:: contextmanager
 
