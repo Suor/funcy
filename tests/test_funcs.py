@@ -57,6 +57,17 @@ def test_rcurry():
     assert rcurry(lambda x,y,z: x+y+z)('a')('b')('c') == 'cba'
     assert rcurry(str.endswith, 2)('c')('abc') is True
 
+@pytest.mark.parametrize('decorate, expected',
+                         [(curry, 'ab'), (rcurry, 'ba'), (autocurry, 'ab')])
+def test_curry_unhashable_callable(decorate, expected):
+    class Add:
+        __hash__ = None
+
+        def __call__(self, a, b):
+            return a + b
+
+    assert decorate(Add())('a')('b') == expected
+
 def test_curry_bound_method():
     def deco(f):
         @wraps(f)
