@@ -3,7 +3,8 @@ import time
 import threading
 from contextlib import suppress  # reexport
 
-from .decorators import decorator, wraps, get_argnames, arggetter, contextmanager
+from .decorators import (decorator, wraps, get_argnames, arggetter, contextmanager,
+                         ContextDecorator)
 
 
 __all__ = ['raiser', 'ignore', 'silent', 'suppress', 'nullcontext', 'reraise', 'retry', 'fallback',
@@ -243,5 +244,7 @@ def once_per_args(func):
 @decorator
 def wrap_with(call, ctx):
     """Turn context manager into a decorator"""
+    if isinstance(ctx, ContextDecorator):
+        ctx = ctx._recreate_cm()
     with ctx:
         return call()

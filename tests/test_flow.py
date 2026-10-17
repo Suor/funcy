@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from datetime import timedelta
 from threading import Thread
 import pytest
@@ -328,7 +329,8 @@ def test_wrap_with():
         pass
 
     calc()
-    assert calls == [1]
+    calc()
+    assert calls == [1, 1]
 
 
 @pytest.mark.parametrize('decorate, expected', [
@@ -376,3 +378,24 @@ def test_limit_error_rate_fractional_timeout(timeout):
     fail.blocked -= timedelta(seconds=1)
     with pytest.raises(MyError):
         fail()
+
+
+def test_wrap_with_generator_context_manager():
+    events = []
+
+    @contextmanager
+    def transaction():
+        events.append('begin')
+        try:
+            yield
+        finally:
+            events.append('end')
+
+    @wrap_with(transaction())
+    def save(value):
+        events.append(value)
+        return value
+
+    assert save('first') == 'first'
+    assert save('second') == 'second'
+    assert events == ['begin', 'first', 'end', 'begin', 'second', 'end']
