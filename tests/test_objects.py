@@ -224,3 +224,53 @@ def test_lazy_object():
     a = LazyObject(A)
     assert not log
     assert a.x == 42
+
+
+@pytest.mark.parametrize('fail_first', [False, True])
+def test_wrap_prop_recreates_generator_contexts(fail_first):
+    from contextlib import contextmanager
+
+    events = []
+
+    @contextmanager
+    def transaction():
+        events.append('enter')
+        try:
+            yield
+        finally:
+            events.append('exit')
+
+    class Record:
+        value = 1
+
+        @property
+        def field(self):
+            if self.value is None:
+                raise ValueError('missing value')
+            return self.value
+
+        @field.setter
+        def field(self, value):
+            self.value = value
+
+        @field.deleter
+        def field(self):
+            self.value = None
+
+        field = wrap_prop(transaction())(field)
+
+    record = Record()
+    if fail_first:
+        record.value = None
+        with pytest.raises(ValueError, match='missing value'):
+            _ = record.field
+        record.value = 1
+
+    assert record.field == 1
+    assert record.field == 1
+    record.field = 2
+    assert record.field == 2
+    del record.field
+    record.field = 3
+    assert record.field == 3
+    assert events == ['enter', 'exit'] * (8 if fail_first else 7)
