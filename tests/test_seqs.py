@@ -184,6 +184,12 @@ def test_partition_zero():
     with pytest.raises(ValueError):
         lchunks(2, 0, [0, 1, 2])
 
+@pytest.mark.parametrize('func', [partition, chunks])
+@pytest.mark.parametrize('n,step', [(-1, 1), (2, -1)])
+def test_partition_negative(func, n, step):
+    with pytest.raises(ValueError):
+        func(n, step, [0, 1, 2])
+
 def test_partition_by():
     assert lpartition_by(lambda x: x == 3, [1,2,3,4,5]) == [[1,2], [3], [4,5]]
     assert lpartition_by('x', 'abxcd') == [['a', 'b'], ['x'], ['c', 'd']]

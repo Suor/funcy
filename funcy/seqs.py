@@ -388,6 +388,8 @@ def _cut(drop_tail, n, step, seq=EMPTY):
         step, seq = n, step
     if n == 0 or step == 0:
         raise ValueError('n and step must not be zero')
+    if n < 0 or step < 0:
+        raise ValueError('n and step must be positive')
     if isinstance(seq, Sequence):
         return _cut_seq(drop_tail, n, step, seq)
     else:
