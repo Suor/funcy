@@ -35,6 +35,19 @@ jobs:
         pip install -r requirements.txt
         make html SPHINXOPTS="-W"
 
+  types:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v5
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.13
+    - name: Type tests and stubtest
+      run: |
+        pip install tox
+        tox -e typetest,stubtest
+
   test:
     strategy:
       fail-fast: false
