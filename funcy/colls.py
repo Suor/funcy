@@ -1,7 +1,7 @@
 from builtins import all as _all, any as _any
 from copy import copy
 from operator import itemgetter, methodcaller, attrgetter
-from itertools import chain, tee
+from itertools import chain
 from collections import Counter, defaultdict
 from collections.abc import Mapping, Set, Iterable, Iterator
 
@@ -80,8 +80,7 @@ itervalues.__doc__ = "Yields values of the given collection."
 
 def join(colls):
     """Joins several collections of same type into one."""
-    colls, colls_copy = tee(colls)
-    it = iter(colls_copy)
+    it = iter(colls)
     try:
         dest = next(it)
     except StopIteration:
@@ -89,7 +88,7 @@ def join(colls):
     cls = dest.__class__
 
     if isinstance(dest, (bytes, str)):
-        return cls().join(colls)
+        return cls().join(chain((dest,), it))
     elif isinstance(dest, Mapping):
         result = dest.copy()
         for d in it:
@@ -98,11 +97,11 @@ def join(colls):
     elif isinstance(dest, Set):
         return dest.union(*it)
     elif isinstance(dest, (Iterator, range)):
-        return chain.from_iterable(colls)
+        return chain.from_iterable(chain((dest,), it))
     elif isinstance(dest, Iterable):
         # NOTE: this could be reduce(concat, ...),
         #       more effective for low count
-        return cls(chain.from_iterable(colls))
+        return cls(chain.from_iterable(chain((dest,), it)))
     else:
         raise TypeError("Don't know how to join %s" % cls.__name__)
 

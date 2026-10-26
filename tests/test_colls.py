@@ -1,6 +1,8 @@
 from collections.abc import Iterator
 from collections import Counter, defaultdict, namedtuple
 from itertools import chain, count
+import gc
+import weakref
 import pytest
 from whatever import _
 
@@ -87,6 +89,39 @@ def test_join_iter():
     it2 = (x for x in range(5, 7))
     chained = join(iter([it1, it2]))
     assert isinstance(chained, Iterator) and list(chained) == [0,1,5,6]
+
+
+def test_join_releases_processed_mappings():
+    class WeakDict(dict):
+        pass
+
+    refs = []
+
+    def batches():
+        for i in range(3):
+            batch = WeakDict(value=i)
+            refs.append(weakref.ref(batch))
+            yield batch
+        gc.collect()
+        assert refs[1]() is None
+
+    assert join(batches()) == {'value': 2}
+
+
+def test_join_keeps_iterator_inputs_lazy():
+    seen = []
+
+    def batches():
+        for i in range(3):
+            seen.append(i)
+            yield iter([i])
+
+    result = join(batches())
+    assert seen == [0]
+    assert next(result) == 0
+    assert seen == [0]
+    assert list(result) == [1, 2]
+    assert seen == [0, 1, 2]
 
 
 def test_merge_with():
