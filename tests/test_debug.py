@@ -1,4 +1,5 @@
 import re
+import pytest
 
 from funcy.debug import *
 from funcy.flow import silent
@@ -61,6 +62,24 @@ def test_log_calls_raise():
         "Call f()",
         "-> Exception: something bad raised in f()",
     ]
+
+
+@pytest.mark.parametrize('decorate', [log_calls, log_exits])
+@pytest.mark.parametrize('error_type', [SystemExit, KeyboardInterrupt])
+@pytest.mark.parametrize('stack', [False, True])
+def test_log_base_exception(decorate, error_type, stack):
+    log = []
+    error = error_type('stopped')
+
+    @decorate(log.append, stack=stack)
+    def fail():
+        raise error
+
+    with pytest.raises(error_type) as exc:
+        fail()
+    assert exc.value is error
+    assert error_type.__name__ + ': stopped' in log[-1]
+    assert ('Traceback' in log[-1]) == stack
 
 
 def test_log_errors():
