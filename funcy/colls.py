@@ -33,7 +33,8 @@ def _factory(coll, mapper=None):
     coll_type = type(coll)
     # Hack for defaultdicts overridden constructor
     if isinstance(coll, defaultdict):
-        item_factory = compose(mapper, coll.default_factory) if mapper and coll.default_factory \
+        item_factory = compose(mapper, coll.default_factory) \
+                       if mapper is not None and coll.default_factory is not None \
                        else coll.default_factory
         return partial(defaultdict, item_factory)
     elif isinstance(coll, Counter):

@@ -142,6 +142,27 @@ def test_walk_values_defaultdict():
     assert walked_dd[0] == 3
 
 
+@pytest.mark.parametrize('false_factory,false_mapper', [(True, False), (False, True), (True, True)])
+def test_walk_values_false_valued_defaultdict_callables(false_factory, false_mapper):
+    class Factory:
+        def __bool__(self):
+            return not false_factory
+
+        def __call__(self):
+            return 'default'
+
+    class Mapper:
+        def __bool__(self):
+            return not false_mapper
+
+        def __call__(self, value):
+            return len(value)
+
+    result = walk_values(Mapper(), defaultdict(Factory(), a='word'))
+    assert result['a'] == 4
+    assert result['missing'] == 7
+
+
 def test_select():
     assert eq(select(_ > 1, [1,2,3]), [2,3])
     assert eq(select(_ > 1, (1,2,3)), (2,3))
