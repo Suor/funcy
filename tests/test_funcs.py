@@ -4,7 +4,7 @@ import sys
 import pytest
 from whatever import _
 
-from funcy import lmap, merge_with
+from funcy import lmap, lfilter, merge_with
 from funcy.funcs import *
 from funcy.seqs import keep
 
@@ -218,6 +218,7 @@ def test_rcompose():
 def test_complement():
     assert complement(identity)(0) is True
     assert complement(identity)([1, 2]) is False
+    assert lfilter(complement(r'^\s*$'), ['a', '', '  ', ' b']) == ['a', ' b']
 
 def test_juxt():
     assert ljuxt(__add__, __sub__)(10, 2) == [12, 8]

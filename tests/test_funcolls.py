@@ -19,6 +19,12 @@ def test_one_fn():
 def test_some_fn():
     assert some_fn(_-1, _*0, _+1, _*2)(1) == 2
 
+def test_regex_fns():
+    assert all_fn(r'^\s*$')('')
+    assert any_fn(r'^\s*$')('')
+    assert not none_fn(r'^\s*$')('')
+    assert one_fn(r'^\s*$')('')
+
 
 def test_extended_fns():
     f = any_fn(None, set([1,2,0]))

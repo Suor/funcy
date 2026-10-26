@@ -118,7 +118,7 @@ def rcompose(*fs):
 
 def complement(pred):
     """Constructs a complementary predicate."""
-    return compose(__not__, pred)
+    return compose(__not__, make_pred(pred))
 
 
 # NOTE: using lazy map in these two will result in empty list/iterator
