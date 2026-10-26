@@ -244,6 +244,12 @@ def test_omit():
     dd = defaultdict(int, {'a': 1, 'b': 2, 'c': 3})
     assert eq(omit(dd, 'ac'), defaultdict(int, {'b': 2}))
 
+@pytest.mark.parametrize('keys', [iter(['b', 'c']), (k for k in ['c', 'b'])])
+def test_omit_iterator(keys):
+    data = defaultdict(int, {'a': 1, 'b': 2, 'c': 3})
+    assert eq(omit(data, keys), defaultdict(int, {'a': 1}))
+    assert data == {'a': 1, 'b': 2, 'c': 3}
+
 def test_zip_values():
     assert list(zip_values({1: 10}, {1: 20, 2: 30})) == [(10, 20)]
     with pytest.raises(TypeError): list(zip_values())
