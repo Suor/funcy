@@ -20,10 +20,11 @@ memoize() mixes up positional and keyword args: `f(('x', 1))` and `f(x=1)` share
 
 Fixed with `(MARK, args, frozenset(kwargs.items()))` as a cache key. `frozenset` is faster than `tuple(sorted(...))`, which is used now.
 
-Benchmarked 9 variants, including MARK in the middle. The selected one is on par with or better than master.
-Tests: added the fail from title and a couple more tricky ones.
-No docs changes.
 Found by code reading, no real case.
+
+- benchmarked 9 variants, including MARK in the middle. The selected one is on par with or better than master.
+- tests: added the fail from title and a couple more tricky ones.
+- no docs changes.
 
 ---
 
