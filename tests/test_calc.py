@@ -323,6 +323,72 @@ def test_cache_expiration_preserves_refilled_key(monkeypatch):
     assert cached('expired') == 4
 
 
+def test_cache_prunes_expired_entries_on_new_keys(monkeypatch):
+    now = [0]
+    monkeypatch.setattr('funcy.calc.time.monotonic', lambda: now[0])
+
+    @cache(10)
+    def cached(query):
+        return 'result for ' + query
+
+    for second in range(100):
+        now[0] = second
+        assert cached(str(second)) == 'result for ' + str(second)
+
+    assert len(cached.memory) == 10
+    assert len(cached.memory._keys) == 10
+    assert len(cached.memory._expires) == 10
+    assert all(int(key[0]) >= 90 for key in cached.memory)
+
+
+def test_cache_pruning_on_insert_preserves_refilled_key(monkeypatch):
+    now = [0]
+    monkeypatch.setattr('funcy.calc.time.monotonic', lambda: now[0])
+    calls = []
+
+    @cache(10)
+    def cached(query):
+        calls.append(query)
+        return len(calls)
+
+    assert cached('refilled') == 1
+    assert cached('expired') == 2
+    now[0] = 5
+    cached.invalidate('refilled')
+    assert cached('refilled') == 3
+
+    now[0] = 10
+    assert cached('new') == 4
+    assert len(cached.memory) == 2
+    assert cached('refilled') == 3
+    assert calls == ['refilled', 'expired', 'refilled', 'new']
+
+
+@pytest.mark.parametrize('cleanup_time', [1, 20])
+def test_cache_timeout_starts_after_insert_cleanup(monkeypatch, cleanup_time):
+    now = [0]
+    monkeypatch.setattr('funcy.calc.time.monotonic', lambda: now[0])
+
+    @cache(10)
+    def cached(key):
+        return object()
+
+    cached('old')
+    expire = cached.memory.expire
+
+    def slow_expire():
+        expire()
+        now[0] += cleanup_time
+
+    monkeypatch.setattr(cached.memory, 'expire', slow_expire)
+    now[0] = 10
+    value = cached('new')
+    now[0] = 19 + cleanup_time
+    assert cached('new') is value
+    now[0] = 20 + cleanup_time
+    assert cached('new') is not value
+
+
 def test_cache_invalidate():
     calls = []
 

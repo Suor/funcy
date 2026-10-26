@@ -2,7 +2,6 @@ from datetime import timedelta
 import time
 import inspect
 from collections import deque
-from bisect import bisect
 
 from .decorators import wraps
 
@@ -83,7 +82,11 @@ class CacheMemory(dict):
         self.clear()
 
     def __setitem__(self, key, value):
-        expires_at = time.monotonic() + self.timeout
+        now = time.monotonic()
+        if self._expires and self._expires[0] <= now:
+            self.expire()
+            now = time.monotonic()
+        expires_at = now + self.timeout
         dict.__setitem__(self, key, (value, expires_at))
         self._keys.append(key)
         self._expires.append(expires_at)
@@ -96,8 +99,8 @@ class CacheMemory(dict):
         return value
 
     def expire(self):
-        i = bisect(self._expires, time.monotonic())
-        for _ in range(i):
+        now = time.monotonic()
+        while self._expires and self._expires[0] <= now:
             expires_at = self._expires.popleft()
             key = self._keys.popleft()
             entry = self.get(key)
