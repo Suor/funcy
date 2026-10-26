@@ -23,6 +23,8 @@ def test_empty():
     assert eq(empty({'a': 1}), {})
     assert eq(empty(defaultdict(int)), defaultdict(int))
     assert empty(defaultdict(int)).default_factory == defaultdict(int).default_factory
+    assert eq(empty(range(5)), range(0))
+    assert eq(empty(range(2, 10, 3)), range(0))
 
 def test_empty_iter():
     it = empty(iter([]))

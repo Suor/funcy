@@ -66,6 +66,8 @@ def empty(coll):
         return iter([])
     if isinstance(coll, (str, bytes)):
         return type(coll)()
+    if type(coll) is range:
+        return range(0)
     return _factory(coll)()
 
 def iteritems(coll):
