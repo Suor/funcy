@@ -1,4 +1,5 @@
 from .funcs import compose, juxt
+from .funcmakers import make_pred
 from .colls import some, none, one
 
 
@@ -7,19 +8,19 @@ __all__ = ['all_fn', 'any_fn', 'none_fn', 'one_fn', 'some_fn']
 
 def all_fn(*fs):
     """Constructs a predicate, which holds when all fs hold."""
-    return compose(all, juxt(*fs))
+    return compose(all, juxt(*map(make_pred, fs)))
 
 def any_fn(*fs):
     """Constructs a predicate, which holds when any fs holds."""
-    return compose(any, juxt(*fs))
+    return compose(any, juxt(*map(make_pred, fs)))
 
 def none_fn(*fs):
     """Constructs a predicate, which holds when none of fs hold."""
-    return compose(none, juxt(*fs))
+    return compose(none, juxt(*map(make_pred, fs)))
 
 def one_fn(*fs):
     """Constructs a predicate, which holds when exactly one of fs holds."""
-    return compose(one, juxt(*fs))
+    return compose(one, juxt(*map(make_pred, fs)))
 
 def some_fn(*fs):
     """Constructs a function, which calls fs one by one

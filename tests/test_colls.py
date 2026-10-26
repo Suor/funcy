@@ -203,12 +203,14 @@ def test_all_extended():
     assert not all(None, [1,2,''])
     assert all(r'\d', '125')
     assert not all(r'\d', '12.5')
+    assert all(r'^\s*$', ['', ' '])
 
 def test_any():
     assert any([0, False, 3, ''])
     assert not any([0, False, ''])
     assert any(_ > 0, [1,2,0])
     assert not any(_ < 0, [1,2,0])
+    assert any(r'^\s*$', ['a', ''])
 
 def test_one():
     assert one([0, False, 3, ''])
@@ -221,6 +223,7 @@ def test_one():
 def test_none():
     assert none([0, False])
     assert not none(_ < 0, [0, -1])
+    assert not none(r'^\s*$', ['a', ''])
 
 def test_some():
     assert some([0, '', 2, 3]) == 2

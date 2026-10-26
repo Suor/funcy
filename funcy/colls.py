@@ -216,13 +216,13 @@ def all(pred, seq=EMPTY):
     """Checks if all items in seq pass pred (or are truthy)."""
     if seq is EMPTY:
         return _all(pred)
-    return _all(xmap(pred, seq))
+    return _all(map(make_pred(pred), seq))
 
 def any(pred, seq=EMPTY):
     """Checks if any item in seq passes pred (or is truthy)."""
     if seq is EMPTY:
         return _any(pred)
-    return _any(xmap(pred, seq))
+    return _any(map(make_pred(pred), seq))
 
 def none(pred, seq=EMPTY):
     """"Checks if none of the items in seq pass pred (or are truthy)."""
