@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 import time
 import threading
 from contextlib import suppress  # reexport
@@ -136,14 +136,14 @@ class ErrorRateExceeded(Exception):
 def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
     """If function fails to complete fails times in a row,
        calls to it will be intercepted for timeout with exception raised instead."""
-    if isinstance(timeout, (int, float)):
-        timeout = timedelta(seconds=timeout)
+    if isinstance(timeout, timedelta):
+        timeout = timeout.total_seconds()
 
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if wrapper.blocked:
-                if datetime.now() - wrapper.blocked < timeout:
+            if wrapper.blocked is not None:
+                if time.monotonic() - wrapper.blocked < timeout:
                     raise exception
                 else:
                     wrapper.blocked = None
@@ -153,7 +153,7 @@ def limit_error_rate(fails, timeout, exception=ErrorRateExceeded):
             except:  # noqa
                 wrapper.fails += 1
                 if wrapper.fails >= fails:
-                    wrapper.blocked = datetime.now()
+                    wrapper.blocked = time.monotonic()
                 raise
             else:
                 wrapper.fails = 0
