@@ -1,3 +1,4 @@
+from collections import namedtuple
 from operator import __add__, __sub__
 from functools import wraps
 import sys
@@ -233,3 +234,41 @@ def test_iffy():
     assert lmap(iffy(r'\d+', str.upper), ['a2', 'c']) == ['A2', 'c']
     assert lmap(iffy(set([1,4,5])), [False, 2, 4]) == [False, False, True]
     assert lmap(iffy(None), [False, 2, 3, 4]) == [False, 2, 3, 4]
+
+
+def test_curry_namedtuple_constructor():
+    Point = namedtuple('Point', 'x y')
+    assert curry(Point)(1)(2) == Point(1, 2)
+    assert rcurry(Point)(2)(1) == Point(1, 2)
+    assert autocurry(Point)(1)(2) == Point(1, 2)
+    assert autocurry(Point)(x=1)(y=2) == Point(1, 2)
+
+
+def test_autocurry_new_constructor():
+    class NewOnly:
+        def __new__(cls, x, *, y):
+            value = super().__new__(cls)
+            value.x, value.y = x, y
+            return value
+
+    assert autocurry(NewOnly)(1)(y=2).__dict__ == {'x': 1, 'y': 2}
+    assert autocurry(NewOnly)(y=2)(x=1).__dict__ == {'x': 1, 'y': 2}
+
+
+def test_autocurry_builtin_subclass_constructor():
+    class Number(int):
+        pass
+
+    assert autocurry(Number)('12') == 12
+
+
+def test_autocurry_class_metaclass_signature():
+    class Constructor(type):
+        def __call__(cls, value):
+            return value
+
+    class Value(metaclass=Constructor):
+        def __new__(cls, first, second):
+            return super().__new__(cls)
+
+    assert autocurry(Value)(value=3) == 3
