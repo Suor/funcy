@@ -69,7 +69,7 @@ All public API is re-exported through `funcy/__init__.py` via wildcard imports. 
 
 ### Type Stubs
 
-For type stub details (patterns, `.pyih` code generation, type tests), see [CLAUDE_TYPES.md](CLAUDE_TYPES.md). For extended `.pyih` syntax reference, see [PYIH.md](PYIH.md).
+For type stub details (patterns, `.pyih` code generation, type tests), see [TYPING.md](TYPING.md). For extended `.pyih` syntax reference, see [PYIH.md](PYIH.md).
 
 ## Shell Rules
 
