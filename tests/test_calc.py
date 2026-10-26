@@ -364,6 +364,31 @@ def test_cache_pruning_on_insert_preserves_refilled_key(monkeypatch):
     assert calls == ['refilled', 'expired', 'refilled', 'new']
 
 
+@pytest.mark.parametrize('cleanup_time', [1, 20])
+def test_cache_timeout_starts_after_insert_cleanup(monkeypatch, cleanup_time):
+    now = [0]
+    monkeypatch.setattr('funcy.calc.time.monotonic', lambda: now[0])
+
+    @cache(10)
+    def cached(key):
+        return object()
+
+    cached('old')
+    expire = cached.memory.expire
+
+    def slow_expire():
+        expire()
+        now[0] += cleanup_time
+
+    monkeypatch.setattr(cached.memory, 'expire', slow_expire)
+    now[0] = 10
+    value = cached('new')
+    now[0] = 19 + cleanup_time
+    assert cached('new') is value
+    now[0] = 20 + cleanup_time
+    assert cached('new') is not value
+
+
 def test_cache_invalidate():
     calls = []
 
