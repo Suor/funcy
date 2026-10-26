@@ -1,4 +1,5 @@
 from inspect import isclass, ismodule
+from contextlib import ContextDecorator
 
 from .strings import cut_prefix
 
@@ -48,17 +49,17 @@ def wrap_prop(ctx):
                 if instance is None:
                     return self
 
-                with ctx:
+                with ctx._recreate_cm() if isinstance(ctx, ContextDecorator) else ctx:
                     return prop.__get__(instance, type)
 
             if hasattr(prop, '__set__'):
                 def __set__(self, name, value):
-                    with ctx:
+                    with ctx._recreate_cm() if isinstance(ctx, ContextDecorator) else ctx:
                         return prop.__set__(name, value)
 
             if hasattr(prop, '__delete__'):
                 def __delete__(self, instance):
-                    with ctx:
+                    with ctx._recreate_cm() if isinstance(ctx, ContextDecorator) else ctx:
                         return prop.__delete__(instance)
 
         return WrapperProp()
