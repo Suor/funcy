@@ -107,12 +107,15 @@ def has_1pos_and_kwonly(func):
         and kinds[P.VAR_POSITIONAL] == 0
 
 def get_argnames(func):
-    func = getattr(func, '__original__', None) or unwrap(func)
-    code = func.__code__
+    original = getattr(func, '__original__', None) or unwrap(func)
+    code = original.__code__
     count = code.co_argcount + code.co_kwonlyargcount
     count += bool(code.co_flags & inspect.CO_VARARGS)
     count += bool(code.co_flags & inspect.CO_VARKEYWORDS)
-    return code.co_varnames[:count]
+    names = code.co_varnames[:count]
+    if code.co_argcount and (inspect.ismethod(func) or inspect.ismethod(original)):
+        names = names[1:]
+    return names
 
 def arggetter(func, _cache={}):
     if func in _cache:
