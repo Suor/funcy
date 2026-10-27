@@ -302,7 +302,12 @@ def split_by(pred, seq):
     """Lazily splits the start of the sequence,
        consisting of items passing pred, from the rest of it."""
     a, b = tee(seq)
-    return takewhile(pred, a), dropwhile(pred, b)
+    head, head_copy = tee(takewhile(pred, a))
+
+    def tail():
+        yield from drop(ilen(head_copy), b)
+
+    return head, tail()
 
 def lsplit_by(pred, seq):
     """Splits the start of the sequence,
