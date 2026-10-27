@@ -327,6 +327,36 @@ def test_del_in():
     assert del_in(d, ['c', 1]) == {'c': [1, 3]}
     with pytest.raises(TypeError): del_in(d, ['c', 'b'])
 
+
+@pytest.mark.parametrize('path', [['missing'], ['missing', 'child']])
+def test_del_in_missing_defaultdict(path):
+    calls = []
+    def factory():
+        calls.append(True)
+        return {}
+    data = defaultdict(factory, existing=1)
+    assert del_in(data, path) is data
+    assert dict(data) == {'existing': 1}
+    assert calls == []
+
+
+def test_del_in_nested_defaultdict():
+    child = defaultdict(list, items=[1, 2, 3])
+    data = {'child': child}
+    assert del_in(data, ['child', 'missing']) == data
+    assert dict(child) == {'items': [1, 2, 3]}
+    result = del_in(data, ['child', 'items', -1])
+    assert result == {'child': {'items': [1, 2]}}
+    assert type(result['child']) is defaultdict
+    assert result['child'].default_factory is list
+    assert child['items'] == [1, 2, 3]
+
+
+@pytest.mark.parametrize('data, path', [({}, [[]]), ([1], ['bad']), (None, [0])])
+def test_del_in_invalid_input(data, path):
+    with pytest.raises(TypeError):
+        del_in(data, path)
+
 def test_has_path():
     d = {
         "a": {

@@ -328,6 +328,8 @@ def del_in(coll, path):
     """Creates a copy of coll with a nested key or index deleted."""
     if not path:
         return coll
+    if isinstance(coll, defaultdict) and path[0] not in coll:
+        return coll
     try:
         next_coll = coll[path[0]]
     except (KeyError, IndexError):
