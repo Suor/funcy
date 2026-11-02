@@ -344,6 +344,8 @@ def del_in(coll, path):
 def has_path(coll, path):
     """Checks if path exists in the given nested collection."""
     for p in path:
+        if isinstance(coll, dict) and p not in coll:
+            return False
         try:
             coll = coll[p]
         except (KeyError, IndexError):

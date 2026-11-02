@@ -346,8 +346,25 @@ def test_has_path():
     assert has_path(d, ("a", "b"))
     assert has_path(d, ["a", "f", "g"])
 
+@pytest.mark.parametrize('mapping', [defaultdict(int), Counter()])
+def test_has_path_missing_dict_key(mapping):
+    assert not has_path(mapping, ['missing'])
+    assert mapping == {}
+
+
+def test_has_path_nested_defaultdict():
+    groups = defaultdict(list, available=[42])
+    data = {'groups': groups}
+    assert has_path(data, ['groups', 'available', 0])
+    assert not has_path(data, ['groups', 'missing'])
+    assert groups == {'available': [42]}
+
+
 def test_has_path_list():
     assert has_path([1, 2], [0])
+    assert has_path([1, 2], [-1])
+    assert not has_path([1, 2], [-3])
+    assert has_path(namedtuple('Point', 'x y')(1, 2), [1])
     assert not has_path([1, 2], [3])
     assert has_path({'x': [1, 2]}, ['x', 1])
 
