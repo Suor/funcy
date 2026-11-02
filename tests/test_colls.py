@@ -192,6 +192,30 @@ def test_is_distinct():
     assert not is_distinct(['ab', 'cb', 'ad'], key=0)
 
 
+@pytest.mark.parametrize('values, expected', [([], True), ([1, 2], True), ([1, 1], False)])
+def test_is_distinct_iterator(values, expected):
+    assert is_distinct(iter(values)) is expected
+
+
+def test_is_distinct_iterator_key():
+    assert is_distinct(iter(['a', 'bb']), key=len)
+    assert not is_distinct(iter(['ab', 'ac']), key=0)
+
+
+def test_is_distinct_unsized_iterable():
+    class Rows:
+        def __iter__(self):
+            return iter([1, 2, 1])
+
+    assert not is_distinct(Rows())
+
+
+def test_is_distinct_iterator_stops_at_duplicate():
+    values = iter([1, 1, 2])
+    assert not is_distinct(values)
+    assert next(values) == 2
+
+
 def test_all():
     assert all([1,2,3])
     assert not all([1,2,''])

@@ -206,10 +206,21 @@ def compact(coll):
 
 def is_distinct(coll, key=EMPTY):
     """Checks if all elements in the collection are different."""
+    try:
+        size = len(coll)
+    except TypeError:
+        seen = set()
+        values = coll if key is EMPTY else xmap(key, coll)
+        for value in values:
+            if value in seen:
+                return False
+            seen.add(value)
+        return True
+
     if key is EMPTY:
-        return len(coll) == len(set(coll))
+        return size == len(set(coll))
     else:
-        return len(coll) == len(set(xmap(key, coll)))
+        return size == len(set(xmap(key, coll)))
 
 
 def all(pred, seq=EMPTY):
