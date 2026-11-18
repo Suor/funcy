@@ -311,6 +311,28 @@ def test_once_per_unhashable_arguments(decorate, make_value):
     assert calls == [make_value(), 'other']
 
 
+@pytest.mark.parametrize('decorate', [once_per('n'), once_per_args])
+@pytest.mark.parametrize('first, equal', [
+    ({1}, frozenset({1})),
+    (frozenset({1}), {1}),
+    (({1},), (frozenset({1}),)),
+    ((frozenset({1}),), ({1},)),
+])
+def test_once_per_equal_values_with_different_hashability(decorate, first, equal):
+    calls = []
+
+    @decorate
+    def call(n):
+        calls.append(n)
+        return 'called'
+
+    assert call(first) == 'called'
+    assert call(n=equal) is None
+    assert call('other') == 'called'
+    assert call('other') is None
+    assert calls == [first, 'other']
+
+
 def test_wrap_with():
     calls = []
 
