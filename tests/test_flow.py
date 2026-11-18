@@ -1,4 +1,5 @@
 from datetime import timedelta
+from functools import partial
 from threading import Thread
 import pytest
 from funcy.flow import *
@@ -229,6 +230,29 @@ def test_once():
     call(1)
     call(2)
     assert calls == [1]
+
+
+def test_once_non_function_callables():
+    # `once` has no argnames, so it must not introspect __code__ when wrapping.
+    calls = []
+
+    def initialize(mode):
+        calls.append(mode)
+
+    initialized = once(partial(initialize, 'configured'))
+    initialized()
+    initialized()
+    assert calls == ['configured']
+
+    # Callable objects have no __code__ either.
+    class Initializer:
+        def __call__(self):
+            calls.append('object')
+
+    init_object = once(Initializer())
+    init_object()
+    init_object()
+    assert calls == ['configured', 'object']
 
 
 def test_once_per():
