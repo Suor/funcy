@@ -222,13 +222,15 @@ def once_per(*argnames):
                 try:
                     hash(values)
                 except TypeError:
-                    done, add = done_list, done_list.append
+                    if values in done_list or any(done == values for done in done_set):
+                        return
+                    done_list.append(values)
                 else:
-                    done, add = done_set, done_set.add
+                    if values in done_set or values in done_list:
+                        return
+                    done_set.add(values)
 
-                if values not in done:
-                    add(values)
-                    return func(*args, **kwargs)
+                return func(*args, **kwargs)
         return wrapper
     return once
 
