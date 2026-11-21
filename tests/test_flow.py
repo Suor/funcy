@@ -34,6 +34,11 @@ def test_raiser():
     with pytest.raises(Exception, match="text") as e: raiser("text")()
     assert e.type is Exception
 
+    f = raiser("text")
+    with pytest.raises(Exception) as e1: f()
+    with pytest.raises(Exception) as e2: f()
+    assert e1.value is not e2.value
+
     with pytest.raises(MyError):
         raiser(MyError)()
     with pytest.raises(MyError, match="some message"):
