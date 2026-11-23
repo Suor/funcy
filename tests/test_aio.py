@@ -12,10 +12,17 @@ from funcy.primitives import EMPTY
 def run_async(f):
     @functools.wraps(f)
     def run(*args, **kwargs):
+        if hasattr(asyncio, 'run'):
+            return asyncio.run(f(*args, **kwargs))
         loop = asyncio.new_event_loop()
         try:
             return loop.run_until_complete(f(*args, **kwargs))
         finally:
+            pending = asyncio.Task.all_tasks(loop)
+            for task in pending:
+                task.cancel()
+            if pending:
+                loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
             loop.run_until_complete(loop.shutdown_asyncgens())
             loop.close()
     return run
